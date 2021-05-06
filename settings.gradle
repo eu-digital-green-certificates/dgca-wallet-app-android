@@ -1,2 +1,4 @@
 include ':app'
-rootProject.name = "DgcaWalletApplication"
+include ':decoder'
+rootProject.name = "dgca-wallet-app-android"
+project(':decoder').projectDir = new File("../dgca-app-core-android/decoder")
