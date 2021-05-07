@@ -38,7 +38,7 @@
 
     <fragment
         android:id="@+id/certificatesFragment"
-        android:name="dgca.wallet.app.android.сertificate.CertificatesFragment"
+        android:name="dgca.wallet.app.android.certificate.CertificatesFragment"
         android:label="Certificates"
         tools:layout="@layout/fragment_certificates">
 
@@ -66,13 +66,13 @@
 
     <fragment
         android:id="@+id/viewCertificateFragment"
-        android:name="dgca.wallet.app.android.сertificate.ViewCertificateFragment"
+        android:name="dgca.wallet.app.android.certificate.ViewCertificateFragment"
         android:label="ViewCertificate"
         tools:layout="@layout/fragment_certificate_view" />
 
     <fragment
         android:id="@+id/claimCertificateFragment"
-        android:name="dgca.wallet.app.android.сertificate.ClaimCertificateFragment"
+        android:name="dgca.wallet.app.android.certificate.ClaimCertificateFragment"
         android:label="ClaimCertificate"
         tools:layout="@layout/fragment_certificate_claim">
 
