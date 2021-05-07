@@ -43,12 +43,11 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import dgca.wallet.app.android.databinding.FragmentAuthBinding
+import timber.log.Timber
 import java.nio.charset.Charset
 import java.security.InvalidKeyException
 import java.util.concurrent.Executor
 import javax.crypto.Cipher
-
-private const val TAG = "AuthFragment"
 
 class AuthFragment : Fragment() {
 
@@ -123,7 +122,7 @@ class AuthFragment : Fragment() {
             promptInfo = getPrompInfo(true)
             biometricPrompt.authenticate(promptInfo, BiometricPrompt.CryptoObject(cipher))
         } catch (ex: Exception) {
-            Log.w(TAG, ex)
+            Timber.tag(TAG).w(ex)
         }
     }
 
@@ -148,7 +147,7 @@ class AuthFragment : Fragment() {
     }
 
     private fun setupDeviceSecurity() {
-        Log.i(TAG, "Device not secured")
+        Timber.i("Device not secured")
         Toast.makeText(
             requireContext(),
             "Device not secured. Configure it in device settings.",
@@ -203,16 +202,16 @@ class AuthFragment : Fragment() {
                 "plaintext - string".toByteArray(Charset.defaultCharset())
             )
 
-            Log.i(TAG, "EncryptedInfo: ${encryptedInfo.contentToString()}")
+            Timber.i("EncryptedInfo: ${encryptedInfo.contentToString()}")
 
         } catch (e: InvalidKeyException) {
-            Log.w(TAG, "Key is invalid.")
+            Timber.w("Key is invalid.")
             biometricPrompt.authenticate(promptInfo)
         } catch (e: UserNotAuthenticatedException) {
-            Log.w(TAG, "The key's validity timed out.")
+            Timber.w("The key's validity timed out.")
             biometricPrompt.authenticate(promptInfo)
         } catch (ex: Exception) {
-            Log.w(TAG, "Unknown exception", ex)
+            Timber.w(ex, "Unknown exception")
         }
     }
 
