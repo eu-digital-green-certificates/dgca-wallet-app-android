@@ -17,19 +17,20 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 5/7/21 10:10 AM
+ *  Created by Mykhailo Nester on 4/23/21 9:49 AM
  */
 
-package dgca.wallet.app.android
+import org.gradle.api.JavaVersion
 
-import android.os.Bundle
-import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
+object Config {
+    const val minSdk = 26
+    const val compileSdk = 29
+    const val targetSdk = 29
+    val javaVersion = JavaVersion.VERSION_1_8
 
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
-        setContentView(R.layout.activity_main)
-    }
+    const val versionCode = 1
+    const val versionName = "1.0.0"
+
+    const val androidTestInstrumentation = "androidx.test.runner.AndroidJUnitRunner"
+    const val proguardConsumerRules = "consumer-rules.pro"
 }
