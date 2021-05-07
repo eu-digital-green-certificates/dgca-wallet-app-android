@@ -20,7 +20,7 @@
  *  Created by osarapulov on 5/7/21 8:59 AM
  */
 
-package dgca.wallet.app.android.сertificate
+package dgca.wallet.app.android.certificate
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -45,8 +45,7 @@ class CertificatesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.fab.setOnClickListener {
-            val action =
-                CertificatesFragmentDirections.actionCertificatesFragmentToCodeReaderFragment()
+            val action = CertificatesFragmentDirections.actionCertificatesFragmentToCodeReaderFragment()
             findNavController().navigate(action)
         }
     }

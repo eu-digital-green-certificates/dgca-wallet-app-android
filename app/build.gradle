@@ -11,7 +11,7 @@ android {
     compileSdkVersion Config.compileSdk
 
     defaultConfig {
-        applicationId "dgca.verifier.app.android"
+        applicationId "dgca.wallet.app.android"
         minSdkVersion Config.minSdk
         targetSdkVersion Config.targetSdk
         versionCode Config.versionCode
@@ -49,7 +49,6 @@ android {
 }
 
 dependencies {
-
     implementation project(':decoder')
 
     implementation Deps.kotlin_stdlib
