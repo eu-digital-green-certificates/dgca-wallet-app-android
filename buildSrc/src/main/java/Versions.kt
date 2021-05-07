@@ -51,6 +51,8 @@ object Versions {
     // Validation
     const val json_validation = "2.2.6"
 
+    const val timber = "4.7.1"
+
     // Tests
     const val junit = "4.13.1"
 }
