@@ -17,19 +17,11 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 5/7/21 10:10 AM
+ *  Created by osarapulov on 5/7/21 9:33 AM
  */
 
-package dgca.wallet.app.android
+package dgca.wallet.app.android.сertificate
 
-import android.os.Bundle
-import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
-        setContentView(R.layout.activity_main)
-    }
-}
+class ViewCertificateFragment: Fragment()

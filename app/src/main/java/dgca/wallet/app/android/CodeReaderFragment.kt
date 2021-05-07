@@ -89,13 +89,12 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
         binding.barcodeScanner.pause()
     }
 
-    private fun navigateToVerificationPage(text: String) {
+    private fun navigateToVerificationPage(qrCodeText: String) {
         findNavController().currentDestination
 
-        requireActivity().finish()
-//        val action =
-//            CodeReaderFragmentDirections.actionCodeReaderFragmentToVerificationFragment(text)
-//        findNavController().navigate(action)
+        val action =
+            CodeReaderFragmentDirections.actionCodeReaderFragmentToClaimCertificateFragment(qrCodeText)
+        findNavController().navigate(action)
     }
 
     private fun requestCameraPermission() {
