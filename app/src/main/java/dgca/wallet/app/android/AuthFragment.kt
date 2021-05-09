@@ -122,7 +122,7 @@ class AuthFragment : Fragment() {
             promptInfo = getPrompInfo(true)
             biometricPrompt.authenticate(promptInfo, BiometricPrompt.CryptoObject(cipher))
         } catch (ex: Exception) {
-            Timber.tag(TAG).w(ex)
+            Timber.w(ex)
         }
     }
 
