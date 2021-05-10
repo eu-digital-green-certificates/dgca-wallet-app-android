@@ -17,22 +17,27 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 5/7/21 2:19 PM
+ *  Created by osarapulov on 5/10/21 10:23 PM
  */
 
-package dgca.wallet.app.android
+package dgca.wallet.app.android.di
 
-import android.app.Application
-import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
-import timber.log.Timber
+import android.content.Context
+import androidx.room.Room
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import dgca.wallet.app.android.data.local.AppDatabase
+import javax.inject.Singleton
 
-@HiltAndroidApp
-class DgcaWalletApplication : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-        }
-    }
+@InstallIn(SingletonComponent::class)
+@Module
+object LocalDataSourceModule {
+
+    @Singleton
+    @Provides
+    fun provideDb(@ApplicationContext context: Context): AppDatabase =
+        Room.databaseBuilder(context, AppDatabase::class.java, "certificate-db").build()
 }

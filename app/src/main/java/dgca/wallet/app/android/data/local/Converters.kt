@@ -17,22 +17,23 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 5/7/21 2:19 PM
+ *  Created by osarapulov on 5/11/21 12:33 AM
  */
 
-package dgca.wallet.app.android
+package dgca.wallet.app.android.data.local
 
-import android.app.Application
-import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
-import timber.log.Timber
+import androidx.room.TypeConverter
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 
-@HiltAndroidApp
-class DgcaWalletApplication : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-        }
+class Converters {
+    @TypeConverter
+    fun fromTimestamp(value: Long?): LocalDate =
+        if (value != null) Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDate() else LocalDate.now()
+
+    @TypeConverter
+    fun dateToTimestamp(date: LocalDate?): Long {
+        return date?.atStartOfDay()?.atZone(ZoneId.systemDefault())?.toInstant()?.toEpochMilli() ?: System.currentTimeMillis()
     }
 }

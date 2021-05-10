@@ -28,6 +28,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dgca.wallet.app.android.R
 import dgca.wallet.app.android.databinding.CertificateCardViewBinding
+import dgca.wallet.app.android.formatWith
 
 class CertificateCardsAdapter(
     private val certificateCards: List<CertificateCard>,
@@ -38,10 +39,28 @@ class CertificateCardsAdapter(
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = CertificateCardViewBinding.bind(itemView)
 
+        companion object {
+            const val YEAR_MONTH_DAY = "yyyy-MM-dd"
+        }
+
         fun bind(certificateCard: CertificateCard, certificateCardClickListener: CertificateCardClickListener) {
-            binding.titleView.text = "Title"
-            binding.nameView.text = "Name"
-            binding.scannedAtDateView.text = "Scanned 2021-05-09"
+            binding.titleView.text = when {
+                certificateCard.certificate.vaccinations?.first() != null -> binding.root.resources.getString(
+                    R.string.vaccination,
+                    certificateCard.certificate.vaccinations?.first()?.doseNumber,
+                    certificateCard.certificate.vaccinations?.first()?.totalSeriesOfDoses
+                )
+                certificateCard.certificate.recoveryStatements?.isNotEmpty() == true -> binding.root.resources.getString(R.string.recovery)
+                certificateCard.certificate.tests?.isNotEmpty() == true -> binding.root.resources.getString(R.string.test)
+                else -> ""
+            }
+            binding.nameView.text =
+                binding.root.resources.getString(
+                    R.string.name_surname,
+                    certificateCard.certificate.person.givenName,
+                    certificateCard.certificate.person.familyName
+                )
+            binding.scannedAtDateView.text = certificateCard.dateTaken.formatWith(YEAR_MONTH_DAY)
             binding.root.setOnClickListener { certificateCardClickListener.onCertificateCardClick(certificateCard.qrCodeText) }
         }
     }

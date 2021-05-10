@@ -17,22 +17,18 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 5/7/21 2:19 PM
+ *  Created by osarapulov on 4/30/21 12:07 AM
  */
 
-package dgca.wallet.app.android
+package dgca.wallet.app.android.data.local
 
-import android.app.Application
-import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
-import timber.log.Timber
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 
-@HiltAndroidApp
-class DgcaWalletApplication : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-        }
-    }
+@Database(entities = [Certificate::class], version = 1)
+@TypeConverters(Converters::class)
+abstract class AppDatabase : RoomDatabase() {
+
+    abstract fun certificateDao(): CertificateDao
 }

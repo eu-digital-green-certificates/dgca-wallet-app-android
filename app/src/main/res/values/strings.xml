@@ -6,5 +6,12 @@
     <string name="biometric_dialog_subtitle">Log in using your biometric credential</string>
     <string name="biometric_dialog_cancel">Cancel</string>
     <string name="add">Add</string>
-    <string name="no_certificates">No certificates</string>
+    <string name="certificate_wallet">Certificate Wallet</string>
+    <string name="no_certificate_available">No Certificate available</string>
+    <string name="click_span_code_to_add_to_your_wallet">Click Scan Code to add to your Wallet.</string>
+    <string name="scan_code">Scan Code</string>
+    <string name="name_surname">%s %s</string>
+    <string name="vaccination">Vaccination %d of %d</string>
+    <string name="recovery">Recovery</string>
+    <string name="test">Test</string>
 </resources>

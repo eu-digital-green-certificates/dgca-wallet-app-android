@@ -29,16 +29,18 @@
     <fragment
         android:id="@+id/authFragment"
         android:name="dgca.wallet.app.android.AuthFragment"
-        android:label="AuthFragment">
+        android:label="AuthFragment"
+        tools:layout="@layout/fragment_auth">
         <action
             android:id="@+id/action_authFragment_to_certificatesFragment"
+            app:launchSingleTop="true"
             app:destination="@id/certificatesFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/certificatesFragment"
         android:name="dgca.wallet.app.android.certificate.CertificatesFragment"
-        android:label="Certificates"
+        android:label="@string/certificate_wallet"
         tools:layout="@layout/fragment_certificates">
 
         <action

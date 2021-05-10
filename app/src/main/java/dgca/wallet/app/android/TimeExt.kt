@@ -17,22 +17,24 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 5/7/21 2:19 PM
+ *  Created by mykhailo.nester on 5/5/21 11:57 PM
  */
 
 package dgca.wallet.app.android
 
-import android.app.Application
-import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
-import timber.log.Timber
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
-@HiltAndroidApp
-class DgcaWalletApplication : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-        }
+const val YEAR_MONTH_DAY = "yyyy-MM-dd"
+const val DATE_TIME = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+const val FORMATTED_YEAR_MONTH_DAY = "MMM d, yyyy"
+const val FORMATTED_DATE_TIME = "MMM d, yyyy, HH:mm"
+
+fun LocalDate.formatWith(pattern: String): String {
+    return try {
+        val formatter = DateTimeFormatter.ofPattern(pattern)
+        return this.format(formatter)
+    } catch (ex: Exception) {
+        ""
     }
 }

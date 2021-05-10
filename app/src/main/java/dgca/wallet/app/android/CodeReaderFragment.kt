@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -19,10 +18,15 @@ import com.google.zxing.client.android.BeepManager
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.DefaultDecoderFactory
+import dagger.hilt.android.AndroidEntryPoint
+import dgca.wallet.app.android.data.local.AppDatabase
+import dgca.wallet.app.android.data.local.Certificate
 import dgca.wallet.app.android.databinding.FragmentCodeReaderBinding
+import javax.inject.Inject
 
 private const val CAMERA_REQUEST_CODE = 1003
 
+@AndroidEntryPoint
 class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListener {
 
     private var _binding: FragmentCodeReaderBinding? = null
@@ -30,6 +34,9 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
 
     private lateinit var beepManager: BeepManager
     private var lastText: String? = null
+
+    @Inject
+    lateinit var db: AppDatabase
 
     private val callback: BarcodeCallback = object : BarcodeCallback {
         override fun barcodeResult(result: BarcodeResult) {
@@ -46,11 +53,6 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
         }
 
         override fun possibleResultPoints(resultPoints: List<ResultPoint>) {}
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback { requireActivity().finish() }
     }
 
     override fun onCreateView(
@@ -91,6 +93,8 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
 
     private fun navigateToVerificationPage(qrCodeText: String) {
         findNavController().currentDestination
+
+        Thread {db.certificateDao().insert(Certificate(qrCodeText = qrCodeText))}.start()
 
         val action =
             CodeReaderFragmentDirections.actionCodeReaderFragmentToClaimCertificateFragment(qrCodeText)

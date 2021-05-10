@@ -17,22 +17,18 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 5/7/21 2:19 PM
+ *  Created by osarapulov on 5/10/21 10:12 PM
  */
 
-package dgca.wallet.app.android
+package dgca.wallet.app.android.data.local
 
-import android.app.Application
-import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
-import timber.log.Timber
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import java.time.LocalDate
 
-@HiltAndroidApp
-class DgcaWalletApplication : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-        }
-    }
-}
+@Entity(tableName = "certificates")
+data class Certificate(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val qrCodeText: String,
+    val dateAdded: LocalDate = LocalDate.now()
+)

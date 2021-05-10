@@ -26,41 +26,41 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
+import dgca.wallet.app.android.MainActivity
 import dgca.wallet.app.android.databinding.FragmentCertificatesBinding
-import java.time.LocalDate
 
+@AndroidEntryPoint
 class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCardClickListener {
+    private val viewModel by viewModels<CertificatesViewModel>()
     private var _binding: FragmentCertificatesBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (activity as MainActivity).clearBackground()
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentCertificatesBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { requireActivity().finish() }
         binding.fab.setOnClickListener {
             val action = CertificatesFragmentDirections.actionCertificatesFragmentToCodeReaderFragment()
             findNavController().navigate(action)
         }
 
-        val certificateCards = mutableListOf(
-            CertificateCard("Title1", "Name1", "Surname1", LocalDate.now(), "qrCodeText"),
-            CertificateCard("Title1", "Name1", "Surname1", LocalDate.now(), "qrCodeText"),
-            CertificateCard("Title1", "Name1", "Surname1", LocalDate.now(), "qrCodeText"),
-            CertificateCard("Title1", "Name1", "Surname1", LocalDate.now(), "qrCodeText"),
-            CertificateCard("Title1", "Name1", "Surname1", LocalDate.now(), "qrCodeText"),
-            CertificateCard("Title1", "Name1", "Surname1", LocalDate.now(), "qrCodeText")
-        )
-        setCertificateCards(certificateCards)
+        viewModel.certificates.observe(viewLifecycleOwner, {
+            setCertificateCards(it)
+        })
     }
 
     private fun setCertificateCards(certificateCards: List<CertificateCard>) {
@@ -70,12 +70,20 @@ class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCard
             binding.certificatesView.adapter = CertificateCardsAdapter(certificateCards, this)
             binding.certificatesView.visibility = View.VISIBLE
 
-            binding.noCertificatesView.visibility = View.GONE
+            binding.noAvailableOffersGroup.visibility = View.GONE
+        } else {
+            binding.certificatesView.visibility = View.GONE
+            binding.noAvailableOffersGroup.visibility = View.VISIBLE
         }
     }
 
     override fun onCertificateCardClick(qrCodeText: String) {
         val action = CertificatesFragmentDirections.actionCertificatesFragmentToViewCertificateFragment(qrCodeText)
         findNavController().navigate(action)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

@@ -13,8 +13,6 @@ V
 build.gradle,f/0/f07866736216be0ee2aba49e392191aeae700a35
 R
 "buildSrc/src/main/java/Versions.kt,1/7/17cc39576120ea39e86f37255d0843f33952bb99
-t
-Dapp/src/main/java/dgca/wallet/app/android/certificate/Certificate.kt,c/6/c63d718b6176a519d0b2ab18ca118ede64824b79
 }
 Mapp/src/main/java/dgca/wallet/app/android/certificate/CertificatesFragment.kt,7/f/7f279eef330831d6746335412b7ec3801fa15950
 i

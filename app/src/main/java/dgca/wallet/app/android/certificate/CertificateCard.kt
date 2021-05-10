@@ -17,17 +17,12 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 5/9/21 10:17 AM
+ *  Created by osarapulov on 5/11/21 12:20 AM
  */
 
 package dgca.wallet.app.android.certificate
 
+import dgca.verifier.app.decoder.CertificateModel
 import java.time.LocalDate
 
-data class CertificateCard(
-    val title: String,
-    val firstName: String,
-    val lastName: String,
-    val date: LocalDate,
-    val qrCodeText: String
-)
+data class CertificateCard(val qrCodeText: String, val certificate: CertificateModel, val dateTaken: LocalDate)
