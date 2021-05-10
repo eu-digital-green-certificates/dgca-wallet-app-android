@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~  license-start
   ~  eu-digital-green-certificates / dgca-verifier-app-android
   ~
@@ -68,7 +67,12 @@
         android:id="@+id/viewCertificateFragment"
         android:name="dgca.wallet.app.android.certificate.ViewCertificateFragment"
         android:label="ViewCertificate"
-        tools:layout="@layout/fragment_certificate_view" />
+        tools:layout="@layout/fragment_certificate_view">
+
+        <argument
+            android:name="qrCodeText"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/claimCertificateFragment"

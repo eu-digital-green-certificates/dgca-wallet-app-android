@@ -6,4 +6,5 @@
     <string name="biometric_dialog_subtitle">Log in using your biometric credential</string>
     <string name="biometric_dialog_cancel">Cancel</string>
     <string name="add">Add</string>
+    <string name="no_certificates">No certificates</string>
 </resources>
