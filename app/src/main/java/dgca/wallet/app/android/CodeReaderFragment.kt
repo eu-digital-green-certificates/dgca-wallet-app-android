@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -46,11 +45,6 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
         }
 
         override fun possibleResultPoints(resultPoints: List<ResultPoint>) {}
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback { requireActivity().finish() }
     }
 
     override fun onCreateView(

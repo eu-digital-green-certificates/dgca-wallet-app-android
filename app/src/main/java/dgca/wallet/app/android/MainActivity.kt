@@ -25,11 +25,16 @@ package dgca.wallet.app.android
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
         setContentView(R.layout.activity_main)
+    }
+
+    fun clearBackground() {
+        window.setBackgroundDrawable(ContextCompat.getDrawable(this, R.color.white))
     }
 }

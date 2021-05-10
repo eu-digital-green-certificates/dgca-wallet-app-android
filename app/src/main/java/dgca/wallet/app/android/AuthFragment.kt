@@ -31,7 +31,6 @@ import android.provider.Settings
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.security.keystore.UserNotAuthenticatedException
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -122,7 +121,7 @@ class AuthFragment : Fragment() {
             promptInfo = getPrompInfo(true)
             biometricPrompt.authenticate(promptInfo, BiometricPrompt.CryptoObject(cipher))
         } catch (ex: Exception) {
-            Timber.tag(TAG).w(ex)
+            Timber.w(ex)
         }
     }
 
