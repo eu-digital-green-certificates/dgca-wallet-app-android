@@ -47,4 +47,10 @@
         <item name="android:windowBackground">@color/white</item>
     </style>
 
+
+    <style name="DgcaWalletAppAndroid.Toolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
+        <!-- color used by navigation icon and overflow icon -->
+        <item name="colorOnPrimary">@color/white</item>
+    </style>
+
 </resources>

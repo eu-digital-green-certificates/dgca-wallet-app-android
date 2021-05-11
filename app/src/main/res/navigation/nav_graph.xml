@@ -33,13 +33,14 @@
         tools:layout="@layout/fragment_auth">
         <action
             android:id="@+id/action_authFragment_to_certificatesFragment"
+            app:launchSingleTop="true"
             app:destination="@id/certificatesFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/certificatesFragment"
         android:name="dgca.wallet.app.android.certificate.CertificatesFragment"
-        android:label="Certificates"
+        android:label="@string/certificate_wallet"
         tools:layout="@layout/fragment_certificates">
 
         <action
@@ -68,7 +69,12 @@
         android:id="@+id/viewCertificateFragment"
         android:name="dgca.wallet.app.android.certificate.ViewCertificateFragment"
         android:label="ViewCertificate"
-        tools:layout="@layout/fragment_certificate_view" />
+        tools:layout="@layout/fragment_certificate_view">
+
+        <argument
+            android:name="qrCodeText"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/claimCertificateFragment"

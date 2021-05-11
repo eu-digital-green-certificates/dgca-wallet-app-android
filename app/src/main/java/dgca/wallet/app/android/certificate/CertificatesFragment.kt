@@ -28,12 +28,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.MainActivity
 import dgca.wallet.app.android.databinding.FragmentCertificatesBinding
 
-class CertificatesFragment : Fragment() {
-
+@AndroidEntryPoint
+class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCardClickListener {
+    private val viewModel by viewModels<CertificatesViewModel>()
     private var _binding: FragmentCertificatesBinding? = null
     private val binding get() = _binding!!
 
@@ -48,11 +52,35 @@ class CertificatesFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewModel.fetchCertificates()
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { requireActivity().finish() }
-        binding.fab.setOnClickListener {
+        binding.scanCode.setOnClickListener {
             val action = CertificatesFragmentDirections.actionCertificatesFragmentToCodeReaderFragment()
             findNavController().navigate(action)
         }
+
+        viewModel.certificates.observe(viewLifecycleOwner, {
+            setCertificateCards(it)
+        })
+    }
+
+    private fun setCertificateCards(certificateCards: List<CertificateCard>) {
+        if (certificateCards.isNotEmpty()) {
+            binding.certificatesView.setHasFixedSize(true)
+            binding.certificatesView.layoutManager = LinearLayoutManager(requireContext())
+            binding.certificatesView.adapter = CertificateCardsAdapter(certificateCards, this)
+            binding.certificatesView.visibility = View.VISIBLE
+
+            binding.noAvailableOffersGroup.visibility = View.GONE
+        } else {
+            binding.certificatesView.visibility = View.GONE
+            binding.noAvailableOffersGroup.visibility = View.VISIBLE
+        }
+    }
+
+    override fun onCertificateCardClick(qrCodeText: String) {
+        val action = CertificatesFragmentDirections.actionCertificatesFragmentToViewCertificateFragment(qrCodeText)
+        findNavController().navigate(action)
     }
 
     override fun onDestroyView() {
