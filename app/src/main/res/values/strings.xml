@@ -16,4 +16,12 @@
     <string name="test">Test</string>
     <string name="your_certificate">Your Certificate</string>
     <string name="name">Name</string>
+
+    <string name="qr_reader_title">Step1: Scan Code</string>
+    <string name="claim_cert_title">Step2: TAN</string>
+    <string name="tan_code">TAN Code</string>
+    <string name="tan_code_subtitle">Please provide the TAN Code associated to this Certificate. This has been sent to you by mail order so.</string>
+    <string name="tan_hint">TAN Code</string>
+    <string name="back">Back</string>
+    <string name="save">Save</string>
 </resources>

@@ -7,27 +7,34 @@
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *  
+ *
  *       http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  *  ---license-end
- *  
- *  Created by mykhailo.nester on 5/7/21 5:23 PM
+ *
+ *  Created by mykhailo.nester on 5/11/21 9:19 PM
  */
 
-package dgca.wallet.app.android.data.remote
+package dgca.wallet.app.android.di
 
-import okhttp3.ResponseBody
-import retrofit2.Response
-import retrofit2.http.GET
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import dgca.wallet.app.android.data.WalletRepository
+import dgca.wallet.app.android.data.WalletRepositoryImpl
+import javax.inject.Singleton
 
-interface ApiService {
+@InstallIn(SingletonComponent::class)
+@Module
+abstract class RepositoryModule {
 
-    @GET("/dgca-issuance-service/dgci/wallet/claim")
-    suspend fun claimCertificate(): Response<ResponseBody>
+    @Singleton
+    @Binds
+    abstract fun bindWalletRepository(repository: WalletRepositoryImpl): WalletRepository
 }

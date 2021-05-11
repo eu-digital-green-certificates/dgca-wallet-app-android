@@ -33,8 +33,12 @@
         tools:layout="@layout/fragment_auth">
         <action
             android:id="@+id/action_authFragment_to_certificatesFragment"
+            app:destination="@id/certificatesFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
             app:launchSingleTop="true"
-            app:destination="@id/certificatesFragment" />
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
     </fragment>
 
     <fragment
@@ -45,23 +49,35 @@
 
         <action
             android:id="@+id/action_certificatesFragment_to_codeReaderFragment"
-            app:destination="@id/codeReaderFragment" />
+            app:destination="@id/codeReaderFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
 
         <action
             android:id="@+id/action_certificatesFragment_to_viewCertificateFragment"
-            app:destination="@id/viewCertificateFragment" />
+            app:destination="@id/viewCertificateFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
 
     </fragment>
 
     <fragment
         android:id="@+id/codeReaderFragment"
         android:name="dgca.wallet.app.android.CodeReaderFragment"
-        android:label="CodeReader"
+        android:label="@string/qr_reader_title"
         tools:layout="@layout/fragment_code_reader">
 
         <action
             android:id="@+id/action_codeReaderFragment_to_claimCertificateFragment"
-            app:destination="@id/claimCertificateFragment" />
+            app:destination="@id/claimCertificateFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
 
     </fragment>
 
@@ -79,7 +95,7 @@
     <fragment
         android:id="@+id/claimCertificateFragment"
         android:name="dgca.wallet.app.android.certificate.ClaimCertificateFragment"
-        android:label="ClaimCertificate"
+        android:label="@string/claim_cert_title"
         tools:layout="@layout/fragment_certificate_claim">
 
         <argument
@@ -88,7 +104,11 @@
 
         <action
             android:id="@+id/action_claimCertificateFragment_to_verificationFragment"
-            app:destination="@id/viewCertificateFragment" />
+            app:destination="@id/viewCertificateFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
 
     </fragment>
 
