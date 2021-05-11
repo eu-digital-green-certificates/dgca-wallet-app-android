@@ -94,6 +94,7 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
     private fun navigateToVerificationPage(qrCodeText: String) {
         findNavController().currentDestination
 
+        // TODO temporar changes, remove after implementing QR code data validation and saving.
         Thread {db.certificateDao().insert(Certificate(qrCodeText = qrCodeText))}.start()
 
         val action =
