@@ -22,7 +22,7 @@
 
 package dgca.wallet.app.android.certificate
 
-import dgca.verifier.app.decoder.CertificateModel
+import dgca.wallet.app.android.data.CertificateModel
 import java.time.LocalDate
 
 data class CertificateCard(val qrCodeText: String, val certificate: CertificateModel, val dateTaken: LocalDate)

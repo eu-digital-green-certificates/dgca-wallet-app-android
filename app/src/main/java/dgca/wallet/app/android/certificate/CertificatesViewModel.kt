@@ -29,8 +29,9 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.verifier.app.decoder.CertificateDecoder
 import dgca.verifier.app.decoder.CertificateDecodingResult
-import dgca.verifier.app.decoder.CertificateModel
+import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.local.AppDatabase
+import dgca.wallet.app.android.data.local.toCertificateModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -54,7 +55,7 @@ class CertificatesViewModel @Inject constructor(
                     appDatabase.certificateDao().getAll().map {
                         // We assume that we do not store invalid QR codes, thus here, no errors should appear.
                         val certificateModel: CertificateModel =
-                            (certificateDecoder.decodeCertificate(it.qrCodeText) as CertificateDecodingResult.Success).certificateModel
+                            (certificateDecoder.decodeCertificate(it.qrCodeText) as CertificateDecodingResult.Success).greenCertificate.toCertificateModel()
                         CertificateCard(
                             it.qrCodeText,
                             certificateModel,
