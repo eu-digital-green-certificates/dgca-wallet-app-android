@@ -94,7 +94,7 @@
 
     <fragment
         android:id="@+id/claimCertificateFragment"
-        android:name="dgca.wallet.app.android.certificate.ClaimCertificateFragment"
+        android:name="dgca.wallet.app.android.certificate.claim.ClaimCertificateFragment"
         android:label="@string/claim_cert_title"
         tools:layout="@layout/fragment_certificate_claim">
 

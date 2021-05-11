@@ -17,10 +17,10 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 5/7/21 9:33 AM
+ *  Created by mykhailo.nester on 5/12/21 12:27 AM
  */
 
-package dgca.wallet.app.android.certificate
+package dgca.wallet.app.android.certificate.claim
 
 import android.os.Bundle
 import android.view.LayoutInflater

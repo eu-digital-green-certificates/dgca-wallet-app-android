@@ -17,27 +17,25 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by mykhailo.nester on 5/11/21 9:00 PM
+ *  Created by mykhailo.nester on 5/12/21 12:27 AM
  */
 
-package dgca.wallet.app.android.certificate
+package dgca.wallet.app.android.certificate.claim
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dgca.verifier.app.decoder.*
 import dgca.verifier.app.decoder.base45.Base45Service
 import dgca.verifier.app.decoder.cbor.CborService
 import dgca.verifier.app.decoder.compression.CompressorService
 import dgca.verifier.app.decoder.cose.CoseService
-import dgca.verifier.app.decoder.generateClaimSignature
-import dgca.verifier.app.decoder.getValidationDataFromCOSE
 import dgca.verifier.app.decoder.model.GreenCertificate
 import dgca.verifier.app.decoder.model.VerificationResult
 import dgca.verifier.app.decoder.prefixvalidation.PrefixValidationService
 import dgca.verifier.app.decoder.schema.SchemaValidator
-import dgca.verifier.app.decoder.toHash
 import dgca.wallet.app.android.Event
 import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.WalletRepository
@@ -92,22 +90,25 @@ class ClaimCertificateViewModel @Inject constructor(
                 schemaValidator.validate(coseData.cbor, verificationResult)
                 greenCertificate = cborService.decode(coseData.cbor, verificationResult)
 
-
                 // Claim Cert
                 val dgci = greenCertificate?.getDgci()
                 val certHash = cose.getValidationDataFromCOSE().toHash()
                 val tanHash = tan.toByteArray().toHash()
 
-                val keyPairGen = KeyPairGenerator.getInstance("EC")
-                keyPairGen.initialize(256)
-                val keyPair: KeyPair = keyPairGen.generateKeyPair()
+                val keyPairData = cose.generateKeyPair()
+                val keyPair: KeyPair? = keyPairData?.keyPair
+                val sigAlg = keyPairData?.algo
+
+                if (keyPair == null || sigAlg == null) {
+                    Timber.d("Key not generated")
+                    return@withContext
+                }
 
                 val keyData = PublicKeyData(
                     keyPair.public.algorithm,
                     Base64.getEncoder().encodeToString(keyPair.public.encoded)
                 )
 
-                val sigAlg = "SHA256withECDSA"
                 val signature = generateClaimSignature(tanHash, certHash, keyData.value, keyPair.private, sigAlg)
                 val request = ClaimRequest(
                     dgci,
