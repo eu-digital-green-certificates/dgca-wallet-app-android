@@ -40,7 +40,7 @@
         <item name="android:textColorSecondary">@color/grey_75</item>
         <item name="android:textColorTertiary">@color/grey_50</item>
 
-<!--        <item name="android:windowBackground">@drawable/splash_bg</item>-->
+        <item name="android:windowBackground">@drawable/splash_bg</item>
     </style>
 
     <style name="Theme.DgcaWalletAppAndroid.Main" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -52,4 +52,5 @@
         <!-- color used by navigation icon and overflow icon -->
         <item name="colorOnPrimary">@color/white</item>
     </style>
+
 </resources>

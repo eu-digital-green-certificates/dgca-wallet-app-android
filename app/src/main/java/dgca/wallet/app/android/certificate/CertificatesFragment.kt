@@ -53,7 +53,7 @@ class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCard
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { requireActivity().finish() }
-        binding.fab.setOnClickListener {
+        binding.scanCode.setOnClickListener {
             val action = CertificatesFragmentDirections.actionCertificatesFragmentToCodeReaderFragment()
             findNavController().navigate(action)
         }
