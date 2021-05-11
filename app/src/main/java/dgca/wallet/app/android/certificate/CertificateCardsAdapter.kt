@@ -47,7 +47,7 @@ class CertificateCardsAdapter(
             binding.titleView.text = when {
                 certificateCard.certificate.vaccinations?.first() != null -> binding.root.resources.getString(
                     R.string.vaccination,
-                    certificateCard.certificate.vaccinations.first().doseNumber
+                    certificateCard.certificate.vaccinations.first().doseNumber.toString()
                 )
                 certificateCard.certificate.recoveryStatements?.isNotEmpty() == true -> binding.root.resources.getString(R.string.recovery)
                 certificateCard.certificate.tests?.isNotEmpty() == true -> binding.root.resources.getString(R.string.test)
