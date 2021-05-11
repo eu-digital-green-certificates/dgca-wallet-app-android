@@ -67,13 +67,13 @@
 
     <fragment
         android:id="@+id/viewCertificateFragment"
-        android:name="dgca.wallet.app.android.certificate.ViewCertificateFragment"
-        android:label="ViewCertificate"
+        android:name="dgca.wallet.app.android.certificate.view.ViewCertificateFragment"
+        android:label="@string/your_certificate"
         tools:layout="@layout/fragment_certificate_view">
 
         <argument
-            android:name="qrCodeText"
-            app:argType="string" />
+            android:name="certificateId"
+            app:argType="integer" />
     </fragment>
 
     <fragment

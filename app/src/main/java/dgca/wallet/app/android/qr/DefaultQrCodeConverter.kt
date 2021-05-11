@@ -17,23 +17,20 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 5/10/21 10:20 PM
+ *  Created by osarapulov on 5/11/21 5:43 PM
  */
 
-package dgca.wallet.app.android.data.local
+package dgca.wallet.app.android.qr
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
+import android.graphics.Bitmap
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.MultiFormatWriter
+import com.journeyapps.barcodescanner.BarcodeEncoder
 
-@Dao
-interface CertificateDao {
-    @Query("SELECT * FROM certificates")
-    fun getAll(): List<Certificate>
-
-    @Query("SELECT * FROM certificates WHERE id LIKE :id LIMIT 1")
-    fun getById(id: Int): Certificate?
-
-    @Insert
-    fun insert(certificate: Certificate)
+class DefaultQrCodeConverter(private val multiFormatWriter: MultiFormatWriter, private val barcodeEncoder: BarcodeEncoder) :
+    QrCodeConverter {
+    override fun convertStringIntoQrCode(text: String, size: Int): Bitmap {
+        val bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.QR_CODE, size, size)
+        return barcodeEncoder.createBitmap(bitMatrix)
+    }
 }

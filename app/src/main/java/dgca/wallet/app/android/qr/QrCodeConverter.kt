@@ -17,11 +17,13 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 5/7/21 9:33 AM
+ *  Created by osarapulov on 5/11/21 5:42 PM
  */
 
-package dgca.wallet.app.android.certificate
+package dgca.wallet.app.android.qr
 
-import androidx.fragment.app.Fragment
+import android.graphics.Bitmap
 
-class ViewCertificateFragment: Fragment()
+interface QrCodeConverter {
+    fun convertStringIntoQrCode(text: String, size: Int): Bitmap
+}

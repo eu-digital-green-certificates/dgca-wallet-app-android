@@ -11,7 +11,9 @@
     <string name="click_span_code_to_add_to_your_wallet">Click Scan Code to add to your Wallet.</string>
     <string name="scan_code">Scan Code</string>
     <string name="name_surname">%s %s</string>
-    <string name="vaccination">Vaccination %d of %d</string>
+    <string name="vaccination">Vaccination Shot #%d</string>
     <string name="recovery">Recovery</string>
     <string name="test">Test</string>
+    <string name="your_certificate">Your Certificate</string>
+    <string name="name">Name</string>
 </resources>

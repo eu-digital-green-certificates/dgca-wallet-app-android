@@ -23,6 +23,19 @@
 package dgca.wallet.app.android.certificate
 
 import dgca.wallet.app.android.data.CertificateModel
+import dgca.wallet.app.android.data.local.Certificate
 import java.time.LocalDate
 
-data class CertificateCard(val qrCodeText: String, val certificate: CertificateModel, val dateTaken: LocalDate)
+data class CertificateCard(
+    val certificateId: Int,
+    val qrCodeText: String,
+    val certificate: CertificateModel,
+    val dateTaken: LocalDate
+) {
+    constructor(certificate: Certificate, certificateModel: CertificateModel) : this(
+        certificate.id,
+        certificate.qrCodeText,
+        certificateModel,
+        certificate.dateAdded
+    )
+}
