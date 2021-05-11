@@ -94,10 +94,9 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
         findNavController().currentDestination
 
         // TODO temporar changes, remove after implementing QR code data validation and saving.
-        Thread {db.certificateDao().insert(Certificate(qrCodeText = qrCodeText))}.start()
+        Thread { db.certificateDao().insert(Certificate(qrCodeText = qrCodeText)) }.start()
 
-        val action =
-            CodeReaderFragmentDirections.actionCodeReaderFragmentToClaimCertificateFragment(qrCodeText)
+        val action = CodeReaderFragmentDirections.actionCodeReaderFragmentToClaimCertificateFragment(qrCodeText)
         findNavController().navigate(action)
     }
 

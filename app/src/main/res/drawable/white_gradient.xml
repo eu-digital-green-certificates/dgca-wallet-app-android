@@ -17,11 +17,13 @@
   ~  limitations under the License.
   ~  -license-end
   ~
-  ~  Created by mykhailo.nester on 5/11/21 9:48 PM
+  ~  Created by mykhailo.nester on 5/12/21 00:05 AM
   -->
 
-<translate xmlns:android="http://schemas.android.com/apk/res/android"
-    android:duration="@android:integer/config_shortAnimTime"
-    android:fromXDelta="0%"
-    android:interpolator="@android:anim/decelerate_interpolator"
-    android:toXDelta="100%" />
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:angle="-90"
+        android:centerColor="#96ffffff"
+        android:endColor="#ffffff"
+        android:startColor="#65ffffff" />
+</shape>

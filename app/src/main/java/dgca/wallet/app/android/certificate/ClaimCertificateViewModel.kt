@@ -38,9 +38,9 @@ import dgca.verifier.app.decoder.model.VerificationResult
 import dgca.verifier.app.decoder.prefixvalidation.PrefixValidationService
 import dgca.verifier.app.decoder.schema.SchemaValidator
 import dgca.verifier.app.decoder.toHash
+import dgca.wallet.app.android.Event
 import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.WalletRepository
-import dgca.wallet.app.android.data.local.toCertificateModel
 import dgca.wallet.app.android.model.ClaimRequest
 import dgca.wallet.app.android.model.PublicKeyData
 import kotlinx.coroutines.Dispatchers
@@ -68,11 +68,15 @@ class ClaimCertificateViewModel @Inject constructor(
     private val _inProgress = MutableLiveData<Boolean>()
     val inProgress: LiveData<Boolean> = _inProgress
 
+    private val _event = MutableLiveData<Event<ClaimCertEvent>>()
+    val event: LiveData<Event<ClaimCertEvent>> = _event
+
     fun save(qrCode: String, tan: String) {
         viewModelScope.launch {
             _inProgress.value = true
             var greenCertificate: GreenCertificate? = null
             val verificationResult = VerificationResult()
+            var result = false
 
             withContext(Dispatchers.IO) {
                 val plainInput = prefixValidationService.decode(qrCode, verificationResult)
@@ -115,12 +119,15 @@ class ClaimCertificateViewModel @Inject constructor(
                 )
 
 //                TODO: handle response
-                walletRepository.claimCertificate(request)
+                result = walletRepository.claimCertificate(request)
 
             }
-
             _inProgress.value = false
-            _certificate.value = greenCertificate?.toCertificateModel()
+            _event.value = Event(ClaimCertEvent.OnCertClaimed(result))
         }
+    }
+
+    sealed class ClaimCertEvent {
+        data class OnCertClaimed(val result: Boolean) : ClaimCertEvent()
     }
 }
