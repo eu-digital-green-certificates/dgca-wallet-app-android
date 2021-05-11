@@ -78,8 +78,8 @@ class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCard
         }
     }
 
-    override fun onCertificateCardClick(qrCodeText: String) {
-        val action = CertificatesFragmentDirections.actionCertificatesFragmentToViewCertificateFragment(qrCodeText)
+    override fun onCertificateCardClick(certificateId: Int) {
+        val action = CertificatesFragmentDirections.actionCertificatesFragmentToViewCertificateFragment(certificateId)
         findNavController().navigate(action)
     }
 

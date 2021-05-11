@@ -47,8 +47,7 @@ class CertificateCardsAdapter(
             binding.titleView.text = when {
                 certificateCard.certificate.vaccinations?.first() != null -> binding.root.resources.getString(
                     R.string.vaccination,
-                    certificateCard.certificate.vaccinations?.first()?.doseNumber,
-                    certificateCard.certificate.vaccinations?.first()?.totalSeriesOfDoses
+                    certificateCard.certificate.vaccinations.first().doseNumber.toString()
                 )
                 certificateCard.certificate.recoveryStatements?.isNotEmpty() == true -> binding.root.resources.getString(R.string.recovery)
                 certificateCard.certificate.tests?.isNotEmpty() == true -> binding.root.resources.getString(R.string.test)
@@ -61,7 +60,7 @@ class CertificateCardsAdapter(
                     certificateCard.certificate.person.familyName
                 )
             binding.scannedAtDateView.text = certificateCard.dateTaken.formatWith(YEAR_MONTH_DAY)
-            binding.root.setOnClickListener { certificateCardClickListener.onCertificateCardClick(certificateCard.qrCodeText) }
+            binding.root.setOnClickListener { certificateCardClickListener.onCertificateCardClick(certificateCard.certificateId) }
         }
     }
 
@@ -78,6 +77,6 @@ class CertificateCardsAdapter(
     }
 
     interface CertificateCardClickListener {
-        fun onCertificateCardClick(qrCodeText: String)
+        fun onCertificateCardClick(certificateId: Int)
     }
 }
