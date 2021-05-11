@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="dgca.wallet.app.android">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:name=".DgcaWalletApplication"
         android:allowBackup="false"
@@ -11,8 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DgcaWalletAppAndroid">
 
-        <activity
-            android:name=".MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

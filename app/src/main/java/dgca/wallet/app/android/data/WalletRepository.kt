@@ -22,7 +22,9 @@
 
 package dgca.wallet.app.android.data
 
+import dgca.wallet.app.android.model.ClaimRequest
+
 interface WalletRepository {
 
-    suspend fun claimCertificate(): Boolean?
+    suspend fun claimCertificate(request: ClaimRequest): Boolean
 }

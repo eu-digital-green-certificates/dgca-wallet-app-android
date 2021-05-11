@@ -23,6 +23,7 @@
 package dgca.wallet.app.android.data
 
 import dgca.wallet.app.android.data.remote.ApiService
+import dgca.wallet.app.android.model.ClaimRequest
 import javax.inject.Inject
 
 class WalletRepositoryImpl @Inject constructor(
@@ -30,8 +31,12 @@ class WalletRepositoryImpl @Inject constructor(
 ) : BaseRepository(), WalletRepository {
 
 
-    override suspend fun claimCertificate(): Boolean? {
+    override suspend fun claimCertificate(request: ClaimRequest): Boolean {
+        return execute {
+            val response = apiService.claimCertificate(request)
+            val body = response.body() ?: return@execute false
 
-        return true
+            return@execute true
+        } == true
     }
 }
