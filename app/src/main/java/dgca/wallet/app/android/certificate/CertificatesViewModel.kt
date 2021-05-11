@@ -41,10 +41,12 @@ class CertificatesViewModel @Inject constructor(
     private val appDatabase: AppDatabase,
     private val certificateDecoder: CertificateDecoder
 ) : ViewModel() {
+
+
     private val _certificates = MutableLiveData<List<CertificateCard>>()
     val certificates: LiveData<List<CertificateCard>> = _certificates
 
-    init {
+    fun fetchCertificates() {
         viewModelScope.launch {
             var certificateCards: List<CertificateCard>? = null
             withContext(Dispatchers.IO) {

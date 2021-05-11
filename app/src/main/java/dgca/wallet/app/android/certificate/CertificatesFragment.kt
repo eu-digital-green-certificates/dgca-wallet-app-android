@@ -52,6 +52,7 @@ class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCard
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewModel.fetchCertificates()
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { requireActivity().finish() }
         binding.scanCode.setOnClickListener {
             val action = CertificatesFragmentDirections.actionCertificatesFragmentToCodeReaderFragment()
