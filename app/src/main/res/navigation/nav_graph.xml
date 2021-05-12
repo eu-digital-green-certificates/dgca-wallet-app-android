@@ -27,6 +27,12 @@
     app:startDestination="@id/authFragment">
 
     <fragment
+        android:id="@+id/settingsFragment"
+        android:name="dgca.wallet.app.android.SettingsFragment"
+        android:label="@string/settings"
+        tools:layout="@layout/fragment_settings" />
+
+    <fragment
         android:id="@+id/authFragment"
         android:name="dgca.wallet.app.android.AuthFragment"
         tools:layout="@layout/fragment_auth">
