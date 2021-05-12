@@ -23,6 +23,8 @@
 package dgca.wallet.app.android
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -50,6 +52,24 @@ class MainActivity : AppCompatActivity() {
             fallbackOnNavigateUpListener = ::onSupportNavigateUp
         )
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
+
+        setSupportActionBar(binding.toolbar)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+        if (item.itemId == R.id.settings) {
+            navController.navigate(R.id.settingsFragment)
+            return true
+        } else {
+            return navController.navigateUp()
+        }
     }
 
     fun clearBackground() {
