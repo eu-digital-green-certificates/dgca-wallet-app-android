@@ -68,7 +68,6 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.settingsFragment)
             return true
         } else {
-
             return navController.navigateUp()
         }
     }
