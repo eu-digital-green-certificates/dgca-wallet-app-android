@@ -17,11 +17,25 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 5/7/21 9:33 AM
+ *  Created by mykhailo.nester on 5/11/21 11:13 PM
  */
 
-package dgca.wallet.app.android.certificate
+package dgca.wallet.app.android.model
 
-import androidx.fragment.app.Fragment
+import com.google.gson.annotations.SerializedName
 
-class ClaimCertificateFragment : Fragment()
+data class ClaimRequest(
+
+    @SerializedName("DGCI")
+    val dgci: String? = null,
+
+    @SerializedName("certhash")
+    val certHash: String? = null,
+
+    @SerializedName("TANHash")
+    val tanHash: String? = null,
+
+    val publicKey: PublicKeyData? = null,
+    val sigAlg: String? = null,
+    val signature: String? = null
+)

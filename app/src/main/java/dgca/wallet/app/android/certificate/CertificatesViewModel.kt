@@ -43,11 +43,14 @@ class CertificatesViewModel @Inject constructor(
     private val certificateDecoder: CertificateDecoder
 ) : ViewModel() {
 
-
     private val _certificates = MutableLiveData<List<CertificateCard>>()
     val certificates: LiveData<List<CertificateCard>> = _certificates
 
+    private val _inProgress = MutableLiveData<Boolean>()
+    val inProgress: LiveData<Boolean> = _inProgress
+
     fun fetchCertificates() {
+        _inProgress.value = true
         viewModelScope.launch {
             var certificateCards: List<CertificateCard>? = null
             withContext(Dispatchers.IO) {
@@ -62,6 +65,7 @@ class CertificatesViewModel @Inject constructor(
                         )
                     }
             }
+            _inProgress.value = false
             _certificates.value = certificateCards ?: emptyList()
         }
     }

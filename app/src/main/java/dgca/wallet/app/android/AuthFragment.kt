@@ -60,6 +60,7 @@ class AuthFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        (activity as MainActivity).disableBackButton()
         _binding = FragmentAuthBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -81,9 +82,6 @@ class AuthFragment : Fragment() {
 
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
-                    Toast.makeText(requireContext(), "Authentication success", Toast.LENGTH_SHORT)
-                        .show()
-
                     encryptSecretInformation(result.cryptoObject)
                     navigateToCodeReader()
                 }
