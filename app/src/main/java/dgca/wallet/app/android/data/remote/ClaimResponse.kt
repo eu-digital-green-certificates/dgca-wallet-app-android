@@ -23,5 +23,5 @@
 package dgca.wallet.app.android.data.remote
 
 data class ClaimResponse(
-    val newTan: String
+    val tan: String
 )

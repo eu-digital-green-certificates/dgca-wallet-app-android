@@ -93,6 +93,8 @@ class SecurityKeyWrapper(private val keyPair: KeyPair) {
             return String(res)
         } catch (e: GeneralSecurityException) {
             Timber.w(e)
+        } catch (ex: Exception) {
+            Timber.w(ex)
         }
         return null
     }

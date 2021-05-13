@@ -48,4 +48,5 @@
     <string name="certificate_valid_from_title">Certificate Valid From</string>
     <string name="certificate_valid_until_title">Certificate Valid Until</string>
     <string name="date_of_positive_title">Date of First Positive Test</string>
+    <string name="tan_placeholder">Tan: %1$s</string>
 </resources>

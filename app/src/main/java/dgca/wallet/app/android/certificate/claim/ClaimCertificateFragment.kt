@@ -39,6 +39,7 @@ import dgca.wallet.app.android.R
 import dgca.wallet.app.android.YEAR_MONTH_DAY
 import dgca.wallet.app.android.data.CertificateData
 import dgca.wallet.app.android.data.CertificateModel
+import dgca.wallet.app.android.data.getCertificateListData
 import dgca.wallet.app.android.databinding.FragmentCertificateClaimBinding
 import dgca.wallet.app.android.parseFromTo
 
@@ -77,8 +78,7 @@ class ClaimCertificateFragment : Fragment() {
         viewModel.certificate.observe(viewLifecycleOwner, { certificate ->
             if (certificate != null) {
                 showUserData(certificate)
-                val list = getCertificateListData(certificate)
-                adapter.update(list)
+                adapter.update(certificate.getCertificateListData())
             }
         })
         viewModel.init(args.qrCodeText)
@@ -95,15 +95,6 @@ class ClaimCertificateFragment : Fragment() {
         binding.personStandardisedFamilyName.text = certificate.person.standardisedFamilyName
         binding.personStandardisedGivenName.text = certificate.person.standardisedGivenName
         binding.dateOfBirth.text = certificate.dateOfBirth.parseFromTo(YEAR_MONTH_DAY, FORMATTED_YEAR_MONTH_DAY)
-    }
-
-    private fun getCertificateListData(certificate: CertificateModel): List<CertificateData> {
-        val list = mutableListOf<CertificateData>()
-        list.addAll(certificate.vaccinations ?: emptyList())
-        list.addAll(certificate.tests ?: emptyList())
-        list.addAll(certificate.recoveryStatements ?: emptyList())
-
-        return list
     }
 
     private fun onViewModelEvent(event: ClaimCertificateViewModel.ClaimCertEvent) {

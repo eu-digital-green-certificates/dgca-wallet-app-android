@@ -28,13 +28,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dgca.wallet.app.android.security.KeyStoreCryptor
 import dgca.verifier.app.decoder.CertificateDecoder
 import dgca.verifier.app.decoder.CertificateDecodingResult
 import dgca.wallet.app.android.certificate.CertificateCard
+import dgca.wallet.app.android.data.WalletRepository
 import dgca.wallet.app.android.data.local.AppDatabase
 import dgca.wallet.app.android.data.local.toCertificateModel
 import dgca.wallet.app.android.qr.QrCodeConverter
+import dgca.wallet.app.android.security.KeyStoreCryptor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -47,17 +48,24 @@ class ViewCertificateViewModel @Inject constructor(
     private val appDatabase: AppDatabase,
     private val certificateDecoder: CertificateDecoder,
     private val qrCodeConverter: QrCodeConverter,
-    private val cryptor: KeyStoreCryptor
+    private val cryptor: KeyStoreCryptor,
+    private val walletRepository: WalletRepository
 ) : ViewModel() {
 
     private val _certificate = MutableLiveData<CertificateViewCard>()
     val certificate: LiveData<CertificateViewCard> = _certificate
 
+    private val _inProgress = MutableLiveData<Boolean>()
+    val inProgress: LiveData<Boolean> = _inProgress
+
     fun setCertificateId(certificateId: Int, qrCodeSize: Int) {
         viewModelScope.launch {
+            _inProgress.value = true
             var certificateCard: CertificateCard
             var qrCode: Bitmap
             withContext(Dispatchers.IO) {
+//                walletRepository  TODO: get cert
+
                 val encodedCertificate = appDatabase.certificateDao().getById(certificateId)!!
                 val certificate = encodedCertificate.copy(qrCodeText = cryptor.decrypt(encodedCertificate.qrCodeText)!!)
                 val certificateModel =
@@ -66,6 +74,7 @@ class ViewCertificateViewModel @Inject constructor(
                 qrCode = qrCodeConverter.convertStringIntoQrCode(certificate.qrCodeText, qrCodeSize)
             }
             _certificate.value = CertificateViewCard(certificateCard, qrCode)
+            _inProgress.value = false
         }
     }
 }

@@ -40,7 +40,7 @@ class WalletRepositoryImpl @Inject constructor(
         return execute {
             val response = apiService.claimCertificate(request)
             if (response.isSuccessful) {
-                val tan = response.body()?.newTan ?: ""
+                val tan = response.body()?.tan ?: ""
                 keyStoreCryptor.encrypt(qrCode)?.let {
                     certificateDao.insert(
                         CertificateEntity(

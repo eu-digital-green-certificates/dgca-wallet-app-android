@@ -30,12 +30,14 @@ data class CertificateCard(
     val certificateId: Int,
     val qrCodeText: String,
     val certificate: CertificateModel,
+    val tan: String,
     val dateTaken: LocalDate
 ) {
     constructor(certificateEntity: CertificateEntity, certificateModel: CertificateModel) : this(
         certificateEntity.id,
         certificateEntity.qrCodeText,
         certificateModel,
+        certificateEntity.tan,
         certificateEntity.dateAdded
     )
 }
