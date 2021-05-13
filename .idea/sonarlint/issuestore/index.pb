@@ -17,3 +17,7 @@ R
 Mapp/src/main/java/dgca/wallet/app/android/certificate/CertificatesFragment.kt,7/f/7f279eef330831d6746335412b7ec3801fa15950
 i
 9app/src/main/java/dgca/wallet/app/android/AuthFragment.kt,3/f/3f641df96474afc2c48ea65c56c4ad4d20a3bcbc
+…
+Uapp/src/main/java/dgca/wallet/app/android/certificate/view/ViewCertificateFragment.kt,2/e/2ea83e6002da9894334c2b1b6f87fa4f9eca18e0
+m
+=app/src/main/java/dgca/wallet/app/android/SettingsFragment.kt,c/3/c3914fb13fa0f0b95290c71d05b1aa2140338112

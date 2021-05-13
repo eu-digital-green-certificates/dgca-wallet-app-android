@@ -57,4 +57,7 @@ object Deps {
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
 
     const val test_junit = "junit:junit:${Versions.junit}"
+
+    const val android_test_junit = "androidx.test.ext:junit:${Versions.android_test_junit}"
+    const val android_test_rules = "androidx.test:rules:${Versions.android_test_rules}"
 }
