@@ -66,7 +66,6 @@ class DefaultKeyStoreCryptor @Inject constructor() : KeyStoreCryptor {
                 val builder =
                     KeyGenParameterSpec.Builder(KEY_ALIAS, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
                         .setBlockModes(KeyProperties.BLOCK_MODE_ECB)
-                        //.setUserAuthenticationRequired(true)
                         .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1)
 
                 keyPairGenerator.initialize(builder.build())
