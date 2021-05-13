@@ -25,5 +25,6 @@ package dgca.wallet.app.android.qr
 import android.graphics.Bitmap
 
 interface QrCodeConverter {
+
     fun convertStringIntoQrCode(text: String, size: Int): Bitmap
 }

@@ -26,14 +26,15 @@ import androidx.room.*
 
 @Dao
 interface CertificateDao {
+
     @Query("SELECT * FROM certificates")
-    fun getAll(): List<CertificateEntity>
+    suspend fun getAll(): List<CertificateEntity>
 
     @Query("SELECT * FROM certificates WHERE id LIKE :id LIMIT 1")
-    fun getById(id: Int): CertificateEntity?
+    suspend fun getById(id: Int): CertificateEntity?
 
     @Insert(entity = CertificateEntity::class, onConflict = OnConflictStrategy.IGNORE)
-    fun insert(item: CertificateEntity): Long
+    suspend fun insert(item: CertificateEntity): Long
 
     @Update(entity = CertificateEntity::class, onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(item: CertificateEntity): Int

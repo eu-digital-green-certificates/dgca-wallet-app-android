@@ -28,14 +28,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dgca.verifier.app.decoder.CertificateDecoder
-import dgca.verifier.app.decoder.CertificateDecodingResult
 import dgca.wallet.app.android.certificate.CertificateCard
 import dgca.wallet.app.android.data.WalletRepository
-import dgca.wallet.app.android.data.local.AppDatabase
-import dgca.wallet.app.android.data.local.toCertificateModel
 import dgca.wallet.app.android.qr.QrCodeConverter
-import dgca.wallet.app.android.security.KeyStoreCryptor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -45,10 +40,7 @@ data class CertificateViewCard(val certificateCard: CertificateCard, val qrCode:
 
 @HiltViewModel
 class ViewCertificateViewModel @Inject constructor(
-    private val appDatabase: AppDatabase,
-    private val certificateDecoder: CertificateDecoder,
     private val qrCodeConverter: QrCodeConverter,
-    private val cryptor: KeyStoreCryptor,
     private val walletRepository: WalletRepository
 ) : ViewModel() {
 
@@ -61,17 +53,16 @@ class ViewCertificateViewModel @Inject constructor(
     fun setCertificateId(certificateId: Int, qrCodeSize: Int) {
         viewModelScope.launch {
             _inProgress.value = true
-            var certificateCard: CertificateCard
             var qrCode: Bitmap
-            withContext(Dispatchers.IO) {
-//                walletRepository  TODO: get cert
 
-                val encodedCertificate = appDatabase.certificateDao().getById(certificateId)!!
-                val certificate = encodedCertificate.copy(qrCodeText = cryptor.decrypt(encodedCertificate.qrCodeText)!!)
-                val certificateModel =
-                    (certificateDecoder.decodeCertificate(certificate.qrCodeText) as CertificateDecodingResult.Success).greenCertificate.toCertificateModel()
-                certificateCard = CertificateCard(certificate, certificateModel)
-                qrCode = qrCodeConverter.convertStringIntoQrCode(certificate.qrCodeText, qrCodeSize)
+            val certificateCard = walletRepository.getCertificatesById(certificateId)
+            if (certificateCard == null) {
+                _inProgress.value = false
+                return@launch
+            }
+
+            withContext(Dispatchers.IO) {
+                qrCode = qrCodeConverter.convertStringIntoQrCode(certificateCard.qrCodeText, qrCodeSize)
             }
             _certificate.value = CertificateViewCard(certificateCard, qrCode)
             _inProgress.value = false
