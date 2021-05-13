@@ -27,10 +27,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.MultiFormatWriter
-import com.journeyapps.barcodescanner.BarcodeEncoder
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dgca.verifier.app.android.security.KeyStoreCryptor
 import dgca.verifier.app.decoder.CertificateDecoder
 import dgca.verifier.app.decoder.CertificateDecodingResult
 import dgca.wallet.app.android.certificate.CertificateCard
@@ -49,7 +47,8 @@ data class CertificateViewCard(val certificateCard: CertificateCard, val qrCode:
 class ViewCertificateViewModel @Inject constructor(
     private val appDatabase: AppDatabase,
     private val certificateDecoder: CertificateDecoder,
-    private val qrCodeConverter: QrCodeConverter
+    private val qrCodeConverter: QrCodeConverter,
+    private val cryptor: KeyStoreCryptor
 ) : ViewModel() {
     private val _certificate = MutableLiveData<CertificateViewCard>()
     val certificate: LiveData<CertificateViewCard> = _certificate
@@ -59,7 +58,9 @@ class ViewCertificateViewModel @Inject constructor(
             var certificateCard: CertificateCard
             var qrCode: Bitmap
             withContext(Dispatchers.IO) {
-                val certificate: Certificate = appDatabase.certificateDao().getById(certificateId)!!
+                val encodedCertificate: Certificate = appDatabase.certificateDao().getById(certificateId)!!
+                val certificate: Certificate =
+                    encodedCertificate.copy(qrCodeText = cryptor.decrypt(encodedCertificate.qrCodeText)!!)
                 val certificateModel =
                     (certificateDecoder.decodeCertificate(certificate.qrCodeText) as CertificateDecodingResult.Success).greenCertificate.toCertificateModel()
                 certificateCard = CertificateCard(certificate, certificateModel)

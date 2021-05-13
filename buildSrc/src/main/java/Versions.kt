@@ -56,4 +56,8 @@ object Versions {
 
     // Tests
     const val junit = "4.13.1"
+
+    // Instrumented tests
+    const val android_test_junit = "1.1.2"
+    const val android_test_rules = "1.3.0"
 }
