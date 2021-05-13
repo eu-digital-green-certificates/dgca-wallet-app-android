@@ -39,6 +39,7 @@ import dgca.verifier.app.decoder.schema.SchemaValidator
 import dgca.wallet.app.android.Event
 import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.WalletRepository
+import dgca.wallet.app.android.data.local.toCertificateModel
 import dgca.wallet.app.android.model.ClaimRequest
 import dgca.wallet.app.android.model.PublicKeyData
 import kotlinx.coroutines.Dispatchers
@@ -69,17 +70,17 @@ class ClaimCertificateViewModel @Inject constructor(
     private val _event = MutableLiveData<Event<ClaimCertEvent>>()
     val event: LiveData<Event<ClaimCertEvent>> = _event
 
-    fun save(qrCode: String, tan: String) {
+    private var cose = ByteArray(0)
+    private var greenCertificate: GreenCertificate? = null
+
+    fun init(qrCodeText: String) {
         viewModelScope.launch {
             _inProgress.value = true
-            var greenCertificate: GreenCertificate? = null
-            val verificationResult = VerificationResult()
-            var result = false
-
             withContext(Dispatchers.IO) {
-                val plainInput = prefixValidationService.decode(qrCode, verificationResult)
+                val verificationResult = VerificationResult()
+                val plainInput = prefixValidationService.decode(qrCodeText, verificationResult)
                 val compressedCose = base45Service.decode(plainInput, verificationResult)
-                val cose = compressorService.decode(compressedCose, verificationResult)
+                cose = compressorService.decode(compressedCose, verificationResult)
 
                 val coseData = coseService.decode(cose, verificationResult)
                 if (coseData == null) {
@@ -89,8 +90,22 @@ class ClaimCertificateViewModel @Inject constructor(
 
                 schemaValidator.validate(coseData.cbor, verificationResult)
                 greenCertificate = cborService.decode(coseData.cbor, verificationResult)
+            }
+            _inProgress.value = false
+            _certificate.value = greenCertificate?.toCertificateModel()
+        }
+    }
 
-                // Claim Cert
+    fun save(qrCode: String, tan: String) {
+        viewModelScope.launch {
+            _inProgress.value = true
+            var result = false
+
+            withContext(Dispatchers.IO) {
+                if (greenCertificate == null || cose.isEmpty()) {
+                    return@withContext
+                }
+
                 val dgci = greenCertificate?.getDgci()
                 val certHash = cose.getValidationDataFromCOSE().toHash()
                 val tanHash = tan.toByteArray().toHash()
