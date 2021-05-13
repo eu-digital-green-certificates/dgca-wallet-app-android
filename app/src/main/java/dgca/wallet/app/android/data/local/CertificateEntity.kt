@@ -17,25 +17,29 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 5/11/21 12:20 AM
+ *  Created by osarapulov on 5/10/21 10:12 PM
  */
 
-package dgca.wallet.app.android.certificate
+package dgca.wallet.app.android.data.local
 
-import dgca.wallet.app.android.data.CertificateModel
-import dgca.wallet.app.android.data.local.CertificateEntity
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.time.LocalDate
 
-data class CertificateCard(
-    val certificateId: Int,
+@Entity(tableName = "certificates")
+data class CertificateEntity(
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    val id: Int = 0,
+
+    @ColumnInfo(name = "qr_code")
     val qrCodeText: String,
-    val certificate: CertificateModel,
-    val dateTaken: LocalDate
-) {
-    constructor(certificateEntity: CertificateEntity, certificateModel: CertificateModel) : this(
-        certificateEntity.id,
-        certificateEntity.qrCodeText,
-        certificateModel,
-        certificateEntity.dateAdded
-    )
-}
+
+    @ColumnInfo(name = "tan")
+    val tan: String,
+
+    @ColumnInfo(name = "date_added")
+    val dateAdded: LocalDate = LocalDate.now()
+)

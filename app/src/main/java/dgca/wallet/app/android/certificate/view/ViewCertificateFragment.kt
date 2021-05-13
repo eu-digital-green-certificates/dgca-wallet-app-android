@@ -36,6 +36,7 @@ import dgca.wallet.app.android.databinding.FragmentCertificateViewBinding
 
 @AndroidEntryPoint
 class ViewCertificateFragment : Fragment() {
+
     private val args by navArgs<ViewCertificateFragmentArgs>()
     private val viewModel by viewModels<ViewCertificateViewModel>()
     private var _binding: FragmentCertificateViewBinding? = null
@@ -50,8 +51,8 @@ class ViewCertificateFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val displayMetrics = DisplayMetrics()
         requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
-        val minEdge = Math.min(displayMetrics.heightPixels, displayMetrics.widthPixels)
-        viewModel.setCertificateId(args.certificateId, minEdge)
+        val minEdge = displayMetrics.widthPixels * 0.9
+        viewModel.setCertificateId(args.certificateId, minEdge.toInt())
         viewModel.certificate.observe(viewLifecycleOwner, {
             binding.title.text = when {
                 it.certificateCard.certificate.vaccinations?.first() != null -> binding.root.resources.getString(

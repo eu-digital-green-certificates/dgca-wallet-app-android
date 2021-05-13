@@ -22,19 +22,33 @@
 
 package dgca.wallet.app.android.data
 
+import dgca.wallet.app.android.data.local.CertificateDao
+import dgca.wallet.app.android.data.local.CertificateEntity
 import dgca.wallet.app.android.data.remote.ApiService
 import dgca.wallet.app.android.model.ClaimRequest
 import javax.inject.Inject
 
 class WalletRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
+    private val certificateDao: CertificateDao
 ) : BaseRepository(), WalletRepository {
 
 
-    override suspend fun claimCertificate(request: ClaimRequest): Boolean {
+    override suspend fun claimCertificate(qrCode: String, request: ClaimRequest): Boolean {
         return execute {
             val response = apiService.claimCertificate(request)
+            if (response.isSuccessful) {
+                val tan = response.body()?.newTan ?: ""
+                certificateDao.upsert(
+                    CertificateEntity(
+                        qrCodeText = qrCode,
+                        tan = tan
+                    )
+                )
+            }
+
             val body = response.body() ?: return@execute false
+
 
             return@execute true
         } == true

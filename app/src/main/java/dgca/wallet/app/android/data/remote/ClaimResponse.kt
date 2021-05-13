@@ -17,18 +17,11 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 5/10/21 10:12 PM
+ *  Created by mykhailo.nester on 5/13/21 2:46 PM
  */
 
-package dgca.wallet.app.android.data.local
+package dgca.wallet.app.android.data.remote
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import java.time.LocalDate
-
-@Entity(tableName = "certificates")
-data class Certificate(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val qrCodeText: String,
-    val dateAdded: LocalDate = LocalDate.now()
+data class ClaimResponse(
+    val newTan: String
 )

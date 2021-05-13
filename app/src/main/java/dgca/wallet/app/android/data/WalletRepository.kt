@@ -26,5 +26,5 @@ import dgca.wallet.app.android.model.ClaimRequest
 
 interface WalletRepository {
 
-    suspend fun claimCertificate(request: ClaimRequest): Boolean
+    suspend fun claimCertificate(qrCode: String, request: ClaimRequest): Boolean
 }

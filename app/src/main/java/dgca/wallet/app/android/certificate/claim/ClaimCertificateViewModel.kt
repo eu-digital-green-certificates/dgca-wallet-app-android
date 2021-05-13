@@ -120,8 +120,10 @@ class ClaimCertificateViewModel @Inject constructor(
                 )
 
 //                TODO: handle response
-                result = walletRepository.claimCertificate(request)
+                result = walletRepository.claimCertificate(qrCode, request)
+                if (result) {
 
+                }
             }
             _inProgress.value = false
             _event.value = Event(ClaimCertEvent.OnCertClaimed(result))

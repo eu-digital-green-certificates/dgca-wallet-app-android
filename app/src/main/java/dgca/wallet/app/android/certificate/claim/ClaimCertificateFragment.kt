@@ -50,16 +50,8 @@ class ClaimCertificateFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.backBtn.setOnClickListener {
-            findNavController().popBackStack()
-        }
-        binding.saveBtn.setOnClickListener {
-            viewModel.save(args.qrCodeText, binding.tanTextField.editText?.text.toString())
-        }
-
-        viewModel.inProgress.observe(viewLifecycleOwner, {
-            binding.progressView.isVisible = it
-        })
+        binding.saveBtn.setOnClickListener { viewModel.save(args.qrCodeText, args.tan) }
+        viewModel.inProgress.observe(viewLifecycleOwner, { binding.progressView.isVisible = it })
         viewModel.event.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
                 onViewModelEvent(it)

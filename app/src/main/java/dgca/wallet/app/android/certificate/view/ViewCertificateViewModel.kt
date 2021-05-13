@@ -27,15 +27,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.MultiFormatWriter
-import com.journeyapps.barcodescanner.BarcodeEncoder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.verifier.app.decoder.CertificateDecoder
 import dgca.verifier.app.decoder.CertificateDecodingResult
 import dgca.wallet.app.android.certificate.CertificateCard
 import dgca.wallet.app.android.data.local.AppDatabase
-import dgca.wallet.app.android.data.local.Certificate
+import dgca.wallet.app.android.data.local.CertificateEntity
 import dgca.wallet.app.android.data.local.toCertificateModel
 import dgca.wallet.app.android.qr.QrCodeConverter
 import kotlinx.coroutines.Dispatchers
@@ -51,6 +48,7 @@ class ViewCertificateViewModel @Inject constructor(
     private val certificateDecoder: CertificateDecoder,
     private val qrCodeConverter: QrCodeConverter
 ) : ViewModel() {
+
     private val _certificate = MutableLiveData<CertificateViewCard>()
     val certificate: LiveData<CertificateViewCard> = _certificate
 
@@ -59,11 +57,11 @@ class ViewCertificateViewModel @Inject constructor(
             var certificateCard: CertificateCard
             var qrCode: Bitmap
             withContext(Dispatchers.IO) {
-                val certificate: Certificate = appDatabase.certificateDao().getById(certificateId)!!
+                val certificateEntity: CertificateEntity = appDatabase.certificateDao().getById(certificateId)!!
                 val certificateModel =
-                    (certificateDecoder.decodeCertificate(certificate.qrCodeText) as CertificateDecodingResult.Success).greenCertificate.toCertificateModel()
-                certificateCard = CertificateCard(certificate, certificateModel)
-                qrCode = qrCodeConverter.convertStringIntoQrCode(certificate.qrCodeText, qrCodeSize)
+                    (certificateDecoder.decodeCertificate(certificateEntity.qrCodeText) as CertificateDecodingResult.Success).greenCertificate.toCertificateModel()
+                certificateCard = CertificateCard(certificateEntity, certificateModel)
+                qrCode = qrCodeConverter.convertStringIntoQrCode(certificateEntity.qrCodeText, qrCodeSize)
             }
             _certificate.value = CertificateViewCard(certificateCard, qrCode)
         }
