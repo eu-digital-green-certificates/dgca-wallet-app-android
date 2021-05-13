@@ -20,7 +20,7 @@
  *  Created by osarapulov on 4/30/21 1:24 AM
  */
 
-package dgca.verifier.app.android.security
+package dgca.wallet.app.android.security
 
 interface KeyStoreCryptor {
 

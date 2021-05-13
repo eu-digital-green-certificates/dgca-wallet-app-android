@@ -26,11 +26,13 @@ import dgca.wallet.app.android.data.local.CertificateDao
 import dgca.wallet.app.android.data.local.CertificateEntity
 import dgca.wallet.app.android.data.remote.ApiService
 import dgca.wallet.app.android.model.ClaimRequest
+import dgca.wallet.app.android.security.KeyStoreCryptor
 import javax.inject.Inject
 
 class WalletRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
-    private val certificateDao: CertificateDao
+    private val certificateDao: CertificateDao,
+    private val keyStoreCryptor: KeyStoreCryptor
 ) : BaseRepository(), WalletRepository {
 
 
@@ -39,12 +41,15 @@ class WalletRepositoryImpl @Inject constructor(
             val response = apiService.claimCertificate(request)
             if (response.isSuccessful) {
                 val tan = response.body()?.newTan ?: ""
-                certificateDao.upsert(
-                    CertificateEntity(
-                        qrCodeText = qrCode,
-                        tan = tan
+                keyStoreCryptor.encrypt(qrCode)?.let {
+                    certificateDao.insert(
+                        CertificateEntity(
+                            qrCodeText = it,
+                            tan = tan
+                        )
                     )
-                )
+
+                }
             }
 
             val body = response.body() ?: return@execute false

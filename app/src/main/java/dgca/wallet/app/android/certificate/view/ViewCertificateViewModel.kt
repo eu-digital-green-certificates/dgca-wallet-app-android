@@ -28,7 +28,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dgca.verifier.app.android.security.KeyStoreCryptor
+import dgca.wallet.app.android.security.KeyStoreCryptor
 import dgca.verifier.app.decoder.CertificateDecoder
 import dgca.verifier.app.decoder.CertificateDecodingResult
 import dgca.wallet.app.android.certificate.CertificateCard

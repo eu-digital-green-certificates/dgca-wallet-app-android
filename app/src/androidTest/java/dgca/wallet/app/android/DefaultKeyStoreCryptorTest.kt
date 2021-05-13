@@ -23,8 +23,8 @@
 package dgca.wallet.app.android
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import dgca.verifier.app.android.security.DefaultKeyStoreCryptor
-import dgca.verifier.app.android.security.KeyStoreCryptor
+import dgca.wallet.app.android.security.DefaultKeyStoreCryptor
+import dgca.wallet.app.android.security.KeyStoreCryptor
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
