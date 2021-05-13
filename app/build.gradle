@@ -76,4 +76,8 @@ dependencies {
     implementation Deps.timber
 
     testImplementation Deps.test_junit
+
+    androidTestImplementation Deps.android_test_junit
+    androidTestImplementation Deps.android_test_rules
+
 }

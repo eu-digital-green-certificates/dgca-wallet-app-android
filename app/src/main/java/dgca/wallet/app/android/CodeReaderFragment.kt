@@ -19,6 +19,7 @@ import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import dagger.hilt.android.AndroidEntryPoint
+import dgca.verifier.app.android.security.KeyStoreCryptor
 import dgca.wallet.app.android.data.local.AppDatabase
 import dgca.wallet.app.android.data.local.Certificate
 import dgca.wallet.app.android.databinding.FragmentCodeReaderBinding
@@ -37,6 +38,8 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
 
     @Inject
     lateinit var db: AppDatabase
+    @Inject
+    lateinit var cryptor: KeyStoreCryptor
 
     private val callback: BarcodeCallback = object : BarcodeCallback {
         override fun barcodeResult(result: BarcodeResult) {
@@ -94,7 +97,7 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
         findNavController().currentDestination
 
         // TODO temporar changes, remove after implementing QR code data validation and saving.
-        Thread { db.certificateDao().insert(Certificate(qrCodeText = qrCodeText)) }.start()
+        Thread { db.certificateDao().insert(Certificate(qrCodeText = cryptor.encrypt(qrCodeText)!!)) }.start()
 
         val action = CodeReaderFragmentDirections.actionCodeReaderFragmentToClaimCertificateFragment(qrCodeText)
         findNavController().navigate(action)
