@@ -22,34 +22,69 @@
 
 package dgca.wallet.app.android.data
 
+import dgca.wallet.app.android.data.remote.ApiResult
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.ResponseBody
+import retrofit2.Response
 import timber.log.Timber
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
+import kotlin.coroutines.CoroutineContext
 
 abstract class BaseRepository : Repository {
 
     suspend fun <P> execute(doOnAsyncBlock: suspend () -> P): P? {
         return withContext(Dispatchers.IO) {
             return@withContext try {
-                Timber.d("Do network coroutine work")
                 doOnAsyncBlock.invoke()
-            } catch (e: UnknownHostException) {
-                Timber.w(e, "UnknownHostException")
-                null
-            } catch (e: SocketTimeoutException) {
-                Timber.w(e, "SocketTimeoutException")
-                null
             } catch (throwable: Throwable) {
                 Timber.w(throwable, "Throwable")
                 null
             }
         }
     }
-}
 
-@Suppress("BlockingMethodInNonBlockingContext")
-suspend fun ResponseBody.stringSuspending() =
-    withContext(Dispatchers.IO) { string() }
+    suspend fun <P> doApiBackgroundWork(doOnAsyncBlock: suspend CoroutineScope.() -> Response<P>): ApiResult<P> =
+        doCoroutineWork(doOnAsyncBlock, Dispatchers.IO)
+
+    private suspend inline fun <P> doCoroutineWork(
+        crossinline doOnAsyncBlock: suspend CoroutineScope.() -> Response<P>,
+        context: CoroutineContext
+    ): ApiResult<P> {
+        var error: ApiResult<P>? = null
+        val response = withContext(context) {
+            return@withContext try {
+                Timber.v("Do network coroutine work")
+                doOnAsyncBlock.invoke(this)
+            } catch (e: UnknownHostException) {
+                Timber.w(e, "UnknownHostException")
+                error = ApiResult.error(
+                    error = e.toString(),
+                    errorDescription = "Server is unreachable. Please, check network connection."
+                )
+                null
+            } catch (e: SocketTimeoutException) {
+                Timber.w(e, "SocketTimeoutException")
+                error = ApiResult.error(
+                    error = e.toString(),
+                    errorDescription = "No internet connection"
+                )
+                null
+            } catch (throwable: Throwable) {
+                Timber.w(throwable, "Throwable")
+                error = ApiResult.error(
+                    error = throwable.toString(),
+                    errorDescription = "Unknown exception. Please, try again."
+                )
+                null
+            }
+        }
+
+        return if (error != null) {
+            error!!
+        } else {
+            ApiResult(response)
+        }
+    }
+}

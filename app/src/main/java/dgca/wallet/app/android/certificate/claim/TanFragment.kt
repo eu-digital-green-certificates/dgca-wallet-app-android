@@ -30,6 +30,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
+import dgca.wallet.app.android.R
 import dgca.wallet.app.android.databinding.FragmentCertificateTanBinding
 
 @AndroidEntryPoint
@@ -48,8 +49,12 @@ class TanFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.nextBtn.setOnClickListener {
             val tan = binding.tanTextField.editText?.text.toString()
-            val action = TanFragmentDirections.actionTanFragmentToClaimCertificateFragment(args.qrCodeText, tan)
-            findNavController().navigate(action)
+            if (tan.isEmpty()) {
+                binding.tanTextField.error = getString(R.string.tan_empty_error)
+            } else {
+                val action = TanFragmentDirections.actionTanFragmentToClaimCertificateFragment(args.qrCodeText, tan)
+                findNavController().navigate(action)
+            }
         }
     }
 

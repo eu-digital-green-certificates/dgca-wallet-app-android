@@ -37,7 +37,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.FORMATTED_YEAR_MONTH_DAY
 import dgca.wallet.app.android.R
 import dgca.wallet.app.android.YEAR_MONTH_DAY
-import dgca.wallet.app.android.data.CertificateData
 import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.getCertificateListData
 import dgca.wallet.app.android.databinding.FragmentCertificateClaimBinding
@@ -93,20 +92,24 @@ class ClaimCertificateFragment : Fragment() {
         binding.personFullName.text =
             getString(R.string.person_full_name_placeholder, certificate.person.givenName, certificate.person.familyName)
         binding.personStandardisedFamilyName.text = certificate.person.standardisedFamilyName
+        binding.personStandardisedFamilyNameTitle.isVisible = true
         binding.personStandardisedGivenName.text = certificate.person.standardisedGivenName
+        binding.personStandardisedGivenNameTitle.isVisible = true
         binding.dateOfBirth.text = certificate.dateOfBirth.parseFromTo(YEAR_MONTH_DAY, FORMATTED_YEAR_MONTH_DAY)
+        binding.dateOfBirthTitle.isVisible = true
     }
 
     private fun onViewModelEvent(event: ClaimCertificateViewModel.ClaimCertEvent) {
         when (event) {
             is ClaimCertificateViewModel.ClaimCertEvent.OnCertClaimed -> {
-                if (event.result) {
+                if (event.isClaimed) {
                     Toast.makeText(requireContext(), "Certificate claimed", Toast.LENGTH_SHORT).show()
                     val action = ClaimCertificateFragmentDirections.actionClaimCertificateFragmentToCertificatesFragment()
                     findNavController().navigate(action)
-                } else {
-                    Toast.makeText(requireContext(), "Certificate not claimed", Toast.LENGTH_SHORT).show()
                 }
+            }
+            is ClaimCertificateViewModel.ClaimCertEvent.OnCertNotClaimed -> {
+                Toast.makeText(requireContext(), event.error, Toast.LENGTH_SHORT).show()
             }
         }
     }

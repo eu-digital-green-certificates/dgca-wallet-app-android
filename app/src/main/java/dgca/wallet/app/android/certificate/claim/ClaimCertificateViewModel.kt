@@ -40,6 +40,8 @@ import dgca.wallet.app.android.Event
 import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.WalletRepository
 import dgca.wallet.app.android.data.local.toCertificateModel
+import dgca.wallet.app.android.data.remote.ApiResult
+import dgca.wallet.app.android.data.remote.ClaimResponse
 import dgca.wallet.app.android.model.ClaimRequest
 import dgca.wallet.app.android.model.PublicKeyData
 import kotlinx.coroutines.Dispatchers
@@ -99,7 +101,7 @@ class ClaimCertificateViewModel @Inject constructor(
     fun save(qrCode: String, tan: String) {
         viewModelScope.launch {
             _inProgress.value = true
-            var result = false
+            var claimResult: ApiResult<ClaimResponse>? = null
 
             withContext(Dispatchers.IO) {
                 if (greenCertificate == null || cose.isEmpty()) {
@@ -134,18 +136,16 @@ class ClaimCertificateViewModel @Inject constructor(
                     signature
                 )
 
-//                TODO: handle response
-                result = walletRepository.claimCertificate(qrCode, request)
-                if (result) {
-
-                }
+                claimResult = walletRepository.claimCertificate(qrCode, request)
             }
             _inProgress.value = false
-            _event.value = Event(ClaimCertEvent.OnCertClaimed(result))
+            claimResult?.success?.let { _event.value = Event(ClaimCertEvent.OnCertClaimed(true)) }
+            claimResult?.error?.let { _event.value = Event(ClaimCertEvent.OnCertNotClaimed(it.details)) }
         }
     }
 
     sealed class ClaimCertEvent {
-        data class OnCertClaimed(val result: Boolean) : ClaimCertEvent()
+        data class OnCertClaimed(val isClaimed: Boolean) : ClaimCertEvent()
+        data class OnCertNotClaimed(val error: String) : ClaimCertEvent()
     }
 }

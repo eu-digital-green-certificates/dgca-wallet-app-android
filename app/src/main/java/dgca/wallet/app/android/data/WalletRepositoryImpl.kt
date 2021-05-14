@@ -28,7 +28,9 @@ import dgca.wallet.app.android.certificate.CertificateCard
 import dgca.wallet.app.android.data.local.CertificateDao
 import dgca.wallet.app.android.data.local.CertificateEntity
 import dgca.wallet.app.android.data.local.toCertificateModel
+import dgca.wallet.app.android.data.remote.ApiResult
 import dgca.wallet.app.android.data.remote.ApiService
+import dgca.wallet.app.android.data.remote.ClaimResponse
 import dgca.wallet.app.android.model.ClaimRequest
 import dgca.wallet.app.android.security.KeyStoreCryptor
 import javax.inject.Inject
@@ -40,33 +42,23 @@ class WalletRepositoryImpl @Inject constructor(
     private val certificateDecoder: CertificateDecoder
 ) : BaseRepository(), WalletRepository {
 
-
-    override suspend fun claimCertificate(qrCode: String, request: ClaimRequest): Boolean {
-        return execute {
-            val response = apiService.claimCertificate(request)
-            if (response.isSuccessful) {
-                val tan = response.body()?.tan ?: ""
+    override suspend fun claimCertificate(qrCode: String, request: ClaimRequest): ApiResult<ClaimResponse> {
+        return doApiBackgroundWork { apiService.claimCertificate(request) }.also { result ->
+            result.success?.let {
+                val tan = result.rawResponse?.body()?.tan ?: ""
                 val codeEncrypted = keyStoreCryptor.encrypt(qrCode)
                 val tanEncrypted = keyStoreCryptor.encrypt(tan)
 
-                if (codeEncrypted == null || tanEncrypted == null) {
-                    return@execute false
-                }
-
-                val result = certificateDao.insert(
-                    CertificateEntity(
-                        qrCodeText = codeEncrypted,
-                        tan = tanEncrypted
+                if (codeEncrypted != null && tanEncrypted != null) {
+                    certificateDao.insert(
+                        CertificateEntity(
+                            qrCodeText = codeEncrypted,
+                            tan = tanEncrypted
+                        )
                     )
-                )
-
-                if (result != -1L) {
-                    return@execute true
                 }
             }
-
-            return@execute false
-        } == true
+        }
     }
 
     override suspend fun getCertificates(): List<CertificateCard>? {

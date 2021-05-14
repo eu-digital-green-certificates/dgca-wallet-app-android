@@ -23,11 +23,13 @@
 package dgca.wallet.app.android.data
 
 import dgca.wallet.app.android.certificate.CertificateCard
+import dgca.wallet.app.android.data.remote.ApiResult
+import dgca.wallet.app.android.data.remote.ClaimResponse
 import dgca.wallet.app.android.model.ClaimRequest
 
 interface WalletRepository {
 
-    suspend fun claimCertificate(qrCode: String, request: ClaimRequest): Boolean
+    suspend fun claimCertificate(qrCode: String, request: ClaimRequest): ApiResult<ClaimResponse>
 
     suspend fun getCertificates(): List<CertificateCard>?
 

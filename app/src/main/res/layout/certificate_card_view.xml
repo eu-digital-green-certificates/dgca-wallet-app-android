@@ -81,7 +81,7 @@
         app:layout_constraintTop_toBottomOf="@id/scannedAtDateView"
         tools:text="Surname Name. Realy long name" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
