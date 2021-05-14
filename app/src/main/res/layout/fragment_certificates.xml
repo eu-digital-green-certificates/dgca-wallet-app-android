@@ -25,6 +25,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true"
     tools:background="@color/white">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -97,12 +99,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/yellow"
+            android:backgroundTint="@color/blue"
+            android:minWidth="130dp"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:text="@string/scan_code"
             android:textAllCaps="false"
-            android:textColor="@color/black" />
+            android:textColor="@color/white" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/logo"

@@ -20,33 +20,38 @@
   ~  Created by osarapulov on 5/7/21 9:32 AM
   -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:background="@color/white">
 
-    <ScrollView
-        android:id="@+id/list"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        tools:visibility="visible">
+        android:layout_height="0dp"
+        android:paddingHorizontal="@dimen/default_padding"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            android:id="@+id/person_info_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingVertical="10dp">
 
             <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
                 android:ellipsize="end"
+                android:fontFamily="sans-serif-medium"
                 android:lines="1"
                 android:textColor="@color/black"
                 android:textSize="20sp"
@@ -63,36 +68,131 @@
                 tools:src="@drawable/ic_logo_eu" />
 
             <TextView
+                android:id="@+id/tan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                tools:text="TAN: GG23AWFRQ" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-light"
                 android:text="@string/name"
                 android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/name"
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/person_full_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:ellipsize="end"
-                android:maxLines="2"
                 android:textColor="@color/black"
                 android:textSize="22sp"
-                tools:text="Name Surname" />
+                tools:text="Gabriele Musterfrau" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/person_standardised_family_name_title"
+                style="@style/TextAppearance.Dgca.CertificateTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin"
+                android:text="@string/standardised_family_name_title" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/person_standardised_family_name"
+                style="@style/TextAppearance.Dgca.CertificateValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="MUSTERFRAU" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/person_standardised_given_name_title"
+                style="@style/TextAppearance.Dgca.CertificateTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/standardised_given_name_title" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/person_standardised_given_name"
+                style="@style/TextAppearance.Dgca.CertificateValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="GABRIELE" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/date_of_birth_title"
+                style="@style/TextAppearance.Dgca.CertificateTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/date_of_birth_title" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/date_of_birth"
+                style="@style/TextAppearance.Dgca.CertificateValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Feb 26, 1988" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:overScrollMode="never" />
 
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
-    <ImageView
-        android:id="@+id/euLogo"
-        android:layout_width="wrap_content"
+    <View
+        android:id="@+id/gradient"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@drawable/white_gradient"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/bottom_container"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:layout_marginBottom="16dp"
-        android:src="@drawable/eu_logo_big" />
-</FrameLayout>
+        android:background="@color/white"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/default_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/logo"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/eu_logo_big" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/progress_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/grey_transparent"
+        android:clickable="true"
+        android:elevation="4dp"
+        android:focusableInTouchMode="true"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/blue" />
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

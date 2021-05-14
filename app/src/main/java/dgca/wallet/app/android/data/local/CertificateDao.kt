@@ -22,18 +22,28 @@
 
 package dgca.wallet.app.android.data.local
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface CertificateDao {
+
     @Query("SELECT * FROM certificates")
-    fun getAll(): List<Certificate>
+    suspend fun getAll(): List<CertificateEntity>
 
     @Query("SELECT * FROM certificates WHERE id LIKE :id LIMIT 1")
-    fun getById(id: Int): Certificate?
+    suspend fun getById(id: Int): CertificateEntity?
 
-    @Insert
-    fun insert(certificate: Certificate)
+    @Insert(entity = CertificateEntity::class, onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(item: CertificateEntity): Long
+
+    @Update(entity = CertificateEntity::class, onConflict = OnConflictStrategy.REPLACE)
+    suspend fun update(item: CertificateEntity): Int
+
+    @Transaction
+    suspend fun upsert(entity: CertificateEntity) {
+        val id = insert(entity)
+        if (id == -1L) {
+            update(entity)
+        }
+    }
 }

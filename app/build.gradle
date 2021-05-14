@@ -59,6 +59,8 @@ dependencies {
     implementation Deps.androidx_navigation_fragment
     implementation Deps.androidx_navigation_ui
     implementation Deps.androidx_room_runtime
+    implementation Deps.room_ktx
+    kapt Deps.androidx_room_compiler
     implementation Deps.kotlinx_coroutines
     implementation Deps.zxing
     implementation Deps.biometric
@@ -67,7 +69,6 @@ dependencies {
     kapt Deps.hilt_compiler
     implementation Deps.hilt_viewmodel
     kapt Deps.androidx_hilt_compiler
-    kapt Deps.androidx_room_compiler
 
     implementation Deps.retrofit2
     implementation Deps.log_interceptor

@@ -26,8 +26,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dgca.verifier.app.android.security.DefaultKeyStoreCryptor
-import dgca.verifier.app.android.security.KeyStoreCryptor
+import dgca.wallet.app.android.security.DefaultKeyStoreCryptor
+import dgca.wallet.app.android.security.KeyStoreCryptor
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)

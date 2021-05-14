@@ -22,13 +22,24 @@
 
 package dgca.wallet.app.android.data.local
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.LocalDate
 
 @Entity(tableName = "certificates")
-data class Certificate(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+data class CertificateEntity(
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    val id: Int = 0,
+
+    @ColumnInfo(name = "qr_code")
     val qrCodeText: String,
+
+    @ColumnInfo(name = "tan")
+    val tan: String,
+
+    @ColumnInfo(name = "date_added")
     val dateAdded: LocalDate = LocalDate.now()
 )

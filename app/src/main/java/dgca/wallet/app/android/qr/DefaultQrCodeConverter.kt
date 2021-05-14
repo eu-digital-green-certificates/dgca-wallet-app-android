@@ -27,8 +27,11 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.journeyapps.barcodescanner.BarcodeEncoder
 
-class DefaultQrCodeConverter(private val multiFormatWriter: MultiFormatWriter, private val barcodeEncoder: BarcodeEncoder) :
-    QrCodeConverter {
+class DefaultQrCodeConverter(
+    private val multiFormatWriter: MultiFormatWriter,
+    private val barcodeEncoder: BarcodeEncoder
+) : QrCodeConverter {
+
     override fun convertStringIntoQrCode(text: String, size: Int): Bitmap {
         val bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.QR_CODE, size, size)
         return barcodeEncoder.createBitmap(bitMatrix)

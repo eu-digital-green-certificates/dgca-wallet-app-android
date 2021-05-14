@@ -27,23 +27,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dgca.verifier.app.android.security.KeyStoreCryptor
-import dgca.verifier.app.decoder.CertificateDecoder
-import dgca.verifier.app.decoder.CertificateDecodingResult
-import dgca.wallet.app.android.data.CertificateModel
-import dgca.wallet.app.android.data.local.AppDatabase
-import dgca.wallet.app.android.data.local.Certificate
-import dgca.wallet.app.android.data.local.toCertificateModel
-import kotlinx.coroutines.Dispatchers
+import dgca.wallet.app.android.data.WalletRepository
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class CertificatesViewModel @Inject constructor(
-    private val appDatabase: AppDatabase,
-    private val certificateDecoder: CertificateDecoder,
-    private val cryptor: KeyStoreCryptor
+    private val walletRepository: WalletRepository
 ) : ViewModel() {
 
     private val _certificates = MutableLiveData<List<CertificateCard>>()
@@ -55,21 +45,7 @@ class CertificatesViewModel @Inject constructor(
     fun fetchCertificates() {
         _inProgress.value = true
         viewModelScope.launch {
-            var certificateCards: List<CertificateCard>? = null
-            withContext(Dispatchers.IO) {
-                certificateCards =
-                    appDatabase.certificateDao().getAll().map { encryptedCertificate ->
-                        val certificate: Certificate =
-                            encryptedCertificate.copy(qrCodeText = cryptor.decrypt(encryptedCertificate.qrCodeText)!!)
-                        // We assume that we do not store invalid QR codes, thus here, no errors should appear.
-                        val certificateModel: CertificateModel =
-                            (certificateDecoder.decodeCertificate(certificate.qrCodeText) as CertificateDecodingResult.Success).greenCertificate.toCertificateModel()
-                        CertificateCard(
-                            certificate,
-                            certificateModel
-                        )
-                    }
-            }
+            val certificateCards = walletRepository.getCertificates()
             _inProgress.value = false
             _certificates.value = certificateCards ?: emptyList()
         }

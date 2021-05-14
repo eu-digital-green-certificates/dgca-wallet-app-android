@@ -32,6 +32,7 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.security.keystore.UserNotAuthenticatedException
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -55,6 +56,11 @@ class AuthFragment : Fragment() {
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
     private var _binding: FragmentAuthBinding? = null
     private val binding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -96,6 +102,11 @@ class AuthFragment : Fragment() {
 
         binding.retry.setOnClickListener { showPrompt() }
         showPrompt()
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        menu.clear()
     }
 
     override fun onDestroyView() {

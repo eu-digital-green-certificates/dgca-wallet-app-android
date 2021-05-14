@@ -22,21 +22,76 @@
 
 package dgca.wallet.app.android.data
 
+import dgca.verifier.app.decoder.CertificateDecoder
+import dgca.verifier.app.decoder.CertificateDecodingResult
+import dgca.wallet.app.android.certificate.CertificateCard
+import dgca.wallet.app.android.data.local.CertificateDao
+import dgca.wallet.app.android.data.local.CertificateEntity
+import dgca.wallet.app.android.data.local.toCertificateModel
 import dgca.wallet.app.android.data.remote.ApiService
 import dgca.wallet.app.android.model.ClaimRequest
+import dgca.wallet.app.android.security.KeyStoreCryptor
 import javax.inject.Inject
 
 class WalletRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
+    private val certificateDao: CertificateDao,
+    private val keyStoreCryptor: KeyStoreCryptor,
+    private val certificateDecoder: CertificateDecoder
 ) : BaseRepository(), WalletRepository {
 
 
-    override suspend fun claimCertificate(request: ClaimRequest): Boolean {
+    override suspend fun claimCertificate(qrCode: String, request: ClaimRequest): Boolean {
         return execute {
             val response = apiService.claimCertificate(request)
-            val body = response.body() ?: return@execute false
+            if (response.isSuccessful) {
+                val tan = response.body()?.tan ?: ""
+                val codeEncrypted = keyStoreCryptor.encrypt(qrCode)
+                val tanEncrypted = keyStoreCryptor.encrypt(tan)
 
-            return@execute true
+                if (codeEncrypted == null || tanEncrypted == null) {
+                    return@execute false
+                }
+
+                val result = certificateDao.insert(
+                    CertificateEntity(
+                        qrCodeText = codeEncrypted,
+                        tan = tanEncrypted
+                    )
+                )
+
+                if (result != -1L) {
+                    return@execute true
+                }
+            }
+
+            return@execute false
         } == true
+    }
+
+    override suspend fun getCertificates(): List<CertificateCard>? {
+        return execute {
+            certificateDao.getAll().map { encryptedCertificate ->
+                generateCard(encryptedCertificate)
+            }
+        }
+    }
+
+    override suspend fun getCertificatesById(certificateId: Int): CertificateCard? {
+        return execute {
+            certificateDao.getById(certificateId)?.let { generateCard(it) }
+        }
+    }
+
+    private fun generateCard(encryptedCertificate: CertificateEntity): CertificateCard {
+        val certificate =
+            encryptedCertificate.copy(
+                qrCodeText = keyStoreCryptor.decrypt(encryptedCertificate.qrCodeText)!!,
+                tan = keyStoreCryptor.decrypt(encryptedCertificate.tan)!!
+            )
+        // We assume that we do not store invalid QR codes, thus here, no errors should appear.
+        val certificateModel =
+            (certificateDecoder.decodeCertificate(certificate.qrCodeText) as CertificateDecodingResult.Success).greenCertificate.toCertificateModel()
+        return CertificateCard(certificate, certificateModel)
     }
 }

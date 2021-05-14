@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~  license-start
+  ~  eu-digital-green-certificates / dgca-verifier-app-android
+  ~
+  ~  Copyright (C) 2021 T-Systems International GmbH and all other contributors
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  ~  license-end
+  ~
+  ~  Created by osarapulov on 5/7/21 9:32 AM
+  -->
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:background="@color/white">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tan_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/default_margin"
+        android:layout_marginTop="@dimen/default_margin"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/tan_code"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tan_subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_margin"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/tan_code_subtitle"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_big"
+        app:layout_constraintEnd_toEndOf="@+id/tan_title"
+        app:layout_constraintStart_toStartOf="@+id/tan_title"
+        app:layout_constraintTop_toBottomOf="@+id/tan_title" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tan_text_field"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_margin"
+        android:hint="@string/tan_hint"
+        app:errorEnabled="true"
+        app:layout_constraintEnd_toEndOf="@+id/tan_subtitle"
+        app:layout_constraintStart_toStartOf="@+id/tan_subtitle"
+        app:layout_constraintTop_toBottomOf="@+id/tan_subtitle">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:inputType="textCapCharacters"
+            android:maxLines="1"
+            android:textAllCaps="true" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/next_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginBottom="@dimen/default_margin"
+        android:backgroundTint="@color/blue"
+        android:minWidth="120dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="@string/next"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@+id/tan_text_field"
+        app:layout_constraintTop_toBottomOf="@+id/tan_text_field" />
+
+    <FrameLayout
+        android:id="@+id/progress_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/grey_transparent"
+        android:clickable="true"
+        android:elevation="4dp"
+        android:focusableInTouchMode="true"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/blue" />
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

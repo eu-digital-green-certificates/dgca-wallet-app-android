@@ -20,35 +20,71 @@
   ~  Created by osarapulov on 5/12/21 2:57 PM
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    tools:background="@color/white">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/about_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginTop="@dimen/default_margin"
+        android:text="@string/about"
+        android:textColor="@color/blue_light"
+        android:textSize="@dimen/text_size_big"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/privacyPolicy"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:autoLink="web"
+        android:drawableEnd="@drawable/ic_baseline_arrow_forward_24"
+        android:gravity="start"
+        android:minHeight="48dp"
+        android:paddingHorizontal="@dimen/default_padding"
+        android:text="@string/privacy_policy"
+        android:textAllCaps="false"
         android:textColor="@color/black"
-        android:textSize="22sp"
-        tools:text="Privacy Policy" />
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@+id/about_title" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/materialTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/default_margin"
+        android:text="@string/settings_version_title"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@+id/privacyPolicy"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/version"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginHorizontal="@dimen/default_margin"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textColor="@color/black"
-        android:textSize="22sp"
+        android:textColor="@color/grey_50"
+        android:textSize="@dimen/text_size_medium"
+        app:layout_constraintTop_toBottomOf="@+id/materialTextView"
+        tools:layout_editor_absoluteX="16dp"
         tools:text="Version: 1.0.0" />
 
-</LinearLayout>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/logo"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginBottom="@dimen/default_margin"
+        android:scaleType="centerInside"
+        android:src="@drawable/eu_logo_big"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

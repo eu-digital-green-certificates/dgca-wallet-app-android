@@ -77,3 +77,12 @@ data class RecoveryModel(
 interface CertificateData {
     val disease: String
 }
+
+fun CertificateModel.getCertificateListData(): List<CertificateData> {
+    val list = mutableListOf<CertificateData>()
+    list.addAll(vaccinations ?: emptyList())
+    list.addAll(tests ?: emptyList())
+    list.addAll(recoveryStatements ?: emptyList())
+
+    return list
+}
