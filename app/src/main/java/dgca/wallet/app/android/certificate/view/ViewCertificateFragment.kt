@@ -93,10 +93,14 @@ class ViewCertificateFragment : Fragment() {
     }
 
     private fun showUserData(certificate: CertificateModel) {
+        binding.nameTitle.isVisible = true
         binding.personFullName.text =
             getString(R.string.person_full_name_placeholder, certificate.person.givenName, certificate.person.familyName)
         binding.personStandardisedFamilyName.text = certificate.person.standardisedFamilyName
+        binding.personStandardisedFamilyNameTitle.isVisible = true
         binding.personStandardisedGivenName.text = certificate.person.standardisedGivenName
+        binding.personStandardisedGivenNameTitle.isVisible = true
         binding.dateOfBirth.text = certificate.dateOfBirth.parseFromTo(YEAR_MONTH_DAY, FORMATTED_YEAR_MONTH_DAY)
+        binding.dateOfBirthTitle.isVisible = true
     }
 }

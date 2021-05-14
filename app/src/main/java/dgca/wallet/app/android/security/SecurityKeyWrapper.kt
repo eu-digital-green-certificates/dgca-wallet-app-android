@@ -72,7 +72,7 @@ class SecurityKeyWrapper(private val keyPair: KeyPair) {
             var counter = 0
             val originalSum = ByteArray(chunksAmount * BLOCK_SIZE) { EMPTY_BYTE }
             for (i in 0 until chunksAmount) {
-                val chunk: ByteArray = ByteArray(OUTPUT_BLOCK_SIZE)
+                val chunk = ByteArray(OUTPUT_BLOCK_SIZE)
                 for (j in 0 until OUTPUT_BLOCK_SIZE) {
                     chunk[j] = decoded[i * OUTPUT_BLOCK_SIZE + j]
                 }

@@ -26,6 +26,7 @@
     android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     tools:background="@color/white">
 
     <com.google.android.material.textview.MaterialTextView
@@ -63,7 +64,8 @@
                 style="@style/TextAppearance.Dgca.CertificateTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/standardised_family_name_title" />
+                android:text="@string/standardised_family_name_title"
+                android:visibility="gone" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/person_standardised_family_name"
@@ -78,7 +80,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@string/standardised_given_name_title" />
+                android:text="@string/standardised_given_name_title"
+                android:visibility="gone" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/person_standardised_given_name"
@@ -93,7 +96,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@string/date_of_birth_title" />
+                android:text="@string/date_of_birth_title"
+                android:visibility="gone" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/date_of_birth"

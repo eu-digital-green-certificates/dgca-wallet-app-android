@@ -23,12 +23,12 @@
 package dgca.wallet.app.android
 
 import android.app.Application
-import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
 @HiltAndroidApp
 class DgcaWalletApplication : Application() {
+
     override fun onCreate() {
         super.onCreate()
         if (BuildConfig.DEBUG) {

@@ -60,7 +60,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Vaccination Shot #2" />
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/qrCode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -78,12 +78,14 @@
                 tools:text="TAN: GG23AWFRQ" />
 
             <TextView
+                android:id="@+id/name_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:fontFamily="sans-serif-light"
                 android:text="@string/name"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:visibility="gone" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/person_full_name"
@@ -99,7 +101,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/default_margin"
-                android:text="@string/standardised_family_name_title" />
+                android:text="@string/standardised_family_name_title"
+                android:visibility="gone" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/person_standardised_family_name"
@@ -114,7 +117,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@string/standardised_given_name_title" />
+                android:text="@string/standardised_given_name_title"
+                android:visibility="gone" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/person_standardised_given_name"
@@ -129,7 +133,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@string/date_of_birth_title" />
+                android:text="@string/date_of_birth_title"
+                android:visibility="gone" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/date_of_birth"

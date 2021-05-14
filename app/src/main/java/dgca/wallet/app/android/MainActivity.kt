@@ -64,11 +64,11 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
-        if (item.itemId == R.id.settings) {
+        return if (item.itemId == R.id.settings) {
             navController.navigate(R.id.settingsFragment)
-            return true
+            true
         } else {
-            return navController.navigateUp()
+            navController.navigateUp()
         }
     }
 
