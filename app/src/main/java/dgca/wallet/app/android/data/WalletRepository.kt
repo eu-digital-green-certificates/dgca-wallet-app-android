@@ -34,4 +34,6 @@ interface WalletRepository {
     suspend fun getCertificates(): List<CertificateCard>?
 
     suspend fun getCertificatesById(certificateId: Int): CertificateCard?
+
+    suspend fun deleteCertificateById(certificateId: Int): Boolean
 }

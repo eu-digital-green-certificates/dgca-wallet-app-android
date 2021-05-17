@@ -38,6 +38,7 @@ import dgca.wallet.app.android.databinding.FragmentCertificatesBinding
 
 @AndroidEntryPoint
 class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCardClickListener {
+
     private val viewModel by viewModels<CertificatesViewModel>()
     private var _binding: FragmentCertificatesBinding? = null
     private val binding get() = _binding!!

@@ -33,6 +33,9 @@ interface CertificateDao {
     @Query("SELECT * FROM certificates WHERE id LIKE :id LIMIT 1")
     suspend fun getById(id: Int): CertificateEntity?
 
+    @Query("DELETE FROM certificates WHERE id = :id")
+    suspend fun delete(id: Int): Int
+
     @Insert(entity = CertificateEntity::class, onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(item: CertificateEntity): Long
 
