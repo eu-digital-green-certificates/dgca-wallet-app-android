@@ -24,28 +24,28 @@ package dgca.wallet.app.android.di
 
 import android.content.Context
 import com.google.gson.Gson
-import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dgca.verifier.app.decoder.BuildConfig
+import dgca.wallet.app.android.data.ConfigRepository
 import dgca.wallet.app.android.data.remote.ApiService
 import dgca.wallet.app.android.network.HeaderInterceptor
-import okhttp3.Cache
-import okhttp3.Call
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.net.URL
 import java.util.concurrent.TimeUnit
+import javax.inject.Provider
 import javax.inject.Singleton
 
 private const val CONNECT_TIMEOUT = 30L
 
 const val BASE_URL = "https://dgca-issuance-web.cfapps.eu10.hana.ondemand.com/"
+const val SHA256_PREFIX = "sha256/"
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -60,19 +60,45 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    internal fun provideOkhttpClient(cache: Cache): OkHttpClient {
-        val httpClient = getHttpClient(cache).apply {
-            addInterceptor(HeaderInterceptor())
-        }
-        addLogging(httpClient)
-
-        return httpClient.build()
+    internal fun provideRetrofit(okHttpClient: Provider<OkHttpClient>): Retrofit {
+        return createRetrofit(okHttpClient)
     }
 
     @Singleton
     @Provides
-    internal fun provideRetrofit(okHttpClient: Lazy<OkHttpClient>): Retrofit {
-        return createRetrofit(okHttpClient)
+    internal fun provideHeaderInterceptor(): Interceptor = HeaderInterceptor()
+
+    @Provides
+    internal fun provideCertificatePinner(configRepository: ConfigRepository): CertificatePinner {
+        val config = configRepository.local().getConfig()
+        val pinnerBuilder = CertificatePinner.Builder()
+        config.versions?.values?.let { versions ->
+            versions.forEach { version ->
+                version.contextEndpoint?.pubKeys?.forEach { keyHash ->
+                    pinnerBuilder.add(URL(version.contextEndpoint.url).host, "$SHA256_PREFIX$keyHash")
+                }
+                version.endpoints?.values?.forEach { endpoint ->
+                    endpoint.pubKeys?.forEach { keyHash ->
+                        pinnerBuilder.add(URL(endpoint.url).host, "$SHA256_PREFIX$keyHash")
+                    }
+                }
+            }
+        }
+        return pinnerBuilder.build()
+    }
+
+    @Provides
+    internal fun provideOkhttpClient(
+        cache: Cache, interceptor: Interceptor,
+        certificatePinner: CertificatePinner
+    ): OkHttpClient {
+        val httpClient = getHttpClient(cache).apply {
+            addInterceptor(interceptor)
+            certificatePinner(certificatePinner)
+        }
+        addLogging(httpClient)
+
+        return httpClient.build()
     }
 
     @Singleton
@@ -96,11 +122,13 @@ object NetworkModule {
         }
     }
 
-    private fun createRetrofit(okHttpClient: Lazy<OkHttpClient>): Retrofit {
+    private fun createRetrofit(okHttpClient: Provider<OkHttpClient>): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(Gson()))
             .baseUrl(BASE_URL)
-            .callFactory { okHttpClient.get().newCall(it) }
+            .callFactory {
+                okHttpClient.get().newCall(it)
+            }
             .build()
     }
 }

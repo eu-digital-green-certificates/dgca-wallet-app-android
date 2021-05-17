@@ -27,5 +27,5 @@ import dgca.wallet.app.android.data.ConfigDataSource
 import javax.inject.Inject
 
 class RemoteConfigDataSource @Inject constructor(private val apiService: ApiService) : ConfigDataSource {
-    override suspend fun getConfig(): Config = apiService.context()
+    override fun getConfig(): Config = apiService.context().execute().body()!!
 }

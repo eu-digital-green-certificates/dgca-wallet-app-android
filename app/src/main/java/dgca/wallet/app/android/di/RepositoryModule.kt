@@ -30,6 +30,7 @@ import dgca.wallet.app.android.data.*
 import dgca.wallet.app.android.data.local.LocalConfigDataSource
 import dgca.wallet.app.android.data.local.MutableConfigDataSource
 import dgca.wallet.app.android.data.remote.RemoteConfigDataSource
+import javax.inject.Named
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)

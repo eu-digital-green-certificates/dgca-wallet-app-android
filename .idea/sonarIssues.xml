@@ -8,6 +8,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.dagger/hilt-android/2.29.1-alpha/da66fc4854ba6266507ee955c08e1a17db063f8c/hilt-android-2.29.1-alpha-sources.jar!/dagger/hilt/android/components/ApplicationComponent.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$USER_HOME$/.gradle/caches/modules-2/files-2.1/junit/junit/4.12/a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa/junit-4.12-sources.jar!/junit/framework/Assert.java">
           <value>
             <set />
