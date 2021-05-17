@@ -32,7 +32,7 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import kotlin.coroutines.CoroutineContext
 
-abstract class BaseRepository : Repository {
+abstract class BaseRepository {
 
     suspend fun <P> execute(doOnAsyncBlock: suspend () -> P): P? {
         return withContext(Dispatchers.IO) {

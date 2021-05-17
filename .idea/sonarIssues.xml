@@ -38,6 +38,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../dgca-verifier-app-android/app/src/main/java/dgca/verifier/app/android/MainActivity.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/.idea/gradle.xml">
           <value>
             <set />
@@ -83,6 +88,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/build/tmp/kapt3/stubs/debug/dgca/wallet/app/android/di/RepositoryModule.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/androidTest/java/dgca/wallet/app/android/DefaultKeyStoreCryptorTest.kt">
           <value>
             <set />
@@ -94,6 +104,16 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/assets/wallet-context.jsonc">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/ActivityViewModel.java">
           <value>
             <set />
           </value>
@@ -114,6 +134,16 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/MainActivity.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/MainViewModel.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/MainViewModel.kt">
           <value>
             <set />
           </value>
@@ -168,7 +198,67 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/configs/Config.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/configs/ConfigsProvider.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/configs/Context.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/configs/DefaultConfigsProvider.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/configs/Version.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/data/BaseRepository.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/data/CertificateModel.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/data/Config.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/data/ConfigDataSource.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/data/ConfigRepository.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/data/ConfigRepositoryImpl.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/data/DefaultConfigRepository.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/data/Repository.kt">
           <value>
             <set />
           </value>
@@ -193,12 +283,37 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/data/local/LocalConfigDataSource.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/data/local/Mapper.kt">
           <value>
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/data/local/MutableConfigDataSource.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/data/local/QrCodeText.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/data/remote/ApiService.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/data/remote/RemoteConfigDataSource.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/di/ConfigModule.kt">
           <value>
             <set />
           </value>
@@ -218,7 +333,22 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/di/NetworkModule.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/di/QrCodeModule.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/di/RepositoryModule.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/network/HeaderInterceptor.kt">
           <value>
             <set />
           </value>
@@ -239,6 +369,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/security/SecurityKeyWrapper.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/worker/ConfigsLoadingWorker.kt">
           <value>
             <set />
           </value>

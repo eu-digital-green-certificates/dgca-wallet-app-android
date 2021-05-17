@@ -1,0 +1,23 @@
+{
+  "origin": "DE", // ISO alpha 2 code
+  "versions": {
+    "default": {
+      // catch-all for normal versions
+      "privacyUrl": "https://publications.europa.eu/en/web/about-us/legal-notices/eu-mobile-apps",
+      "context": {
+        "url": "https://dgca-issuance-web.cfapps.eu10.hana.ondemand.com/dgca-issuance-service/context",
+        "pubKeys": ["Ef6tLK887tpTdkiVkSG7ioXCgNEJsbIgKcAU+dxTTag="]
+      },
+      "endpoints": {
+        "claim": {
+          "url": "https://dgca-issuance-web.cfapps.eu10.hana.ondemand.com/dgca-issuance-service/dgci/wallet/claim",
+          "pubKeys": ["Ef6tLK887tpTdkiVkSG7ioXCgNEJsbIgKcAU+dxTTag="]
+        }
+      }
+    },
+    "0.1.0": {
+      // Example for a version that is insecure and shouldn't start.
+      "outdated": true
+    }
+  }
+}

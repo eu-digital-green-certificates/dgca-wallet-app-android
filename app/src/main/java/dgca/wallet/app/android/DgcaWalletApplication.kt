@@ -23,16 +23,41 @@
 package dgca.wallet.app.android
 
 import android.app.Application
+import androidx.hilt.work.HiltWorkerFactory
+import androidx.work.*
 import dagger.hilt.android.HiltAndroidApp
+import dgca.wallet.app.android.worker.ConfigsLoadingWorker
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 @HiltAndroidApp
-class DgcaWalletApplication : Application() {
+class DgcaWalletApplication : Application(), Configuration.Provider {
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
+
+    override fun getWorkManagerConfiguration(): Configuration {
+        return Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
+    }
 
     override fun onCreate() {
         super.onCreate()
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
+
+        val workRequest: WorkRequest =
+            PeriodicWorkRequestBuilder<ConfigsLoadingWorker>(1, TimeUnit.DAYS)
+                .setConstraints(
+                    Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .build()
+                )
+                .build()
+        WorkManager
+            .getInstance(this)
+            .enqueue(workRequest)
     }
 }
