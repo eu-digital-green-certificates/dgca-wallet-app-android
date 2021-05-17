@@ -43,11 +43,6 @@
         <item name="android:windowBackground">@drawable/splash_bg</item>
     </style>
 
-    <style name="Theme.DgcaWalletAppAndroid.Main" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:windowBackground">@color/white</item>
-    </style>
-
-
     <style name="DgcaWalletAppAndroid.Toolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
         <!-- color used by navigation icon and overflow icon -->
         <item name="colorOnPrimary">@color/white</item>

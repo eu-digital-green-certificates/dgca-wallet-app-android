@@ -41,20 +41,23 @@
         android:lines="1"
         android:textColor="@color/black"
         android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/scannedAtDateView"
         app:layout_constraintEnd_toStartOf="@id/arrow"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Vaccination1 of 2asdfffffffffffffffffffffffffffffffff" />
+        tools:text="Vaccination1 of 2" />
 
     <TextView
         android:id="@+id/scannedAtDateView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="16dp"
         android:ellipsize="end"
         android:lines="1"
         android:textColor="@color/blue"
+        android:textSize="@dimen/text_size_big"
         app:layout_constraintBottom_toTopOf="@id/nameView"
         app:layout_constraintEnd_toStartOf="@id/arrow"
         app:layout_constraintStart_toStartOf="@id/titleView"
@@ -66,6 +69,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:maxLines="2"
@@ -75,9 +79,9 @@
         app:layout_constraintEnd_toStartOf="@id/arrow"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/scannedAtDateView"
-        tools:text="Surname Name. Realy long nameasfdlsdfkasdfklsdfkfdsakasdflkfdsklasdkflsdafasfd" />
+        tools:text="Surname Name. Realy long name" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -32,8 +32,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import dgca.wallet.app.android.FORMATTED_YEAR_MONTH_DAY
+import dgca.wallet.app.android.R
+import dgca.wallet.app.android.YEAR_MONTH_DAY
+import dgca.wallet.app.android.data.CertificateModel
+import dgca.wallet.app.android.data.getCertificateListData
 import dgca.wallet.app.android.databinding.FragmentCertificateClaimBinding
+import dgca.wallet.app.android.parseFromTo
 
 @AndroidEntryPoint
 class ClaimCertificateFragment : Fragment() {
@@ -42,6 +49,12 @@ class ClaimCertificateFragment : Fragment() {
     private val viewModel by viewModels<ClaimCertificateViewModel>()
     private var _binding: FragmentCertificateClaimBinding? = null
     private val binding get() = _binding!!
+    private lateinit var adapter: CertListAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        adapter = CertListAdapter(layoutInflater)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentCertificateClaimBinding.inflate(inflater, container, false)
@@ -50,21 +63,24 @@ class ClaimCertificateFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.backBtn.setOnClickListener {
-            findNavController().popBackStack()
-        }
-        binding.saveBtn.setOnClickListener {
-            viewModel.save(args.qrCodeText, binding.tanTextField.editText?.text.toString())
-        }
+        val layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.layoutManager = layoutManager
+        binding.recyclerView.adapter = adapter
 
-        viewModel.inProgress.observe(viewLifecycleOwner, {
-            binding.progressView.isVisible = it
-        })
+        binding.saveBtn.setOnClickListener { viewModel.save(args.qrCodeText, args.tan) }
+        viewModel.inProgress.observe(viewLifecycleOwner, { binding.progressView.isVisible = it })
         viewModel.event.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
                 onViewModelEvent(it)
             }
         }
+        viewModel.certificate.observe(viewLifecycleOwner, { certificate ->
+            if (certificate != null) {
+                showUserData(certificate)
+                adapter.update(certificate.getCertificateListData())
+            }
+        })
+        viewModel.init(args.qrCodeText)
     }
 
     override fun onDestroyView() {
@@ -72,16 +88,28 @@ class ClaimCertificateFragment : Fragment() {
         _binding = null
     }
 
+    private fun showUserData(certificate: CertificateModel) {
+        binding.personFullName.text =
+            getString(R.string.person_full_name_placeholder, certificate.person.givenName, certificate.person.familyName)
+        binding.personStandardisedFamilyName.text = certificate.person.standardisedFamilyName
+        binding.personStandardisedFamilyNameTitle.isVisible = true
+        binding.personStandardisedGivenName.text = certificate.person.standardisedGivenName
+        binding.personStandardisedGivenNameTitle.isVisible = true
+        binding.dateOfBirth.text = certificate.dateOfBirth.parseFromTo(YEAR_MONTH_DAY, FORMATTED_YEAR_MONTH_DAY)
+        binding.dateOfBirthTitle.isVisible = true
+    }
+
     private fun onViewModelEvent(event: ClaimCertificateViewModel.ClaimCertEvent) {
         when (event) {
             is ClaimCertificateViewModel.ClaimCertEvent.OnCertClaimed -> {
-                if (event.result) {
+                if (event.isClaimed) {
                     Toast.makeText(requireContext(), "Certificate claimed", Toast.LENGTH_SHORT).show()
                     val action = ClaimCertificateFragmentDirections.actionClaimCertificateFragmentToCertificatesFragment()
                     findNavController().navigate(action)
-                } else {
-                    Toast.makeText(requireContext(), "Certificate not claimed", Toast.LENGTH_SHORT).show()
                 }
+            }
+            is ClaimCertificateViewModel.ClaimCertEvent.OnCertNotClaimed -> {
+                Toast.makeText(requireContext(), event.error, Toast.LENGTH_SHORT).show()
             }
         }
     }

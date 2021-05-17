@@ -19,11 +19,7 @@ import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import dagger.hilt.android.AndroidEntryPoint
-import dgca.verifier.app.android.security.KeyStoreCryptor
-import dgca.wallet.app.android.data.local.AppDatabase
-import dgca.wallet.app.android.data.local.Certificate
 import dgca.wallet.app.android.databinding.FragmentCodeReaderBinding
-import javax.inject.Inject
 
 private const val CAMERA_REQUEST_CODE = 1003
 
@@ -35,11 +31,6 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
 
     private lateinit var beepManager: BeepManager
     private var lastText: String? = null
-
-    @Inject
-    lateinit var db: AppDatabase
-    @Inject
-    lateinit var cryptor: KeyStoreCryptor
 
     private val callback: BarcodeCallback = object : BarcodeCallback {
         override fun barcodeResult(result: BarcodeResult) {
@@ -94,12 +85,7 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
     }
 
     private fun navigateToVerificationPage(qrCodeText: String) {
-        findNavController().currentDestination
-
-        // TODO temporar changes, remove after implementing QR code data validation and saving.
-        Thread { db.certificateDao().insert(Certificate(qrCodeText = cryptor.encrypt(qrCodeText)!!)) }.start()
-
-        val action = CodeReaderFragmentDirections.actionCodeReaderFragmentToClaimCertificateFragment(qrCodeText)
+        val action = CodeReaderFragmentDirections.actionCodeReaderFragmentToTanCertificateFragment(qrCodeText)
         findNavController().navigate(action)
     }
 

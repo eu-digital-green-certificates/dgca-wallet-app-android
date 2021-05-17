@@ -20,7 +20,7 @@
  *  Created by osarapulov on 4/30/21 1:33 AM
  */
 
-package dgca.verifier.app.android.security
+package dgca.wallet.app.android.security
 
 import android.util.Base64
 import timber.log.Timber
@@ -72,7 +72,7 @@ class SecurityKeyWrapper(private val keyPair: KeyPair) {
             var counter = 0
             val originalSum = ByteArray(chunksAmount * BLOCK_SIZE) { EMPTY_BYTE }
             for (i in 0 until chunksAmount) {
-                val chunk: ByteArray = ByteArray(OUTPUT_BLOCK_SIZE)
+                val chunk = ByteArray(OUTPUT_BLOCK_SIZE)
                 for (j in 0 until OUTPUT_BLOCK_SIZE) {
                     chunk[j] = decoded[i * OUTPUT_BLOCK_SIZE + j]
                 }
@@ -93,6 +93,8 @@ class SecurityKeyWrapper(private val keyPair: KeyPair) {
             return String(res)
         } catch (e: GeneralSecurityException) {
             Timber.w(e)
+        } catch (ex: Exception) {
+            Timber.w(ex)
         }
         return null
     }

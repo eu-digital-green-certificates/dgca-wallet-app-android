@@ -27,19 +27,34 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import dgca.wallet.app.android.FORMATTED_YEAR_MONTH_DAY
 import dgca.wallet.app.android.R
+import dgca.wallet.app.android.YEAR_MONTH_DAY
+import dgca.wallet.app.android.certificate.claim.CertListAdapter
+import dgca.wallet.app.android.data.CertificateModel
+import dgca.wallet.app.android.data.getCertificateListData
 import dgca.wallet.app.android.databinding.FragmentCertificateViewBinding
+import dgca.wallet.app.android.parseFromTo
 
 @AndroidEntryPoint
 class ViewCertificateFragment : Fragment() {
+
     private val args by navArgs<ViewCertificateFragmentArgs>()
     private val viewModel by viewModels<ViewCertificateViewModel>()
     private var _binding: FragmentCertificateViewBinding? = null
     private val binding get() = _binding!!
+    private lateinit var adapter: CertListAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        adapter = CertListAdapter(layoutInflater)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentCertificateViewBinding.inflate(inflater, container, false)
@@ -50,28 +65,42 @@ class ViewCertificateFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val displayMetrics = DisplayMetrics()
         requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
-        val minEdge = Math.min(displayMetrics.heightPixels, displayMetrics.widthPixels)
-        viewModel.setCertificateId(args.certificateId, minEdge)
+        val minEdge = displayMetrics.widthPixels * 0.9
+
+        val layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.layoutManager = layoutManager
+        binding.recyclerView.adapter = adapter
+
+        viewModel.inProgress.observe(viewLifecycleOwner, { binding.progressView.isVisible = it })
         viewModel.certificate.observe(viewLifecycleOwner, {
+            val certificate = it.certificateCard.certificate
             binding.title.text = when {
-                it.certificateCard.certificate.vaccinations?.first() != null -> binding.root.resources.getString(
+                certificate.vaccinations?.first() != null -> binding.root.resources.getString(
                     R.string.vaccination,
-                    it.certificateCard.certificate.vaccinations.first().doseNumber.toString()
+                    certificate.vaccinations.first().doseNumber.toString()
                 )
-                it.certificateCard.certificate.recoveryStatements?.isNotEmpty() == true -> binding.root.resources.getString(R.string.recovery)
-                it.certificateCard.certificate.tests?.isNotEmpty() == true -> binding.root.resources.getString(R.string.test)
+                certificate.recoveryStatements?.isNotEmpty() == true -> binding.root.resources.getString(R.string.recovery)
+                certificate.tests?.isNotEmpty() == true -> binding.root.resources.getString(R.string.test)
                 else -> ""
             }
 
             binding.qrCode.setImageBitmap(it.qrCode)
-
-            binding.name.text = getString(
-                R.string.name_surname,
-                it.certificateCard.certificate.person.givenName,
-                it.certificateCard.certificate.person.familyName
-            )
-
-            binding.list.visibility = View.VISIBLE
+            binding.tan.text = getString(R.string.tan_placeholder, it.certificateCard.tan)
+            showUserData(certificate)
+            adapter.update(certificate.getCertificateListData())
         })
+        viewModel.setCertificateId(args.certificateId, minEdge.toInt())
+    }
+
+    private fun showUserData(certificate: CertificateModel) {
+        binding.nameTitle.isVisible = true
+        binding.personFullName.text =
+            getString(R.string.person_full_name_placeholder, certificate.person.givenName, certificate.person.familyName)
+        binding.personStandardisedFamilyName.text = certificate.person.standardisedFamilyName
+        binding.personStandardisedFamilyNameTitle.isVisible = true
+        binding.personStandardisedGivenName.text = certificate.person.standardisedGivenName
+        binding.personStandardisedGivenNameTitle.isVisible = true
+        binding.dateOfBirth.text = certificate.dateOfBirth.parseFromTo(YEAR_MONTH_DAY, FORMATTED_YEAR_MONTH_DAY)
+        binding.dateOfBirthTitle.isVisible = true
     }
 }

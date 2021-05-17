@@ -17,55 +17,49 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 5/12/21 2:55 PM
+ *  Created by mykhailo.nester on 5/12/21 12:27 AM
  */
 
-package dgca.wallet.app.android
+package dgca.wallet.app.android.certificate.claim
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
-import dgca.wallet.app.android.databinding.FragmentSettingsBinding
+import dgca.wallet.app.android.R
+import dgca.wallet.app.android.databinding.FragmentCertificateTanBinding
 
 @AndroidEntryPoint
-class SettingsFragment : Fragment() {
-    private var _binding: FragmentSettingsBinding? = null
+class TanFragment : Fragment() {
+
+    private val args by navArgs<TanFragmentArgs>()
+    private var _binding: FragmentCertificateTanBinding? = null
     private val binding get() = _binding!!
 
-    companion object {
-        const val PRIVACY_POLICY = "https://op.europa.eu/en/web/about-us/legal-notices/eu-mobile-apps"
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        _binding = FragmentCertificateTanBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        setHasOptionsMenu(true)
-
-        binding.privacyPolicy.setOnClickListener { launchWebIntent() }
-        binding.version.text = getString(R.string.version, BuildConfig.VERSION_NAME)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
-        menu.findItem(R.id.settings).isVisible = false
-    }
-
-    private fun launchWebIntent() {
-        val page = Uri.parse(PRIVACY_POLICY)
-        val intent = Intent(Intent.ACTION_VIEW, page)
-
-        if (intent.resolveActivity(requireContext().packageManager) == null) {
-            return
+        super.onViewCreated(view, savedInstanceState)
+        binding.nextBtn.setOnClickListener {
+            val tan = binding.tanTextField.editText?.text.toString()
+            if (tan.isEmpty()) {
+                binding.tanTextField.error = getString(R.string.tan_empty_error)
+            } else {
+                val action = TanFragmentDirections.actionTanFragmentToClaimCertificateFragment(args.qrCodeText, tan)
+                findNavController().navigate(action)
+            }
         }
-        requireContext().startActivity(intent)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

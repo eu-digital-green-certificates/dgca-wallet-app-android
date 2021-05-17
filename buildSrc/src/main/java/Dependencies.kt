@@ -35,6 +35,7 @@ object Deps {
     const val androidx_room_runtime = "androidx.room:room-runtime:${Versions.androidx_room}"
     const val androidx_worker_ktx = "androidx.work:work-runtime-ktx:${Versions.androidx_worker_ktx}"
     const val androidx_room_compiler = "androidx.room:room-compiler:${Versions.androidx_room}"
+    const val room_ktx = "androidx.room:room-ktx:${Versions.androidx_room}"
     const val androidx_navigation = "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.androidx_navigation}"
     const val androidx_hilt_compiler = "androidx.hilt:hilt-compiler:${Versions.androidx_hilt_compiler}"
     const val retrofit2 = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"

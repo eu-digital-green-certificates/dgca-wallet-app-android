@@ -30,6 +30,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dgca.wallet.app.android.data.local.AppDatabase
+import dgca.wallet.app.android.data.local.CertificateDao
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -40,4 +41,9 @@ object LocalDataSourceModule {
     @Provides
     fun provideDb(@ApplicationContext context: Context): AppDatabase =
         Room.databaseBuilder(context, AppDatabase::class.java, "certificate-db").build()
+
+    @Provides
+    fun provideContactsDao(database: AppDatabase): CertificateDao {
+        return database.certificateDao()
+    }
 }

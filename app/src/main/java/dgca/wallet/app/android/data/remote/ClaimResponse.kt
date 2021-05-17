@@ -17,27 +17,11 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 5/11/21 12:20 AM
+ *  Created by mykhailo.nester on 5/13/21 2:46 PM
  */
 
-package dgca.wallet.app.android.certificate
+package dgca.wallet.app.android.data.remote
 
-import dgca.wallet.app.android.data.CertificateModel
-import dgca.wallet.app.android.data.local.CertificateEntity
-import java.time.LocalDate
-
-data class CertificateCard(
-    val certificateId: Int,
-    val qrCodeText: String,
-    val certificate: CertificateModel,
-    val tan: String,
-    val dateTaken: LocalDate
-) {
-    constructor(certificateEntity: CertificateEntity, certificateModel: CertificateModel) : this(
-        certificateEntity.id,
-        certificateEntity.qrCodeText,
-        certificateModel,
-        certificateEntity.tan,
-        certificateEntity.dateAdded
-    )
-}
+data class ClaimResponse(
+    val tan: String
+)
