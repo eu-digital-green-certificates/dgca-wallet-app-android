@@ -29,7 +29,7 @@ import timber.log.Timber
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
-abstract class BaseRepository : Repository {
+abstract class BaseRepository {
 
     suspend fun <P> execute(doOnAsyncBlock: suspend () -> P): P? {
         return withContext(Dispatchers.IO) {

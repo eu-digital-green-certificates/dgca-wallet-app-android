@@ -26,8 +26,10 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dgca.wallet.app.android.data.WalletRepository
-import dgca.wallet.app.android.data.WalletRepositoryImpl
+import dgca.wallet.app.android.data.*
+import dgca.wallet.app.android.data.local.LocalConfigDataSource
+import dgca.wallet.app.android.data.local.MutableConfigDataSource
+import dgca.wallet.app.android.data.remote.RemoteConfigDataSource
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -37,4 +39,17 @@ abstract class RepositoryModule {
     @Singleton
     @Binds
     abstract fun bindWalletRepository(repository: WalletRepositoryImpl): WalletRepository
+
+
+    @Singleton
+    @Binds
+    abstract fun bindLocalConfigDataSource(configDataSource: LocalConfigDataSource): MutableConfigDataSource
+
+    @Singleton
+    @Binds
+    abstract fun bindRemoteConfigDataSource(configDataSource: RemoteConfigDataSource): ConfigDataSource
+
+    @Singleton
+    @Binds
+    abstract fun bindConfigRepository(configRepository: ConfigRepositoryImpl): ConfigRepository
 }

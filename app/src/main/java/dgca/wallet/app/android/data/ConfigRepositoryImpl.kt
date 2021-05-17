@@ -20,23 +20,21 @@
  *  Created by mykhailo.nester on 5/7/21 5:23 PM
  */
 
-package dgca.wallet.app.android.data.remote
+package dgca.wallet.app.android.data
 
 import dgca.wallet.app.android.configs.Config
-import dgca.wallet.app.android.model.ClaimRequest
-import okhttp3.ResponseBody
-import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
+import dgca.wallet.app.android.data.local.MutableConfigDataSource
+import javax.inject.Inject
 
-interface ApiService {
+class ConfigRepositoryImpl @Inject constructor(
+    private val localConfigDataSource: MutableConfigDataSource,
+    private val remoteConfigDataSource: ConfigDataSource
+) : ConfigRepository {
+    override fun local(): ConfigDataSource {
+        return localConfigDataSource
+    }
 
-    @GET("/dgca-issuance-service/context")
-    suspend fun context(): Config
-
-    @POST("/dgca-issuance-service/dgci/wallet/claim")
-    suspend fun claimCertificate(
-        @Body request: ClaimRequest
-    ): Response<ResponseBody>
+    override suspend fun getConfig(): Config = remoteConfigDataSource.getConfig().apply {
+        localConfigDataSource.setConfig(this)
+    }
 }
