@@ -28,6 +28,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dgca.wallet.app.android.Event
 import dgca.wallet.app.android.certificate.CertificateCard
 import dgca.wallet.app.android.data.WalletRepository
 import dgca.wallet.app.android.qr.QrCodeConverter
@@ -50,6 +51,9 @@ class ViewCertificateViewModel @Inject constructor(
     private val _inProgress = MutableLiveData<Boolean>()
     val inProgress: LiveData<Boolean> = _inProgress
 
+    private val _event = MutableLiveData<Event<ViewCertEvent>>()
+    val event: LiveData<Event<ViewCertEvent>> = _event
+
     fun setCertificateId(certificateId: Int, qrCodeSize: Int) {
         viewModelScope.launch {
             _inProgress.value = true
@@ -67,5 +71,16 @@ class ViewCertificateViewModel @Inject constructor(
             _certificate.value = CertificateViewCard(certificateCard, qrCode)
             _inProgress.value = false
         }
+    }
+
+    fun deleteCert(certificateId: Int) {
+        viewModelScope.launch {
+            val result = walletRepository.deleteCertificateById(certificateId)
+            _event.value = Event(ViewCertEvent.OnCertDeleted(result))
+        }
+    }
+
+    sealed class ViewCertEvent {
+        data class OnCertDeleted(val isDeleted: Boolean) : ViewCertEvent()
     }
 }

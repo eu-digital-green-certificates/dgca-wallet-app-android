@@ -75,6 +75,12 @@ class WalletRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun deleteCertificateById(certificateId: Int): Boolean {
+        return execute {
+            certificateDao.delete(certificateId) == 1
+        } == true
+    }
+
     private fun generateCard(encryptedCertificate: CertificateEntity): CertificateCard {
         val certificate =
             encryptedCertificate.copy(

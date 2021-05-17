@@ -25,7 +25,14 @@
     <item
         android:id="@+id/settings"
         android:icon="@drawable/overflow_menu"
-        android:orderInCategory="1"
+        android:orderInCategory="0"
         android:title="@string/settings"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/delete"
+        android:title="@string/delete"
+        android:visible="false"
+        app:showAsAction="never" />
+
 </menu>

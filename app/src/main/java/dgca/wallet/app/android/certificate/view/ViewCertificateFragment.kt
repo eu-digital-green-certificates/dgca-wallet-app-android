@@ -24,12 +24,11 @@ package dgca.wallet.app.android.certificate.view
 
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,6 +52,7 @@ class ViewCertificateFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         adapter = CertListAdapter(layoutInflater)
     }
 
@@ -89,7 +89,27 @@ class ViewCertificateFragment : Fragment() {
             showUserData(certificate)
             adapter.update(certificate.getCertificateListData())
         })
+        viewModel.event.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let {
+                onViewModelEvent(it)
+            }
+        }
         viewModel.setCertificateId(args.certificateId, minEdge.toInt())
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        menu.findItem(R.id.settings).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+        menu.findItem(R.id.delete).isVisible = true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == R.id.delete) {
+            viewModel.deleteCert(args.certificateId)
+            true
+        } else {
+            super.onOptionsItemSelected(item)
+        }
     }
 
     private fun showUserData(certificate: CertificateModel) {
@@ -102,5 +122,11 @@ class ViewCertificateFragment : Fragment() {
         binding.personStandardisedGivenNameTitle.isVisible = true
         binding.dateOfBirth.text = certificate.dateOfBirth.parseFromTo(YEAR_MONTH_DAY, FORMATTED_YEAR_MONTH_DAY)
         binding.dateOfBirthTitle.isVisible = true
+    }
+
+    private fun onViewModelEvent(event: ViewCertificateViewModel.ViewCertEvent) {
+        when (event) {
+            is ViewCertificateViewModel.ViewCertEvent.OnCertDeleted -> findNavController().popBackStack()
+        }
     }
 }
