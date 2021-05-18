@@ -37,13 +37,14 @@ data class Config(
     }
 }
 
-data class Context(
+data class Endpoint(
     @SerializedName("url") val url: String?,
     @SerializedName("pubKeys") val pubKeys: Collection<String>?
 )
 
 data class Version(
     @SerializedName("privacyUrl") val privacyUrl: String?,
-    @SerializedName("context") val context: Context?,
-    @SerializedName("outdated") val outdated: Boolean?
+    @SerializedName("context") val contextEndpoint: Endpoint?,
+    @SerializedName("outdated") val outdated: Boolean?,
+    @SerializedName("endpoints") val endpoints: Map<String, Endpoint>?
 )

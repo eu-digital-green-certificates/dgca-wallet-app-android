@@ -24,6 +24,7 @@ package dgca.wallet.app.android.data.remote
 
 import dgca.wallet.app.android.configs.Config
 import dgca.wallet.app.android.model.ClaimRequest
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -32,7 +33,7 @@ import retrofit2.http.POST
 interface ApiService {
 
     @GET("/dgca-issuance-service/context")
-    suspend fun context(): Config
+    fun context(): Call<Config>
 
     @POST("/dgca-issuance-service/dgci/wallet/claim")
     suspend fun claimCertificate(

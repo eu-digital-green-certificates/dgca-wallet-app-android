@@ -34,7 +34,7 @@ class ConfigRepositoryImpl @Inject constructor(
         return localConfigDataSource
     }
 
-    override suspend fun getConfig(): Config = remoteConfigDataSource.getConfig().apply {
+    override fun getConfig(): Config = remoteConfigDataSource.getConfig().apply {
         localConfigDataSource.setConfig(this)
     }
 }

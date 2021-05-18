@@ -6,12 +6,18 @@
       "privacyUrl": "https://publications.europa.eu/en/web/about-us/legal-notices/eu-mobile-apps",
       "context": {
         "url": "https://dgca-issuance-web.cfapps.eu10.hana.ondemand.com/dgca-issuance-service/context",
-        "pubKeys": ["Ef6tLK887tpTdkiVkSG7ioXCgNEJsbIgKcAU+dxTTag="]
+        "pubKeys": [
+          "lKdU1EbQubxyDDm2q3N8KclZ2C94Num3xXjG0pk+3eI=",
+          "r/mIkG3eEpVdm+u/ko/cwxzOMo1bk4TyHIlByibiA5E="
+        ]
       },
       "endpoints": {
         "claim": {
           "url": "https://dgca-issuance-web.cfapps.eu10.hana.ondemand.com/dgca-issuance-service/dgci/wallet/claim",
-          "pubKeys": ["Ef6tLK887tpTdkiVkSG7ioXCgNEJsbIgKcAU+dxTTag="]
+          "pubKeys": [
+            "lKdU1EbQubxyDDm2q3N8KclZ2C94Num3xXjG0pk+3eI=",
+            "r/mIkG3eEpVdm+u/ko/cwxzOMo1bk4TyHIlByibiA5E="
+          ]
         }
       }
     },

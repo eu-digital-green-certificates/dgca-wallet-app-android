@@ -45,7 +45,7 @@ class LocalConfigDataSource @Inject constructor(@ApplicationContext private val 
         return saveConfig(this.config)
     }
 
-    override suspend fun getConfig(): Config {
+    override fun getConfig(): Config {
         if (!this::config.isInitialized) {
             try {
                 config = loadConfig()
