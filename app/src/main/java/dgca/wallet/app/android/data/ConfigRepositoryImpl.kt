@@ -38,7 +38,7 @@ class ConfigRepositoryImpl @Inject constructor(
 
     override fun getConfig(): Config {
         return remoteConfigDataSource.getConfig(localConfigDataSource.getConfig().getContextUrl(BuildConfig.VERSION_NAME)).apply {
-//            localConfigDataSource.setConfig(this)
+            localConfigDataSource.setConfig(this)
         }
     }
 }
