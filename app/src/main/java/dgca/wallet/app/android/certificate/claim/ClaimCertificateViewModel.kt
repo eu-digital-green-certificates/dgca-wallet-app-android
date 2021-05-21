@@ -36,8 +36,10 @@ import dgca.verifier.app.decoder.model.GreenCertificate
 import dgca.verifier.app.decoder.model.VerificationResult
 import dgca.verifier.app.decoder.prefixvalidation.PrefixValidationService
 import dgca.verifier.app.decoder.schema.SchemaValidator
+import dgca.wallet.app.android.BuildConfig
 import dgca.wallet.app.android.Event
 import dgca.wallet.app.android.data.CertificateModel
+import dgca.wallet.app.android.data.ConfigRepository
 import dgca.wallet.app.android.data.WalletRepository
 import dgca.wallet.app.android.data.local.toCertificateModel
 import dgca.wallet.app.android.data.remote.ApiResult
@@ -60,6 +62,7 @@ class ClaimCertificateViewModel @Inject constructor(
     private val coseService: CoseService,
     private val schemaValidator: SchemaValidator,
     private val cborService: CborService,
+    private val configRepository: ConfigRepository,
     private val walletRepository: WalletRepository
 ) : ViewModel() {
 
@@ -136,7 +139,8 @@ class ClaimCertificateViewModel @Inject constructor(
                     signature
                 )
 
-                claimResult = walletRepository.claimCertificate(qrCode, request)
+                val config = configRepository.local().getConfig()
+                claimResult = walletRepository.claimCertificate(config.getClaimUrl(BuildConfig.VERSION_NAME), qrCode, request)
             }
             _inProgress.value = false
             claimResult?.success?.let { _event.value = Event(ClaimCertEvent.OnCertClaimed(true)) }

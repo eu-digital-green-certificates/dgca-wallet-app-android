@@ -39,11 +39,11 @@ class WalletRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
     private val certificateDao: CertificateDao,
     private val keyStoreCryptor: KeyStoreCryptor,
-    private val certificateDecoder: CertificateDecoder
+    private val certificateDecoder: CertificateDecoder,
 ) : BaseRepository(), WalletRepository {
 
-    override suspend fun claimCertificate(qrCode: String, request: ClaimRequest): ApiResult<ClaimResponse> {
-        return doApiBackgroundWork { apiService.claimCertificate(request) }.also { result ->
+    override suspend fun claimCertificate(url: String, qrCode: String, request: ClaimRequest): ApiResult<ClaimResponse> {
+        return doApiBackgroundWork { apiService.claimCertificate(url, request) }.also { result ->
             result.success?.let {
                 val tan = result.rawResponse?.body()?.tan ?: ""
                 val codeEncrypted = keyStoreCryptor.encrypt(qrCode)

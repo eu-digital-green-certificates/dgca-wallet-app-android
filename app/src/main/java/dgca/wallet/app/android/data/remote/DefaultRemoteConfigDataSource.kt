@@ -17,13 +17,14 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 5/21/21 2:00 PM
+ *  Created by osarapulov on 5/17/21 8:23 AM
  */
 
 package dgca.wallet.app.android.data.remote
 
 import dgca.wallet.app.android.configs.Config
+import javax.inject.Inject
 
-interface RemoteConfigDataSource {
-    fun getConfig(url: String): Config
+class DefaultRemoteConfigDataSource @Inject constructor(private val apiService: ApiService) : RemoteConfigDataSource {
+    override fun getConfig(url: String): Config = apiService.context(url).execute().body()!!
 }

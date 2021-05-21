@@ -30,11 +30,21 @@ import com.google.gson.annotations.SerializedName
  */
 data class Config(
     @SerializedName("origin") val origin: String?,
-    @SerializedName("versions") val versions: Map<String, Version>?,
+    @SerializedName("versions") val versions: Map<String, Version>,
 ) {
-    fun mergeOrOverrideWith(config: Config): Config {
-        return this
+    private companion object {
+        const val DEFAULT_VERSION_NAME = "default"
+        const val CLAIM_ENDPOINT_NAME = "claim"
     }
+
+    private fun getCurrentVersionOrUseDefault(versionName: String): Version =
+        versions[versionName] ?: versions[DEFAULT_VERSION_NAME]!!
+
+    fun getClaimUrl(versionName: String): String =
+        getCurrentVersionOrUseDefault(versionName).endpoints[CLAIM_ENDPOINT_NAME]!!.url!!
+
+    fun getContextUrl(versionName: String): String =
+        getCurrentVersionOrUseDefault(versionName).contextEndpoint!!.url!!
 }
 
 data class Endpoint(
@@ -46,5 +56,5 @@ data class Version(
     @SerializedName("privacyUrl") val privacyUrl: String?,
     @SerializedName("context") val contextEndpoint: Endpoint?,
     @SerializedName("outdated") val outdated: Boolean?,
-    @SerializedName("endpoints") val endpoints: Map<String, Endpoint>?
+    @SerializedName("endpoints") val endpoints: Map<String, Endpoint>
 )
