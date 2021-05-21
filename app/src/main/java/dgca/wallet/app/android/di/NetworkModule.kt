@@ -44,7 +44,7 @@ import javax.inject.Singleton
 
 private const val CONNECT_TIMEOUT = 30L
 
-const val BASE_URL = "https://issuance-dgca-test.cfapps.eu10.hana.ondemand.com/"
+const val BASE_URL = "https://dgca-issuance-web.cfapps.eu10.hana.ondemand.com/"
 const val SHA256_PREFIX = "sha256/"
 
 @InstallIn(SingletonComponent::class)
