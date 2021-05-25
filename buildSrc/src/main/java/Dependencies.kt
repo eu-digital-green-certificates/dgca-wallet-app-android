@@ -60,6 +60,10 @@ object Deps {
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
 
     const val test_junit = "junit:junit:${Versions.junit}"
+    const val test_junit_jupiter_api = "org.junit.jupiter:junit-jupiter-api:${Versions.junit_jupiter}"
+    const val test_junit_jupiter_params = "org.junit.jupiter:junit-jupiter-params:${Versions.junit_jupiter}"
+    const val test_runtime_only = "org.junit.jupiter:junit-jupiter-engine:${Versions.junit_jupiter}"
+    const val test_hamcrest = "org.hamcrest:hamcrest:${Versions.hamcrest}"
 
     const val android_test_junit = "androidx.test.ext:junit:${Versions.android_test_junit}"
     const val android_test_rules = "androidx.test:rules:${Versions.android_test_rules}"

@@ -18,6 +18,21 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../dgca-app-core-android/buildSrc/build.gradle.kts">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../dgca-app-core-android/decoder/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../dgca-app-core-android/decoder/src/main/java/Dependencies.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../dgca-app-core-android/decoder/src/main/java/dgca/verifier/app/decoder/CertificateDecoder.kt">
           <value>
             <set />
