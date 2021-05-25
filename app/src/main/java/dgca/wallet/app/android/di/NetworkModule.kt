@@ -72,8 +72,8 @@ object NetworkModule {
     internal fun provideCertificatePinner(configRepository: ConfigRepository): CertificatePinner {
         val config = configRepository.local().getConfig()
         val pinnerBuilder = CertificatePinner.Builder()
-        config.versions?.values?.let { versions ->
-            versions.forEach { version ->
+        config.versions?.values.let { versions ->
+            versions?.forEach { version ->
                 version.contextEndpoint?.pubKeys?.forEach { keyHash ->
                     pinnerBuilder.add(URL(version.contextEndpoint.url).host, "$SHA256_PREFIX$keyHash")
                 }

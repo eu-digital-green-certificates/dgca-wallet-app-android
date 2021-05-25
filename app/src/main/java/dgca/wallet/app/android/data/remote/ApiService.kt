@@ -29,14 +29,16 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Url
 
 interface ApiService {
 
-    @GET("/dgca-issuance-service/context")
-    fun context(): Call<Config>
+    @GET
+    fun context(@Url url: String): Call<Config>
 
-    @POST("/dgca-issuance-service/dgci/wallet/claim")
+    @POST
     suspend fun claimCertificate(
+        @Url url: String,
         @Body request: ClaimRequest
     ): Response<ClaimResponse>
 }
