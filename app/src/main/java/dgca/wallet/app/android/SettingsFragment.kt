@@ -30,6 +30,7 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.databinding.FragmentSettingsBinding
 
@@ -50,7 +51,8 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
 
-        binding.privacyPolicy.setOnClickListener { launchWebIntent() }
+        binding.privacyInformation.setOnClickListener { launchWebIntent() }
+        binding.licenses.setOnClickListener { openLicenses() }
         binding.version.text = getString(R.string.version, BuildConfig.VERSION_NAME)
     }
 
@@ -67,5 +69,12 @@ class SettingsFragment : Fragment() {
             return
         }
         requireContext().startActivity(intent)
+    }
+
+    private fun openLicenses() {
+        OssLicensesMenuActivity.setActivityTitle(getString(R.string.licenses))
+        requireContext().apply {
+            startActivity(Intent(this, OssLicensesMenuActivity::class.java))
+        }
     }
 }
