@@ -1,5 +1,5 @@
 <h1 align="center">
-    EU Digital Green Certificates Wallet App - Android
+   EU Digital COVID Certificate Wallet App - Android
 </h1>
 
 <p align="center">
@@ -20,7 +20,7 @@
 
 ## About
 
-This repository contains the source code of the Digital Green Certificates Wallet App for Android.
+This repository contains the source code of the EU Digital COVID Certificate Wallet App for Android.
 
 The wallet app provides a user interface to store and manage personal DGCs directly on the phone. DGCs will be imported by scanning a base45-encoded QR code and decoding CBOR to JSON. Afterwards, it is symmetrically encrypted in the app’s sandbox and the symmetric key is stored in the system’s keychain. Multiple DGCs can be stored in the app. Access to the app is controlled via biometric data (e. g., Touch ID or Face ID). The wallet app can display any imported DGC as QR code for scanning and verifying with the verifier app.
 
