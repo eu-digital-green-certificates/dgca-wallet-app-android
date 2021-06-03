@@ -44,8 +44,8 @@ jobs:
         --ks-pass pass:${KEY_STORE_PASSWORD} \
         --ks-key-alias ${KEY_ALIAS} \
         --key-pass pass:${KEY_PASSWORD} \
-        --out ./app/build/outputs/apk/release/app-release-signed.apk \
-        ./app/build/outputs/apk/release/app-release-unsigned.apk
+        --out ./app/build/outputs/apk/tst/release/app-tst-release-signed.apk \
+        ./app/build/outputs/apk/tst/release/app-tst-release-unsigned.apk
         ${APKSIGNER} verify ./app/build/outputs/apk/tst/release/app-tst-release-signed.apk
       env:
         BUILD_TOOLS_VERSION: 29.0.3
@@ -65,8 +65,8 @@ jobs:
         --ks-pass pass:${KEY_STORE_PASSWORD} \
         --ks-key-alias ${KEY_ALIAS} \
         --key-pass pass:${KEY_PASSWORD} \
-        --out ./app/build/outputs/apk/release/app-release-signed.apk \
-        ./app/build/outputs/apk/release/app-release-unsigned.apk
+        --out ./app/build/outputs/apk/acc/release/app-acc-release-signed.apk \
+        ./app/build/outputs/apk/acc/release/app-acc-release-unsigned.apk
         ${APKSIGNER} verify ./app/build/outputs/apk/acc/release/app-acc-release-signed.apk
       env:
         BUILD_TOOLS_VERSION: 29.0.3
@@ -79,6 +79,9 @@ jobs:
       run: |-
         gh release upload ${APP_VERSION} \
         --clobber \
-        ./app/build/outputs/apk/release/app-release-signed.apk#app-release-signed-${APP_VERSION}.apk
+        ./app/build/outputs/apk/tst/release/app-tst-release-signed.apk#app-tst-release-signed-${APP_VERSION}.apk
+        gh release upload ${APP_VERSION} \
+        --clobber \
+        ./app/build/outputs/apk/acc/release/app-acc-release-signed.apk#app-acc-release-signed-${APP_VERSION}.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
