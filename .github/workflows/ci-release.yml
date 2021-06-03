@@ -32,13 +32,13 @@ jobs:
       working-directory: ./dgca-wallet-app-android
       run: |-
         ./gradlew --no-daemon build
-    - name: sign
+    - name: sign-tst
       working-directory: ./dgca-wallet-app-android
       run: |-
         echo "${KEY_STORE_BASE64}" | base64 --decode > ./key.jks
         ZIPALIGN=${ANDROID_HOME}/build-tools/${BUILD_TOOLS_VERSION}/zipalign
         APKSIGNER=${ANDROID_HOME}/build-tools/${BUILD_TOOLS_VERSION}/apksigner
-        ${ZIPALIGN} -c -v 4 ./app/build/outputs/apk/release/app-release-unsigned.apk
+        ${ZIPALIGN} -c -v 4 ./app/build/outputs/apk/tst/release/app-tst-release-unsigned.apk
         ${APKSIGNER} sign \
         --ks ./key.jks \
         --ks-pass pass:${KEY_STORE_PASSWORD} \
@@ -46,7 +46,28 @@ jobs:
         --key-pass pass:${KEY_PASSWORD} \
         --out ./app/build/outputs/apk/release/app-release-signed.apk \
         ./app/build/outputs/apk/release/app-release-unsigned.apk
-        ${APKSIGNER} verify ./app/build/outputs/apk/release/app-release-signed.apk
+        ${APKSIGNER} verify ./app/build/outputs/apk/tst/release/app-tst-release-signed.apk
+      env:
+        BUILD_TOOLS_VERSION: 29.0.3
+        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        KEY_STORE_BASE64: ${{ secrets.KEY_STORE_BASE64 }}
+        KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+    - name: sign-acc
+      working-directory: ./dgca-wallet-app-android
+      run: |-
+        echo "${KEY_STORE_BASE64}" | base64 --decode > ./key.jks
+        ZIPALIGN=${ANDROID_HOME}/build-tools/${BUILD_TOOLS_VERSION}/zipalign
+        APKSIGNER=${ANDROID_HOME}/build-tools/${BUILD_TOOLS_VERSION}/apksigner
+        ${ZIPALIGN} -c -v 4 ./app/build/outputs/apk/acc/release/app-acc-release-unsigned.apk
+        ${APKSIGNER} sign \
+        --ks ./key.jks \
+        --ks-pass pass:${KEY_STORE_PASSWORD} \
+        --ks-key-alias ${KEY_ALIAS} \
+        --key-pass pass:${KEY_PASSWORD} \
+        --out ./app/build/outputs/apk/release/app-release-signed.apk \
+        ./app/build/outputs/apk/release/app-release-unsigned.apk
+        ${APKSIGNER} verify ./app/build/outputs/apk/acc/release/app-acc-release-signed.apk
       env:
         BUILD_TOOLS_VERSION: 29.0.3
         KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
