@@ -25,18 +25,16 @@ package dgca.wallet.app.android.certificate.claim
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import dgca.wallet.app.android.DATE_TIME
-import dgca.wallet.app.android.FORMATTED_DATE_TIME
 import dgca.wallet.app.android.data.TestModel
 import dgca.wallet.app.android.databinding.ItemTestBinding
-import dgca.wallet.app.android.parseFromTo
+import dgca.wallet.app.android.toFormattedDateTime
 
 class TestViewHolder(private val binding: ItemTestBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(data: TestModel) {
         binding.testResultValue.text = data.resultType.value
-        binding.dateOfCollectionValue.text = data.dateTimeOfCollection.parseFromTo(DATE_TIME, FORMATTED_DATE_TIME)
-        binding.dateOfTestResultValue.text = data.dateTimeOfTestResult?.parseFromTo(DATE_TIME, FORMATTED_DATE_TIME)
+        binding.dateOfCollectionValue.text = data.dateTimeOfCollection.toFormattedDateTime()
+        binding.dateOfTestResultValue.text = data.dateTimeOfTestResult?.toFormattedDateTime()
         binding.diseaseValue.text = data.disease
         binding.typeOfTestValue.text = data.typeOfTest
         binding.countryValue.text = data.countryOfVaccination
