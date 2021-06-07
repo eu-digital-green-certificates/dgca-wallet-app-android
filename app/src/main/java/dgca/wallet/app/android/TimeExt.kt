@@ -23,29 +23,45 @@
 package dgca.wallet.app.android
 
 import java.text.SimpleDateFormat
-import java.time.LocalDate
+import java.time.*
 import java.time.format.DateTimeFormatter
 import java.util.*
 
 const val YEAR_MONTH_DAY = "yyyy-MM-dd"
-const val DATE_TIME = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
 const val FORMATTED_YEAR_MONTH_DAY = "MMM d, yyyy"
-const val FORMATTED_DATE_TIME = "MMM d, yyyy, HH:mm"
+private const val FORMATTED_DATE_TIME = "MMM d, yyyy, HH:mm"
 
-fun LocalDate.formatWith(pattern: String): String {
-    return try {
-        val formatter = DateTimeFormatter.ofPattern(pattern)
-        return this.format(formatter)
-    } catch (ex: Exception) {
-        ""
-    }
+private fun String.toZonedDateTime(): ZonedDateTime? = try {
+    ZonedDateTime.parse(this)
+} catch (error: Throwable) {
+    null
 }
+
+private fun String.toLocalDateTime(): LocalDateTime? = try {
+    LocalDateTime.parse(this)
+} catch (error: Throwable) {
+    null
+}
+
+private val DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(FORMATTED_DATE_TIME)
+fun String.toFormattedDateTime(): String? =
+    this.toZonedDateTime()?.let { "${DATE_TIME_FORMATTER.format(it)} (UTC)" }
+        ?: this.toLocalDateTime()?.let { "${DATE_TIME_FORMATTER.format(it)} (UTC)" }
 
 fun String.parseFromTo(from: String, to: String): String {
     return try {
         val parser = SimpleDateFormat(from, Locale.US)
         val formatter = SimpleDateFormat(to, Locale.US)
         return formatter.format(parser.parse(this)!!)
+    } catch (ex: Exception) {
+        ""
+    }
+}
+
+fun LocalDate.formatWith(pattern: String): String {
+    return try {
+        val formatter = DateTimeFormatter.ofPattern(pattern)
+        return this.format(formatter)
     } catch (ex: Exception) {
         ""
     }
