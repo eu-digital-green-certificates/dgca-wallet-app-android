@@ -55,7 +55,8 @@ object Versions {
     const val bouncy_castle = "1.68"
 
     // Validation
-    const val json_validation = "2.2.6"
+    const val json_validation = "2.2.14"
+    const val json_validation_rhino = "1.0"
 
     const val timber = "4.7.1"
     const val google_licenses = "17.0.0"
