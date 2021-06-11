@@ -24,10 +24,7 @@
         </activity>
 
         <activity
-            android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
-            android:theme="@style/Theme.DgcaVerifierAppAndroid.Licensing" />
-        <activity
-            android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
+            android:name=".LicensesActivity"
             android:theme="@style/Theme.DgcaVerifierAppAndroid.Licensing" />
 
         <provider

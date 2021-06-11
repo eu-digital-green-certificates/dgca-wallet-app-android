@@ -94,8 +94,6 @@ dependencies {
 
     implementation Deps.timber
 
-    implementation Deps.google_licenses
-
     testImplementation Deps.test_junit
 
     androidTestImplementation Deps.android_test_junit
