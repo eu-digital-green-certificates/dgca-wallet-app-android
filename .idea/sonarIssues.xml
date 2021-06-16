@@ -63,6 +63,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../dgca-verifier-app-android/buildSrc/src/main/java/AppConfig.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/.idea/gradle.xml">
           <value>
             <set />
@@ -489,6 +494,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/buildSrc/src/main/java/AppConfig.kt">
           <value>
             <set />
           </value>
