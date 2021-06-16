@@ -20,7 +20,7 @@
     <string name="tan_cert_title">Step2: TAN</string>
     <string name="claim_cert_title">Step3: Your Data</string>
     <string name="tan_code">TAN Code</string>
-    <string name="tan_code_subtitle">Please provide the TAN Code associated to this Certificate. This has been sent to you by mail order so.</string>
+    <string name="tan_code_subtitle">Please provide the TAN Code associated to this certificate. This was sent to you via email or similar.</string>
     <string name="tan_hint">TAN Code</string>
     <string name="save">Save</string>
     <string name="settings">Settings</string>
