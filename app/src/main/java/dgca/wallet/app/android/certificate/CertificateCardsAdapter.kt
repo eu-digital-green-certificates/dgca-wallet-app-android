@@ -53,12 +53,7 @@ class CertificateCardsAdapter(
                 certificateCard.certificate.tests?.isNotEmpty() == true -> binding.root.resources.getString(R.string.test)
                 else -> ""
             }
-            binding.nameView.text =
-                binding.root.resources.getString(
-                    R.string.name_surname,
-                    certificateCard.certificate.person.givenName,
-                    certificateCard.certificate.person.familyName
-                )
+            binding.nameView.text = certificateCard.certificate.getFullName()
             binding.scannedAtDateView.text = certificateCard.dateTaken.formatWith(YEAR_MONTH_DAY)
             binding.root.setOnClickListener { certificateCardClickListener.onCertificateCardClick(certificateCard.certificateId) }
         }
