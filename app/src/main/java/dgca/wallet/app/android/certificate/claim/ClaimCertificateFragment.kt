@@ -89,14 +89,30 @@ class ClaimCertificateFragment : Fragment() {
     }
 
     private fun showUserData(certificate: CertificateModel) {
-        binding.personFullName.text =
-            getString(R.string.person_full_name_placeholder, certificate.person.givenName, certificate.person.familyName)
+        binding.personFullName.text = certificate.getFullName()
         binding.personStandardisedFamilyName.text = certificate.person.standardisedFamilyName
         binding.personStandardisedFamilyNameTitle.isVisible = true
-        binding.personStandardisedGivenName.text = certificate.person.standardisedGivenName
-        binding.personStandardisedGivenNameTitle.isVisible = true
-        binding.dateOfBirth.text = certificate.dateOfBirth.parseFromTo(YEAR_MONTH_DAY, FORMATTED_YEAR_MONTH_DAY)
-        binding.dateOfBirthTitle.isVisible = true
+        val standardisedGivenName = certificate.person.standardisedGivenName
+        if (standardisedGivenName?.isNotBlank() == true) {
+            binding.personStandardisedGivenName.text = standardisedGivenName
+            View.VISIBLE
+        } else {
+            View.GONE
+        }.apply {
+            binding.personStandardisedGivenNameTitle.visibility = this
+            binding.personStandardisedGivenName.visibility = this
+        }
+
+        val dateOfBirth = certificate.dateOfBirth.parseFromTo(YEAR_MONTH_DAY, FORMATTED_YEAR_MONTH_DAY)
+        if (dateOfBirth.isNotBlank()) {
+            binding.dateOfBirth.text = dateOfBirth
+            View.VISIBLE
+        } else {
+            View.GONE
+        }.apply {
+            binding.dateOfBirthTitle.visibility = this
+            binding.dateOfBirth.visibility = this
+        }
     }
 
     private fun onViewModelEvent(event: ClaimCertificateViewModel.ClaimCertEvent) {
