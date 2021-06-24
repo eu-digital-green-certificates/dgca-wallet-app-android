@@ -118,6 +118,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/acc/assets/wallet-context.jsonc">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/androidTest/java/dgca/wallet/app/android/DefaultKeyStoreCryptorTest.kt">
           <value>
             <set />
