@@ -9,11 +9,13 @@
     <string name="no_certificate_available">No Certificate available</string>
     <string name="click_span_code_to_add_to_your_wallet">Click Scan Code to add to your Wallet.</string>
     <string name="scan_code">Scan Code</string>
+    <string name="check_validity">Check Validity</string>
     <string name="vaccination">Vaccination Shot #%1$s</string>
     <string name="recovery">Recovery</string>
     <string name="test">Test</string>
     <string name="your_certificate">Your Certificate</string>
     <string name="name">Name</string>
+    <string name="validity_of_your_certificate">Validity of your certificate</string>
 
     <string name="qr_reader_title">Step1: Scan Code</string>
     <string name="tan_cert_title">Step2: TAN</string>

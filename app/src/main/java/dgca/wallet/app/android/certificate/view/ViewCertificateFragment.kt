@@ -35,6 +35,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.FORMATTED_YEAR_MONTH_DAY
 import dgca.wallet.app.android.R
 import dgca.wallet.app.android.YEAR_MONTH_DAY
+import dgca.wallet.app.android.certificate.CertificatesFragmentDirections
 import dgca.wallet.app.android.certificate.claim.CertListAdapter
 import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.getCertificateListData
@@ -95,6 +96,10 @@ class ViewCertificateFragment : Fragment() {
             }
         }
         viewModel.setCertificateId(args.certificateId, minEdge.toInt())
+        binding.checkValidity.setOnClickListener {
+            val action = ViewCertificateFragmentDirections.actionViewCertificateFragmentToValidateCertificateFragment()
+            findNavController().navigate(action)
+        }
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
