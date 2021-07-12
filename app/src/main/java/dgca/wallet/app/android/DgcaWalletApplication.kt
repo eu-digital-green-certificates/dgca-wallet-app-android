@@ -26,7 +26,10 @@ import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.*
 import dagger.hilt.android.HiltAndroidApp
+import dgca.verifier.app.android.worker.RulesLoadWorker
 import dgca.wallet.app.android.worker.ConfigsLoadingWorker
+import dgca.wallet.app.android.worker.CountriesLoadWorker
+import dgca.wallet.app.android.worker.ValueSetsLoadWorker
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -48,16 +51,22 @@ class DgcaWalletApplication : Application(), Configuration.Provider {
             Timber.plant(Timber.DebugTree())
         }
 
-        val workRequest: WorkRequest =
-            PeriodicWorkRequestBuilder<ConfigsLoadingWorker>(1, TimeUnit.DAYS)
+        WorkManager.getInstance(this).apply {
+            schedulePeriodicWorker<ConfigsLoadingWorker>()
+            schedulePeriodicWorker<RulesLoadWorker>()
+            schedulePeriodicWorker<CountriesLoadWorker>()
+            schedulePeriodicWorker<ValueSetsLoadWorker>()
+        }
+    }
+
+    private inline fun <reified T : ListenableWorker> WorkManager.schedulePeriodicWorker() =
+        this.enqueue(
+            PeriodicWorkRequestBuilder<T>(1, TimeUnit.DAYS)
                 .setConstraints(
                     Constraints.Builder()
                         .setRequiredNetworkType(NetworkType.CONNECTED)
                         .build()
                 )
                 .build()
-        WorkManager
-            .getInstance(this)
-            .enqueue(workRequest)
-    }
+        )
 }

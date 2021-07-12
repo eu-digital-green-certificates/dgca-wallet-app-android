@@ -36,13 +36,14 @@ object Versions {
     const val androidx_hilt_viewmodel = "1.0.0-alpha01"
     const val androidx_hilt_work = work_hilt
     const val androidx_hilt_compiler = work_hilt
+
     const val androidx_room = "2.3.0"
     const val androidx_worker_ktx = "2.5.0"
     const val hilt_version = "2.33-beta"
     const val google_licenses_version = "0.10.4"
     const val retrofit = "2.9.0"
     const val logging_interceptor = "4.0.1"
-    const val gson_converter = "2.6.0"
+    const val gson_converter = "2.1.0"
     const val biometric = "1.2.0-alpha03"
 
     // QR
@@ -54,6 +55,9 @@ object Versions {
     const val jackson_cbor = "2.12.3"
     const val java_cose = "1.1.0"
     const val bouncy_castle = "1.68"
+    const val jackson_kotlin = "2.12.0"
+    const val jackson_datetype = "jackson-datatype-jsr310"
+    const val appache_commons = "2.9.0"
 
     // Validation
     const val json_validation = "2.2.14"
@@ -68,6 +72,6 @@ object Versions {
     const val hamcrest = "2.2"
 
     // Instrumented tests
-    const val android_test_junit = "1.1.2"
-    const val android_test_rules = "1.3.0"
+    const val test_ext = "1.1.2"
+    const val test_rules = "1.3.0"
 }

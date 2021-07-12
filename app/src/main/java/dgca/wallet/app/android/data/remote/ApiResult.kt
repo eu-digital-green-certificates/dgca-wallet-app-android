@@ -22,7 +22,7 @@
 
 package dgca.wallet.app.android.data.remote
 
-import com.google.gson.Gson
+import com.fasterxml.jackson.databind.ObjectMapper
 import okhttp3.ResponseBody
 import retrofit2.Response
 
@@ -51,7 +51,7 @@ class ApiResult<T>(response: Response<T>? = null) {
                 var responseError: CommonError?
                 this?.charStream().use { reader ->
                     val json = reader?.readText()
-                    val result: CommonError? = Gson().fromJson(json, CommonError::class.java)
+                    val result: CommonError? = ObjectMapper().readValue(json, CommonError::class.java)
 
                     responseError = if (result != null && result.details.isEmpty()) {
                         null
