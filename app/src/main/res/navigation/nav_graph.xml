@@ -127,7 +127,7 @@
 
     <fragment
         android:id="@+id/rulesValidationFragment"
-        android:name="dgca.wallet.app.android.certificate.view.validity.RulesValidationFragment"
+        android:name="dgca.wallet.app.android.certificate.view.validity.rules.RulesValidationFragment"
         android:label="@string/country_rules_validation"
         tools:layout="@layout/fragment_rules_validatation">
 

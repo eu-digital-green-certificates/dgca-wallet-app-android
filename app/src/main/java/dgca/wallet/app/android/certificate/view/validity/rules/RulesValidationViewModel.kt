@@ -20,7 +20,7 @@
  *  Created by osarapulov on 7/13/21 1:45 PM
  */
 
-package dgca.wallet.app.android.certificate.view.validity
+package dgca.wallet.app.android.certificate.view.validity.rules
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -83,6 +83,7 @@ class RulesValidationViewModel @Inject constructor(
                 val validationResults: List<ValidationResult>? =
                     base64EncodedKid?.let { greenCertificateData.validateRules(zonedDateTime, selectedCountry, base64EncodedKid) }
                 _validationResults.postValue(validationResults)
+                _inProgress.postValue(false)
             }
         }
     }

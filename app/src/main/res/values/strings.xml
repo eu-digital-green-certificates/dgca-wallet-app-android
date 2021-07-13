@@ -59,4 +59,15 @@
     <string name="check_the_date">Check the date</string>
     <string name="disclaimer">Disclaimer</string>
     <string name="country_code_list_is_empty">Country codes list is empty</string>
+
+    <string name="result">Result</string>
+    <string name="current">Current</string>
+    <string name="passed">Passed</string>
+    <string name="failed">Failed</string>
+    <string name="open">Open</string>
+    <string name="negative">Negative</string>
+    <string name="rule">Rule</string>
+    <string name="passed_for">Passed for %1$s (see settings)</string>
+    <string name="open_for">Open for %1$s (see settings)</string>
+    <string name="failed_for">Failed for %1$s (see settings)</string>
 </resources>

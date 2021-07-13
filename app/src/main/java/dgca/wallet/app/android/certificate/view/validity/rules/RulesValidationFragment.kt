@@ -17,10 +17,10 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 7/13/21 1:43 PM
+ *  Created by osarapulov on 7/13/21 3:42 PM
  */
 
-package dgca.wallet.app.android.certificate.view.validity
+package dgca.wallet.app.android.certificate.view.validity.rules
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -30,6 +30,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.verifier.app.engine.data.source.local.rules.Converters
 import dgca.wallet.app.android.databinding.FragmentRulesValidatationBinding
@@ -53,5 +54,16 @@ class RulesValidationFragment : Fragment() {
             binding.progress.isVisible = it
         })
         viewModel.validate(args.qrCodeText, args.selectedCountry, Converters().fromTimestamp(args.timeStamp))
+        binding.rulesList.layoutManager = LinearLayoutManager(requireContext())
+        viewModel.validationResults.observe(viewLifecycleOwner, { it ->
+            val ruleValidationResultCards = mutableListOf<RuleValidationResultCard>()
+            it?.forEach { validationResult ->
+                ruleValidationResultCards.add(
+                    validationResult.toRuleValidationResultCard(requireContext())
+                )
+            }
+            binding.rulesList.adapter =
+                RuleValidationResultsAdapter(layoutInflater, ruleValidationResultCards)
+        })
     }
 }

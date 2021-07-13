@@ -43,4 +43,9 @@
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:typeface">normal</item>
     </style>
+
+    <style name="TextAppearance.Dgca.RuleTitle" parent="">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
+    </style>
 </resources>
