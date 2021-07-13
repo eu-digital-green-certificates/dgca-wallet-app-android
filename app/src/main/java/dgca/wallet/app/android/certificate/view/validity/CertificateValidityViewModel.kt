@@ -1,6 +1,6 @@
 /*
  *  ---license-start
- *  eu-digital-green-certificates / dgca-verifier-app-android
+ *  eu-digital-green-certificates / dgca-wallet-app-android
  *  ---
  *  Copyright (C) 2021 T-Systems International GmbH and all other contributors
  *  ---
@@ -38,43 +38,16 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-/*-
- * ---license-start
- * eu-digital-green-certificates / dgc-certlogic-android
- * ---
- * Copyright (C) 2021 T-Systems International GmbH and all other contributors
- * ---
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ---license-end
- *
- * Created by osarapulov on 12.07.21 13:22
- */
 @HiltViewModel
 class CertificateValidityViewModel @Inject constructor(
-    private val countriesRepository: CountriesRepository,
-    private val preferences: Preferences,
-    private val prefixValidationService: PrefixValidationService,
-    private val base45Service: Base45Service,
-    private val compressorService: CompressorService,
-    private val coseService: CoseService,
-    private val cborService: CborService,
+    countriesRepository: CountriesRepository,
+    private val preferences: Preferences
 ) : ViewModel() {
-    private val _countries: MediatorLiveData<Triple<List<String>?, String?, GreenCertificateData?>> = MediatorLiveData()
-    val countries: LiveData<Triple<List<String>?, String?, GreenCertificateData?>> = _countries
+    private val _countries: MediatorLiveData<Pair<List<String>?, String?>> = MediatorLiveData()
+    val countries: LiveData<Pair<List<String>?, String?>> = _countries
     private val _selectedCountry: LiveData<String?> = liveData {
         emit(preferences.selectedCountryIsoCode)
     }
-    private val _greenCertificateData = MutableLiveData<GreenCertificateData>()
 
     fun selectCountry(countryIsoCode: String) {
         preferences.selectedCountryIsoCode = countryIsoCode
@@ -82,31 +55,11 @@ class CertificateValidityViewModel @Inject constructor(
 
     init {
         _countries.addSource(countriesRepository.getCountries().asLiveData()) {
-            _countries.value = Triple(it, _countries.value?.second, _countries.value?.third)
+            _countries.value = Pair(it, _countries.value?.second)
         }
 
         _countries.addSource(_selectedCountry) {
-            _countries.value = Triple(_countries.value?.first, it ?: "", _countries.value?.third)
-        }
-
-        _countries.addSource(_greenCertificateData) {
-            _countries.value =
-                Triple(_countries.value?.first, _countries.value?.second, it)
-        }
-    }
-
-    fun init(qrCodeText: String) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                val verificationResult = VerificationResult()
-                val plainInput = prefixValidationService.decode(qrCodeText, verificationResult)
-                val compressedCose = base45Service.decode(plainInput, verificationResult)
-                val cose = compressorService.decode(compressedCose, verificationResult)
-
-                coseService.decode(cose, verificationResult)?.let {
-                    _greenCertificateData.postValue(cborService.decodeData(it.cbor, verificationResult))
-                }
-            }
+            _countries.value = Pair(_countries.value?.first, it ?: "")
         }
     }
 }

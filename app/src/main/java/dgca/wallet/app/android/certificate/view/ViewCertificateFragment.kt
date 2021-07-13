@@ -96,7 +96,7 @@ class ViewCertificateFragment : Fragment() {
         viewModel.setCertificateId(args.certificateId, minEdge.toInt())
         binding.checkValidity.setOnClickListener {
             viewModel.certificate.value?.certificateCard?.qrCodeText?.let {
-                val action = ViewCertificateFragmentDirections.actionViewCertificateFragmentToValidateCertificateFragment(it)
+                val action = ViewCertificateFragmentDirections.actionViewCertificateFragmentToCertificateValidityFragment(it)
                 findNavController().navigate(action)
             }
         }

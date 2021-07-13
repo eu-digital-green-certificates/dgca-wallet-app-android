@@ -98,8 +98,8 @@
             app:argType="integer" />
 
         <action
-            android:id="@+id/action_viewCertificateFragment_to_validateCertificateFragment"
-            app:destination="@id/validateCertificateFragment"
+            android:id="@+id/action_viewCertificateFragment_to_certificateValidityFragment"
+            app:destination="@id/certificateValidityFragment"
             app:enterAnim="@animator/nav_default_pop_enter_anim"
             app:exitAnim="@animator/nav_default_exit_anim"
             app:popEnterAnim="@animator/nav_default_pop_enter_anim"
@@ -107,14 +107,41 @@
     </fragment>
 
     <fragment
-        android:id="@+id/validateCertificateFragment"
+        android:id="@+id/certificateValidityFragment"
         android:name="dgca.wallet.app.android.certificate.view.validity.CertificateValidityFragment"
         android:label="@string/country_rules_validation"
-        tools:layout="@layout/fragment_certificate_view">
+        tools:layout="@layout/fragment_validity_certificate">
 
         <argument
             android:name="qrCodeText"
             app:argType="string" />
+
+        <action
+            android:id="@+id/action_certificateValidityFragment_to_rulesValidationFragment"
+            app:destination="@id/rulesValidationFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/rulesValidationFragment"
+        android:name="dgca.wallet.app.android.certificate.view.validity.RulesValidationFragment"
+        android:label="@string/country_rules_validation"
+        tools:layout="@layout/fragment_rules_validatation">
+
+        <argument
+            android:name="qrCodeText"
+            app:argType="string" />
+
+        <argument
+            android:name="selectedCountry"
+            app:argType="string" />
+
+        <argument
+            android:name="timeStamp"
+            app:argType="long" />
     </fragment>
 
     <fragment

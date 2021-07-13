@@ -113,6 +113,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/build/generated/source/navigation-args/tst/debug/dgca/wallet/app/android/certificate/view/validity/CertificateValidityFragmentDirections.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/build/tmp/kapt3/stubs/debug/dgca/wallet/app/android/DgcaWalletApplication.java">
           <value>
             <set />
@@ -269,6 +274,16 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/view/validity/CountriesAdapter.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/view/validity/RulesValidationFragment.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/view/validity/RulesValidationViewModel.kt">
           <value>
             <set />
           </value>
@@ -704,6 +719,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/app/src/main/res/layout/fragment_certificates.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/layout/fragment_rules_validatation.xml">
           <value>
             <set />
           </value>

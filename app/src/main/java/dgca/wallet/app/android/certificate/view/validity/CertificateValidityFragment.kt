@@ -1,6 +1,6 @@
 /*
  *  ---license-start
- *  eu-digital-green-certificates / dgca-verifier-app-android
+ *  eu-digital-green-certificates / dgca-wallet-app-android
  *  ---
  *  Copyright (C) 2021 T-Systems International GmbH and all other contributors
  *  ---
@@ -29,32 +29,16 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
+import dgca.verifier.app.engine.UTC_ZONE_ID
+import dgca.verifier.app.engine.data.source.local.rules.Converters
 import dgca.wallet.app.android.databinding.FragmentValidityCertificateBinding
+import java.time.LocalDate
+import java.time.ZonedDateTime
 import java.util.*
 
-/*-
- * ---license-start
- * eu-digital-green-certificates / dgc-certlogic-android
- * ---
- * Copyright (C) 2021 T-Systems International GmbH and all other contributors
- * ---
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ---license-end
- *
- * Created by osarapulov on 12.07.21 13:18
- */
 @AndroidEntryPoint
 class CertificateValidityFragment : Fragment() {
     private var _binding: FragmentValidityCertificateBinding? = null
@@ -71,20 +55,30 @@ class CertificateValidityFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.init(args.qrCodeText)
         setUpCountriesProcessing()
+        binding.iAgreeCheckValidity.setOnClickListener {
+            val selectedDateTime: ZonedDateTime =
+                LocalDate.of(binding.date.year, binding.date.month, binding.date.dayOfMonth).atStartOfDay().atZone(UTC_ZONE_ID)
+            val action =
+                CertificateValidityFragmentDirections.actionCertificateValidityFragmentToRulesValidationFragment(
+                    args.qrCodeText,
+                    binding.yourDestinationCountry.selectedItem as String,
+                    Converters().zonedDateTimeToTimestamp(selectedDateTime)
+                )
+            findNavController().navigate(action)
+        }
     }
 
     private fun setUpCountriesProcessing() {
-        viewModel.countries.observe(viewLifecycleOwner, { triple ->
-            if (triple.first == null || triple.second == null || triple.third == null) {
+        viewModel.countries.observe(viewLifecycleOwner, { pair ->
+            if (pair.first == null || pair.second == null) {
                 binding.iAgreeCheckValidity.isEnabled = false
                 binding.progress.visibility = View.VISIBLE
                 View.GONE
             } else {
-                handleCountries(triple.first!!, triple.second!!)
+                handleCountries(pair.first!!, pair.second!!)
                 binding.progress.visibility = View.GONE
-                binding.iAgreeCheckValidity.isEnabled = triple!!.first!!.isNotEmpty()
+                binding.iAgreeCheckValidity.isEnabled = pair!!.first!!.isNotEmpty()
                 View.VISIBLE
             }.apply {
                 binding.yourDestinationCountry.visibility = this
@@ -112,7 +106,7 @@ class CertificateValidityFragment : Fragment() {
             binding.yourDestinationCountry.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parentView: AdapterView<*>?,
-                    selectedItemView: View,
+                    selectedItemView: View?,
                     position: Int,
                     id: Long
                 ) {
