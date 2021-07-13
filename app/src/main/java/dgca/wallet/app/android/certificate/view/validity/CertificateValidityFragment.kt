@@ -29,6 +29,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.databinding.FragmentValidityCertificateBinding
 import java.util.*
@@ -59,6 +60,8 @@ class CertificateValidityFragment : Fragment() {
     private var _binding: FragmentValidityCertificateBinding? = null
     private val binding get() = _binding!!
 
+    private val args by navArgs<CertificateValidityFragmentArgs>()
+
     private val viewModel by viewModels<CertificateValidityViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -68,22 +71,23 @@ class CertificateValidityFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.init(args.qrCodeText)
         setUpCountriesProcessing()
     }
 
     private fun setUpCountriesProcessing() {
-        viewModel.countries.observe(viewLifecycleOwner, { pair ->
-            if (pair.first.isEmpty() || pair.second == null) {
+        viewModel.countries.observe(viewLifecycleOwner, { triple ->
+            if (triple.first.isEmpty() || triple.second == null || triple.third == null) {
                 binding.iAgreeCheckValidity.isEnabled = false
                 View.GONE
             } else {
-                val countries = pair.first
+                val countries = triple.first
                 val refinedCountries = countries.map { COUNTRIES_MAP[it] ?: it }
                     .sortedBy { Locale("", it).displayCountry }
                 binding.yourDestinationCountry.adapter = CountriesAdapter(refinedCountries, layoutInflater)
-                if (pair.second!!.isNotBlank()) {
+                if (triple.second!!.isNotBlank()) {
                     val selectedCountryIndex =
-                        refinedCountries.indexOf(pair.second!!)
+                        refinedCountries.indexOf(triple.second!!)
                     if (selectedCountryIndex >= 0) {
                         binding.yourDestinationCountry.setSelection(selectedCountryIndex)
                     }

@@ -24,8 +24,18 @@ package dgca.wallet.app.android.certificate.view.validity
 
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dgca.verifier.app.decoder.base45.Base45Service
+import dgca.verifier.app.decoder.cbor.CborService
+import dgca.verifier.app.decoder.cbor.GreenCertificateData
+import dgca.verifier.app.decoder.compression.CompressorService
+import dgca.verifier.app.decoder.cose.CoseService
+import dgca.verifier.app.decoder.model.VerificationResult
+import dgca.verifier.app.decoder.prefixvalidation.PrefixValidationService
 import dgca.verifier.app.engine.data.source.countries.CountriesRepository
 import dgca.wallet.app.android.data.local.Preferences
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /*-
@@ -52,13 +62,20 @@ import javax.inject.Inject
 @HiltViewModel
 class CertificateValidityViewModel @Inject constructor(
     private val countriesRepository: CountriesRepository,
-    private val preferences: Preferences
+    private val preferences: Preferences,
+    private val prefixValidationService: PrefixValidationService,
+    private val base45Service: Base45Service,
+    private val compressorService: CompressorService,
+    private val coseService: CoseService,
+    private val cborService: CborService,
 ) : ViewModel() {
-    private val _countries: MediatorLiveData<Pair<List<String>, String?>> = MediatorLiveData()
-    val countries: LiveData<Pair<List<String>, String?>> = _countries
+    private val _countries: MediatorLiveData<Triple<List<String>, String?, GreenCertificateData?>> = MediatorLiveData()
+    val countries: LiveData<Triple<List<String>, String?, GreenCertificateData?>> = _countries
     private val _selectedCountry: LiveData<String?> = liveData {
         emit(preferences.selectedCountryIsoCode)
     }
+    private val _greenCertificateData = MutableLiveData<GreenCertificateData>()
+    val greenCertificateData: LiveData<GreenCertificateData> = _greenCertificateData
 
     fun selectCountry(countryIsoCode: String) {
         preferences.selectedCountryIsoCode = countryIsoCode
@@ -66,11 +83,32 @@ class CertificateValidityViewModel @Inject constructor(
 
     init {
         _countries.addSource(countriesRepository.getCountries().asLiveData()) {
-            _countries.value = Pair(it, _countries.value?.second)
+            _countries.value = Triple(it, _countries.value?.second, _countries.value?.third)
         }
 
         _countries.addSource(_selectedCountry) {
-            _countries.value = Pair(_countries.value?.first ?: emptyList(), it ?: "")
+            _countries.value = Triple(_countries.value?.first ?: emptyList(), it ?: "", _countries.value?.third)
+        }
+
+        _countries.addSource(_greenCertificateData) {
+            _countries.value =
+                Triple(_countries.value?.first ?: emptyList(), _countries.value?.second, it)
         }
     }
+
+    fun init(qrCodeText: String) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val verificationResult = VerificationResult()
+                val plainInput = prefixValidationService.decode(qrCodeText, verificationResult)
+                val compressedCose = base45Service.decode(plainInput, verificationResult)
+                val cose = compressorService.decode(compressedCose, verificationResult)
+
+                coseService.decode(cose, verificationResult)?.let {
+                    _greenCertificateData.postValue(cborService.decodeData(it.cbor, verificationResult))
+                }
+            }
+        }
+    }
+
 }
