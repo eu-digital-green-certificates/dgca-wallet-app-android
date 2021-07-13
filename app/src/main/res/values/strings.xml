@@ -16,7 +16,8 @@
     <string name="test">Test</string>
     <string name="your_certificate">Your Certificate</string>
     <string name="name">Name</string>
-    <string name="validity_of_your_certificate">Validity of your certificate</string>
+    <string name="country_rules_validation">Country rules validation</string>
+    <string name="check_country_rules_conformance_of_your_certificate">Check country rules conformance of your certificate</string>
 
     <string name="qr_reader_title">Step1: Scan Code</string>
     <string name="tan_cert_title">Step2: TAN</string>
@@ -53,8 +54,9 @@
     <string name="tan_placeholder">Tan: %1$s</string>
     <string name="tan_empty_error">TAN cannot be empty</string>
     <string name="delete">Delete</string>
-    <string name="message">Terms and Conditions agreements act as a legal contract between you (the company) who has the website or mobile app and the user who access your website and mobile app.    Having a Terms and Conditions agreement is completely optional. No laws require you to have one. Not even the super-strict and wide-reaching General Data Protection Regulation (GDPR).    Terms and Conditions are also known as Terms of Service or Terms of Use.</string>
+    <string name="disclaimer_message">This check gives an indication on eligibility to travel based on your certificate. Restriction of free movement in response to the coronavirus pandemic are subject to change and might be based on additional information not available to and within this application. Please refer to authoritative national sources for more information and the Re-open EU website: https://reopen.europa.eu/. Your data is being processed locally on this device.</string>
     <string name="your_destination_country">Your destination country</string>
     <string name="check_the_date">Check the date</string>
     <string name="disclaimer">Disclaimer</string>
+    <string name="country_code_list_is_empty">Country codes list is empty</string>
 </resources>

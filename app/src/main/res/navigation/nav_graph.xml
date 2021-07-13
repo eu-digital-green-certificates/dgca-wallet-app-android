@@ -109,7 +109,7 @@
     <fragment
         android:id="@+id/validateCertificateFragment"
         android:name="dgca.wallet.app.android.certificate.view.validity.CertificateValidityFragment"
-        android:label="@string/validity_of_your_certificate"
+        android:label="@string/country_rules_validation"
         tools:layout="@layout/fragment_certificate_view">
 
         <argument

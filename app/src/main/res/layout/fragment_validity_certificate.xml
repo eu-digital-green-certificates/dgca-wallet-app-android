@@ -47,15 +47,7 @@
                 style="@style/TextAppearance.Dgca.GeneralTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/validity_of_your_certificate" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/message"
-                style="@style/TextAppearance.Dgca.CertificateValue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/default_quarter_margin"
-                android:text="@string/message" />
+                android:text="@string/check_country_rules_conformance_of_your_certificate" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/yourDestinationCountryTitle"
@@ -65,12 +57,22 @@
                 android:layout_marginTop="@dimen/default_margin"
                 android:text="@string/your_destination_country" />
 
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/yourDestinationCountryText"
+                style="@style/TextAppearance.Dgca.CertificateValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_quarter_margin"
+                android:background="@color/white"
+                android:text="@string/country_code_list_is_empty" />
+
             <Spinner
                 android:id="@+id/yourDestinationCountry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/default_quarter_margin"
-                android:background="@color/white" />
+                android:background="@color/white"
+                android:visibility="gone" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/checkTheDateTitle"
@@ -101,20 +103,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/default_quarter_margin"
-                android:text="@string/message" />
+                android:text="@string/disclaimer_message" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/iAgreeCheckValidity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/blue"
+        android:enabled="false"
         android:minWidth="130dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:enabled="false"
         android:text="@string/i_agree_check_validity"
         android:textAllCaps="false"
         android:textColor="@color/white"
@@ -132,4 +133,32 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:id="@+id/background"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/grey_transparent"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/blue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/progress"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:constraint_referenced_ids="background, progressBar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -43,7 +43,6 @@ import dgca.wallet.app.android.parseFromTo
 
 @AndroidEntryPoint
 class ViewCertificateFragment : Fragment() {
-
     private val args by navArgs<ViewCertificateFragmentArgs>()
     private val viewModel by viewModels<ViewCertificateViewModel>()
     private var _binding: FragmentCertificateViewBinding? = null

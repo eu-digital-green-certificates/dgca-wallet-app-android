@@ -77,40 +77,52 @@ class CertificateValidityFragment : Fragment() {
 
     private fun setUpCountriesProcessing() {
         viewModel.countries.observe(viewLifecycleOwner, { triple ->
-            if (triple.first.isEmpty() || triple.second == null || triple.third == null) {
+            if (triple.first == null || triple.second == null || triple.third == null) {
                 binding.iAgreeCheckValidity.isEnabled = false
+                binding.progress.visibility = View.VISIBLE
                 View.GONE
             } else {
-                val countries = triple.first
-                val refinedCountries = countries.map { COUNTRIES_MAP[it] ?: it }
-                    .sortedBy { Locale("", it).displayCountry }
-                binding.yourDestinationCountry.adapter = CountriesAdapter(refinedCountries, layoutInflater)
-                if (triple.second!!.isNotBlank()) {
-                    val selectedCountryIndex =
-                        refinedCountries.indexOf(triple.second!!)
-                    if (selectedCountryIndex >= 0) {
-                        binding.yourDestinationCountry.setSelection(selectedCountryIndex)
-                    }
-                }
-                binding.yourDestinationCountry.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        parentView: AdapterView<*>?,
-                        selectedItemView: View,
-                        position: Int,
-                        id: Long
-                    ) {
-                        viewModel.selectCountry(refinedCountries[position].toLowerCase(Locale.ROOT))
-                    }
-
-                    override fun onNothingSelected(parentView: AdapterView<*>?) {
-                    }
-                }
-                binding.iAgreeCheckValidity.isEnabled = true
+                handleCountries(triple.first!!, triple.second!!)
+                binding.progress.visibility = View.GONE
+                binding.iAgreeCheckValidity.isEnabled = triple!!.first!!.isNotEmpty()
                 View.VISIBLE
             }.apply {
                 binding.yourDestinationCountry.visibility = this
             }
         })
+    }
+
+    private fun handleCountries(countries: List<String>, selectedCountry: String) {
+        if (countries.isEmpty()) {
+            binding.yourDestinationCountry.visibility = View.GONE
+            binding.yourDestinationCountryText.visibility = View.VISIBLE
+        } else {
+            binding.yourDestinationCountry.visibility = View.VISIBLE
+            binding.yourDestinationCountryText.visibility = View.GONE
+            val refinedCountries = countries.map { COUNTRIES_MAP[it] ?: it }
+                .sortedBy { Locale("", it).displayCountry }
+            binding.yourDestinationCountry.adapter = CountriesAdapter(refinedCountries, layoutInflater)
+            if (selectedCountry.isNotBlank()) {
+                val selectedCountryIndex =
+                    refinedCountries.indexOf(selectedCountry)
+                if (selectedCountryIndex >= 0) {
+                    binding.yourDestinationCountry.setSelection(selectedCountryIndex)
+                }
+            }
+            binding.yourDestinationCountry.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parentView: AdapterView<*>?,
+                    selectedItemView: View,
+                    position: Int,
+                    id: Long
+                ) {
+                    viewModel.selectCountry(refinedCountries[position].toLowerCase(Locale.ROOT))
+                }
+
+                override fun onNothingSelected(parentView: AdapterView<*>?) {
+                }
+            }
+        }
     }
 
     companion object {

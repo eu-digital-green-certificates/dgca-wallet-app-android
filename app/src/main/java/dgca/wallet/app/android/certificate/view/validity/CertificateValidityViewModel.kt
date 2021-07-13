@@ -69,13 +69,12 @@ class CertificateValidityViewModel @Inject constructor(
     private val coseService: CoseService,
     private val cborService: CborService,
 ) : ViewModel() {
-    private val _countries: MediatorLiveData<Triple<List<String>, String?, GreenCertificateData?>> = MediatorLiveData()
-    val countries: LiveData<Triple<List<String>, String?, GreenCertificateData?>> = _countries
+    private val _countries: MediatorLiveData<Triple<List<String>?, String?, GreenCertificateData?>> = MediatorLiveData()
+    val countries: LiveData<Triple<List<String>?, String?, GreenCertificateData?>> = _countries
     private val _selectedCountry: LiveData<String?> = liveData {
         emit(preferences.selectedCountryIsoCode)
     }
     private val _greenCertificateData = MutableLiveData<GreenCertificateData>()
-    val greenCertificateData: LiveData<GreenCertificateData> = _greenCertificateData
 
     fun selectCountry(countryIsoCode: String) {
         preferences.selectedCountryIsoCode = countryIsoCode
@@ -87,12 +86,12 @@ class CertificateValidityViewModel @Inject constructor(
         }
 
         _countries.addSource(_selectedCountry) {
-            _countries.value = Triple(_countries.value?.first ?: emptyList(), it ?: "", _countries.value?.third)
+            _countries.value = Triple(_countries.value?.first, it ?: "", _countries.value?.third)
         }
 
         _countries.addSource(_greenCertificateData) {
             _countries.value =
-                Triple(_countries.value?.first ?: emptyList(), _countries.value?.second, it)
+                Triple(_countries.value?.first, _countries.value?.second, it)
         }
     }
 
@@ -110,5 +109,4 @@ class CertificateValidityViewModel @Inject constructor(
             }
         }
     }
-
 }
