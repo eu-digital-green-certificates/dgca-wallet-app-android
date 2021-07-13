@@ -18,6 +18,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../dgc-certlogic-android/engine/src/main/java/dgca/verifier/app/engine/DefaultCertLogicEngine.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../dgc-certlogic-android/engine/src/main/java/dgca/verifier/app/engine/data/ExternalParameter.kt">
           <value>
             <set />
