@@ -58,7 +58,8 @@ class CertificateValidityFragment : Fragment() {
         setUpCountriesProcessing()
         binding.iAgreeCheckValidity.setOnClickListener {
             val selectedDateTime: ZonedDateTime =
-                LocalDate.of(binding.date.year, binding.date.month, binding.date.dayOfMonth).atStartOfDay().atZone(UTC_ZONE_ID)
+                LocalDate.of(binding.date.year, binding.date.month + 1, binding.date.dayOfMonth).atStartOfDay()
+                    .atZone(UTC_ZONE_ID)
             val action =
                 CertificateValidityFragmentDirections.actionCertificateValidityFragmentToRulesValidationFragment(
                     args.qrCodeText,
