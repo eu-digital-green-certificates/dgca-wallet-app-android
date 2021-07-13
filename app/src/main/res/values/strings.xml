@@ -70,4 +70,9 @@
     <string name="passed_for">Passed for %1$s (see settings)</string>
     <string name="open_for">Open for %1$s (see settings)</string>
     <string name="failed_for">Failed for %1$s (see settings)</string>
+    <string name="valid_certificate_title">Valid certificate</string>
+    <string name="certificate_has_limitation_title">Certificate has limitation</string>
+    <string name="valid_certificate_message">Your certificate allows you to enter the chosen country</string>
+    <string name="certificate_has_limitation_message">Your certificate is valid but has the following restrictions:</string>
+    <string name="please_note_that_this_informaiont_is_without_guaranty">Please note that this information is without guaranty. This functions check if the certificate matches the rules of the country you are traveling to at the given time.</string>
 </resources>

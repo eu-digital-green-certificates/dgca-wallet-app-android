@@ -26,13 +26,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import dgca.verifier.app.engine.Result
 import dgca.verifier.app.engine.data.source.local.rules.Converters
+import dgca.wallet.app.android.R
 import dgca.wallet.app.android.databinding.FragmentRulesValidatationBinding
 
 @AndroidEntryPoint
@@ -55,13 +58,30 @@ class RulesValidationFragment : Fragment() {
         })
         viewModel.validate(args.qrCodeText, args.selectedCountry, Converters().fromTimestamp(args.timeStamp))
         binding.rulesList.layoutManager = LinearLayoutManager(requireContext())
-        viewModel.validationResults.observe(viewLifecycleOwner, { it ->
+        viewModel.validationResults.observe(viewLifecycleOwner, {
+
+            var isCertificateValid = it != null
+
             val ruleValidationResultCards = mutableListOf<RuleValidationResultCard>()
             it?.forEach { validationResult ->
                 ruleValidationResultCards.add(
                     validationResult.toRuleValidationResultCard(requireContext())
                 )
+                isCertificateValid = isCertificateValid && validationResult.result == Result.PASSED
             }
+
+            binding.title.visibility = View.VISIBLE
+            binding.title.setText(if (isCertificateValid) R.string.valid_certificate_title else R.string.certificate_has_limitation_title)
+
+            binding.message.visibility = View.VISIBLE
+            binding.message.setText(if (isCertificateValid) R.string.valid_certificate_message else R.string.certificate_has_limitation_message)
+
+            binding.icon.visibility = View.VISIBLE
+            binding.icon.setImageResource(if (isCertificateValid) R.drawable.icon_large_valid else R.drawable.icon_large_warning)
+            if (isCertificateValid) {
+                binding.icon.backgroundTintList = ResourcesCompat.getColorStateList(resources, R.color.green, null)
+            }
+
             binding.rulesList.adapter =
                 RuleValidationResultsAdapter(layoutInflater, ruleValidationResultCards)
         })
