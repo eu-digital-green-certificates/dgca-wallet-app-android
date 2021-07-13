@@ -112,9 +112,9 @@
         android:label="@string/validity_of_your_certificate"
         tools:layout="@layout/fragment_certificate_view">
 
-        <!--        <argument-->
-        <!--            android:name="certificateId"-->
-        <!--            app:argType="integer" />-->
+        <argument
+            android:name="qrCodeText"
+            app:argType="string" />
     </fragment>
 
     <fragment
