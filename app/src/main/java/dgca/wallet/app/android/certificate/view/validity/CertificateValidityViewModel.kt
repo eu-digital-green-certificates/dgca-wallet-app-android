@@ -22,8 +22,10 @@
 
 package dgca.wallet.app.android.certificate.view.validity
 
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dgca.verifier.app.engine.data.source.countries.CountriesRepository
+import dgca.wallet.app.android.data.local.Preferences
 import javax.inject.Inject
 
 /*-
@@ -48,4 +50,27 @@ import javax.inject.Inject
  * Created by osarapulov on 12.07.21 13:22
  */
 @HiltViewModel
-class CertificateValidityViewModel @Inject constructor() : ViewModel()
+class CertificateValidityViewModel @Inject constructor(
+    private val countriesRepository: CountriesRepository,
+    private val preferences: Preferences
+) : ViewModel() {
+    private val _countries: MediatorLiveData<Pair<List<String>, String?>> = MediatorLiveData()
+    val countries: LiveData<Pair<List<String>, String?>> = _countries
+    private val _selectedCountry: LiveData<String?> = liveData {
+        emit(preferences.selectedCountryIsoCode)
+    }
+
+    fun selectCountry(countryIsoCode: String) {
+        preferences.selectedCountryIsoCode = countryIsoCode
+    }
+
+    init {
+        _countries.addSource(countriesRepository.getCountries().asLiveData()) {
+            _countries.value = Pair(it, _countries.value?.second)
+        }
+
+        _countries.addSource(_selectedCountry) {
+            _countries.value = Pair(_countries.value?.first ?: emptyList(), it ?: "")
+        }
+    }
+}

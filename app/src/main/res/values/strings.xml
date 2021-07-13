@@ -53,4 +53,8 @@
     <string name="tan_placeholder">Tan: %1$s</string>
     <string name="tan_empty_error">TAN cannot be empty</string>
     <string name="delete">Delete</string>
+    <string name="message">Terms and Conditions agreements act as a legal contract between you (the company) who has the website or mobile app and the user who access your website and mobile app.    Having a Terms and Conditions agreement is completely optional. No laws require you to have one. Not even the super-strict and wide-reaching General Data Protection Regulation (GDPR).    Terms and Conditions are also known as Terms of Service or Terms of Use.</string>
+    <string name="your_destination_country">Your destination country</string>
+    <string name="check_the_date">Check the date</string>
+    <string name="disclaimer">Disclaimer</string>
 </resources>

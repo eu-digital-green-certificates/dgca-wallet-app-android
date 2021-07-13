@@ -26,9 +26,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.databinding.FragmentValidityCertificateBinding
+import java.util.*
 
 /*-
  * ---license-start
@@ -56,8 +59,57 @@ class CertificateValidityFragment : Fragment() {
     private var _binding: FragmentValidityCertificateBinding? = null
     private val binding get() = _binding!!
 
+    private val viewModel by viewModels<CertificateValidityViewModel>()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentValidityCertificateBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setUpCountriesProcessing()
+    }
+
+    private fun setUpCountriesProcessing() {
+        viewModel.countries.observe(viewLifecycleOwner, { pair ->
+            if (pair.first.isEmpty() || pair.second == null) {
+                binding.iAgreeCheckValidity.isEnabled = false
+                View.GONE
+            } else {
+                val countries = pair.first
+                val refinedCountries = countries.map { COUNTRIES_MAP[it] ?: it }
+                    .sortedBy { Locale("", it).displayCountry }
+                binding.yourDestinationCountry.adapter = CountriesAdapter(refinedCountries, layoutInflater)
+                if (pair.second!!.isNotBlank()) {
+                    val selectedCountryIndex =
+                        refinedCountries.indexOf(pair.second!!)
+                    if (selectedCountryIndex >= 0) {
+                        binding.yourDestinationCountry.setSelection(selectedCountryIndex)
+                    }
+                }
+                binding.yourDestinationCountry.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parentView: AdapterView<*>?,
+                        selectedItemView: View,
+                        position: Int,
+                        id: Long
+                    ) {
+                        viewModel.selectCountry(refinedCountries[position].toLowerCase(Locale.ROOT))
+                    }
+
+                    override fun onNothingSelected(parentView: AdapterView<*>?) {
+                    }
+                }
+                binding.iAgreeCheckValidity.isEnabled = true
+                View.VISIBLE
+            }.apply {
+                binding.yourDestinationCountry.visibility = this
+            }
+        })
+    }
+
+    companion object {
+        private val COUNTRIES_MAP = mapOf("el" to "gr")
     }
 }

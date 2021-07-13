@@ -25,6 +25,86 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/listContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/iAgreeCheckValidity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/default_margin">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/title"
+                style="@style/TextAppearance.Dgca.GeneralTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/validity_of_your_certificate" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/message"
+                style="@style/TextAppearance.Dgca.CertificateValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_quarter_margin"
+                android:text="@string/message" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/yourDestinationCountryTitle"
+                style="@style/TextAppearance.Dgca.GeneralTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin"
+                android:text="@string/your_destination_country" />
+
+            <Spinner
+                android:id="@+id/yourDestinationCountry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_quarter_margin"
+                android:background="@color/white" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/checkTheDateTitle"
+                style="@style/TextAppearance.Dgca.GeneralTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin"
+                android:text="@string/check_the_date" />
+
+            <DatePicker
+                android:id="@+id/date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/disclaimerTitle"
+                style="@style/TextAppearance.Dgca.GeneralTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin"
+                android:text="@string/disclaimer" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/disclaimerMessage"
+                style="@style/TextAppearance.Dgca.CertificateValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_quarter_margin"
+                android:text="@string/message" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
     <Button
         android:id="@+id/iAgreeCheckValidity"
         android:layout_width="wrap_content"
@@ -34,6 +114,7 @@
         android:minWidth="130dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
+        android:enabled="false"
         android:text="@string/i_agree_check_validity"
         android:textAllCaps="false"
         android:textColor="@color/white"
