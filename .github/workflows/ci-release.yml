@@ -3,6 +3,7 @@ on:
   release:
     types:
     - created
+    - prereleased
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -14,6 +15,11 @@ jobs:
         repository: eu-digital-green-certificates/dgca-app-core-android
         ref: main
         path: dgca-app-core-android
+    - uses: actions/checkout@v2
+      with:
+        repository: eu-digital-green-certificates/dgc-certlogic-android
+        ref: main
+        path: dgc-certlogic-android
     - uses: actions/checkout@v2
       with:
         path: dgca-wallet-app-android
