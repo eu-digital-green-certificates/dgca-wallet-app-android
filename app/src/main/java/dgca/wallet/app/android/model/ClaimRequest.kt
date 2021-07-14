@@ -22,17 +22,17 @@
 
 package dgca.wallet.app.android.model
 
-import com.google.gson.annotations.SerializedName
+import com.fasterxml.jackson.annotation.JsonProperty
 
 data class ClaimRequest(
 
-    @SerializedName("DGCI")
+    @JsonProperty("DGCI")
     val dgci: String? = null,
 
-    @SerializedName("certhash")
+    @JsonProperty("certhash")
     val certHash: String? = null,
 
-    @SerializedName("TANHash")
+    @JsonProperty("TANHash")
     val tanHash: String? = null,
 
     val publicKey: PublicKeyData? = null,

@@ -33,15 +33,14 @@ object Deps {
     const val androidx_constraint = "androidx.constraintlayout:constraintlayout:${Versions.androidx_constraint}"
     const val androidx_navigation_fragment = "androidx.navigation:navigation-fragment-ktx:${Versions.androidx_navigation}"
     const val androidx_navigation_ui = "androidx.navigation:navigation-ui-ktx:${Versions.androidx_navigation}"
-    const val androidx_room_runtime = "androidx.room:room-runtime:${Versions.androidx_room}"
+    const val room_runtime = "androidx.room:room-runtime:${Versions.androidx_room}"
     const val androidx_worker_ktx = "androidx.work:work-runtime-ktx:${Versions.androidx_worker_ktx}"
-    const val androidx_room_compiler = "androidx.room:room-compiler:${Versions.androidx_room}"
+    const val room_compiler = "androidx.room:room-compiler:${Versions.androidx_room}"
     const val room_ktx = "androidx.room:room-ktx:${Versions.androidx_room}"
     const val androidx_navigation = "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.androidx_navigation}"
     const val androidx_hilt_compiler = "androidx.hilt:hilt-compiler:${Versions.androidx_hilt_compiler}"
     const val retrofit2 = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
     const val log_interceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.logging_interceptor}"
-    const val gson_converter = "com.squareup.retrofit2:converter-gson:${Versions.gson_converter}"
     const val biometric = "androidx.biometric:biometric-ktx:${Versions.biometric}"
 
     const val hilt_plugin = "com.google.dagger:hilt-android-gradle-plugin:${Versions.hilt_version}"
@@ -60,6 +59,11 @@ object Deps {
     const val json_validation = "com.github.java-json-tools:json-schema-validator:${Versions.json_validation}"
     const val json_validation_rhino = "io.apisense:rhino-android:${Versions.json_validation_rhino}"
     const val jackson_cbor = "com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:${Versions.jackson_cbor}"
+    const val jackson_kotlin = "com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson_kotlin}"
+    const val jackson_datetype = "com.fasterxml.jackson.datatype:${Versions.jackson_datetype}"
+    const val appache_commons = "commons-io:commons-io:${Versions.appache_commons}"
+    const val gson_converter = "com.squareup.retrofit2:converter-jackson:${Versions.gson_converter}"
+    const val android_lifecycle_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.android_lifecycle_ktx_version}"
 
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
 
@@ -70,7 +74,10 @@ object Deps {
     const val test_junit_jupiter_params = "org.junit.jupiter:junit-jupiter-params:${Versions.junit_jupiter}"
     const val test_runtime_only = "org.junit.jupiter:junit-jupiter-engine:${Versions.junit_jupiter}"
     const val test_hamcrest = "org.hamcrest:hamcrest:${Versions.hamcrest}"
+    const val test_runner = "androidx.test:runner:${Versions.test_rules}}"
 
-    const val android_test_junit = "androidx.test.ext:junit:${Versions.android_test_junit}"
-    const val android_test_rules = "androidx.test:rules:${Versions.android_test_rules}"
+    const val test_ext = "androidx.test.ext:junit:${Versions.test_ext}"
+    const val test_rules = "androidx.test:rules:${Versions.test_rules}"
+
+
 }

@@ -31,6 +31,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dgca.wallet.app.android.data.local.AppDatabase
 import dgca.wallet.app.android.data.local.CertificateDao
+import dgca.wallet.app.android.data.local.Preferences
+import dgca.wallet.app.android.data.local.PreferencesImpl
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -46,4 +48,8 @@ object LocalDataSourceModule {
     fun provideContactsDao(database: AppDatabase): CertificateDao {
         return database.certificateDao()
     }
+
+    @Singleton
+    @Provides
+    fun providePreferences(@ApplicationContext context: Context): Preferences = PreferencesImpl(context)
 }

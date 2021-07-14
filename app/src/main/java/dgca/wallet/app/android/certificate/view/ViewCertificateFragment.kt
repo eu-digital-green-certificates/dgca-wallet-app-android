@@ -43,7 +43,6 @@ import dgca.wallet.app.android.parseFromTo
 
 @AndroidEntryPoint
 class ViewCertificateFragment : Fragment() {
-
     private val args by navArgs<ViewCertificateFragmentArgs>()
     private val viewModel by viewModels<ViewCertificateViewModel>()
     private var _binding: FragmentCertificateViewBinding? = null
@@ -95,6 +94,12 @@ class ViewCertificateFragment : Fragment() {
             }
         }
         viewModel.setCertificateId(args.certificateId, minEdge.toInt())
+        binding.checkValidity.setOnClickListener {
+            viewModel.certificate.value?.certificateCard?.qrCodeText?.let {
+                val action = ViewCertificateFragmentDirections.actionViewCertificateFragmentToCertificateValidityFragment(it)
+                findNavController().navigate(action)
+            }
+        }
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
