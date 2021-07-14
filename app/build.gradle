@@ -84,7 +84,7 @@ dependencies {
     implementation Deps.biometric
     implementation Deps.jackson_kotlin
     implementation Deps.jackson_datetype
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0-alpha02"
+    implementation Deps.android_lifecycle_ktx
 
     implementation Deps.hilt
     kapt Deps.hilt_compiler

@@ -48,7 +48,7 @@ class PreferencesImpl(context: Context) : Preferences {
     )
 
     companion object {
-        private const val USER_PREF = "dgca.verifier.app.pref"
+        private const val USER_PREF = "dgca.wallet.app.pref"
         private const val KEY_SELECTED_COUNTRY_ISO_CODE = "selected_country_iso_code"
     }
 }

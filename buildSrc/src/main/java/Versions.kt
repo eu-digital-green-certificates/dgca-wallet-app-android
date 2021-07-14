@@ -45,6 +45,7 @@ object Versions {
     const val logging_interceptor = "4.0.1"
     const val gson_converter = "2.1.0"
     const val biometric = "1.2.0-alpha03"
+    const val android_lifecycle_ktx_version = "2.4.0-alpha02"
 
     // QR
     const val zxing = "4.2.0"

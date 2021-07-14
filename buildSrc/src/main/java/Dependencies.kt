@@ -63,6 +63,7 @@ object Deps {
     const val jackson_datetype = "com.fasterxml.jackson.datatype:${Versions.jackson_datetype}"
     const val appache_commons = "commons-io:commons-io:${Versions.appache_commons}"
     const val gson_converter = "com.squareup.retrofit2:converter-jackson:${Versions.gson_converter}"
+    const val android_lifecycle_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.android_lifecycle_ktx_version}"
 
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
 
