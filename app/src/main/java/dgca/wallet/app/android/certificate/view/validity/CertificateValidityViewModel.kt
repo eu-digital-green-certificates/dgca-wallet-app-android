@@ -57,7 +57,7 @@ class CertificateValidityViewModel @Inject constructor(
         }
 
         _countries.addSource(_selectedCountry) {
-            if (it != countries.value?.second) {
+            if (countries.value?.second == null || countries.value?.second != it) {
                 _countries.value = Pair(_countries.value?.first, it ?: "")
             }
         }
