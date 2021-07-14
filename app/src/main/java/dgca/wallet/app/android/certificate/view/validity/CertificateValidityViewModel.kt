@@ -24,13 +24,6 @@ package dgca.wallet.app.android.certificate.view.validity
 
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dgca.verifier.app.decoder.base45.Base45Service
-import dgca.verifier.app.decoder.cbor.CborService
-import dgca.verifier.app.decoder.cbor.GreenCertificateData
-import dgca.verifier.app.decoder.compression.CompressorService
-import dgca.verifier.app.decoder.cose.CoseService
-import dgca.verifier.app.decoder.model.VerificationResult
-import dgca.verifier.app.decoder.prefixvalidation.PrefixValidationService
 import dgca.verifier.app.engine.data.source.countries.CountriesRepository
 import dgca.wallet.app.android.data.local.Preferences
 import kotlinx.coroutines.Dispatchers
@@ -45,21 +38,28 @@ class CertificateValidityViewModel @Inject constructor(
 ) : ViewModel() {
     private val _countries: MediatorLiveData<Pair<List<String>?, String?>> = MediatorLiveData()
     val countries: LiveData<Pair<List<String>?, String?>> = _countries
-    private val _selectedCountry: LiveData<String?> = liveData {
-        emit(preferences.selectedCountryIsoCode)
-    }
+    private val _selectedCountry: MutableLiveData<String?> = MutableLiveData<String?>()
 
     fun selectCountry(countryIsoCode: String) {
         preferences.selectedCountryIsoCode = countryIsoCode
+        _selectedCountry.value = countryIsoCode
     }
 
     init {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                _selectedCountry.postValue(preferences.selectedCountryIsoCode)
+            }
+        }
+
         _countries.addSource(countriesRepository.getCountries().asLiveData()) {
             _countries.value = Pair(it, _countries.value?.second)
         }
 
         _countries.addSource(_selectedCountry) {
-            _countries.value = Pair(_countries.value?.first, it ?: "")
+            if (it != countries.value?.second) {
+                _countries.value = Pair(_countries.value?.first, it ?: "")
+            }
         }
     }
 }
