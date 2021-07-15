@@ -108,6 +108,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/build/generated/source/kapt/accDebug/dgca/wallet/app/android/data/local/CertificateDao_Impl.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/build/generated/source/kapt/debug/dgca/wallet/app/android/Hilt_MainActivity.java">
           <value>
             <set />

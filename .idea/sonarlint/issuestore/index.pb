@@ -61,3 +61,5 @@ i
 9app/src/main/java/dgca/wallet/app/android/MainActivity.kt,1/0/10068f8d895357047f6ee9470e76b78a881110a5
 S
 #buildSrc/src/main/java/AppConfig.kt,a/f/afbe0c8e034c515e4cd2282931468bc45a8cbd10
+z
+Japp/src/main/java/dgca/wallet/app/android/certificate/claim/TanFragment.kt,4/3/43672e43970c16969a47ed95d517cf4e064ba912
