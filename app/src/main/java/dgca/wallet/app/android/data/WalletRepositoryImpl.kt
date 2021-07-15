@@ -63,15 +63,25 @@ class WalletRepositoryImpl @Inject constructor(
 
     override suspend fun getCertificates(): List<CertificateCard>? {
         return execute {
-            certificateDao.getAll().map { encryptedCertificate ->
-                generateCard(encryptedCertificate)
-            }
+            certificateDao.getAll()
+                .map { encryptedCertificate -> decodeCertificate(encryptedCertificate) }
+                .filter { it.second is CertificateDecodingResult.Success }
+                .map { Pair(it.first, it.second as CertificateDecodingResult.Success) }
+                .map { it.toCertificateCard() }
         }
     }
 
     override suspend fun getCertificatesById(certificateId: Int): CertificateCard? {
         return execute {
-            certificateDao.getById(certificateId)?.let { generateCard(it) }
+            certificateDao.getById(certificateId)?.let { certificateEntity ->
+                decodeCertificate(certificateEntity).let {
+                    if (it.second is CertificateDecodingResult.Success) {
+                        Pair(it.first, it.second as CertificateDecodingResult.Success).toCertificateCard()
+                    } else {
+                        null
+                    }
+                }
+            }
         }
     }
 
@@ -81,15 +91,18 @@ class WalletRepositoryImpl @Inject constructor(
         } == true
     }
 
-    private fun generateCard(encryptedCertificate: CertificateEntity): CertificateCard {
+    private fun decodeCertificate(encryptedCertificate: CertificateEntity): Pair<CertificateEntity, CertificateDecodingResult> {
         val certificate =
             encryptedCertificate.copy(
                 qrCodeText = keyStoreCryptor.decrypt(encryptedCertificate.qrCodeText)!!,
                 tan = keyStoreCryptor.decrypt(encryptedCertificate.tan)!!
             )
         // We assume that we do not store invalid QR codes, thus here, no errors should appear.
-        val certificateModel =
-            (certificateDecoder.decodeCertificate(certificate.qrCodeText) as CertificateDecodingResult.Success).greenCertificate.toCertificateModel()
-        return CertificateCard(certificate, certificateModel)
+        return Pair(certificate, certificateDecoder.decodeCertificate(certificate.qrCodeText))
+    }
+
+    private fun Pair<CertificateEntity, CertificateDecodingResult.Success>.toCertificateCard(): CertificateCard {
+        val certificateModel = this.second.greenCertificate.toCertificateModel()
+        return CertificateCard(this.first, certificateModel)
     }
 }
