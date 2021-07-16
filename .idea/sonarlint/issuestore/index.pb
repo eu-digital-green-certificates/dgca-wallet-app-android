@@ -63,3 +63,7 @@ S
 #buildSrc/src/main/java/AppConfig.kt,a/f/afbe0c8e034c515e4cd2282931468bc45a8cbd10
 z
 Japp/src/main/java/dgca/wallet/app/android/certificate/claim/TanFragment.kt,4/3/43672e43970c16969a47ed95d517cf4e064ba912
+m
+=app/src/main/java/dgca/wallet/app/android/di/NetworkModule.kt,a/5/a5240ece1f0757097e00f43d148a437b74524977
+v
+Fapp/src/main/java/dgca/wallet/app/android/network/HeaderInterceptor.kt,8/f/8f7d10077315765fd963586fb7c6992ade217f49
