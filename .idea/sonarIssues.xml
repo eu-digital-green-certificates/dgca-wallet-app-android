@@ -28,6 +28,21 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../dgc-certlogic-android/engine/src/main/java/dgca/verifier/app/engine/data/source/countries/CountriesRepository.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../dgc-certlogic-android/engine/src/main/java/dgca/verifier/app/engine/data/source/countries/DefaultCountriesRepository.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../dgc-certlogic-android/engine/src/main/java/dgca/verifier/app/engine/data/source/rules/DefaultRulesRepository.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../dgca-app-core-android/buildSrc/build.gradle.kts">
           <value>
             <set />
@@ -64,6 +79,16 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/../dgca-app-core-android/decoder/src/main/java/dgca/verifier/app/decoder/schema/DefaultSchemaValidator.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../dgca-verifier-app-android/app/src/main/java/dgca/verifier/app/android/CodeReaderFragment.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../dgca-verifier-app-android/app/src/main/java/dgca/verifier/app/android/CountriesAdapter.kt">
           <value>
             <set />
           </value>

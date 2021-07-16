@@ -33,6 +33,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.verifier.app.engine.UTC_ZONE_ID
+import dgca.verifier.app.engine.data.source.countries.COUNTRIES_MAP
 import dgca.verifier.app.engine.data.source.local.rules.Converters
 import dgca.wallet.app.android.databinding.FragmentValidityCertificateBinding
 import java.time.LocalDate
@@ -94,8 +95,7 @@ class CertificateValidityFragment : Fragment() {
         } else {
             binding.yourDestinationCountry.visibility = View.VISIBLE
             binding.yourDestinationCountryText.visibility = View.GONE
-            val refinedCountries = countries.map { COUNTRIES_MAP[it] ?: it }
-                .sortedBy { Locale("", it).displayCountry }
+            val refinedCountries = countries.sortedBy { Locale("", COUNTRIES_MAP[it] ?: it).displayCountry }
             binding.yourDestinationCountry.adapter = CountriesAdapter(refinedCountries, layoutInflater)
             if (selectedCountry.isNotBlank()) {
                 val selectedCountryIndex =
@@ -118,9 +118,5 @@ class CertificateValidityFragment : Fragment() {
                 }
             }
         }
-    }
-
-    companion object {
-        private val COUNTRIES_MAP = mapOf("el" to "gr")
     }
 }
