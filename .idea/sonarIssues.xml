@@ -78,6 +78,16 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../dgca-app-core-android/decoder/src/main/java/dgca/verifier/app/decoder/prefixvalidation/DefaultPrefixValidationService.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../dgca-app-core-android/decoder/src/main/java/dgca/verifier/app/decoder/prefixvalidation/PrefixValidationService.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../dgca-app-core-android/decoder/src/main/java/dgca/verifier/app/decoder/schema/DefaultSchemaValidator.kt">
           <value>
             <set />
