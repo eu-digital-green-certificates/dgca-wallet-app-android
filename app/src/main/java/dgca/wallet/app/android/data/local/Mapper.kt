@@ -37,7 +37,7 @@ fun GreenCertificate.toCertificateModel(): CertificateModel {
 
 fun RecoveryStatement.toRecoveryModel(): RecoveryModel {
     return RecoveryModel(
-        disease,
+        disease.toDiseaseCode().toDiseaseType(),
         dateOfFirstPositiveTest,
         countryOfVaccination,
         certificateIssuer,
@@ -49,7 +49,7 @@ fun RecoveryStatement.toRecoveryModel(): RecoveryModel {
 
 fun Test.toTestModel(): TestModel {
     return TestModel(
-        disease,
+        disease.toDiseaseCode().toDiseaseType(),
         typeOfTest,
         testName,
         testNameAndManufacturer,
@@ -71,9 +71,14 @@ fun Test.TestResult.toTestResult(): TestResult {
     }
 }
 
+fun DiseaseCode.toDiseaseType(): DiseaseType = when (this) {
+    DiseaseCode.COVID_19 -> DiseaseType.COVID_19
+    else -> DiseaseType.UNDEFINED
+}
+
 fun Vaccination.toVaccinationModel(): VaccinationModel {
     return VaccinationModel(
-        disease,
+        disease.toDiseaseCode().toDiseaseType(),
         vaccine,
         medicinalProduct,
         manufacturer,
@@ -93,4 +98,14 @@ fun Person.toPersonModel(): PersonModel {
         standardisedGivenName,
         givenName
     )
+}
+
+fun String.toDiseaseCode(): DiseaseCode = when (this) {
+    DiseaseCode.COVID_19.value -> DiseaseCode.COVID_19
+    else -> DiseaseCode.UNDEFINED
+}
+
+enum class DiseaseCode(val value: String) {
+    COVID_19("840539006"),
+    UNDEFINED("")
 }

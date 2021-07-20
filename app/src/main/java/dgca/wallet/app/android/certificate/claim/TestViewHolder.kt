@@ -46,7 +46,7 @@ class TestViewHolder(private val binding: ItemTestBinding) : RecyclerView.ViewHo
             binding.dateOfTestResultValue.visibility = this
         }
 
-        binding.diseaseValue.text = data.disease
+        binding.diseaseValue.text = data.disease.value
         binding.typeOfTestValue.text = data.typeOfTest
         binding.countryValue.text = data.countryOfVaccination
     }
