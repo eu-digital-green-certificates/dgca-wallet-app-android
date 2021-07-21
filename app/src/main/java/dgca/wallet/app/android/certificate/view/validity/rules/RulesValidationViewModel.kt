@@ -100,6 +100,7 @@ class RulesValidationViewModel @Inject constructor(
                     Locale.ROOT
                 )
             val rules = getRulesUseCase.invoke(
+                zonedDateTime,
                 countryIsoCode,
                 issuingCountry,
                 engineCertificateType
