@@ -24,6 +24,8 @@ This repository contains the source code of the EU Digital COVID Certificate Wal
 
 The wallet app provides a user interface to store and manage personal DGCs directly on the phone. DGCs will be imported by scanning a base45-encoded QR code and decoding CBOR to JSON. Afterwards, it is symmetrically encrypted in the app’s sandbox and the symmetric key is stored in the system’s keychain. Multiple DGCs can be stored in the app. Access to the app is controlled via biometric data (e. g., Touch ID or Face ID). The wallet app can display any imported DGC as QR code for scanning and verifying with the verifier app.
 
+**A note on using the apps and released APK files found in this GitHub organization**: The apps are reference implementations that cannot be used in production environments as-is, but rather need to be configured by EU member states to access their national backends. The released APK files are configured to work with the test environments and will not report correct results on "live" DCCs.
+
 ## Development
 
 ### Prerequisites
