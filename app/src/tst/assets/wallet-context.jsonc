@@ -1,8 +1,7 @@
 {
-  "origin": "DE", // ISO alpha 2 code
+  "origin": "DE",
   "versions": {
     "default": {
-      // catch-all for normal versions
       "privacyUrl": "https://publications.europa.eu/en/web/about-us/legal-notices/eu-mobile-apps",
       "context": {
         "url": "https://issuance-dgca-test.cfapps.eu10.hana.ondemand.com/dgca-issuance-service/context",
@@ -22,7 +21,6 @@
       }
     },
     "0.1.0": {
-      // Example for a version that is insecure and shouldn't start.
       "outdated": true
     }
   }

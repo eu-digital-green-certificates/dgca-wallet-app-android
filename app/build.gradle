@@ -65,6 +65,7 @@ android {
 
 dependencies {
     implementation project(':decoder')
+    implementation project(':engine')
 
     implementation Deps.kotlin_stdlib
     implementation Deps.androidx_core
@@ -73,14 +74,17 @@ dependencies {
     implementation Deps.androidx_constraint
     implementation Deps.androidx_navigation_fragment
     implementation Deps.androidx_navigation_ui
-    implementation Deps.androidx_room_runtime
+    implementation Deps.room_runtime
     implementation Deps.androidx_worker_ktx
     implementation Deps.room_ktx
-    kapt Deps.androidx_room_compiler
+    kapt Deps.room_compiler
     implementation Deps.kotlinx_coroutines
     implementation Deps.zxing
     implementation Deps.guava_conflict_resolver
     implementation Deps.biometric
+    implementation Deps.jackson_kotlin
+    implementation Deps.jackson_datetype
+    implementation Deps.android_lifecycle_ktx
 
     implementation Deps.hilt
     kapt Deps.hilt_compiler
@@ -91,6 +95,8 @@ dependencies {
     implementation Deps.retrofit2
     implementation Deps.log_interceptor
     implementation Deps.gson_converter
+    implementation Deps.jackson_kotlin
+    implementation Deps.jackson_datetype
 
     implementation Deps.timber
 
@@ -98,7 +104,7 @@ dependencies {
 
     testImplementation Deps.test_junit
 
-    androidTestImplementation Deps.android_test_junit
-    androidTestImplementation Deps.android_test_rules
+    androidTestImplementation Deps.test_ext
+    androidTestImplementation Deps.test_rules
 
 }

@@ -9,11 +9,15 @@
     <string name="no_certificate_available">No Certificate available</string>
     <string name="click_span_code_to_add_to_your_wallet">Click Scan Code to add to your Wallet.</string>
     <string name="scan_code">Scan Code</string>
+    <string name="check_validity">Check Validity</string>
+    <string name="i_agree_check_validity">I agree, check validity</string>
     <string name="vaccination">Vaccination Shot #%1$s</string>
     <string name="recovery">Recovery</string>
     <string name="test">Test</string>
     <string name="your_certificate">Your Certificate</string>
     <string name="name">Name</string>
+    <string name="country_rules_validation">Country rules validation</string>
+    <string name="check_country_rules_conformance_of_your_certificate">Check country rules conformance of your certificate</string>
 
     <string name="qr_reader_title">Step1: Scan Code</string>
     <string name="tan_cert_title">Step2: TAN</string>
@@ -50,4 +54,25 @@
     <string name="tan_placeholder">Tan: %1$s</string>
     <string name="tan_empty_error">TAN cannot be empty</string>
     <string name="delete">Delete</string>
+    <string name="disclaimer_message">This check gives an indication on eligibility to travel based on your certificate. Restriction of free movement in response to the coronavirus pandemic are subject to change and might be based on additional information not available to and within this application. Please refer to authoritative national sources for more information and the Re-open EU website: https://reopen.europa.eu/. Your data is being processed locally on this device.</string>
+    <string name="your_destination_country">Your destination country</string>
+    <string name="check_the_date">Check the date</string>
+    <string name="disclaimer">Disclaimer</string>
+    <string name="country_code_list_is_empty">Country codes list is empty</string>
+
+    <string name="result">Result</string>
+    <string name="current">Current</string>
+    <string name="passed">Passed</string>
+    <string name="failed">Failed</string>
+    <string name="open">Open</string>
+    <string name="negative">Negative</string>
+    <string name="rule">Rule</string>
+    <string name="passed_for">Passed for %1$s (see settings)</string>
+    <string name="open_for">Open for %1$s (see settings)</string>
+    <string name="failed_for">Failed for %1$s (see settings)</string>
+    <string name="valid_certificate_title">Valid certificate</string>
+    <string name="certificate_has_limitation_title">Certificate has limitation</string>
+    <string name="valid_certificate_message">Your certificate allows you to enter the chosen country</string>
+    <string name="certificate_has_limitation_message">Your certificate is valid but has the following restrictions:</string>
+    <string name="please_note_that_this_informaiont_is_without_guaranty">Please note that this information is without guaranty. This functions check if the certificate matches the rules of the country you are traveling to at the given time.</string>
 </resources>
