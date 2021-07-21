@@ -61,7 +61,7 @@ data class PersonModel(
 )
 
 data class VaccinationModel(
-    override val disease: String,
+    override val disease: DiseaseType,
     val vaccine: String,
     val medicinalProduct: String,
     val manufacturer: String,
@@ -74,8 +74,8 @@ data class VaccinationModel(
 ) : CertificateData
 
 data class TestModel(
-    override val disease: String,
-    val typeOfTest: String,
+    override val disease: DiseaseType,
+    val typeOfTest: TypeOfTest,
     val testName: String?,
     val testNameAndManufacturer: String?,
     val dateTimeOfCollection: String,
@@ -93,8 +93,19 @@ enum class TestResult(val value: String) {
     NOT_DETECTED("NOT DETECTED")
 }
 
+enum class DiseaseType(val value: String) {
+    COVID_19("COVID-19"),
+    UNDEFINED("UNDEFINED")
+}
+
+enum class TypeOfTest(val value: String) {
+    NUCLEIC_ACID_AMPLIFICATION_WITH_PROBE_DETECTION("Nucleic acid amplification with probe detection"),
+    RAPID_IMMUNOASSAY("Rapid immunoassay"),
+    UNDEFINED("")
+}
+
 data class RecoveryModel(
-    override val disease: String,
+    override val disease: DiseaseType,
     val dateOfFirstPositiveTest: String,
     val countryOfVaccination: String,
     val certificateIssuer: String,
@@ -104,7 +115,7 @@ data class RecoveryModel(
 ) : CertificateData
 
 interface CertificateData {
-    val disease: String
+    val disease: DiseaseType
 }
 
 fun CertificateModel.getCertificateListData(): List<CertificateData> {

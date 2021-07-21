@@ -37,7 +37,7 @@ fun GreenCertificate.toCertificateModel(): CertificateModel {
 
 fun RecoveryStatement.toRecoveryModel(): RecoveryModel {
     return RecoveryModel(
-        disease,
+        disease.toDiseaseCode().toDiseaseType(),
         dateOfFirstPositiveTest,
         countryOfVaccination,
         certificateIssuer,
@@ -49,8 +49,8 @@ fun RecoveryStatement.toRecoveryModel(): RecoveryModel {
 
 fun Test.toTestModel(): TestModel {
     return TestModel(
-        disease,
-        typeOfTest,
+        disease.toDiseaseCode().toDiseaseType(),
+        typeOfTest.toTypeOfTestCode().toTypeOfTest(),
         testName,
         testNameAndManufacturer,
         dateTimeOfCollection,
@@ -71,9 +71,20 @@ fun Test.TestResult.toTestResult(): TestResult {
     }
 }
 
+fun DiseaseCode.toDiseaseType(): DiseaseType = when (this) {
+    DiseaseCode.COVID_19 -> DiseaseType.COVID_19
+    else -> DiseaseType.UNDEFINED
+}
+
+fun TypeOfTestCode.toTypeOfTest(): TypeOfTest = when (this) {
+    TypeOfTestCode.NUCLEIC_ACID_AMPLIFICATION_WITH_PROBE_DETECTION -> TypeOfTest.NUCLEIC_ACID_AMPLIFICATION_WITH_PROBE_DETECTION
+    TypeOfTestCode.RAPID_IMMUNOASSAY -> TypeOfTest.RAPID_IMMUNOASSAY
+    else -> TypeOfTest.UNDEFINED
+}
+
 fun Vaccination.toVaccinationModel(): VaccinationModel {
     return VaccinationModel(
-        disease,
+        disease.toDiseaseCode().toDiseaseType(),
         vaccine,
         medicinalProduct,
         manufacturer,
@@ -93,4 +104,26 @@ fun Person.toPersonModel(): PersonModel {
         standardisedGivenName,
         givenName
     )
+}
+
+fun String.toDiseaseCode(): DiseaseCode = when (this) {
+    DiseaseCode.COVID_19.value -> DiseaseCode.COVID_19
+    else -> DiseaseCode.UNDEFINED
+}
+
+fun String.toTypeOfTestCode(): TypeOfTestCode = when (this) {
+    TypeOfTestCode.NUCLEIC_ACID_AMPLIFICATION_WITH_PROBE_DETECTION.value -> TypeOfTestCode.NUCLEIC_ACID_AMPLIFICATION_WITH_PROBE_DETECTION
+    TypeOfTestCode.RAPID_IMMUNOASSAY.value -> TypeOfTestCode.RAPID_IMMUNOASSAY
+    else -> TypeOfTestCode.UNDEFINED
+}
+
+enum class DiseaseCode(val value: String) {
+    COVID_19("840539006"),
+    UNDEFINED("")
+}
+
+enum class TypeOfTestCode(val value: String) {
+    NUCLEIC_ACID_AMPLIFICATION_WITH_PROBE_DETECTION("LP6464-4"),
+    RAPID_IMMUNOASSAY("LP217198-3"),
+    UNDEFINED("")
 }
