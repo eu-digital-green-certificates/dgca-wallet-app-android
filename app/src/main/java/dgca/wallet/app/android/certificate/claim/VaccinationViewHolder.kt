@@ -36,8 +36,8 @@ class VaccinationViewHolder(private val binding: ItemVaccinationBinding) : Recyc
     fun bind(data: VaccinationModel) {
         binding.dateValue.text = data.dateOfVaccination.parseFromTo(YEAR_MONTH_DAY, FORMATTED_YEAR_MONTH_DAY)
         binding.diseaseValue.text = data.disease.value
-        data.manufacturer.bindText(binding.manufacturerTitle, binding.manufacturerValue)
-        data.vaccine.bindText(binding.vaccineOrProphylaxisTitle, binding.vaccineOrProphylaxisValue)
+        data.manufacturer.value.bindText(binding.manufacturerTitle, binding.manufacturerValue)
+        data.vaccine.value.bindText(binding.vaccineOrProphylaxisTitle, binding.vaccineOrProphylaxisValue)
         data.countryOfVaccination.bindCountryWith(binding.countryTitle, binding.countryValue)
         data.certificateIssuer.bindText(binding.certificateIssuerTitle, binding.certificateIssuerValue)
     }
