@@ -98,16 +98,7 @@ class ClaimCertificateFragment : Fragment() {
 
     private fun showUserData(certificate: CertificateModel) {
         certificate.getType().bindText(binding.certificateTypeTitle, binding.certificateTypeValue)
-        certificate.getFullName().apply {
-            if (this.isNotBlank()) {
-                binding.personFullName.text = this
-                View.VISIBLE
-            } else {
-                View.GONE
-            }.apply {
-                binding.personFullName.visibility = this
-            }
-        }
+        certificate.getFullName().bindText(binding.nameTitle, binding.personFullName)
 
 //        val dateOfBirth = certificate.dateOfBirth.parseFromTo(YEAR_MONTH_DAY, FORMATTED_YEAR_MONTH_DAY)
 //        if (dateOfBirth.isNotBlank()) {

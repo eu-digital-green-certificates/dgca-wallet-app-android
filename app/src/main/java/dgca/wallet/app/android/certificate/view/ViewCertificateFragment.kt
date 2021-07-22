@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.R
 import dgca.wallet.app.android.certificate.claim.CertListAdapter
+import dgca.wallet.app.android.certificate.claim.bindText
 import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.getCertificateListData
 import dgca.wallet.app.android.databinding.FragmentCertificateViewBinding
@@ -116,17 +117,7 @@ class ViewCertificateFragment : Fragment() {
     }
 
     private fun showUserData(certificate: CertificateModel) {
-        certificate.getFullName().apply {
-            if (this.isNotBlank()) {
-                binding.personFullName.text = this
-                View.VISIBLE
-            } else {
-                View.GONE
-            }.apply {
-                binding.nameTitle.visibility = this
-                binding.personFullName.visibility = this
-            }
-        }
+        certificate.getFullName().bindText(binding.nameTitle, binding.personFullName)
 
 //        val dateOfBirthday = certificate.dateOfBirth.parseFromTo(YEAR_MONTH_DAY, FORMATTED_YEAR_MONTH_DAY)
 //        if (dateOfBirthday.isNotBlank()) {
