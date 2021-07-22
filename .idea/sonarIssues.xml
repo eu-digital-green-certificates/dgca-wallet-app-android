@@ -123,6 +123,16 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../dgca-verifier-app-android/app/src/main/java/dgca/verifier/app/android/verification/VerificationError.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../dgca-verifier-app-android/app/src/test/java/dgca/verifier/app/android/CertificateTests.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../dgca-verifier-app-android/buildSrc/src/main/java/AppConfig.kt">
           <value>
             <set />

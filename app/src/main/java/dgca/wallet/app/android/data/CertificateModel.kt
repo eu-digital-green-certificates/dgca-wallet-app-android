@@ -29,6 +29,7 @@ data class CertificateModel(
     val tests: List<TestModel>?,
     val recoveryStatements: List<RecoveryModel>?
 ) {
+
     fun getFullName(): String {
         val givenName: String? = person.givenName?.trim()
         val familyName: String? = person.familyName?.trim()
