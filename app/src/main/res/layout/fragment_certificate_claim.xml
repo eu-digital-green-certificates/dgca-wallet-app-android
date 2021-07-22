@@ -59,52 +59,21 @@
             android:orientation="vertical"
             android:paddingVertical="10dp">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/person_standardised_family_name_title"
-                style="@style/TextAppearance.Dgca.CertificateTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/standardised_family_name_title"
-                android:visibility="gone" />
+<!--            <com.google.android.material.textview.MaterialTextView-->
+<!--                android:id="@+id/date_of_birth_title"-->
+<!--                style="@style/TextAppearance.Dgca.CertificateTitle"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:text="@string/date_of_birth_title"-->
+<!--                android:visibility="gone" />-->
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/person_standardised_family_name"
-                style="@style/TextAppearance.Dgca.CertificateValue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="MUSTERFRAU" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/person_standardised_given_name_title"
-                style="@style/TextAppearance.Dgca.CertificateTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@string/standardised_given_name_title"
-                android:visibility="gone" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/person_standardised_given_name"
-                style="@style/TextAppearance.Dgca.CertificateValue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="GABRIELE" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/date_of_birth_title"
-                style="@style/TextAppearance.Dgca.CertificateTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@string/date_of_birth_title"
-                android:visibility="gone" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/date_of_birth"
-                style="@style/TextAppearance.Dgca.CertificateValue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="Feb 26, 1988" />
+<!--            <com.google.android.material.textview.MaterialTextView-->
+<!--                android:id="@+id/date_of_birth"-->
+<!--                style="@style/TextAppearance.Dgca.CertificateValue"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                tools:text="Feb 26, 1988" />-->
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"

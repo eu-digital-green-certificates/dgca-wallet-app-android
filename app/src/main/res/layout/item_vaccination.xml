@@ -49,7 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="@string/disease_or_agent_targeted_title" />
+        android:text="@string/target_disease" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/disease_value"
@@ -59,34 +59,34 @@
         tools:text="840539006" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/dose_total_number_title"
+        android:id="@+id/manufacturer_title"
         style="@style/TextAppearance.Dgca.CertificateTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="@string/total_series_of_doses_title" />
+        android:text="@string/manufacturer" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/dose_total_number_value"
+        android:id="@+id/manufacturer_value"
         style="@style/TextAppearance.Dgca.CertificateValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="2" />
+        tools:text="Biontech Manufacturing GmbH" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/dose_sequence_title"
+        android:id="@+id/vaccine_or_prophylaxis_title"
         style="@style/TextAppearance.Dgca.CertificateTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="@string/dose_number_title" />
+        android:text="@string/vaccine_of_prophylaxis" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/dose_sequence_value"
+        android:id="@+id/vaccine_or_prophylaxis_value"
         style="@style/TextAppearance.Dgca.CertificateValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="1" />
+        tools:text="SARS-CoV-2 antigen vaccine" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/country_title"
@@ -94,7 +94,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="@string/country_of_vaccination_title" />
+        android:text="@string/issuer_country" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/country_value"
@@ -103,4 +103,18 @@
         android:layout_height="wrap_content"
         tools:text="UA" />
 
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/certificate_issuer_title"
+        style="@style/TextAppearance.Dgca.CertificateTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/certificate_issuer" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/certificate_issuer_value"
+        style="@style/TextAppearance.Dgca.CertificateValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Custom Issuer Certificate" />
 </LinearLayout>

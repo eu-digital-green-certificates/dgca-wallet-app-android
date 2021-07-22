@@ -48,7 +48,9 @@ class TestViewHolder(private val binding: ItemTestBinding) : RecyclerView.ViewHo
 
         binding.diseaseValue.text = data.disease.value
         binding.typeOfTestValue.text = data.typeOfTest.value
-        binding.countryValue.text = data.countryOfVaccination
+        data.testingCentre.bindText(binding.testingCenterTitle, binding.testingCenterValue)
+        data.countryOfVaccination.bindCountryWith(binding.countryTitle, binding.countryValue)
+        data.certificateIssuer.bindText(binding.certificateIssuerTitle, binding.certificateIssuerValue)
     }
 
     companion object {

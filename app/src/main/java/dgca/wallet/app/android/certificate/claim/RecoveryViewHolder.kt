@@ -35,10 +35,13 @@ class RecoveryViewHolder(private val binding: ItemRecoveryBinding) : RecyclerVie
 
     fun bind(data: RecoveryModel) {
         binding.diseaseValue.text = data.disease.value
-        binding.validFromValue.text = data.certificateValidFrom.parseFromTo(YEAR_MONTH_DAY, FORMATTED_YEAR_MONTH_DAY)
-        binding.validUntilValue.text = data.certificateValidUntil.parseFromTo(YEAR_MONTH_DAY, FORMATTED_YEAR_MONTH_DAY)
+        val validFrom = data.certificateValidFrom.parseFromTo(YEAR_MONTH_DAY, FORMATTED_YEAR_MONTH_DAY)
+        val validTo = data.certificateValidUntil.parseFromTo(YEAR_MONTH_DAY, FORMATTED_YEAR_MONTH_DAY)
+        val validFromTo = if (validFrom.isNotBlank() && validTo.isNotBlank()) "$validFrom - $validTo" else ""
+        validFromTo.bindText(binding.validFromTitle, binding.validFromValue)
         binding.dateOfPositiveValue.text = data.dateOfFirstPositiveTest.parseFromTo(YEAR_MONTH_DAY, FORMATTED_YEAR_MONTH_DAY)
-        binding.countryValue.text = data.countryOfVaccination
+        data.countryOfVaccination.bindCountryWith(binding.countryTitle, binding.countryValue)
+        data.certificateIssuer.bindText(binding.certificateIssuerTitle, binding.certificateIssuerValue)
     }
 
     companion object {

@@ -67,11 +67,3 @@ m
 =app/src/main/java/dgca/wallet/app/android/di/NetworkModule.kt,a/5/a5240ece1f0757097e00f43d148a437b74524977
 v
 Fapp/src/main/java/dgca/wallet/app/android/network/HeaderInterceptor.kt,8/f/8f7d10077315765fd963586fb7c6992ade217f49
-{
-Ksrc/main/java/dgca/verifier/app/engine/data/source/rules/RulesDataSource.kt,a/5/a5f5b6bca6a2efb76a4c5fa919d43eb5353e6a03
-v
-Fsrc/main/java/dgca/verifier/app/engine/domain/rules/GetRulesUseCase.kt,1/9/19ce0fd1a612f464942365b703899170a83ca69c
-}
-Msrc/main/java/dgca/verifier/app/engine/domain/rules/DefaultGetRulesUseCase.kt,4/f/4f60981f36816db5bcc34a01c29b496f009b43b7
-Å
-Qsrc/test/java/dgca/verifier/app/engine/domain/rules/DefaultGetRulesUseCaseTest.kt,1/b/1b91abc18e5933645a5c49601bf7a7c50d860768

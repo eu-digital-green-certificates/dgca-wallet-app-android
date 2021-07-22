@@ -29,57 +29,12 @@
     tools:background="@color/white">
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/disease_title"
-        style="@style/TextAppearance.Dgca.CertificateTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="@string/disease_or_agent_targeted_title" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/disease_value"
-        style="@style/TextAppearance.Dgca.CertificateValue"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="840539006" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/valid_from_title"
-        style="@style/TextAppearance.Dgca.CertificateTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="@string/certificate_valid_from_title" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/valid_from_value"
-        style="@style/TextAppearance.Dgca.CertificateValue"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="Feb 26, 1998" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/valid_until_title"
-        style="@style/TextAppearance.Dgca.CertificateTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="@string/certificate_valid_until_title" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/valid_until_value"
-        style="@style/TextAppearance.Dgca.CertificateValue"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="Feb 26, 1998" />
-
-    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/date_of_positive_title"
         style="@style/TextAppearance.Dgca.CertificateTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="@string/date_of_positive_title" />
+        android:text="@string/first_positive_test_result" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/date_of_positive_value"
@@ -89,12 +44,42 @@
         tools:text="Feb 26, 1998" />
 
     <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/valid_from_title"
+        style="@style/TextAppearance.Dgca.CertificateTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/certificate_valid_from_to_title" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/valid_from_value"
+        style="@style/TextAppearance.Dgca.CertificateValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Feb 26, 1998 - Feb 26, 2000" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/disease_title"
+        style="@style/TextAppearance.Dgca.CertificateTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/target_disease" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/disease_value"
+        style="@style/TextAppearance.Dgca.CertificateValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="COVID-19" />
+
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/country_title"
         style="@style/TextAppearance.Dgca.CertificateTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="@string/country_of_issuance_title" />
+        android:text="@string/country_of_test" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/country_value"
@@ -103,4 +88,18 @@
         android:layout_height="wrap_content"
         tools:text="UA" />
 
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/certificate_issuer_title"
+        style="@style/TextAppearance.Dgca.CertificateTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/certificate_issuer" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/certificate_issuer_value"
+        style="@style/TextAppearance.Dgca.CertificateValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Custom Issuer Certificate" />
 </LinearLayout>
