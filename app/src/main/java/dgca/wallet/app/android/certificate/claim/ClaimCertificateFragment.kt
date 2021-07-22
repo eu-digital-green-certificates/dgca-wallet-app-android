@@ -88,8 +88,8 @@ class ClaimCertificateFragment : Fragment() {
     private fun CertificateModel.getType() = when {
         this.vaccinations?.isNotEmpty() == true -> getString(
             R.string.vaccination,
-            this.vaccinations.first().doseNumber,
-            this.vaccinations.first().totalSeriesOfDoses
+            this.vaccinations.first().doseNumber.toString(),
+            this.vaccinations.first().totalSeriesOfDoses.toString()
         )
         this.recoveryStatements?.isNotEmpty() == true -> getString(R.string.recovery)
         this.tests?.isNotEmpty() == true -> getString(R.string.test)

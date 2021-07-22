@@ -74,8 +74,8 @@ class ViewCertificateFragment : Fragment() {
             binding.title.text = when {
                 certificate.vaccinations?.first() != null -> binding.root.resources.getString(
                     R.string.vaccination,
-                    certificate.vaccinations.first().doseNumber,
-                    certificate.vaccinations.first().totalSeriesOfDoses
+                    certificate.vaccinations.first().doseNumber.toString(),
+                    certificate.vaccinations.first().totalSeriesOfDoses.toString()
                 )
                 certificate.recoveryStatements?.isNotEmpty() == true -> binding.root.resources.getString(R.string.recovery)
                 certificate.tests?.isNotEmpty() == true -> binding.root.resources.getString(R.string.test)

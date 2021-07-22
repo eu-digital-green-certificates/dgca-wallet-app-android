@@ -11,7 +11,7 @@
     <string name="scan_code">Scan Code</string>
     <string name="check_validity">Check Validity</string>
     <string name="i_agree_check_validity">I agree, check validity</string>
-    <string name="vaccination">Vaccination %1$d of %2$d</string>
+    <string name="vaccination">Vaccination %1$s of %2$s</string>
     <string name="recovery">Recovery</string>
     <string name="test">Test</string>
     <string name="your_certificate">Your Certificate</string>
