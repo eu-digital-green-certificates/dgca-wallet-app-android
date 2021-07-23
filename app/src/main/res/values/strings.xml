@@ -66,9 +66,9 @@
     <string name="failed_for">Failed for %1$s (see settings)</string>
     <string name="valid_certificate_title">Valid certificate</string>
     <string name="certificate_has_limitation_title">Certificate has limitation</string>
-    <string name="valid_certificate_message">Your certificate allows you to enter the chosen country</string>
+    <string name="valid_certificate_message">Your certificate is valid and confirms to the provided country rules. Additional entry requirements might apply, please refer to the Re-open EU website: https://reopen.europa.eu/</string>
     <string name="certificate_has_limitation_message">Your certificate is valid but has the following restrictions:</string>
-    <string name="please_note_that_this_informaiont_is_without_guaranty">Please note that this information is without guaranty. This functions check if the certificate matches the rules of the country you are traveling to at the given time.</string>
+    <string name="please_note_that_this_informaiont_is_without_guaranty">This check gives an indication on eligibility to travel based on your certificate. Restriction of free movement in response to the coronavirus pandemic are subject to change and might be based on additional information not available to and within this application.</string>
     <string name="certificate_type">Certificate Type</string>
     <string name="certificate_issuer">Certificate Issuer</string>
     <string name="manufacturer">Manufacturer</string>

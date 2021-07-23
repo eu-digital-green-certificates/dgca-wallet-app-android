@@ -103,6 +103,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/default_quarter_margin"
+                android:autoLink="web"
                 android:text="@string/disclaimer_message" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
