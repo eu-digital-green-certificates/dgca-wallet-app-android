@@ -30,7 +30,6 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.databinding.FragmentSettingsBinding
 
@@ -72,9 +71,9 @@ class SettingsFragment : Fragment() {
     }
 
     private fun openLicenses() {
-        OssLicensesMenuActivity.setActivityTitle(getString(R.string.licenses))
+        val intent = Intent(requireContext(), LicensesActivity::class.java)
         requireContext().apply {
-            startActivity(Intent(this, OssLicensesMenuActivity::class.java))
+            startActivity(intent)
         }
     }
 }
