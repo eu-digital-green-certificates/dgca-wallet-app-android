@@ -67,8 +67,6 @@ object Deps {
 
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
 
-    const val google_licenses = "com.google.android.gms:play-services-oss-licenses:${Versions.google_licenses}"
-
     const val test_junit = "junit:junit:${Versions.junit}"
     const val test_junit_jupiter_api = "org.junit.jupiter:junit-jupiter-api:${Versions.junit_jupiter}"
     const val test_junit_jupiter_params = "org.junit.jupiter:junit-jupiter-params:${Versions.junit_jupiter}"
