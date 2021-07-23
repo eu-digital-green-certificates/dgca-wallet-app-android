@@ -64,7 +64,11 @@ class ClaimCertificateFragment : Fragment() {
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = adapter
 
-        binding.saveBtn.setOnClickListener { viewModel.save(args.qrCodeText, args.tan) }
+        binding.saveBtn.setOnClickListener {
+            val action = ClaimCertificateFragmentDirections.actionClaimCertificateFragmentToTanFragment()
+            findNavController().navigate(action)
+//            viewModel.save(args.qrCodeText, args.tan)
+        }
         viewModel.inProgress.observe(viewLifecycleOwner, { binding.progressView.isVisible = it })
         viewModel.event.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
