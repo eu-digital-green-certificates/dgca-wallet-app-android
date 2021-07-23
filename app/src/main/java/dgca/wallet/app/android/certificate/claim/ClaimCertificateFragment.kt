@@ -64,10 +64,14 @@ class ClaimCertificateFragment : Fragment() {
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = adapter
 
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>(TanFragment.TAN_KEY)
+            ?.observe(viewLifecycleOwner) { tan ->
+                viewModel.save(args.qrCodeText, tan)
+            }
+
         binding.saveBtn.setOnClickListener {
             val action = ClaimCertificateFragmentDirections.actionClaimCertificateFragmentToTanFragment()
             findNavController().navigate(action)
-//            viewModel.save(args.qrCodeText, args.tan)
         }
         viewModel.inProgress.observe(viewLifecycleOwner, { binding.progressView.isVisible = it })
         viewModel.event.observe(viewLifecycleOwner) { event ->
@@ -126,7 +130,7 @@ class ClaimCertificateFragment : Fragment() {
                 }
             }
             is ClaimCertificateViewModel.ClaimCertEvent.OnCertNotClaimed -> {
-                Toast.makeText(requireContext(), event.error, Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.check_the_tan_and_try_again), Toast.LENGTH_SHORT).show()
             }
         }
     }

@@ -144,7 +144,7 @@
             app:argType="long" />
     </fragment>
 
-    <dialog
+    <fragment
         android:id="@+id/tanFragment"
         android:name="dgca.wallet.app.android.certificate.claim.TanFragment"
         android:label="@string/tan_cert_title"
@@ -158,7 +158,7 @@
             app:popEnterAnim="@animator/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
-    </dialog>
+    </fragment>
     <fragment
         android:id="@+id/claimCertificateFragment"
         android:name="dgca.wallet.app.android.certificate.claim.ClaimCertificateFragment"
