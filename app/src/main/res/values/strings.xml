@@ -20,8 +20,8 @@
     <string name="check_country_rules_conformance_of_your_certificate">Check country rules conformance of your certificate</string>
 
     <string name="qr_reader_title">Step1: Scan Code</string>
-    <string name="tan_cert_title">Step2: TAN</string>
-    <string name="claim_cert_title">Step3: Your Data</string>
+    <string name="claim_cert_title">Step2: Your Data</string>
+    <string name="tan_cert_title">Step3: TAN</string>
     <string name="tan_code">TAN Code</string>
     <string name="tan_code_subtitle">Please provide the TAN Code associated to this certificate. This was sent to you via email or similar.</string>
     <string name="tan_hint">TAN Code</string>
@@ -73,4 +73,5 @@
     <string name="certificate_issuer">Certificate Issuer</string>
     <string name="manufacturer">Manufacturer</string>
     <string name="vaccine_of_prophylaxis">Vaccine or Prophylaxis</string>
+    <string name="check_the_tan_and_try_again">Check the TAN and try again</string>
 </resources>

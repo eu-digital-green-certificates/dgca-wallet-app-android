@@ -28,15 +28,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.R
 import dgca.wallet.app.android.databinding.FragmentCertificateTanBinding
 
 @AndroidEntryPoint
 class TanFragment : Fragment() {
+    companion object {
+        const val TAN_KEY = "TAN"
+    }
 
-    private val args by navArgs<TanFragmentArgs>()
     private var _binding: FragmentCertificateTanBinding? = null
     private val binding get() = _binding!!
 
@@ -52,8 +53,10 @@ class TanFragment : Fragment() {
             if (tan.isEmpty()) {
                 binding.tanTextField.error = getString(R.string.tan_empty_error)
             } else {
-                val action = TanFragmentDirections.actionTanFragmentToClaimCertificateFragment(args.qrCodeText, tan)
-                findNavController().navigate(action)
+                findNavController().apply {
+                    this.previousBackStackEntry?.savedStateHandle?.set(TAN_KEY, tan)
+                    this.navigateUp()
+                }
             }
         }
     }

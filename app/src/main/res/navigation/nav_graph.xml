@@ -78,8 +78,8 @@
         tools:layout="@layout/fragment_code_reader">
 
         <action
-            android:id="@+id/action_codeReaderFragment_to_tanCertificateFragment"
-            app:destination="@id/tanFragment"
+            android:id="@+id/action_codeReaderFragment_to_claimCertificateFragment"
+            app:destination="@id/claimCertificateFragment"
             app:enterAnim="@animator/nav_default_pop_enter_anim"
             app:exitAnim="@animator/nav_default_exit_anim"
             app:popEnterAnim="@animator/nav_default_pop_enter_anim"
@@ -150,10 +150,6 @@
         android:label="@string/tan_cert_title"
         tools:layout="@layout/fragment_certificate_tan">
 
-        <argument
-            android:name="qrCodeText"
-            app:argType="string" />
-
         <action
             android:id="@+id/action_tanFragment_to_claimCertificateFragment"
             app:destination="@id/claimCertificateFragment"
@@ -177,9 +173,13 @@
             android:name="qrCodeText"
             app:argType="string" />
 
-        <argument
-            android:name="tan"
-            app:argType="string" />
+        <action
+            android:id="@+id/action_claimCertificateFragment_to_tanFragment"
+            app:destination="@id/tanFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
         <action
             android:id="@+id/action_claimCertificateFragment_to_certificatesFragment"

@@ -85,7 +85,7 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
     }
 
     private fun navigateToVerificationPage(qrCodeText: String) {
-        val action = CodeReaderFragmentDirections.actionCodeReaderFragmentToTanCertificateFragment(qrCodeText)
+        val action = CodeReaderFragmentDirections.actionCodeReaderFragmentToClaimCertificateFragment(qrCodeText)
         findNavController().navigate(action)
     }
 
