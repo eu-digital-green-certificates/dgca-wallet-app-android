@@ -67,3 +67,13 @@ m
 =app/src/main/java/dgca/wallet/app/android/di/NetworkModule.kt,a/5/a5240ece1f0757097e00f43d148a437b74524977
 v
 Fapp/src/main/java/dgca/wallet/app/android/network/HeaderInterceptor.kt,8/f/8f7d10077315765fd963586fb7c6992ade217f49
+l
+<src/main/java/dgca/verifier/app/decoder/model/Vaccination.kt,1/1/118f4c09bf1984645a351f4c03dbb861cedaeb5c
+r
+Bapp/src/main/java/dgca/wallet/app/android/data/CertificateModel.kt,7/6/76dac2609fb4a81960df30700eef5f1189545226
+n
+>app/src/main/java/dgca/wallet/app/android/data/local/Mapper.kt,a/5/a506d20ab76082e565759f0570e17bdd3438fe20
+„
+Tapp/src/main/java/dgca/wallet/app/android/certificate/claim/VaccinationViewHolder.kt,4/7/4774f218010287c0da4585eacc9ffd61e11503ce
+€
+Papp/src/main/java/dgca/wallet/app/android/certificate/CertificateCardsAdapter.kt,0/2/0223df1f55766185176f6d7c6c73166998c9b604
