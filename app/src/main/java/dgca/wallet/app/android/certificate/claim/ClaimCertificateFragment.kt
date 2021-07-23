@@ -34,13 +34,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import dgca.wallet.app.android.FORMATTED_YEAR_MONTH_DAY
 import dgca.wallet.app.android.R
-import dgca.wallet.app.android.YEAR_MONTH_DAY
 import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.getCertificateListData
 import dgca.wallet.app.android.databinding.FragmentCertificateClaimBinding
-import dgca.wallet.app.android.parseFromTo
 
 @AndroidEntryPoint
 class ClaimCertificateFragment : Fragment() {
@@ -88,31 +85,31 @@ class ClaimCertificateFragment : Fragment() {
         _binding = null
     }
 
-    private fun showUserData(certificate: CertificateModel) {
-        binding.personFullName.text = certificate.getFullName()
-        binding.personStandardisedFamilyName.text = certificate.person.standardisedFamilyName
-        binding.personStandardisedFamilyNameTitle.isVisible = true
-        val standardisedGivenName = certificate.person.standardisedGivenName
-        if (standardisedGivenName?.isNotBlank() == true) {
-            binding.personStandardisedGivenName.text = standardisedGivenName
-            View.VISIBLE
-        } else {
-            View.GONE
-        }.apply {
-            binding.personStandardisedGivenNameTitle.visibility = this
-            binding.personStandardisedGivenName.visibility = this
-        }
+    private fun CertificateModel.getType() = when {
+        this.vaccinations?.isNotEmpty() == true -> getString(
+            R.string.vaccination,
+            this.vaccinations.first().doseNumber.toString(),
+            this.vaccinations.first().totalSeriesOfDoses.toString()
+        )
+        this.recoveryStatements?.isNotEmpty() == true -> getString(R.string.recovery)
+        this.tests?.isNotEmpty() == true -> getString(R.string.test)
+        else -> ""
+    }
 
-        val dateOfBirth = certificate.dateOfBirth.parseFromTo(YEAR_MONTH_DAY, FORMATTED_YEAR_MONTH_DAY)
-        if (dateOfBirth.isNotBlank()) {
-            binding.dateOfBirth.text = dateOfBirth
-            View.VISIBLE
-        } else {
-            View.GONE
-        }.apply {
-            binding.dateOfBirthTitle.visibility = this
-            binding.dateOfBirth.visibility = this
-        }
+    private fun showUserData(certificate: CertificateModel) {
+        certificate.getType().bindText(binding.certificateTypeTitle, binding.certificateTypeValue)
+        certificate.getFullName().bindText(binding.nameTitle, binding.personFullName)
+
+//        val dateOfBirth = certificate.dateOfBirth.parseFromTo(YEAR_MONTH_DAY, FORMATTED_YEAR_MONTH_DAY)
+//        if (dateOfBirth.isNotBlank()) {
+//            binding.dateOfBirth.text = dateOfBirth
+//            View.VISIBLE
+//        } else {
+//            View.GONE
+//        }.apply {
+//            binding.dateOfBirthTitle.visibility = this
+//            binding.dateOfBirth.visibility = this
+//        }
     }
 
     private fun onViewModelEvent(event: ClaimCertificateViewModel.ClaimCertEvent) {

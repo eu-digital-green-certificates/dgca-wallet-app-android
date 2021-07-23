@@ -82,12 +82,38 @@ fun TypeOfTestCode.toTypeOfTest(): TypeOfTest = when (this) {
     else -> TypeOfTest.UNDEFINED
 }
 
+fun VaccinePropylaxisCode.toVaccineProphylaxisType(): VaccinePropylaxisType = when (this) {
+    VaccinePropylaxisCode.SARS_CoV_2_antigen_vaccine -> VaccinePropylaxisType.SARS_CoV_2_antigen_vaccine
+    VaccinePropylaxisCode.SARS_CoV_2_mRNA_vaccine -> VaccinePropylaxisType.SARS_CoV_2_mRNA_vaccine
+    VaccinePropylaxisCode.covid_19_vaccines -> VaccinePropylaxisType.covid_19_vaccines
+    else -> VaccinePropylaxisType.UNDEFINED
+}
+
+fun ManufacturerCode.toManufacturerType(): ManufacturerType = when (this) {
+    ManufacturerCode.AstraZenecaAB -> ManufacturerType.AstraZenecaAB
+    ManufacturerCode.BiontechManufacturingGmbH -> ManufacturerType.BiontechManufacturingGmbH
+    ManufacturerCode.Janssen_CilagInternational -> ManufacturerType.Janssen_CilagInternational
+    ManufacturerCode.ModernaBiotechSpainS_L -> ManufacturerType.ModernaBiotechSpainS_L
+    ManufacturerCode.CurevacAG -> ManufacturerType.CurevacAG
+    ManufacturerCode.CanSinoBiologics -> ManufacturerType.CanSinoBiologics
+    ManufacturerCode.ChinaSinopharmInternationalCorp_Beijinglocation -> ManufacturerType.ChinaSinopharmInternationalCorp_Beijinglocation
+    ManufacturerCode.SinopharmWeiqidaEuropePharmaceuticals_r_o_Praguelocation -> ManufacturerType.SinopharmWeiqidaEuropePharmaceuticals_r_o_Praguelocation
+    ManufacturerCode.SinopharmZhijun_Shenzhen_PharmaceuticalCo_Ltd_Shenzhenlocation -> ManufacturerType.SinopharmZhijun_Shenzhen_PharmaceuticalCo_Ltd_Shenzhenlocation
+    ManufacturerCode.NovavaxCZAS -> ManufacturerType.NovavaxCZAS
+    ManufacturerCode.GamaleyaResearchInstitute -> ManufacturerType.GamaleyaResearchInstitute
+    ManufacturerCode.VectorInstitute -> ManufacturerType.VectorInstitute
+    ManufacturerCode.SinovacBiotech -> ManufacturerType.SinovacBiotech
+    ManufacturerCode.BharatBiotech -> ManufacturerType.BharatBiotech
+    ManufacturerCode.SerumInstituteOfIndiaPrivateLimited -> ManufacturerType.SerumInstituteOfIndiaPrivateLimited
+    else -> ManufacturerType.UNDEFINED
+}
+
 fun Vaccination.toVaccinationModel(): VaccinationModel {
     return VaccinationModel(
         disease.toDiseaseCode().toDiseaseType(),
-        vaccine,
+        vaccine.toVaccineProphylaxisCode().toVaccineProphylaxisType(),
         medicinalProduct,
-        manufacturer,
+        manufacturer.toManufacturerCode().toManufacturerType(),
         doseNumber,
         totalSeriesOfDoses,
         dateOfVaccination,
@@ -117,8 +143,52 @@ fun String.toTypeOfTestCode(): TypeOfTestCode = when (this) {
     else -> TypeOfTestCode.UNDEFINED
 }
 
+fun String.toVaccineProphylaxisCode(): VaccinePropylaxisCode {
+    VaccinePropylaxisCode.values().forEach {
+        if (it.value == this) {
+            return it
+        }
+    }
+    return VaccinePropylaxisCode.UNDEFINED
+}
+
+fun String.toManufacturerCode(): ManufacturerCode {
+    ManufacturerCode.values().forEach {
+        if (it.value == this) {
+            return it
+        }
+    }
+    return ManufacturerCode.UNDEFINED
+}
+
 enum class DiseaseCode(val value: String) {
     COVID_19("840539006"),
+    UNDEFINED("")
+}
+
+enum class VaccinePropylaxisCode(val value: String) {
+    SARS_CoV_2_antigen_vaccine("1119305005"),
+    SARS_CoV_2_mRNA_vaccine("1119349007"),
+    covid_19_vaccines("J07BX03"),
+    UNDEFINED("")
+}
+
+enum class ManufacturerCode(val value: String) {
+    AstraZenecaAB("ORG-100001699"),
+    BiontechManufacturingGmbH("ORG-100030215"),
+    Janssen_CilagInternational("ORG-100001417"),
+    ModernaBiotechSpainS_L("ORG-100031184"),
+    CurevacAG("ORG-100006270"),
+    CanSinoBiologics("ORG-100013793"),
+    ChinaSinopharmInternationalCorp_Beijinglocation("ORG-100020693"),
+    SinopharmWeiqidaEuropePharmaceuticals_r_o_Praguelocation("ORG-100010771"),
+    SinopharmZhijun_Shenzhen_PharmaceuticalCo_Ltd_Shenzhenlocation("ORG-100024420"),
+    NovavaxCZAS("ORG-100032020"),
+    GamaleyaResearchInstitute("Gamaleya-Research-Institute"),
+    VectorInstitute("Vector-Institute"),
+    SinovacBiotech("Sinovac-Biotech"),
+    BharatBiotech("Bharat-Biotech"),
+    SerumInstituteOfIndiaPrivateLimited("ORG-100001981"),
     UNDEFINED("")
 }
 

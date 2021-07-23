@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~  license-start
-  ~  eu-digital-green-certificates / dgca-verifier-app-android
+  ~  eu-digital-green-certificates / dgca-wallet-app-android
   ~
   ~  Copyright (C) 2021 T-Systems International GmbH and all other contributors
   ~
@@ -29,17 +29,56 @@
     android:animateLayoutChanges="true"
     tools:background="@color/white">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/person_full_name"
+    <TextView
+        android:id="@+id/certificate_type_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/default_margin"
+        android:layout_marginHorizontal="@dimen/default_padding"
         android:layout_marginTop="@dimen/default_margin"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/certificate_type"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/certificate_type_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/default_padding"
+        android:ellipsize="end"
+        android:lines="1"
         android:textColor="@color/black"
         android:textSize="26sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/certificate_type_title"
+        tools:text="Vaccination 1 of 2" />
+
+    <TextView
+        android:id="@+id/name_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/default_padding"
+        android:layout_marginTop="@dimen/default_margin"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/name"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/certificate_type_value" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/person_full_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/default_padding"
+        android:textColor="@color/black"
+        android:textSize="26sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/name_title"
         tools:text="Gabriele \nMusterfrau" />
 
     <androidx.core.widget.NestedScrollView
@@ -59,52 +98,21 @@
             android:orientation="vertical"
             android:paddingVertical="10dp">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/person_standardised_family_name_title"
-                style="@style/TextAppearance.Dgca.CertificateTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/standardised_family_name_title"
-                android:visibility="gone" />
+            <!--            <com.google.android.material.textview.MaterialTextView-->
+            <!--                android:id="@+id/date_of_birth_title"-->
+            <!--                style="@style/TextAppearance.Dgca.CertificateTitle"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="10dp"-->
+            <!--                android:text="@string/date_of_birth_title"-->
+            <!--                android:visibility="gone" />-->
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/person_standardised_family_name"
-                style="@style/TextAppearance.Dgca.CertificateValue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="MUSTERFRAU" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/person_standardised_given_name_title"
-                style="@style/TextAppearance.Dgca.CertificateTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@string/standardised_given_name_title"
-                android:visibility="gone" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/person_standardised_given_name"
-                style="@style/TextAppearance.Dgca.CertificateValue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="GABRIELE" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/date_of_birth_title"
-                style="@style/TextAppearance.Dgca.CertificateTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@string/date_of_birth_title"
-                android:visibility="gone" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/date_of_birth"
-                style="@style/TextAppearance.Dgca.CertificateValue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="Feb 26, 1988" />
+            <!--            <com.google.android.material.textview.MaterialTextView-->
+            <!--                android:id="@+id/date_of_birth"-->
+            <!--                style="@style/TextAppearance.Dgca.CertificateValue"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                tools:text="Feb 26, 1988" />-->
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"

@@ -29,6 +29,7 @@ data class CertificateModel(
     val tests: List<TestModel>?,
     val recoveryStatements: List<RecoveryModel>?
 ) {
+
     fun getFullName(): String {
         val givenName: String? = person.givenName?.trim()
         val familyName: String? = person.familyName?.trim()
@@ -62,9 +63,9 @@ data class PersonModel(
 
 data class VaccinationModel(
     override val disease: DiseaseType,
-    val vaccine: String,
+    val vaccine: VaccinePropylaxisType,
     val medicinalProduct: String,
-    val manufacturer: String,
+    val manufacturer: ManufacturerType,
     val doseNumber: Int,
     val totalSeriesOfDoses: Int,
     val dateOfVaccination: String,
@@ -102,6 +103,32 @@ enum class TypeOfTest(val value: String) {
     NUCLEIC_ACID_AMPLIFICATION_WITH_PROBE_DETECTION("Nucleic acid amplification with probe detection"),
     RAPID_IMMUNOASSAY("Rapid immunoassay"),
     UNDEFINED("")
+}
+
+enum class VaccinePropylaxisType(val value: String) {
+    SARS_CoV_2_antigen_vaccine("SARS-CoV-2 antigen vaccine"),
+    SARS_CoV_2_mRNA_vaccine("SARS-CoV-2 mRNA vaccine"),
+    covid_19_vaccines("covid-19 vaccines"),
+    UNDEFINED("")
+}
+
+enum class ManufacturerType(val value: String) {
+    AstraZenecaAB("AstraZenecaAB"),
+    BiontechManufacturingGmbH("BiontechManufacturingGmbH"),
+    Janssen_CilagInternational("Janssen-CilagInternational"),
+    ModernaBiotechSpainS_L("ModernaBiotechSpainS.L."),
+    CurevacAG("CurevacAG"),
+    CanSinoBiologics("CanSinoBiologics"),
+    ChinaSinopharmInternationalCorp_Beijinglocation("ChinaSinopharmInternationalCorp.-Beijinglocation"),
+    SinopharmWeiqidaEuropePharmaceuticals_r_o_Praguelocation("SinopharmWeiqidaEuropePharmaceuticals.r.o.-Praguelocation"),
+    SinopharmZhijun_Shenzhen_PharmaceuticalCo_Ltd_Shenzhenlocation("SinopharmZhijun(Shenzhen)PharmaceuticalCo.Ltd.-Shenzhenlocation"),
+    NovavaxCZAS("NovavaxCZAS"),
+    GamaleyaResearchInstitute("GamaleyaResearchInstitute"),
+    VectorInstitute("VectorInstitute"),
+    SinovacBiotech("SinovacBiotech"),
+    BharatBiotech("BharatBiotech"),
+    SerumInstituteOfIndiaPrivateLimited("SerumInstituteOfIndiaPrivateLimited"),
+    UNDEFINED("UNDEFINED")
 }
 
 data class RecoveryModel(
