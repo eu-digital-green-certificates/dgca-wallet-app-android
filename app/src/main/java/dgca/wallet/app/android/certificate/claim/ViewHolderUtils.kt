@@ -54,7 +54,3 @@ fun String.bindText(titleView: View, valueView: TextView) = apply {
         valueView.visibility = this
     }
 }
-
-fun bindValidFromTot(validFrom: String, validTo: String, titleView: View, valueView: TextView) {
-
-}
