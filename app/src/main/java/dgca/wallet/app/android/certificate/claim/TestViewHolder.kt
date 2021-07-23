@@ -35,16 +35,7 @@ class TestViewHolder(private val binding: ItemTestBinding) : RecyclerView.ViewHo
     fun bind(data: TestModel) {
         binding.testResultValue.text = data.resultType.value
         binding.dateOfCollectionValue.text = data.dateTimeOfCollection.toFormattedDateTime()
-        val dateTimeOfTestResult = data.dateTimeOfTestResult?.toFormattedDateTime()
-        if (dateTimeOfTestResult?.isNotBlank() == true) {
-            binding.dateOfTestResultValue.text = dateTimeOfTestResult
-            View.VISIBLE
-        } else {
-            View.GONE
-        }.apply {
-            binding.dateOfTestResultTitle.visibility = this
-            binding.dateOfTestResultValue.visibility = this
-        }
+        (data.dateTimeOfTestResult?.toFormattedDateTime() ?: "").bindText(binding.dateOfTestResultTitle, binding.dateOfTestResultValue)
 
         binding.diseaseValue.text = data.disease.value
         binding.typeOfTestValue.text = data.typeOfTest.value
