@@ -18,6 +18,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../dgc-certlogic-android/buildSrc/src/main/java/AppConfig.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../dgc-certlogic-android/buildSrc/src/main/java/Dependencies.kt">
           <value>
             <set />
@@ -439,6 +444,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/app/build/tmp/kapt3/stubs/tstDebug/dgca/wallet/app/android/model/ClaimRequest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/build/tmp/kapt3/stubs/tstRelease/dgca/wallet/app/android/data/local/rules/DescriptionLocal.java">
           <value>
             <set />
           </value>
