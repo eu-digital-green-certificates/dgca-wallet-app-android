@@ -34,8 +34,8 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.verifier.app.engine.Result
-import dgca.verifier.app.engine.data.source.local.rules.Converters
 import dgca.wallet.app.android.R
+import dgca.wallet.app.android.data.local.rules.Converters
 import dgca.wallet.app.android.databinding.FragmentRulesValidatationBinding
 
 @AndroidEntryPoint

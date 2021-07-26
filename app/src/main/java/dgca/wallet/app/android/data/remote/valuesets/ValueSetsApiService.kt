@@ -1,6 +1,6 @@
 /*
  *  ---license-start
- *  eu-digital-green-certificates / dgca-verifier-app-android
+ *  eu-digital-green-certificates / dgca-wallet-app-android
  *  ---
  *  Copyright (C) 2021 T-Systems International GmbH and all other contributors
  *  ---
@@ -17,20 +17,22 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by Mykhailo Nester on 4/23/21 9:49 AM
+ *  Created by osarapulov on 7/26/21 1:53 PM
  */
 
-import org.gradle.api.JavaVersion
+package dgca.wallet.app.android.data.remote.valuesets
 
-object Config {
-    const val minSdk = 26
-    const val compileSdk = 29
-    const val targetSdk = 29
-    val javaVersion = JavaVersion.VERSION_1_8
+import dgca.verifier.app.engine.data.source.remote.valuesets.ValueSetIdentifierRemote
+import dgca.verifier.app.engine.data.source.remote.valuesets.ValueSetRemote
+import retrofit2.Response
+import retrofit2.http.GET
+import retrofit2.http.Url
 
-    const val versionCode = 13
-    const val versionName = "1.1.4"
+interface ValueSetsApiService {
 
-    const val androidTestInstrumentation = "androidx.test.runner.AndroidJUnitRunner"
-    const val proguardConsumerRules = "consumer-rules.pro"
+    @GET
+    suspend fun getValueSetsIdentifiers(@Url url: String): Response<List<ValueSetIdentifierRemote>>
+
+    @GET
+    suspend fun getValueSet(@Url url: String): Response<ValueSetRemote>
 }
