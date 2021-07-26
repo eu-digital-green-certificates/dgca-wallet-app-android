@@ -34,15 +34,8 @@ import dgca.verifier.app.decoder.JSON_SCHEMA_V1
 import dgca.verifier.app.engine.*
 import dgca.verifier.app.engine.data.source.countries.CountriesRepository
 import dgca.verifier.app.engine.data.source.countries.DefaultCountriesRepository
-import dgca.verifier.app.engine.data.source.local.countries.CountriesDao
 import dgca.verifier.app.engine.data.source.local.countries.CountriesLocalDataSource
-import dgca.verifier.app.engine.data.source.local.countries.DefaultCountriesLocalDataSource
-import dgca.verifier.app.engine.data.source.local.rules.DefaultRulesLocalDataSource
-import dgca.verifier.app.engine.data.source.local.rules.EngineDatabase
-import dgca.verifier.app.engine.data.source.local.rules.RulesDao
 import dgca.verifier.app.engine.data.source.local.rules.RulesLocalDataSource
-import dgca.verifier.app.engine.data.source.local.valuesets.DefaultValueSetsLocalDataSource
-import dgca.verifier.app.engine.data.source.local.valuesets.ValueSetsDao
 import dgca.verifier.app.engine.data.source.local.valuesets.ValueSetsLocalDataSource
 import dgca.verifier.app.engine.data.source.remote.countries.CountriesApiService
 import dgca.verifier.app.engine.data.source.remote.countries.CountriesRemoteDataSrouce
@@ -59,6 +52,13 @@ import dgca.verifier.app.engine.data.source.valuesets.ValueSetsApiService
 import dgca.verifier.app.engine.data.source.valuesets.ValueSetsRepository
 import dgca.verifier.app.engine.domain.rules.DefaultGetRulesUseCase
 import dgca.verifier.app.engine.domain.rules.GetRulesUseCase
+import dgca.wallet.app.android.data.local.countries.CountriesDao
+import dgca.wallet.app.android.data.local.countries.DefaultCountriesLocalDataSource
+import dgca.wallet.app.android.data.local.rules.DefaultRulesLocalDataSource
+import dgca.wallet.app.android.data.local.rules.EngineDatabase
+import dgca.wallet.app.android.data.local.rules.RulesDao
+import dgca.wallet.app.android.data.local.valuesets.DefaultValueSetsLocalDataSource
+import dgca.wallet.app.android.data.local.valuesets.ValueSetsDao
 import retrofit2.Retrofit
 import javax.inject.Singleton
 

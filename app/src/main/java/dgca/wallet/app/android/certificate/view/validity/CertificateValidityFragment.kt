@@ -34,7 +34,7 @@ import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.verifier.app.engine.UTC_ZONE_ID
 import dgca.verifier.app.engine.data.source.countries.COUNTRIES_MAP
-import dgca.verifier.app.engine.data.source.local.rules.Converters
+import dgca.wallet.app.android.data.local.rules.Converters
 import dgca.wallet.app.android.databinding.FragmentValidityCertificateBinding
 import java.time.LocalDate
 import java.time.ZonedDateTime
