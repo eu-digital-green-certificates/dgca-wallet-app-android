@@ -37,18 +37,12 @@ import dgca.verifier.app.engine.data.source.countries.DefaultCountriesRepository
 import dgca.verifier.app.engine.data.source.local.countries.CountriesLocalDataSource
 import dgca.verifier.app.engine.data.source.local.rules.RulesLocalDataSource
 import dgca.verifier.app.engine.data.source.local.valuesets.ValueSetsLocalDataSource
-import dgca.verifier.app.engine.data.source.remote.countries.CountriesApiService
 import dgca.verifier.app.engine.data.source.remote.countries.CountriesRemoteDataSrouce
-import dgca.verifier.app.engine.data.source.remote.countries.DefaultCountriesRemoteDataSource
-import dgca.verifier.app.engine.data.source.remote.rules.DefaultRulesRemoteDataSource
-import dgca.verifier.app.engine.data.source.remote.rules.RulesApiService
 import dgca.verifier.app.engine.data.source.remote.rules.RulesRemoteDataSource
 import dgca.verifier.app.engine.data.source.remote.valuesets.ValueSetsRemoteDataSource
 import dgca.verifier.app.engine.data.source.rules.DefaultRulesRepository
 import dgca.verifier.app.engine.data.source.rules.RulesRepository
-import dgca.verifier.app.engine.data.source.valuesets.DefaultValueSetsRemoteDataSource
 import dgca.verifier.app.engine.data.source.valuesets.DefaultValueSetsRepository
-import dgca.verifier.app.engine.data.source.valuesets.ValueSetsApiService
 import dgca.verifier.app.engine.data.source.valuesets.ValueSetsRepository
 import dgca.verifier.app.engine.domain.rules.DefaultGetRulesUseCase
 import dgca.verifier.app.engine.domain.rules.GetRulesUseCase
@@ -59,6 +53,12 @@ import dgca.wallet.app.android.data.local.rules.EngineDatabase
 import dgca.wallet.app.android.data.local.rules.RulesDao
 import dgca.wallet.app.android.data.local.valuesets.DefaultValueSetsLocalDataSource
 import dgca.wallet.app.android.data.local.valuesets.ValueSetsDao
+import dgca.wallet.app.android.data.remote.countries.CountriesApiService
+import dgca.wallet.app.android.data.remote.countries.DefaultCountriesRemoteDataSource
+import dgca.wallet.app.android.data.remote.rules.DefaultRulesRemoteDataSource
+import dgca.wallet.app.android.data.remote.rules.RulesApiService
+import dgca.wallet.app.android.data.remote.valuesets.DefaultValueSetsRemoteDataSource
+import dgca.wallet.app.android.data.remote.valuesets.ValueSetsApiService
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
