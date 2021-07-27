@@ -75,7 +75,7 @@ class ClaimCertificateViewModel @Inject constructor(
     private val _event = MutableLiveData<Event<ClaimCertEvent>>()
     val event: LiveData<Event<ClaimCertEvent>> = _event
 
-    private var cose = ByteArray(0)
+    private var cose: ByteArray = ByteArray(0)
     private var greenCertificate: GreenCertificate? = null
 
     fun init(qrCodeText: String) {
@@ -85,7 +85,13 @@ class ClaimCertificateViewModel @Inject constructor(
                 val verificationResult = VerificationResult()
                 val plainInput = prefixValidationService.decode(qrCodeText, verificationResult)
                 val compressedCose = base45Service.decode(plainInput, verificationResult)
-                cose = compressorService.decode(compressedCose, verificationResult)
+                val coseResult: ByteArray? = compressorService.decode(compressedCose, verificationResult)
+
+                if (coseResult == null) {
+                    Timber.d("Verification failed: Too many bytes read")
+                    return@withContext
+                }
+                cose = coseResult
 
                 val coseData = coseService.decode(cose, verificationResult)
                 if (coseData == null) {

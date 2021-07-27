@@ -74,9 +74,9 @@ class RulesValidationViewModel @Inject constructor(
                 val verificationResult = VerificationResult()
                 val plainInput = prefixValidationService.decode(qrCodeText, verificationResult)
                 val compressedCose = base45Service.decode(plainInput, verificationResult)
-                val cose = compressorService.decode(compressedCose, verificationResult)
+                val cose: ByteArray? = compressorService.decode(compressedCose, verificationResult)
 
-                val coseData: CoseData? = coseService.decode(cose, verificationResult)
+                val coseData: CoseData? = cose?.let { coseService.decode(cose, verificationResult) }
                 val greenCertificateData: GreenCertificateData? =
                     coseData?.let { cborService.decodeData(it.cbor, verificationResult) }
                 val base64EncodedKid: String? = coseData?.kid?.toBase64()
