@@ -79,5 +79,3 @@ h
 8app/src/main/java/dgca/wallet/app/android/data/Config.kt,7/b/7bbea943dc2077e68f09568eca397dbf74cd622d
 W
 'app/src/tst/assets/wallet-context.jsonc,2/f/2f8371ba41afcb67d9051946cc189a09643637be
-
-Osrc/main/java/dgca/verifier/app/decoder/compression/DefaultCompressorService.kt,b/7/b73af1a45eb4e13c946a7f69475a41669caeb2bf
