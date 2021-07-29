@@ -80,10 +80,11 @@ class RulesValidationFragment : Fragment() {
             binding.icon.setImageResource(if (isCertificateValid) R.drawable.icon_large_valid else R.drawable.icon_large_warning)
             if (isCertificateValid) {
                 binding.icon.backgroundTintList = ResourcesCompat.getColorStateList(resources, R.color.green, null)
+            } else {
+                binding.rulesList.adapter =
+                    RuleValidationResultsAdapter(layoutInflater, ruleValidationResultCards)
             }
 
-            binding.rulesList.adapter =
-                RuleValidationResultsAdapter(layoutInflater, ruleValidationResultCards)
         })
     }
 }

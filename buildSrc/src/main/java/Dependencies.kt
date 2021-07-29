@@ -58,7 +58,6 @@ object Deps {
     const val java_cose = "com.augustcellars.cose:cose-java:${Versions.java_cose}"
     const val bouncy_castle = "org.bouncycastle:bcpkix-jdk15to18:${Versions.bouncy_castle}"
     const val json_validation = "com.github.java-json-tools:json-schema-validator:${Versions.json_validation}"
-    const val json_validation_rhino = "io.apisense:rhino-android:${Versions.json_validation_rhino}"
     const val jackson_cbor = "com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:${Versions.jackson_cbor}"
     const val jackson_kotlin = "com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson_kotlin}"
     const val jackson_datetype = "com.fasterxml.jackson.datatype:${Versions.jackson_datetype}"
