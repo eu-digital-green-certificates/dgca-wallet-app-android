@@ -79,3 +79,7 @@ h
 8app/src/main/java/dgca/wallet/app/android/data/Config.kt,7/b/7bbea943dc2077e68f09568eca397dbf74cd622d
 W
 'app/src/tst/assets/wallet-context.jsonc,2/f/2f8371ba41afcb67d9051946cc189a09643637be
+B
+proguard-rules.pro,8/f/8fb93e6a4b5f305875d392d25a97c87aa0ec6286
+F
+app/proguard-rules.pro,9/e/9e08934d811afe28fbc77aaa3c0d747b94348db9
