@@ -73,6 +73,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../dgc-certlogic-android/engine/src/main/java/dgca/verifier/app/engine/data/source/remote/rules/RuleRemoteMapper.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../dgc-certlogic-android/engine/src/main/java/dgca/verifier/app/engine/data/source/rules/DefaultRulesRepository.kt">
           <value>
             <set />
@@ -104,6 +109,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/../dgca-app-core-android/decoder/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../dgca-app-core-android/decoder/proguard-rules.pro">
           <value>
             <set />
           </value>
@@ -154,6 +164,16 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/../dgca-verifier-app-android/app/src/acc/assets/verifier-context.jsonc">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../dgca-verifier-app-android/app/src/androidTest/java/dgca/verifier/app/engine/data/source/local/RulesDaoTest.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../dgca-verifier-app-android/app/src/androidTest/resources/rule.json">
           <value>
             <set />
           </value>
@@ -464,6 +484,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/app/build/tmp/kapt3/stubs/tstRelease/dgca/wallet/app/android/data/local/rules/DescriptionLocal.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/proguard-rules.pro">
           <value>
             <set />
           </value>
