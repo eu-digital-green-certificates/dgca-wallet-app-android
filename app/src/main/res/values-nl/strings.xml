@@ -32,7 +32,7 @@
     <string name="version">Versie: %1$s</string>
     <string name="about">Over</string>
     <string name="settings_version_title">Wallet App</string>
-    <string name="volgende">Next</string>
+    <string name="next">volgende</string>
 
     <!--    <string name="date_of_birth_title">Geboortedatum</string>-->
     <string name="date_of_vaccination_title">Datum van vaccinatie</string>
