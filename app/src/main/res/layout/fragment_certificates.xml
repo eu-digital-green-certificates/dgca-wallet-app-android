@@ -107,6 +107,23 @@
             android:textAllCaps="false"
             android:textColor="@color/white" />
 
+        <!-- TODO: update UI when provided by UI/UX team -->
+        <androidx.appcompat.widget.AppCompatToggleButton
+            android:id="@+id/nfc_import"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textOff="@string/nfc_import_reader_disabled"
+            android:textOn="@string/nfc_import_reader_enabled"
+            app:showText="true" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/nfc_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Status ok" />
+
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/logo"
             android:layout_width="match_parent"

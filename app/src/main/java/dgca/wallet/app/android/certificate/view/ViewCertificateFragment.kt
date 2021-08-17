@@ -23,9 +23,13 @@
 package dgca.wallet.app.android.certificate.view
 
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.nfc.NfcAdapter
 import android.os.Bundle
+import android.provider.Settings
 import android.util.DisplayMetrics
 import android.view.*
+import androidx.appcompat.app.AlertDialog
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -42,15 +46,20 @@ import dgca.wallet.app.android.data.getCertificateListData
 import dgca.wallet.app.android.databinding.FragmentCertificateViewBinding
 import java.io.File
 import javax.inject.Inject
-
+import dgca.wallet.app.android.nfc.DCCApduService
 
 @AndroidEntryPoint
 class ViewCertificateFragment : Fragment() {
+
     private val args by navArgs<ViewCertificateFragmentArgs>()
     private val viewModel by viewModels<ViewCertificateViewModel>()
+
     private var _binding: FragmentCertificateViewBinding? = null
     private val binding get() = _binding!!
+
     private lateinit var adapter: CertListAdapter
+    private lateinit var nfcDialog: AlertDialog
+    private var nfcAdapter: NfcAdapter? = null
 
     @Inject
     lateinit var shareImageIntentProvider: ShareImageIntentProvider
@@ -68,6 +77,9 @@ class ViewCertificateFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        nfcAdapter = NfcAdapter.getDefaultAdapter(requireContext())
+
         val displayMetrics = DisplayMetrics()
         requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
         val minEdge = displayMetrics.widthPixels * 0.9
@@ -128,6 +140,34 @@ class ViewCertificateFragment : Fragment() {
                 }
             }
         }
+
+        binding.nfcAction.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                initNFCFunction()
+            } else {
+                stopNfcService()
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (binding.nfcAction.isChecked) {
+            if (nfcAdapter?.isEnabled == true) {
+                initNfcService()
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopNfcService()
+    }
+
+    private fun stopNfcService() {
+        if (nfcAdapter?.isEnabled == true) {
+            requireContext().stopService(Intent(requireContext(), DCCApduService::class.java))
+        }
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -186,5 +226,42 @@ class ViewCertificateFragment : Fragment() {
         when (event) {
             is ViewCertificateViewModel.ViewCertEvent.OnCertDeleted -> findNavController().popBackStack()
         }
+    }
+
+    private fun initNFCFunction() {
+        if (checkNFCEnable() && requireActivity().packageManager.hasSystemFeature(PackageManager.FEATURE_NFC_HOST_CARD_EMULATION)) {
+            initNfcService()
+        } else {
+            showTurnOnNfcDialog()
+        }
+    }
+
+    private fun initNfcService() {
+        val certificate = viewModel.certificate.value?.certificateCard
+        val intent = Intent(requireContext(), DCCApduService::class.java)
+        intent.putExtra("ndefMessage", "DCC: ${certificate?.qrCodeText} \n\nTAN: ${certificate?.tan}")
+        requireContext().startService(intent)
+    }
+
+    private fun checkNFCEnable(): Boolean {
+        return if (nfcAdapter == null) {
+            binding.nfcStatus.text = getString(R.string.no_nfc)
+            false
+        } else {
+            nfcAdapter?.isEnabled == true
+        }
+    }
+
+    private fun showTurnOnNfcDialog() {
+        nfcDialog = AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.nfc_turn_on_title))
+            .setMessage(getString(R.string.nfc_turn_on_message))
+            .setPositiveButton(getString(R.string.nfc_turn_on_positive)) { _, _ ->
+                startActivity(Intent(Settings.ACTION_NFC_SETTINGS))
+                nfcDialog.dismiss()
+            }
+            .setNegativeButton(getString(R.string.nfc_turn_on_negative)) { _, _ -> nfcDialog.dismiss() }
+            .create()
+        nfcDialog.show()
     }
 }
