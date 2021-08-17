@@ -152,12 +152,36 @@
             android:id="@+id/checkValidity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:backgroundTint="@color/blue"
             android:minWidth="130dp"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:text="@string/check_validity"
+            android:textAllCaps="false"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/shareImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/blue"
+            android:minWidth="130dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/share_image"
+            android:textAllCaps="false"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/sharePdf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/blue"
+            android:minWidth="130dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/share_pdf"
             android:textAllCaps="false"
             android:textColor="@color/white" />
 
