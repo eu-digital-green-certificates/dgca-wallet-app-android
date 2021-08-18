@@ -26,7 +26,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.*
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -41,6 +40,7 @@ import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.getCertificateListData
 import dgca.wallet.app.android.databinding.FragmentCertificateViewBinding
 import dgca.wallet.app.android.toFile
+import dgca.wallet.app.android.toPdfDocument
 import java.io.File
 import javax.inject.Inject
 
@@ -109,7 +109,7 @@ class ViewCertificateFragment : Fragment() {
             }
         }
         binding.shareImage.setOnClickListener { launchImageSharing() }
-        binding.sharePdf.setOnClickListener { Toast.makeText(requireContext(), "Share PDF", Toast.LENGTH_SHORT).show() }
+        binding.sharePdf.setOnClickListener { launchPdfImageSharing() }
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -136,6 +136,19 @@ class ViewCertificateFragment : Fragment() {
             Intent.createChooser(
                 shareImageIntentProvider.getShareImageIntent(fileForSharing),
                 getString(R.string.share_image_title)
+            )
+        )
+    }
+
+    private fun launchPdfImageSharing() {
+        val fileForSharing = viewModel.certificate.value!!.qrCode.toPdfDocument().toFile(
+            requireContext().filesDir,
+            "images/${File.separator}pdf_for_sharing.pdf"
+        )
+        startActivity(
+            Intent.createChooser(
+                shareImageIntentProvider.getShareImageIntent(fileForSharing),
+                getString(R.string.share_pdf_title)
             )
         )
     }

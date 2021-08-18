@@ -23,10 +23,14 @@
 package dgca.wallet.app.android
 
 import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.pdf.PdfDocument
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+
 
 fun Bitmap.toFile(parentFile: File, relativePath: String): File {
     val targetFile = File(parentFile, relativePath)
@@ -38,6 +42,30 @@ fun Bitmap.toFile(parentFile: File, relativePath: String): File {
     this.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
     FileOutputStream(targetFile).use {
         it.write(bytes.toByteArray())
+    }
+    return targetFile
+}
+
+fun Bitmap.toPdfDocument(): PdfDocument {
+    val document = PdfDocument()
+    val pageInfo = PdfDocument.PageInfo.Builder(this.width, this.height, 1).create()
+    val page = document.startPage(pageInfo)
+
+    page.canvas.drawPaint(Paint().apply { color = Color.WHITE })
+    page.canvas.drawBitmap(this, 0.toFloat(), 0.toFloat(), null)
+
+    document.finishPage(page)
+    return document
+}
+
+fun PdfDocument.toFile(parentFile: File, relativePath: String): File {
+    val targetFile = File(parentFile, relativePath)
+    val absoluteFileParent = targetFile.parentFile
+    if (absoluteFileParent == null || ((!absoluteFileParent.exists() || !absoluteFileParent.isDirectory) && !absoluteFileParent.mkdirs())) {
+        throw IOException("Unable to create file for the Bitmap")
+    }
+    FileOutputStream(targetFile).use {
+        this.writeTo(it)
     }
     return targetFile
 }
