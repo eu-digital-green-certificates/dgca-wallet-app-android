@@ -22,6 +22,12 @@
 
 package dgca.wallet.app.android.nfc
 
+import android.content.Intent
+import android.provider.Settings
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
+import dgca.wallet.app.android.R
+
 private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
 
 fun ByteArray.toHex(): String {
@@ -36,4 +42,18 @@ fun ByteArray.toHex(): String {
     }
 
     return result.toString()
+}
+
+
+fun Fragment.showTurnOnNfcDialog() {
+    val nfcDialog = AlertDialog.Builder(requireContext())
+        .setTitle(getString(R.string.nfc_turn_on_title))
+        .setMessage(getString(R.string.nfc_turn_on_message))
+        .setPositiveButton(getString(R.string.nfc_turn_on_positive)) { dialog, _ ->
+            startActivity(Intent(Settings.ACTION_NFC_SETTINGS))
+            dialog.dismiss()
+        }
+        .setNegativeButton(getString(R.string.nfc_turn_on_negative)) { dialog, _ -> dialog.dismiss() }
+        .create()
+    nfcDialog.show()
 }

@@ -26,19 +26,17 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.nfc.NfcAdapter
 import android.os.Bundle
-import android.provider.Settings
 import android.util.DisplayMetrics
 import android.view.*
-import androidx.appcompat.app.AlertDialog
 import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.R
+import dgca.wallet.app.android.base.BindingFragment
 import dgca.wallet.app.android.certificate.claim.CertListAdapter
 import dgca.wallet.app.android.certificate.claim.bindText
 import dgca.wallet.app.android.data.CertificateModel
@@ -47,18 +45,15 @@ import dgca.wallet.app.android.databinding.FragmentCertificateViewBinding
 import java.io.File
 import javax.inject.Inject
 import dgca.wallet.app.android.nfc.DCCApduService
+import dgca.wallet.app.android.nfc.showTurnOnNfcDialog
 
 @AndroidEntryPoint
-class ViewCertificateFragment : Fragment() {
+class ViewCertificateFragment : BindingFragment<FragmentCertificateViewBinding>() {
 
     private val args by navArgs<ViewCertificateFragmentArgs>()
     private val viewModel by viewModels<ViewCertificateViewModel>()
 
-    private var _binding: FragmentCertificateViewBinding? = null
-    private val binding get() = _binding!!
-
     private lateinit var adapter: CertListAdapter
-    private lateinit var nfcDialog: AlertDialog
     private var nfcAdapter: NfcAdapter? = null
 
     @Inject
@@ -70,10 +65,8 @@ class ViewCertificateFragment : Fragment() {
         adapter = CertListAdapter(layoutInflater)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = FragmentCertificateViewBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentCertificateViewBinding =
+        FragmentCertificateViewBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -150,24 +143,9 @@ class ViewCertificateFragment : Fragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (binding.nfcAction.isChecked) {
-            if (nfcAdapter?.isEnabled == true) {
-                initNfcService()
-            }
-        }
-    }
-
     override fun onPause() {
         super.onPause()
         stopNfcService()
-    }
-
-    private fun stopNfcService() {
-        if (nfcAdapter?.isEnabled == true) {
-            requireContext().stopService(Intent(requireContext(), DCCApduService::class.java))
-        }
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -229,7 +207,12 @@ class ViewCertificateFragment : Fragment() {
     }
 
     private fun initNFCFunction() {
-        if (checkNFCEnable() && requireActivity().packageManager.hasSystemFeature(PackageManager.FEATURE_NFC_HOST_CARD_EMULATION)) {
+        if (!requireActivity().packageManager.hasSystemFeature(PackageManager.FEATURE_NFC_HOST_CARD_EMULATION)) {
+            binding.nfcStatus.text = getString(R.string.no_nfc)
+            return
+        }
+
+        if (nfcAdapter?.isEnabled == true) {
             initNfcService()
         } else {
             showTurnOnNfcDialog()
@@ -243,25 +226,10 @@ class ViewCertificateFragment : Fragment() {
         requireContext().startService(intent)
     }
 
-    private fun checkNFCEnable(): Boolean {
-        return if (nfcAdapter == null) {
-            binding.nfcStatus.text = getString(R.string.no_nfc)
-            false
-        } else {
-            nfcAdapter?.isEnabled == true
+    private fun stopNfcService() {
+        if (nfcAdapter?.isEnabled == true) {
+            requireContext().stopService(Intent(requireContext(), DCCApduService::class.java))
         }
-    }
-
-    private fun showTurnOnNfcDialog() {
-        nfcDialog = AlertDialog.Builder(requireContext())
-            .setTitle(getString(R.string.nfc_turn_on_title))
-            .setMessage(getString(R.string.nfc_turn_on_message))
-            .setPositiveButton(getString(R.string.nfc_turn_on_positive)) { _, _ ->
-                startActivity(Intent(Settings.ACTION_NFC_SETTINGS))
-                nfcDialog.dismiss()
-            }
-            .setNegativeButton(getString(R.string.nfc_turn_on_negative)) { _, _ -> nfcDialog.dismiss() }
-            .create()
-        nfcDialog.show()
+        binding.nfcAction.isChecked = false
     }
 }
