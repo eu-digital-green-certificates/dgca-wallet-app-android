@@ -31,6 +31,7 @@ import android.os.Bundle
 import timber.log.Timber
 import java.io.UnsupportedEncodingException
 import java.math.BigInteger
+import java.util.*
 
 @Suppress("PrivatePropertyName")
 class DCCApduService : HostApduService() {
@@ -119,15 +120,16 @@ class DCCApduService : HostApduService() {
 
     private val ndefId = byteArrayOf(0xE1.toByte(), 0x04.toByte())
 
-    private var ndefUri = NdefMessage(createTextRecord("en", "Default text", ndefId))
+    private var ndefUri = NdefMessage(createTextRecord(Locale.getDefault().language, "", ndefId))
     private var ndefUriBytes = ndefUri.toByteArray()
     private var ndefUriLength = fillByteArrayToFixedDimension(
         BigInteger.valueOf(ndefUriBytes.size.toLong()).toByteArray(), 2
     )
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        if (intent.hasExtra("ndefMessage")) {
-            ndefUri = NdefMessage(createTextRecord("en", intent.getStringExtra("ndefMessage") ?: "", ndefId))
+        if (intent.hasExtra(NFC_NDEF_KEY)) {
+            ndefUri =
+                NdefMessage(createTextRecord(Locale.getDefault().language, intent.getStringExtra(NFC_NDEF_KEY) ?: "", ndefId))
             ndefUriBytes = ndefUri.toByteArray()
             ndefUriLength = fillByteArrayToFixedDimension(
                 BigInteger.valueOf(ndefUriBytes.size.toLong()).toByteArray(), 2
@@ -257,5 +259,11 @@ class DCCApduService : HostApduService() {
         System.arraycopy(start, 0, filledArray, 0, start.size)
         System.arraycopy(array, 0, filledArray, start.size, array.size)
         return fillByteArrayToFixedDimension(filledArray, fixedSize)
+    }
+
+    companion object {
+        const val NFC_NDEF_KEY = "ndefMessage"
+        const val NFC_TAG_DCC = "DCC:"
+        const val NFC_TAG_TAN = "TAN:"
     }
 }

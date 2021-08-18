@@ -37,7 +37,6 @@ import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.certificate.CertificatesFragment
 import dgca.wallet.app.android.databinding.ActivityMainBinding
-import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -62,18 +61,14 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
     }
 
-    //    TODO: code cleanup
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         if (NfcAdapter.ACTION_NDEF_DISCOVERED == intent.action) {
             intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)?.also { rawMessages ->
                 val messages: List<NdefMessage> = rawMessages.map { it as NdefMessage }
-
-                Timber.d("On New intent")
                 val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
                 navHost.childFragmentManager.primaryNavigationFragment?.let { fragment ->
-                    if (fragment is CertificatesFragment) {
-                        Timber.d("Fragment found")
+                    if (fragment is CertificatesFragment && fragment.isVisible) {
                         fragment.parserNDEFMessage(messages)
                     }
                 }

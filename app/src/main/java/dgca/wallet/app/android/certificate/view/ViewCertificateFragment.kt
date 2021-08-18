@@ -45,6 +45,9 @@ import dgca.wallet.app.android.databinding.FragmentCertificateViewBinding
 import java.io.File
 import javax.inject.Inject
 import dgca.wallet.app.android.nfc.DCCApduService
+import dgca.wallet.app.android.nfc.DCCApduService.Companion.NFC_NDEF_KEY
+import dgca.wallet.app.android.nfc.DCCApduService.Companion.NFC_TAG_DCC
+import dgca.wallet.app.android.nfc.DCCApduService.Companion.NFC_TAG_TAN
 import dgca.wallet.app.android.nfc.showTurnOnNfcDialog
 
 @AndroidEntryPoint
@@ -222,7 +225,8 @@ class ViewCertificateFragment : BindingFragment<FragmentCertificateViewBinding>(
     private fun initNfcService() {
         val certificate = viewModel.certificate.value?.certificateCard
         val intent = Intent(requireContext(), DCCApduService::class.java)
-        intent.putExtra("ndefMessage", "DCC: ${certificate?.qrCodeText} \n\nTAN: ${certificate?.tan}")
+        val qrData = NFC_TAG_DCC + "${certificate?.qrCodeText}" + NFC_TAG_TAN + "${certificate?.tan}"
+        intent.putExtra(NFC_NDEF_KEY, qrData)
         requireContext().startService(intent)
     }
 

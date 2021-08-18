@@ -28,10 +28,10 @@ import android.content.pm.PackageManager
 import android.nfc.NdefMessage
 import android.nfc.NfcAdapter
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -43,6 +43,7 @@ import dgca.wallet.app.android.R
 import dgca.wallet.app.android.base.BindingFragment
 import dgca.wallet.app.android.certificate.claim.ClaimCertificateViewModel
 import dgca.wallet.app.android.databinding.FragmentCertificatesBinding
+import dgca.wallet.app.android.nfc.DCCApduService
 import dgca.wallet.app.android.nfc.NdefParser
 import dgca.wallet.app.android.nfc.showTurnOnNfcDialog
 
@@ -60,7 +61,6 @@ class CertificatesFragment : BindingFragment<FragmentCertificatesBinding>(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity as MainActivity).clearBackground()
-        (activity as MainActivity).disableBackButton()
     }
 
     override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentCertificatesBinding =
@@ -68,6 +68,7 @@ class CertificatesFragment : BindingFragment<FragmentCertificatesBinding>(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as MainActivity).disableBackButton()
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(requireContext())
 
@@ -76,15 +77,6 @@ class CertificatesFragment : BindingFragment<FragmentCertificatesBinding>(),
             val action = CertificatesFragmentDirections.actionCertificatesFragmentToCodeReaderFragment()
             findNavController().navigate(action)
         }
-
-        viewModel.certificates.observe(viewLifecycleOwner, {
-            setCertificateCards(it)
-        })
-        viewModel.inProgress.observe(viewLifecycleOwner, {
-            binding.progressView.isVisible = it
-        })
-        viewModel.fetchCertificates()
-
         binding.nfcImport.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 initNfcReader()
@@ -93,12 +85,29 @@ class CertificatesFragment : BindingFragment<FragmentCertificatesBinding>(),
                 binding.nfcStatus.text = getString(R.string.nfc_import_reader_disabled)
             }
         }
+
+        viewModel.certificates.observe(viewLifecycleOwner, {
+            setCertificateCards(it)
+        })
+        viewModel.inProgress.observe(viewLifecycleOwner, {
+            binding.progressView.isVisible = it
+        })
+        claimCertViewModel.event.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { onViewModelEvent(it) }
+        }
+
+        viewModel.fetchCertificates()
     }
 
     override fun onPause() {
         super.onPause()
         binding.nfcImport.isChecked = false
         nfcAdapter?.disableForegroundDispatch(requireActivity())
+    }
+
+    override fun onCertificateCardClick(certificateId: Int) {
+        val action = CertificatesFragmentDirections.actionCertificatesFragmentToViewCertificateFragment(certificateId)
+        findNavController().navigate(action)
     }
 
     private fun setCertificateCards(certificateCards: List<CertificateCard>) {
@@ -115,9 +124,22 @@ class CertificatesFragment : BindingFragment<FragmentCertificatesBinding>(),
         }
     }
 
-    override fun onCertificateCardClick(certificateId: Int) {
-        val action = CertificatesFragmentDirections.actionCertificatesFragmentToViewCertificateFragment(certificateId)
-        findNavController().navigate(action)
+    fun parserNDEFMessage(messages: List<NdefMessage>) {
+        val builder = StringBuilder()
+        val records = NdefParser.parse(messages[0])
+        val size = records.size
+
+        for (i in 0 until size) {
+            val record = records[i]
+            val str = record.str()
+            builder.append(str)
+        }
+
+        val result = builder.toString()
+        val qrCodeText = result.substring(DCCApduService.NFC_TAG_DCC.length, result.indexOf(DCCApduService.NFC_TAG_TAN))
+        val tan = result.substring(result.indexOf(DCCApduService.NFC_TAG_TAN) + DCCApduService.NFC_TAG_TAN.length, result.length)
+
+        claimCertViewModel.verifyAndStore(qrCodeText, tan)
     }
 
     private fun initNfcReader() {
@@ -138,18 +160,16 @@ class CertificatesFragment : BindingFragment<FragmentCertificatesBinding>(),
         }
     }
 
-    fun parserNDEFMessage(messages: List<NdefMessage>) {
-        val builder = StringBuilder()
-        val records = NdefParser.parse(messages[0])
-        val size = records.size
-
-        for (i in 0 until size) {
-            val record = records[i]
-            val str = record.str()
-            builder.append(str).append("\n")
+    private fun onViewModelEvent(event: ClaimCertificateViewModel.ClaimCertEvent) {
+        when (event) {
+            is ClaimCertificateViewModel.ClaimCertEvent.OnCertClaimed -> {
+                if (event.isClaimed) {
+                    viewModel.fetchCertificates()
+                    Toast.makeText(requireContext(), "Certificate claimed", Toast.LENGTH_SHORT).show()
+                }
+            }
+            is ClaimCertificateViewModel.ClaimCertEvent.OnCertNotClaimed ->
+                Toast.makeText(requireContext(), getString(R.string.check_the_tan_and_try_again), Toast.LENGTH_SHORT).show()
         }
-        Handler().postDelayed({
-            binding.nfcStatus.text = builder.toString()
-        }, 500)
     }
 }
