@@ -32,12 +32,21 @@ import dgca.wallet.app.android.Event
 import dgca.wallet.app.android.certificate.CertificateCard
 import dgca.wallet.app.android.data.WalletRepository
 import dgca.wallet.app.android.qr.QrCodeConverter
+import dgca.wallet.app.android.toFile
+import dgca.wallet.app.android.toPdfDocument
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 
 data class CertificateViewCard(val certificateCard: CertificateCard, val qrCode: Bitmap)
+
+sealed class FilePreparationResult {
+    class FileResult(val file: File) : FilePreparationResult()
+    class ErrorResult(val error: Exception?) : FilePreparationResult()
+}
 
 @HiltViewModel
 class ViewCertificateViewModel @Inject constructor(
@@ -53,6 +62,12 @@ class ViewCertificateViewModel @Inject constructor(
 
     private val _event = MutableLiveData<Event<ViewCertEvent>>()
     val event: LiveData<Event<ViewCertEvent>> = _event
+
+    private val _shareImageFile = MutableLiveData<Event<FilePreparationResult>>()
+    val shareImageFile: LiveData<Event<FilePreparationResult>> = _shareImageFile
+
+    private val _sharePdfFile = MutableLiveData<Event<FilePreparationResult>>()
+    val sharePdfFile: LiveData<Event<FilePreparationResult>> = _sharePdfFile
 
     fun setCertificateId(certificateId: Int, qrCodeSize: Int) {
         viewModelScope.launch {
@@ -77,6 +92,64 @@ class ViewCertificateViewModel @Inject constructor(
         viewModelScope.launch {
             val result = walletRepository.deleteCertificateById(certificateId)
             _event.value = Event(ViewCertEvent.OnCertDeleted(result))
+        }
+    }
+
+    fun shareImage(parentFile: File) {
+        viewModelScope.launch {
+            _inProgress.value = true
+            var fileForSharing: File? = null
+            var error: Exception? = null
+            withContext(Dispatchers.IO) {
+                try {
+                    fileForSharing = certificate.value!!.qrCode.toFile(
+                        parentFile,
+                        "images/${File.separator}image_for_sharing.jpg"
+                    )
+                } catch (exception: Exception) {
+                    error = exception
+                    Timber.e(exception, "Was not able to prepare image for sharing")
+                }
+            }
+            _inProgress.value = false
+            _shareImageFile.postValue(
+                Event(
+                    if (fileForSharing != null) {
+                        FilePreparationResult.FileResult(fileForSharing!!)
+                    } else {
+                        FilePreparationResult.ErrorResult(error)
+                    }
+                )
+            )
+        }
+    }
+
+    fun sharePdf(parentFile: File) {
+        viewModelScope.launch {
+            _inProgress.value = true
+            var fileForSharing: File? = null
+            var error: Exception? = null
+            withContext(Dispatchers.IO) {
+                try {
+                    fileForSharing = certificate.value!!.qrCode.toPdfDocument().toFile(
+                        parentFile,
+                        "images/${File.separator}pdf_for_sharing.pdf"
+                    )
+                } catch (exception: Exception) {
+                    error = exception
+                    Timber.e(exception, "Was not able to prepare pdf for sharing")
+                }
+            }
+            _inProgress.value = false
+            _sharePdfFile.postValue(
+                Event(
+                    if (fileForSharing != null) {
+                        FilePreparationResult.FileResult(fileForSharing!!)
+                    } else {
+                        FilePreparationResult.ErrorResult(error)
+                    }
+                )
+            )
         }
     }
 
