@@ -22,7 +22,10 @@
 
 package dgca.wallet.app.android.certificate.view
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.nfc.NfcAdapter
 import android.os.Bundle
@@ -42,13 +45,13 @@ import dgca.wallet.app.android.certificate.claim.bindText
 import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.getCertificateListData
 import dgca.wallet.app.android.databinding.FragmentCertificateViewBinding
-import java.io.File
-import javax.inject.Inject
 import dgca.wallet.app.android.nfc.DCCApduService
 import dgca.wallet.app.android.nfc.DCCApduService.Companion.NFC_NDEF_KEY
 import dgca.wallet.app.android.nfc.DCCApduService.Companion.NFC_TAG_DCC
 import dgca.wallet.app.android.nfc.DCCApduService.Companion.NFC_TAG_TAN
 import dgca.wallet.app.android.nfc.showTurnOnNfcDialog
+import java.io.File
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ViewCertificateFragment : BindingFragment<FragmentCertificateViewBinding>() {
@@ -228,12 +231,34 @@ class ViewCertificateFragment : BindingFragment<FragmentCertificateViewBinding>(
         val qrData = NFC_TAG_DCC + "${certificate?.qrCodeText}" + NFC_TAG_TAN + "${certificate?.tan}"
         intent.putExtra(NFC_NDEF_KEY, qrData)
         requireContext().startService(intent)
+
+
+        val filter = IntentFilter(NFC_BROADCAST)
+        requireContext().registerReceiver(nfcReceiver, filter)
     }
 
     private fun stopNfcService() {
         if (nfcAdapter?.isEnabled == true) {
             requireContext().stopService(Intent(requireContext(), DCCApduService::class.java))
         }
+        requireContext().unregisterReceiver(nfcReceiver)
         binding.nfcAction.isChecked = false
+    }
+
+    private val nfcReceiver = object : BroadcastReceiver() {
+
+        override fun onReceive(context: Context, intent: Intent) {
+            if (intent.hasExtra(NFC_EXTRA_DCC_SENT)) {
+                if (intent.getBooleanExtra(NFC_EXTRA_DCC_SENT, false)) {
+                    viewModel.onCertificateShared()
+                    Toast.makeText(requireContext(), "DCC was sent successfully", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    companion object {
+        const val NFC_BROADCAST = "dgca.wallet.app.android.certificate.view.nfc_broadcast"
+        const val NFC_EXTRA_DCC_SENT = "nfc_dcc_sent"
     }
 }

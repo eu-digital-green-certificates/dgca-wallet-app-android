@@ -28,6 +28,7 @@ import android.nfc.NdefMessage
 import android.nfc.NdefRecord
 import android.nfc.cardemulation.HostApduService
 import android.os.Bundle
+import dgca.wallet.app.android.certificate.view.ViewCertificateFragment
 import timber.log.Timber
 import java.io.UnsupportedEncodingException
 import java.math.BigInteger
@@ -207,13 +208,26 @@ class DCCApduService : HostApduService() {
             val slicedResponse = fullResponse.sliceArray(offset until fullResponse.size)
 
             // Build our response
-            val realLength = if (slicedResponse.size <= length) slicedResponse.size else length
+            val realLength = if (slicedResponse.size <= length) {
+                slicedResponse.size
+            } else {
+                length
+            }
             val response = ByteArray(realLength + A_OKAY.size)
 
             System.arraycopy(slicedResponse, 0, response, 0, realLength)
             System.arraycopy(A_OKAY, 0, response, realLength, A_OKAY.size)
 
-            Timber.i("NDEF_READ_BINARY triggered. Our Response: ${response.toHex()}")
+            val responseHex = response.toHex()
+            val okHex = A_OKAY.toHex()
+            if (responseHex.contains(okHex)) {
+                val recordWithOkMessage = ndefUri.records[0].payload.toHex() + okHex
+                if (recordWithOkMessage.contains(responseHex)) {
+                    onDccShared()
+                    Timber.i("NDEF_READ_BINARY triggered. Full DCC sent")
+                }
+            }
+            Timber.i("NDEF_READ_BINARY triggered. Our Response: $responseHex")
 
             READ_CAPABILITY_CONTAINER_CHECK = false
             return response
@@ -224,12 +238,19 @@ class DCCApduService : HostApduService() {
         return A_ERROR
     }
 
+    private fun onDccShared() {
+        val intent = Intent(ViewCertificateFragment.NFC_BROADCAST).apply {
+            putExtra(ViewCertificateFragment.NFC_EXTRA_DCC_SENT, true)
+        }
+        sendBroadcast(intent)
+    }
+
     private fun createTextRecord(language: String, text: String, id: ByteArray): NdefRecord {
         val languageBytes: ByteArray
         val textBytes: ByteArray
         try {
-            languageBytes = language.toByteArray(charset("US-ASCII"))
-            textBytes = text.toByteArray(charset("UTF-8"))
+            languageBytes = language.toByteArray(Charsets.US_ASCII)
+            textBytes = text.toByteArray(Charsets.UTF_8)
         } catch (e: UnsupportedEncodingException) {
             throw AssertionError(e)
         }

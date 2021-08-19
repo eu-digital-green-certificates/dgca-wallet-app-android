@@ -153,6 +153,10 @@ class ViewCertificateViewModel @Inject constructor(
         }
     }
 
+    fun onCertificateShared() {
+//        TODO: store state to DB if needed. Or show dialog with delete option.
+    }
+
     sealed class ViewCertEvent {
         data class OnCertDeleted(val isDeleted: Boolean) : ViewCertEvent()
     }
