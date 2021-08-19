@@ -50,6 +50,7 @@ import dgca.wallet.app.android.nfc.DCCApduService.Companion.NFC_NDEF_KEY
 import dgca.wallet.app.android.nfc.DCCApduService.Companion.NFC_TAG_DCC
 import dgca.wallet.app.android.nfc.DCCApduService.Companion.NFC_TAG_TAN
 import dgca.wallet.app.android.nfc.showTurnOnNfcDialog
+import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
@@ -241,8 +242,12 @@ class ViewCertificateFragment : BindingFragment<FragmentCertificateViewBinding>(
         if (nfcAdapter?.isEnabled == true) {
             requireContext().stopService(Intent(requireContext(), DCCApduService::class.java))
         }
-        requireContext().unregisterReceiver(nfcReceiver)
         binding.nfcAction.isChecked = false
+        try {
+            requireContext().unregisterReceiver(nfcReceiver)
+        } catch (ex: Exception) {
+            Timber.d("nfcReceiver not registered.")
+        }
     }
 
     private val nfcReceiver = object : BroadcastReceiver() {

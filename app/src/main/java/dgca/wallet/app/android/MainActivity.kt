@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
                 val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
                 navHost.childFragmentManager.primaryNavigationFragment?.let { fragment ->
                     if (fragment is CertificatesFragment && fragment.isVisible) {
-                        fragment.parserNDEFMessage(messages)
+                        fragment.onNdefMessagesReceived(messages)
                     }
                 }
             }
