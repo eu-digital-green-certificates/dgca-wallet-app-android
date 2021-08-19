@@ -74,4 +74,9 @@
     <string name="manufacturer">Manufacturer</string>
     <string name="vaccine_of_prophylaxis">Vaccine or Prophylaxis</string>
     <string name="check_the_tan_and_try_again">Check the TAN and try again</string>
+    <string name="share_image">Share Image</string>
+    <string name="share_pdf">Share PDF</string>
+    <string name="share_image_title">Share Image</string>
+    <string name="share_pdf_title">Share PDF</string>
+    <string name="file_preparation_error">File preparation failed</string>
 </resources>

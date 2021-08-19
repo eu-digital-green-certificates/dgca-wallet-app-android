@@ -22,9 +22,11 @@
 
 package dgca.wallet.app.android.certificate.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.*
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -38,6 +40,9 @@ import dgca.wallet.app.android.certificate.claim.bindText
 import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.getCertificateListData
 import dgca.wallet.app.android.databinding.FragmentCertificateViewBinding
+import java.io.File
+import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class ViewCertificateFragment : Fragment() {
@@ -46,6 +51,9 @@ class ViewCertificateFragment : Fragment() {
     private var _binding: FragmentCertificateViewBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: CertListAdapter
+
+    @Inject
+    lateinit var shareImageIntentProvider: ShareImageIntentProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,6 +107,27 @@ class ViewCertificateFragment : Fragment() {
                 findNavController().navigate(action)
             }
         }
+        binding.shareImage.setOnClickListener { viewModel.shareImage(requireContext().filesDir) }
+        binding.sharePdf.setOnClickListener { viewModel.sharePdf(requireContext().filesDir) }
+        viewModel.shareImageFile.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let {
+                if (it is FilePreparationResult.FileResult) {
+                    launchImageSharing(it.file)
+                } else {
+                    showFilePreparationError()
+                }
+            }
+        }
+
+        viewModel.sharePdfFile.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let {
+                if (it is FilePreparationResult.FileResult) {
+                    launchPdfImageSharing(it.file)
+                } else {
+                    showFilePreparationError()
+                }
+            }
+        }
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -114,6 +143,28 @@ class ViewCertificateFragment : Fragment() {
         } else {
             super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun launchImageSharing(fileForSharing: File) {
+        startActivity(
+            Intent.createChooser(
+                shareImageIntentProvider.getShareImageIntent(fileForSharing),
+                getString(R.string.share_image_title)
+            )
+        )
+    }
+
+    private fun launchPdfImageSharing(fileForSharing: File) {
+        startActivity(
+            Intent.createChooser(
+                shareImageIntentProvider.getShareImageIntent(fileForSharing),
+                getString(R.string.share_pdf_title)
+            )
+        )
+    }
+
+    private fun showFilePreparationError() {
+        Toast.makeText(requireContext(), R.string.file_preparation_error, Toast.LENGTH_SHORT).show()
     }
 
     private fun showUserData(certificate: CertificateModel) {

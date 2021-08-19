@@ -1,6 +1,6 @@
 /*
  *  ---license-start
- *  eu-digital-green-certificates / dgca-verifier-app-android
+ *  eu-digital-green-certificates / dgca-wallet-app-android
  *  ---
  *  Copyright (C) 2021 T-Systems International GmbH and all other contributors
  *  ---
@@ -17,20 +17,14 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by Mykhailo Nester on 4/23/21 9:49 AM
+ *  Created by osarapulov on 8/17/21 8:10 AM
  */
 
-import org.gradle.api.JavaVersion
+package dgca.wallet.app.android.certificate.view
 
-object Config {
-    const val minSdk = 26
-    const val compileSdk = 29
-    const val targetSdk = 29
-    val javaVersion = JavaVersion.VERSION_1_8
+import android.content.Intent
+import java.io.File
 
-    const val versionCode = 15
-    const val versionName = "1.1.6"
-
-    const val androidTestInstrumentation = "androidx.test.runner.AndroidJUnitRunner"
-    const val proguardConsumerRules = "consumer-rules.pro"
+interface ShareImageIntentProvider {
+    fun getShareImageIntent(file: File): Intent
 }
