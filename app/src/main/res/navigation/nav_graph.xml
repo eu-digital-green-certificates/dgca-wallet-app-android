@@ -69,7 +69,16 @@
             app:popEnterAnim="@animator/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
+        <action
+            android:id="@+id/action_certificatesFragment_to_addNewDialogFragment"
+            app:destination="@id/addNewDialogFragment" />
     </fragment>
+
+    <dialog
+        android:id="@+id/addNewDialogFragment"
+        android:name="dgca.wallet.app.android.certificate.AddNewBottomDialogFragment"
+        android:label="Add New"
+        tools:layout="@layout/dialog_fragment_add_new" />
 
     <fragment
         android:id="@+id/codeReaderFragment"

@@ -103,7 +103,7 @@
             android:minWidth="130dp"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:text="@string/scan_code"
+            android:text="@string/add_new"
             android:textAllCaps="false"
             android:textColor="@color/white" />
 

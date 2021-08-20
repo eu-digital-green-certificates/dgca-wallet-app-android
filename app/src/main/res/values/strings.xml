@@ -8,7 +8,7 @@
     <string name="certificate_wallet">Certificate Wallet</string>
     <string name="no_certificate_available">No Certificate available</string>
     <string name="click_span_code_to_add_to_your_wallet">Click Scan Code to add to your Wallet.</string>
-    <string name="scan_code">Scan Code</string>
+    <string name="add_new">Add New</string>
     <string name="check_validity">Check Validity</string>
     <string name="i_agree_check_validity">I agree, check validity</string>
     <string name="vaccination">Vaccination %1$s of %2$s</string>
@@ -79,4 +79,7 @@
     <string name="share_image_title">Share Image</string>
     <string name="share_pdf_title">Share PDF</string>
     <string name="file_preparation_error">File preparation failed</string>
+    <string name="scan_certificate">Scan certificate</string>
+    <string name="import_image">Import image</string>
+    <string name="import_pdf">Import PDF</string>
 </resources>

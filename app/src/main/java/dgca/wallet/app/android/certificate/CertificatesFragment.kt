@@ -29,6 +29,7 @@ import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -57,10 +58,7 @@ class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCard
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { requireActivity().finish() }
-        binding.scanCode.setOnClickListener {
-            val action = CertificatesFragmentDirections.actionCertificatesFragmentToCodeReaderFragment()
-            findNavController().navigate(action)
-        }
+        binding.scanCode.setOnClickListener { showAddNewDialog() }
 
         viewModel.certificates.observe(viewLifecycleOwner, {
             setCertificateCards(it)
@@ -69,6 +67,17 @@ class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCard
             binding.progressView.isVisible = it
         })
         viewModel.fetchCertificates()
+
+        setFragmentResultListener(AddNewBottomDialogFragment.REQUEST_KEY) { key, bundle ->
+            when (bundle.getInt(AddNewBottomDialogFragment.RESULT_KEY)) {
+                AddNewBottomDialogFragment.RESULT_SCAN_CODE -> {
+                    findNavController().navigateUp()
+                    val action = CertificatesFragmentDirections.actionCertificatesFragmentToCodeReaderFragment()
+                    findNavController().navigate(action)
+                }
+                else -> findNavController().navigateUp()
+            }
+        }
     }
 
     private fun setCertificateCards(certificateCards: List<CertificateCard>) {
@@ -93,5 +102,10 @@ class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCard
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun showAddNewDialog() {
+        val action = CertificatesFragmentDirections.actionCertificatesFragmentToAddNewDialogFragment()
+        findNavController().navigate(action)
     }
 }
