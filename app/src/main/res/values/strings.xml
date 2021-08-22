@@ -82,4 +82,9 @@
     <string name="scan_certificate">Scan certificate</string>
     <string name="import_image">Import image</string>
     <string name="import_pdf">Import PDF</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="pick_from_gallery">Pick From Gallery</string>
+    <string name="certificates">Certificates</string>
+    <string name="images">Images</string>
+    <string name="pdfs">PDFs</string>
 </resources>

@@ -78,7 +78,7 @@ class ViewCertificateFragment : Fragment() {
 
         viewModel.inProgress.observe(viewLifecycleOwner, { binding.progressView.isVisible = it })
         viewModel.certificate.observe(viewLifecycleOwner, {
-            val certificate = it.certificateCard.certificate
+            val certificate = it.certificatesCard.certificate
             binding.title.text = when {
                 certificate.vaccinations?.first() != null -> binding.root.resources.getString(
                     R.string.vaccination,
@@ -91,7 +91,7 @@ class ViewCertificateFragment : Fragment() {
             }
 
             binding.qrCode.setImageBitmap(it.qrCode)
-            binding.tan.text = getString(R.string.tan_placeholder, it.certificateCard.tan)
+            binding.tan.text = getString(R.string.tan_placeholder, it.certificatesCard.tan)
             showUserData(certificate)
             adapter.update(certificate.getCertificateListData())
         })
@@ -102,7 +102,7 @@ class ViewCertificateFragment : Fragment() {
         }
         viewModel.setCertificateId(args.certificateId, minEdge.toInt())
         binding.checkValidity.setOnClickListener {
-            viewModel.certificate.value?.certificateCard?.qrCodeText?.let {
+            viewModel.certificate.value?.certificatesCard?.qrCodeText?.let {
                 val action = ViewCertificateFragmentDirections.actionViewCertificateFragmentToCertificateValidityFragment(it)
                 findNavController().navigate(action)
             }

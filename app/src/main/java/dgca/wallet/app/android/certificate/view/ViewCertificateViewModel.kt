@@ -29,7 +29,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.wallet.app.android.Event
-import dgca.wallet.app.android.certificate.CertificateCard
+import dgca.wallet.app.android.certificate.CertificatesCard
 import dgca.wallet.app.android.data.WalletRepository
 import dgca.wallet.app.android.qr.QrCodeConverter
 import dgca.wallet.app.android.toFile
@@ -41,7 +41,7 @@ import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
-data class CertificateViewCard(val certificateCard: CertificateCard, val qrCode: Bitmap)
+data class CertificateViewCard(val certificatesCard: CertificatesCard.CertificateCard, val qrCode: Bitmap)
 
 sealed class FilePreparationResult {
     class FileResult(val file: File) : FilePreparationResult()

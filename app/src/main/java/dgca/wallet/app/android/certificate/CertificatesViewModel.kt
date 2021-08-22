@@ -22,22 +22,27 @@
 
 package dgca.wallet.app.android.certificate
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dgca.wallet.app.android.data.WalletRepository
 import kotlinx.coroutines.launch
+import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
 class CertificatesViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val walletRepository: WalletRepository
 ) : ViewModel() {
 
-    private val _certificates = MutableLiveData<List<CertificateCard>>()
-    val certificates: LiveData<List<CertificateCard>> = _certificates
+    private val _certificates = MutableLiveData<List<CertificatesCard>>()
+    val certificates: LiveData<List<CertificatesCard>> = _certificates
 
     private val _inProgress = MutableLiveData<Boolean>()
     val inProgress: LiveData<Boolean> = _inProgress
@@ -46,8 +51,27 @@ class CertificatesViewModel @Inject constructor(
         _inProgress.value = true
         viewModelScope.launch {
             val certificateCards = walletRepository.getCertificates()
+            val certificatesCards = mutableListOf<CertificatesCard>()
+            if (certificateCards?.isNotEmpty() == true) {
+                certificatesCards.add(CertificatesCard.CertificatesHeader)
+                certificatesCards.addAll(certificateCards)
+            }
+
+            val imagesDir = File(context.filesDir, "images")
+            val imageFiles = imagesDir.listFiles().filter {
+                Timber.tag("MYTAG").d("File: ${it.path}")
+                return@filter true
+            }
+
+            if (imageFiles.isNotEmpty()) {
+                certificatesCards.add(CertificatesCard.ImagesHeader)
+                imageFiles.forEach {
+                    certificatesCards.add(CertificatesCard.FileCard(it))
+                }
+            }
+
             _inProgress.value = false
-            _certificates.value = certificateCards ?: emptyList()
+            _certificates.value = certificatesCards.toList()
         }
     }
 }

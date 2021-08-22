@@ -27,49 +27,113 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dgca.wallet.app.android.R
+import dgca.wallet.app.android.databinding.CertificateCardFileBinding
+import dgca.wallet.app.android.databinding.CertificateCardHeaderBinding
 import dgca.wallet.app.android.databinding.CertificateCardViewBinding
 import dgca.wallet.app.android.formatWith
 
+enum class ViewType {
+    HEADER_TYPE, CERTIFICATE_TYPE, FILE_TYPE
+}
+
 class CertificateCardsAdapter(
-    private val certificateCards: List<CertificateCard>,
+    private val certificatesCards: List<CertificatesCard>,
     private val certificateCardClickListener: CertificateCardClickListener
 ) :
     RecyclerView.Adapter<CertificateCardsAdapter.ViewHolder>() {
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val binding = CertificateCardViewBinding.bind(itemView)
+    sealed class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         companion object {
             const val YEAR_MONTH_DAY = "yyyy-MM-dd"
         }
 
-        fun bind(certificateCard: CertificateCard, certificateCardClickListener: CertificateCardClickListener) {
-            binding.titleView.text = when {
-                certificateCard.certificate.vaccinations?.first() != null -> binding.root.resources.getString(
-                    R.string.vaccination,
-                    certificateCard.certificate.vaccinations.first().doseNumber.toString(),
-                    certificateCard.certificate.vaccinations.first().totalSeriesOfDoses.toString()
-                )
-                certificateCard.certificate.recoveryStatements?.isNotEmpty() == true -> binding.root.resources.getString(R.string.recovery)
-                certificateCard.certificate.tests?.isNotEmpty() == true -> binding.root.resources.getString(R.string.test)
-                else -> ""
+        class HeaderViewHolder(itemView: View) : ViewHolder(itemView) {
+            private val binding = CertificateCardHeaderBinding.bind(itemView)
+
+            fun bind(certificatesCard: CertificatesCard) {
+                binding.root.visibility =
+                    if (certificatesCard is CertificatesCard.CertificatesHeader || certificatesCard is CertificatesCard.ImagesHeader || certificatesCard is CertificatesCard.PdfsHeader) View.VISIBLE else View.GONE
+                when (certificatesCard) {
+                    is CertificatesCard.CertificatesHeader -> binding.title.setText(R.string.certificates)
+                    is CertificatesCard.ImagesHeader -> binding.title.setText(R.string.images)
+                    is CertificatesCard.PdfsHeader -> binding.title.setText(R.string.pdfs)
+                }
             }
-            binding.nameView.text = certificateCard.certificate.getFullName()
-            binding.scannedAtDateView.text = certificateCard.dateTaken.formatWith(YEAR_MONTH_DAY)
-            binding.root.setOnClickListener { certificateCardClickListener.onCertificateCardClick(certificateCard.certificateId) }
+        }
+
+        class CertificateViewHolder(itemView: View) : ViewHolder(itemView) {
+            private val binding = CertificateCardViewBinding.bind(itemView)
+
+            fun bind(
+                certificatesCard: CertificatesCard.CertificateCard,
+                certificateCardClickListener: CertificateCardClickListener
+            ) {
+                binding.titleView.text = when {
+                    certificatesCard.certificate.vaccinations?.first() != null -> binding.root.resources.getString(
+                        R.string.vaccination,
+                        certificatesCard.certificate.vaccinations.first().doseNumber.toString(),
+                        certificatesCard.certificate.vaccinations.first().totalSeriesOfDoses.toString()
+                    )
+                    certificatesCard.certificate.recoveryStatements?.isNotEmpty() == true -> binding.root.resources.getString(
+                        R.string.recovery
+                    )
+                    certificatesCard.certificate.tests?.isNotEmpty() == true -> binding.root.resources.getString(R.string.test)
+                    else -> ""
+                }
+                binding.nameView.text = certificatesCard.certificate.getFullName()
+                binding.scannedAtDateView.text = certificatesCard.dateTaken.formatWith(YEAR_MONTH_DAY)
+                binding.root.setOnClickListener { certificateCardClickListener.onCertificateCardClick(certificatesCard.certificateId) }
+            }
+        }
+
+        class FileViewHolder(itemView: View) : ViewHolder(itemView) {
+            private val binding = CertificateCardFileBinding.bind(itemView)
+
+            fun bind(fileCard: CertificatesCard.FileCard) {
+                binding.titleView.text = fileCard.file.name
+                binding.scannedAtDateView.text = fileCard.dateTaken.formatWith(YEAR_MONTH_DAY)
+            }
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return when (certificatesCards[position]) {
+            is CertificatesCard.CertificatesHeader, is CertificatesCard.ImagesHeader, is CertificatesCard.PdfsHeader -> ViewType.HEADER_TYPE.ordinal
+            is CertificatesCard.CertificateCard -> ViewType.CERTIFICATE_TYPE.ordinal
+            is CertificatesCard.FileCard -> ViewType.FILE_TYPE.ordinal
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.certificate_card_view, parent, false))
+        return when (viewType) {
+            ViewType.HEADER_TYPE.ordinal -> ViewHolder.HeaderViewHolder(
+                LayoutInflater.from(parent.context).inflate(R.layout.certificate_card_header, parent, false)
+            )
+            ViewType.CERTIFICATE_TYPE.ordinal -> ViewHolder.CertificateViewHolder(
+                LayoutInflater.from(parent.context).inflate(R.layout.certificate_card_view, parent, false)
+            )
+            ViewType.FILE_TYPE.ordinal -> ViewHolder.FileViewHolder(
+                LayoutInflater.from(parent.context).inflate(R.layout.certificate_card_file, parent, false)
+            )
+            else -> throw IllegalArgumentException()
+        }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(certificateCards[position], certificateCardClickListener)
+        when (holder) {
+            is ViewHolder.HeaderViewHolder -> holder.bind(certificatesCards[position])
+            is ViewHolder.CertificateViewHolder -> holder.bind(
+                certificatesCards[position] as CertificatesCard.CertificateCard,
+                certificateCardClickListener
+            )
+            is ViewHolder.FileViewHolder -> holder.bind(certificatesCards[position] as CertificatesCard.FileCard)
+        }
+
     }
 
     override fun getItemCount(): Int {
-        return certificateCards.size
+        return certificatesCards.size
     }
 
     interface CertificateCardClickListener {

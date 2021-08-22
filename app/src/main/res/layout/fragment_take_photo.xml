@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~  license-start
-  ~  eu-digital-green-certificates / dgca-wallet-app-android
+  ~  eu-digital-green-certificates / dgca-verifier-app-android
   ~
   ~  Copyright (C) 2021 T-Systems International GmbH and all other contributors
   ~
@@ -17,39 +17,21 @@
   ~  limitations under the License.
   ~  license-end
   ~
-  ~  Created by osarapulov on 8/20/21 2:27 PM
+  ~  Created by osarapulov on 8/22/21 6:32 PM
   -->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/scanCertificate"
-        style="@style/ButtomDialogButton"
-        android:text="@string/scan_certificate"
-        app:layout_constraintBottom_toTopOf="@id/importImage"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/importImage"
-        style="@style/ButtomDialogButton"
-        android:text="@string/import_image"
-        app:layout_constraintBottom_toTopOf="@id/importPdf"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/scanCertificate" />
-
-    <TextView
-        android:id="@+id/importPdf"
-        style="@style/ButtomDialogButton"
-        android:text="@string/import_pdf"
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/importImage" />
-
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,7 +17,7 @@
   ~  limitations under the License.
   ~  license-end
   ~
-  ~  Created by osarapulov on 8/20/21 2:27 PM
+  ~  Created by osarapulov on 8/20/21 5:23 PM
   -->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -26,30 +26,21 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/scanCertificate"
+        android:id="@+id/takePhoto"
         style="@style/ButtomDialogButton"
-        android:text="@string/scan_certificate"
-        app:layout_constraintBottom_toTopOf="@id/importImage"
+        android:text="@string/take_photo"
+        app:layout_constraintBottom_toTopOf="@id/pickFromGallery"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/importImage"
+        android:id="@+id/pickFromGallery"
         style="@style/ButtomDialogButton"
-        android:text="@string/import_image"
-        app:layout_constraintBottom_toTopOf="@id/importPdf"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/scanCertificate" />
-
-    <TextView
-        android:id="@+id/importPdf"
-        style="@style/ButtomDialogButton"
-        android:text="@string/import_pdf"
+        android:text="@string/pick_from_gallery"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/importImage" />
+        app:layout_constraintTop_toBottomOf="@id/takePhoto" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
