@@ -678,6 +678,26 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/import/pdf/ImportPdfFragment.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/import/pdf/ImportPdfViewModel.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/importe/pdf/ImportPdfFragment.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/importe/pdf/ImportPdfViewModel.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/pick/PickImageFragment.kt">
           <value>
             <set />
@@ -1364,6 +1384,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/app/src/main/res/layout/fragment_certificates.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/layout/fragment_import_pdf.xml">
           <value>
             <set />
           </value>

@@ -92,6 +92,14 @@
             app:exitAnim="@animator/nav_default_exit_anim"
             app:popEnterAnim="@animator/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+        <action
+            android:id="@+id/action_certificatesFragment_to_importPdfFragment"
+            app:destination="@id/importPdfFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
     <dialog
@@ -118,7 +126,13 @@
         android:id="@+id/pickImageFragment"
         android:name="dgca.wallet.app.android.certificate.pick.image.PickImageFragment"
         android:label="@string/pick_image"
-        tools:layout="@layout/fragment_pick_image"></fragment>
+        tools:layout="@layout/fragment_pick_image" />
+
+    <fragment
+        android:id="@+id/importPdfFragment"
+        android:name="dgca.wallet.app.android.certificate.importe.pdf.ImportPdfFragment"
+        android:label="@string/import_pdf"
+        tools:layout="@layout/fragment_import_pdf" />
 
     <fragment
         android:id="@+id/codeReaderFragment"

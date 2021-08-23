@@ -30,7 +30,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -43,7 +42,6 @@ import dgca.wallet.app.android.MainActivity
 import dgca.wallet.app.android.databinding.FragmentCertificatesBinding
 import java.io.File
 import java.io.IOException
-import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
@@ -52,22 +50,6 @@ class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCard
     private val viewModel by viewModels<CertificatesViewModel>()
     private var _binding: FragmentCertificatesBinding? = null
     private val binding get() = _binding!!
-
-    val takePhoto = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { uri ->
-        return@registerForActivityResult
-    }
-
-    @Throws(IOException::class)
-    private fun createImageFile(): File {
-        // Create an image file name
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val storageDir: File = requireContext().filesDir
-        return File.createTempFile(
-            "JPEG_${timeStamp}_", /* prefix */
-            ".jpg", /* suffix */
-            File(storageDir, "images").apply { if (!isDirectory || !exists()) mkdirs() } /* directory */
-        )
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,14 +78,9 @@ class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCard
         setFragmentResultListener(AddNewBottomDialogFragment.REQUEST_KEY) { key, bundle ->
             findNavController().navigateUp()
             when (bundle.getInt(AddNewBottomDialogFragment.RESULT_KEY)) {
-                AddNewBottomDialogFragment.RESULT_SCAN_CODE -> {
-                    val action = CertificatesFragmentDirections.actionCertificatesFragmentToCodeReaderFragment()
-                    findNavController().navigate(action)
-                }
-                AddNewBottomDialogFragment.RESULT_IMPORT_IMAGE -> {
-                    val action = CertificatesFragmentDirections.actionCertificatesFragmentToImagePhotoDialogFragment()
-                    findNavController().navigate(action)
-                }
+                AddNewBottomDialogFragment.RESULT_SCAN_CODE -> showCodeReader()
+                AddNewBottomDialogFragment.RESULT_IMPORT_IMAGE -> showImportImage()
+                AddNewBottomDialogFragment.RESULT_IMPORT_PDF -> showImportPdf()
                 else -> throw IllegalStateException()
             }
         }
@@ -137,27 +114,19 @@ class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCard
         findNavController().navigate(action)
     }
 
-    private fun dispatchTakePictureIntent() {
-        // Create the File where the photo should go
-        val photoFile: File? = try {
-            createImageFile()
-        } catch (ex: IOException) {
-            null
-        }
-        // Continue only if the File was successfully created
-        photoFile?.also {
-            val photoURI: Uri = FileProvider.getUriForFile(
-                requireContext(),
-                requireContext().applicationContext.packageName + ".provider",
-                it
-            )
-            takePhoto.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply { putExtra(MediaStore.EXTRA_OUTPUT, photoURI) })
-        }
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    fun showCodeReader() {
+        val action = CertificatesFragmentDirections.actionCertificatesFragmentToCodeReaderFragment()
+        findNavController().navigate(action)
+    }
+
+    fun showImportImage() {
+        val action = CertificatesFragmentDirections.actionCertificatesFragmentToImagePhotoDialogFragment()
+        findNavController().navigate(action)
     }
 
     private fun showAddNewDialog() {
@@ -172,6 +141,11 @@ class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCard
 
     private fun showPickImage() {
         val action = CertificatesFragmentDirections.actionCertificatesFragmentToPickImageFragment()
+        findNavController().navigate(action)
+    }
+
+    private fun showImportPdf() {
+        val action = CertificatesFragmentDirections.actionCertificatesFragmentToImportPdfFragment()
         findNavController().navigate(action)
     }
 }

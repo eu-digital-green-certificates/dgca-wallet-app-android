@@ -1,6 +1,6 @@
 /*
  *  ---license-start
- *  eu-digital-green-certificates / dgca-verifier-app-android
+ *  eu-digital-green-certificates / dgca-wallet-app-android
  *  ---
  *  Copyright (C) 2021 T-Systems International GmbH and all other contributors
  *  ---
@@ -17,10 +17,10 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 8/23/21 8:46 AM
+ *  Created by osarapulov on 8/23/21 10:16 AM
  */
 
-package dgca.wallet.app.android.certificate.pick.image
+package dgca.wallet.app.android.certificate.importe.pdf
 
 import android.content.Context
 import android.net.Uri
@@ -38,7 +38,7 @@ import java.io.FileOutputStream
 import javax.inject.Inject
 
 @HiltViewModel
-class PickImageViewModel @Inject constructor(@ApplicationContext private val context: Context) : ViewModel() {
+class ImportPdfViewModel @Inject constructor(@ApplicationContext private val context: Context) : ViewModel() {
     private val _result = MutableLiveData<Boolean>()
     val result: LiveData<Boolean> = _result
 
@@ -50,7 +50,7 @@ class PickImageViewModel @Inject constructor(@ApplicationContext private val con
                     context.contentResolver.openInputStream(uri)?.use { inputStream ->
                         val file = File(
                             File(context.filesDir, "images").apply { if (!isDirectory || !exists()) mkdirs() },
-                            "${System.currentTimeMillis()}.jpg"
+                            "${System.currentTimeMillis()}.pdf"
                         )
                         FileOutputStream(file).use { outputStream ->
                             val buffer = ByteArray(8 * 1024)
