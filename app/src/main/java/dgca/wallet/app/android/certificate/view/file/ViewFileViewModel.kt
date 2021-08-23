@@ -22,6 +22,10 @@
 
 package dgca.wallet.app.android.certificate.view.file
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.pdf.PdfRenderer
+import android.os.ParcelFileDescriptor
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -39,6 +43,39 @@ class ViewFileViewModel @Inject constructor() : ViewModel() {
     private val _event = MutableLiveData<Event<ViewFileEvent>>()
     val event: LiveData<Event<ViewFileEvent>> = _event
 
+    private val _image = MutableLiveData<Bitmap?>()
+    val image: LiveData<Bitmap?> = _image
+
+    fun init(file: File, width: Double) {
+        viewModelScope.launch {
+            var bitmap: Bitmap? = null
+            withContext(Dispatchers.IO) {
+                bitmap = when (file.extension) {
+                    "jpeg" -> {
+                        BitmapFactory.decodeFile(file.absolutePath)
+                    }
+                    "pdf" -> {
+                        prepareBitmapFromPdf(file, width)
+                    }
+                    else -> throw IllegalArgumentException()
+                }
+            }
+            _image.value = bitmap
+        }
+    }
+
+    private fun prepareBitmapFromPdf(file: File, width: Double): Bitmap {
+        ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY).use { fd ->
+            PdfRenderer(fd).use { pdfRenderer ->
+                pdfRenderer.openPage(0).use { page ->
+                    return Bitmap.createBitmap(width.toInt(), (width * 1.2941).toInt(), Bitmap.Config.ARGB_8888).apply {
+                        page.render(this, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+                    }
+                }
+            }
+        }
+    }
+
     fun deleteFile(file: File) {
         viewModelScope.launch {
             var res: Boolean
@@ -51,5 +88,9 @@ class ViewFileViewModel @Inject constructor() : ViewModel() {
 
     sealed class ViewFileEvent {
         data class OnFileDeleted(val isDeleted: Boolean) : ViewFileEvent()
+    }
+
+    override fun onCleared() {
+        _image.value?.recycle()
     }
 }

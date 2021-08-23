@@ -23,6 +23,7 @@
 package dgca.wallet.app.android.certificate.view.file
 
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -42,6 +43,10 @@ class ViewFileFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        val displayMetrics = DisplayMetrics()
+        requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val minEdge = displayMetrics.widthPixels * 0.9
+        viewModel.init(args.file, minEdge)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -52,6 +57,12 @@ class ViewFileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.event.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { onViewModelEvent(it) }
+        }
+        viewModel.image.observe(viewLifecycleOwner) { bitmap ->
+            if (bitmap != null) {
+                binding.fileImage.setImageBitmap(bitmap)
+            }
+            binding.progressView.visibility = View.GONE
         }
     }
 
