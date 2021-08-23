@@ -17,10 +17,10 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 5/10/21 11:48 PM
+ *  Created by osarapulov on 8/23/21 1:54 PM
  */
 
-package dgca.wallet.app.android.certificate.view
+package dgca.wallet.app.android.certificate.view.certificate
 
 import android.graphics.Bitmap
 import androidx.lifecycle.LiveData

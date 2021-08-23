@@ -448,6 +448,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/build/generated/source/navigation-args/acc/debug/dgca/wallet/app/android/certificate/CertificatesFragmentDirections.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/build/generated/source/navigation-args/debug/dgca/wallet/app/android/certificate/CertificatesFragmentDirections.kt">
           <value>
             <set />
@@ -754,6 +759,46 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/view/ViewCertificateViewModel.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/view/certificate/DefaultShareImageIntentProvider.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/view/certificate/ViewCertificateFragment.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/view/certificate/ViewCertificateViewModel.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/view/certificate/validity/CertificateValidityFragment.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/view/certificate/validity/rules/RuleValidationResultMapper.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/view/certificate/validity/rules/RulesValidationFragment.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/view/file/ViewFileFragment.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/view/file/ViewFileViewModel.kt">
           <value>
             <set />
           </value>
@@ -1384,6 +1429,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/app/src/main/res/layout/fragment_certificates.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/layout/fragment_file_view.xml">
           <value>
             <set />
           </value>

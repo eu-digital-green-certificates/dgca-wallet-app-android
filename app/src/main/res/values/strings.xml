@@ -89,4 +89,5 @@
     <string name="pdfs">PDFs</string>
     <string name="pick_image">Pick Image</string>
     <string name="error_importing_file">Error importing file</string>
+    <string name="your_file">Your File</string>
 </resources>

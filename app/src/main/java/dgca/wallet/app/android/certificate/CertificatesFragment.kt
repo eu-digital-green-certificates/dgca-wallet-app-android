@@ -22,15 +22,11 @@
 
 package dgca.wallet.app.android.certificate
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
-import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -41,11 +37,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.MainActivity
 import dgca.wallet.app.android.databinding.FragmentCertificatesBinding
 import java.io.File
-import java.io.IOException
-import java.util.*
 
 @AndroidEntryPoint
-class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCardClickListener {
+class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCardClickListener,
+    CertificateCardsAdapter.FileCardClickListener {
 
     private val viewModel by viewModels<CertificatesViewModel>()
     private var _binding: FragmentCertificatesBinding? = null
@@ -99,7 +94,7 @@ class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCard
         if (certificatesCards.isNotEmpty()) {
             binding.certificatesView.setHasFixedSize(true)
             binding.certificatesView.layoutManager = LinearLayoutManager(requireContext())
-            binding.certificatesView.adapter = CertificateCardsAdapter(certificatesCards, this)
+            binding.certificatesView.adapter = CertificateCardsAdapter(certificatesCards, this, this)
             binding.certificatesView.visibility = View.VISIBLE
 
             binding.noAvailableOffersGroup.visibility = View.GONE
@@ -109,22 +104,17 @@ class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCard
         }
     }
 
-    override fun onCertificateCardClick(certificateId: Int) {
-        val action = CertificatesFragmentDirections.actionCertificatesFragmentToViewCertificateFragment(certificateId)
-        findNavController().navigate(action)
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
-    fun showCodeReader() {
+    private fun showCodeReader() {
         val action = CertificatesFragmentDirections.actionCertificatesFragmentToCodeReaderFragment()
         findNavController().navigate(action)
     }
 
-    fun showImportImage() {
+    private fun showImportImage() {
         val action = CertificatesFragmentDirections.actionCertificatesFragmentToImagePhotoDialogFragment()
         findNavController().navigate(action)
     }
@@ -146,6 +136,16 @@ class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCard
 
     private fun showImportPdf() {
         val action = CertificatesFragmentDirections.actionCertificatesFragmentToImportPdfFragment()
+        findNavController().navigate(action)
+    }
+
+    override fun onCertificateCardClick(certificateId: Int) {
+        val action = CertificatesFragmentDirections.actionCertificatesFragmentToViewCertificateFragment(certificateId)
+        findNavController().navigate(action)
+    }
+
+    override fun onFileCardClick(file: File) {
+        val action = CertificatesFragmentDirections.actionCertificatesFragmentToViewFileFragment(file)
         findNavController().navigate(action)
     }
 }

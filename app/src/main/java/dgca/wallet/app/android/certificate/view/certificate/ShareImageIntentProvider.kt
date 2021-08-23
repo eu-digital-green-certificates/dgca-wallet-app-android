@@ -20,19 +20,11 @@
  *  Created by osarapulov on 8/17/21 8:10 AM
  */
 
-package dgca.wallet.app.android.certificate.view
+package dgca.wallet.app.android.certificate.view.certificate
 
-import android.content.Context
 import android.content.Intent
-import android.net.Uri
-import androidx.core.content.FileProvider
 import java.io.File
-import javax.inject.Inject
 
-class DefaultShareImageIntentProvider @Inject constructor(private val context: Context) : ShareImageIntentProvider {
-    override fun getShareImageIntent(file: File): Intent = Intent(Intent.ACTION_SEND).apply {
-        type = "image/jpeg"
-        val uri: Uri = FileProvider.getUriForFile(context, context.applicationContext.packageName + ".provider", file)
-        putExtra(Intent.EXTRA_STREAM, uri)
-    }
+interface ShareImageIntentProvider {
+    fun getShareImageIntent(file: File): Intent
 }

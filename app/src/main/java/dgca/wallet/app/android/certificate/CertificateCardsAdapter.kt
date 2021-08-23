@@ -31,6 +31,7 @@ import dgca.wallet.app.android.databinding.CertificateCardFileBinding
 import dgca.wallet.app.android.databinding.CertificateCardHeaderBinding
 import dgca.wallet.app.android.databinding.CertificateCardViewBinding
 import dgca.wallet.app.android.formatWith
+import java.io.File
 
 enum class ViewType {
     HEADER_TYPE, CERTIFICATE_TYPE, FILE_TYPE
@@ -38,7 +39,8 @@ enum class ViewType {
 
 class CertificateCardsAdapter(
     private val certificatesCards: List<CertificatesCard>,
-    private val certificateCardClickListener: CertificateCardClickListener
+    private val certificateCardClickListener: CertificateCardClickListener,
+    private val fileCardClickListener: FileCardClickListener
 ) :
     RecyclerView.Adapter<CertificateCardsAdapter.ViewHolder>() {
 
@@ -58,6 +60,7 @@ class CertificateCardsAdapter(
                     is CertificatesCard.CertificatesHeader -> binding.title.setText(R.string.certificates)
                     is CertificatesCard.ImagesHeader -> binding.title.setText(R.string.images)
                     is CertificatesCard.PdfsHeader -> binding.title.setText(R.string.pdfs)
+                    else -> throw IllegalArgumentException()
                 }
             }
         }
@@ -90,9 +93,13 @@ class CertificateCardsAdapter(
         class FileViewHolder(itemView: View) : ViewHolder(itemView) {
             private val binding = CertificateCardFileBinding.bind(itemView)
 
-            fun bind(fileCard: CertificatesCard.FileCard) {
+            fun bind(
+                fileCard: CertificatesCard.FileCard,
+                fileCardClickListener: FileCardClickListener
+            ) {
                 binding.titleView.text = fileCard.file.name
                 binding.scannedAtDateView.text = fileCard.dateTaken.formatWith(YEAR_MONTH_DAY)
+                binding.root.setOnClickListener { fileCardClickListener.onFileCardClick(fileCard.file) }
             }
         }
     }
@@ -127,7 +134,10 @@ class CertificateCardsAdapter(
                 certificatesCards[position] as CertificatesCard.CertificateCard,
                 certificateCardClickListener
             )
-            is ViewHolder.FileViewHolder -> holder.bind(certificatesCards[position] as CertificatesCard.FileCard)
+            is ViewHolder.FileViewHolder -> holder.bind(
+                certificatesCards[position] as CertificatesCard.FileCard,
+                fileCardClickListener
+            )
         }
 
     }
@@ -138,5 +148,9 @@ class CertificateCardsAdapter(
 
     interface CertificateCardClickListener {
         fun onCertificateCardClick(certificateId: Int)
+    }
+
+    interface FileCardClickListener {
+        fun onFileCardClick(file: File)
     }
 }

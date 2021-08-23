@@ -17,16 +17,20 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 6/18/21 8:59 AM
+ *  Created by osarapulov on 6/18/21 9:12 AM
  */
 
-package dgca.wallet.app.android.certificate.view.validity.rules
+package dgca.wallet.app.android.certificate.view.certificate.validity.rules
 
-import dgca.verifier.app.engine.Result
+import android.content.Context
+import dgca.verifier.app.engine.ValidationResult
+import java.util.*
 
-data class RuleValidationResultCard(
-    val description: String,
-    val result: Result,
-    val current: String,
-    val countryIsoCode: String
-)
+fun ValidationResult.toRuleValidationResultCard(context: Context): RuleValidationResultCard {
+    return RuleValidationResultCard(
+        this.rule.getDescriptionFor(Locale.getDefault().language),
+        this.result,
+        this.current,
+        this.rule.countryCode
+    )
+}

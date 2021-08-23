@@ -17,10 +17,10 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 5/11/21 2:35 PM
+ *  Created by osarapulov on 8/23/21 1:54 PM
  */
 
-package dgca.wallet.app.android.certificate.view
+package dgca.wallet.app.android.certificate.view.certificate
 
 import android.content.Intent
 import android.os.Bundle
@@ -37,6 +37,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.R
 import dgca.wallet.app.android.certificate.claim.CertListAdapter
 import dgca.wallet.app.android.certificate.claim.bindText
+import dgca.wallet.app.android.certificate.view.certificate.ViewCertificateFragmentArgs
+import dgca.wallet.app.android.certificate.view.certificate.ViewCertificateFragmentDirections
 import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.getCertificateListData
 import dgca.wallet.app.android.databinding.FragmentCertificateViewBinding
