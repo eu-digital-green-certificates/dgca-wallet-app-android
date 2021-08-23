@@ -82,21 +82,28 @@ class ClaimCertificateViewModel @Inject constructor(
         viewModelScope.launch {
             _inProgress.value = true
             withContext(Dispatchers.IO) {
-                getCertificate(qrCodeText)
+                val verificationResult = VerificationResult()
+                val plainInput = prefixValidationService.decode(qrCodeText, verificationResult)
+                val compressedCose = base45Service.decode(plainInput, verificationResult)
+                val coseResult: ByteArray? = compressorService.decode(compressedCose, verificationResult)
+
+                if (coseResult == null) {
+                    Timber.d("Verification failed: Too many bytes read")
+                    return@withContext
+                }
+                cose = coseResult
+
+                val coseData = coseService.decode(cose, verificationResult)
+                if (coseData == null) {
+                    Timber.d("Verification failed: COSE not decoded")
+                    return@withContext
+                }
+
+                schemaValidator.validate(coseData.cbor, verificationResult)
+                greenCertificate = cborService.decode(coseData.cbor, verificationResult)
             }
             _inProgress.value = false
             _certificate.value = greenCertificate?.toCertificateModel()
-        }
-    }
-
-    fun verifyAndStore(qrCodeText: String, tan: String) {
-        viewModelScope.launch {
-            _inProgress.value = true
-            withContext(Dispatchers.IO) {
-                getCertificate(qrCodeText)
-                save(qrCodeText, tan)
-            }
-            _inProgress.value = false
         }
     }
 
@@ -149,28 +156,6 @@ class ClaimCertificateViewModel @Inject constructor(
             claimResult?.success?.let { _event.value = Event(ClaimCertEvent.OnCertClaimed(true)) }
             claimResult?.error?.let { _event.value = Event(ClaimCertEvent.OnCertNotClaimed(it.details)) }
         }
-    }
-
-    private fun getCertificate(qrCodeText: String) {
-        val verificationResult = VerificationResult()
-        val plainInput = prefixValidationService.decode(qrCodeText, verificationResult)
-        val compressedCose = base45Service.decode(plainInput, verificationResult)
-        val coseResult: ByteArray? = compressorService.decode(compressedCose, verificationResult)
-
-        if (coseResult == null) {
-            Timber.d("Verification failed: Too many bytes read")
-            return
-        }
-        cose = coseResult
-
-        val coseData = coseService.decode(cose, verificationResult)
-        if (coseData == null) {
-            Timber.d("Verification failed: COSE not decoded")
-            return
-        }
-
-        schemaValidator.validate(coseData.cbor, verificationResult)
-        greenCertificate = cborService.decode(coseData.cbor, verificationResult)
     }
 
     sealed class ClaimCertEvent {
