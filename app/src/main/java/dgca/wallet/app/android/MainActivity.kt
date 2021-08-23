@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -64,16 +65,18 @@ class MainActivity : AppCompatActivity() {
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
 
         setSupportActionBar(binding.toolbar)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.certificatesFragment) {
+                checkNdefMessage(intent)
+            }
+        }
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        if (NfcAdapter.ACTION_NDEF_DISCOVERED == intent.action) {
-            intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)?.also { rawMessages ->
-                val messages: List<NdefMessage> = rawMessages.map { it as NdefMessage }
-                parseNdefMessages(messages)
-            }
-        }
+
+        checkNdefMessage(intent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -92,12 +95,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+
     fun clearBackground() {
         window.setBackgroundDrawable(ContextCompat.getDrawable(this, R.color.white))
     }
 
     fun disableBackButton() {
         binding.toolbar.navigationIcon = null
+    }
+
+    private fun checkNdefMessage(intent: Intent) {
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED == intent.action) {
+            intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)?.also { rawMessages ->
+                val messages: List<NdefMessage> = rawMessages.map { it as NdefMessage }
+                parseNdefMessages(messages)
+                intent.removeExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)
+            }
+        }
     }
 
     private fun parseNdefMessages(messages: List<NdefMessage>) {
