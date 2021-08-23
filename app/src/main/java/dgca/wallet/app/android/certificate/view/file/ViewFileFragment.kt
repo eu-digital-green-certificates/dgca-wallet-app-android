@@ -22,6 +22,7 @@
 
 package dgca.wallet.app.android.certificate.view.file
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.*
@@ -31,7 +32,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.R
+import dgca.wallet.app.android.certificate.view.certificate.ShareImageIntentProvider
 import dgca.wallet.app.android.databinding.FragmentFileViewBinding
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ViewFileFragment : Fragment() {
@@ -39,6 +42,9 @@ class ViewFileFragment : Fragment() {
     private val viewModel by viewModels<ViewFileViewModel>()
     private var _binding: FragmentFileViewBinding? = null
     private val binding get() = _binding!!
+
+    @Inject
+    lateinit var shareImageIntentProvider: ShareImageIntentProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +70,7 @@ class ViewFileFragment : Fragment() {
             }
             binding.progressView.visibility = View.GONE
         }
+        binding.share.setOnClickListener { launchSharing() }
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -85,5 +92,14 @@ class ViewFileFragment : Fragment() {
         when (event) {
             is ViewFileViewModel.ViewFileEvent.OnFileDeleted -> findNavController().popBackStack()
         }
+    }
+
+    private fun launchSharing() {
+        startActivity(
+            Intent.createChooser(
+                shareImageIntentProvider.getShareImageIntent(args.file),
+                getString(R.string.share)
+            )
+        )
     }
 }

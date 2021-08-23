@@ -75,27 +75,14 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
-            android:id="@+id/shareImage"
+            android:id="@+id/share"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/blue"
             android:minWidth="130dp"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:text="@string/share_image"
-            android:textAllCaps="false"
-            android:textColor="@color/white" />
-
-        <Button
-            android:id="@+id/sharePdf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/blue"
-            android:minWidth="130dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:text="@string/share_pdf"
+            android:text="@string/share"
             android:textAllCaps="false"
             android:textColor="@color/white" />
 
