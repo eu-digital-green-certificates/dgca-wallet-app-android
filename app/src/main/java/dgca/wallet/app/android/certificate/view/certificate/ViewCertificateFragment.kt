@@ -49,7 +49,6 @@ import dgca.wallet.app.android.nfc.DCCApduService
 import dgca.wallet.app.android.nfc.DCCApduService.Companion.NFC_NDEF_KEY
 import dgca.wallet.app.android.nfc.showTurnOnNfcDialog
 import timber.log.Timber
-import java.io.File
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -208,7 +207,7 @@ class ViewCertificateFragment : BindingFragment<FragmentCertificateViewBinding>(
     }
 
     private fun initNfcService() {
-        val certificate = viewModel.certificate.value?.certificateCard
+        val certificate = viewModel.certificate.value?.certificatesCard
         val intent = Intent(requireContext(), DCCApduService::class.java)
         intent.putExtra(NFC_NDEF_KEY, certificate?.qrCodeText)
         requireContext().startService(intent)

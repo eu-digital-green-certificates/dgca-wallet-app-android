@@ -28,6 +28,9 @@
     <TextView
         android:id="@+id/scanCertificate"
         style="@style/ButtomDialogButton"
+        android:gravity="center_vertical"
+        android:minHeight="48dp"
+        android:paddingHorizontal="16dp"
         android:text="@string/scan_certificate"
         app:layout_constraintBottom_toTopOf="@id/importImage"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,6 +40,8 @@
     <TextView
         android:id="@+id/importImage"
         style="@style/ButtomDialogButton"
+        android:gravity="center_vertical"
+        android:minHeight="48dp"
         android:text="@string/import_image"
         app:layout_constraintBottom_toTopOf="@id/importPdf"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,6 +51,8 @@
     <TextView
         android:id="@+id/importPdf"
         style="@style/ButtomDialogButton"
+        android:gravity="center_vertical"
+        android:minHeight="48dp"
         android:text="@string/import_pdf"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

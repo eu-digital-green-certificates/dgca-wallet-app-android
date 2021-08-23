@@ -28,7 +28,7 @@ import android.nfc.NdefMessage
 import android.nfc.NdefRecord
 import android.nfc.cardemulation.HostApduService
 import android.os.Bundle
-import dgca.wallet.app.android.certificate.view.ViewCertificateFragment
+import dgca.wallet.app.android.certificate.view.certificate.ViewCertificateFragment
 import timber.log.Timber
 import java.io.UnsupportedEncodingException
 import java.math.BigInteger

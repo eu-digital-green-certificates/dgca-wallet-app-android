@@ -61,7 +61,6 @@
     <string name="passed">Passed</string>
     <string name="failed">Failed</string>
     <string name="open">Open</string>
-    <string name="negative">Negative</string>
     <string name="rule">Rule</string>
     <string name="passed_for">Passed for %1$s (see settings)</string>
     <string name="open_for">Open for %1$s (see settings)</string>
@@ -97,9 +96,7 @@
     <string name="nfc_turn_on_message">You need turn on NFC module for scanning. Wish turn on it now?</string>
     <string name="nfc_turn_on_positive">Turn on</string>
     <string name="nfc_turn_on_negative">Dismiss</string>
-    <string name="nfc_service_enabled">Service enabled</string>
-    <string name="nfc_service_disabled">Service disabled</string>
-
-    <string name="nfc_import_reader_enabled">Import NFC reader enabled</string>
-    <string name="nfc_import_reader_disabled">Import NFC reader disabled</string>
+    <string name="nfc_service_enabled">NFC Service enabled</string>
+    <string name="nfc_service_disabled">NFC Service disabled</string>
+    <string name="nfc_status_ok">NFC status ok</string>
 </resources>
