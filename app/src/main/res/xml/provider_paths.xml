@@ -25,4 +25,7 @@
     <files-path
         name="myimages"
         path="images/" />
+    <files-path
+        name="temp"
+        path="temp/" />
 </paths>
