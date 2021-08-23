@@ -24,7 +24,7 @@ package dgca.wallet.app.android.data
 
 import dgca.verifier.app.decoder.CertificateDecoder
 import dgca.verifier.app.decoder.CertificateDecodingResult
-import dgca.wallet.app.android.certificate.CertificateCard
+import dgca.wallet.app.android.certificate.CertificatesCard
 import dgca.wallet.app.android.data.local.CertificateDao
 import dgca.wallet.app.android.data.local.CertificateEntity
 import dgca.wallet.app.android.data.local.toCertificateModel
@@ -61,7 +61,7 @@ class WalletRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getCertificates(): List<CertificateCard>? {
+    override suspend fun getCertificates(): List<CertificatesCard.CertificateCard>? {
         return execute {
             certificateDao.getAll()
                 .map { encryptedCertificate -> decodeCertificate(encryptedCertificate) }
@@ -71,7 +71,7 @@ class WalletRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getCertificatesById(certificateId: Int): CertificateCard? {
+    override suspend fun getCertificatesById(certificateId: Int): CertificatesCard.CertificateCard? {
         return execute {
             certificateDao.getById(certificateId)?.let { certificateEntity ->
                 decodeCertificate(certificateEntity).let {
@@ -101,8 +101,8 @@ class WalletRepositoryImpl @Inject constructor(
         return Pair(certificate, certificateDecoder.decodeCertificate(certificate.qrCodeText))
     }
 
-    private fun Pair<CertificateEntity, CertificateDecodingResult.Success>.toCertificateCard(): CertificateCard {
+    private fun Pair<CertificateEntity, CertificateDecodingResult.Success>.toCertificateCard(): CertificatesCard.CertificateCard {
         val certificateModel = this.second.greenCertificate.toCertificateModel()
-        return CertificateCard(this.first, certificateModel)
+        return CertificatesCard.CertificateCard(this.first, certificateModel)
     }
 }

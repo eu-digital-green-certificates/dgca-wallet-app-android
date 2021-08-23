@@ -17,22 +17,20 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 8/17/21 8:10 AM
+ *  Created by osarapulov on 6/18/21 9:12 AM
  */
 
-package dgca.wallet.app.android.certificate.view
+package dgca.wallet.app.android.certificate.view.certificate.validity.rules
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import androidx.core.content.FileProvider
-import java.io.File
-import javax.inject.Inject
+import dgca.verifier.app.engine.ValidationResult
+import java.util.*
 
-class DefaultShareImageIntentProvider @Inject constructor(private val context: Context) : ShareImageIntentProvider {
-    override fun getShareImageIntent(file: File): Intent = Intent(Intent.ACTION_SEND).apply {
-        type = "image/jpeg"
-        val uri: Uri = FileProvider.getUriForFile(context, context.applicationContext.packageName + ".provider", file)
-        putExtra(Intent.EXTRA_STREAM, uri)
-    }
+fun ValidationResult.toRuleValidationResultCard(context: Context): RuleValidationResultCard {
+    return RuleValidationResultCard(
+        this.rule.getDescriptionFor(Locale.getDefault().language),
+        this.result,
+        this.current,
+        this.rule.countryCode
+    )
 }

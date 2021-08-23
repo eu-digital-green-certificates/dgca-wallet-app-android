@@ -27,8 +27,6 @@ s
 Capp/src/main/java/dgca/wallet/app/android/data/local/Preferences.kt,7/9/7928cde8577ad1bfbb7da03134e8a692a42297ee
 ‡
 Wapp/src/main/java/dgca/wallet/app/android/certificate/view/validity/CountriesAdapter.kt,b/7/b7b4e72c0e1546d9d0ed4f0ec3d2d5056db1d21f
-x
-Happ/src/main/java/dgca/wallet/app/android/certificate/CertificateCard.kt,5/e/5e949daec43a2e86b01881aa7d2ff98777ebd12c
 w
 Gapp/src/main/java/dgca/wallet/app/android/worker/CountriesLoadWorker.kt,2/b/2b1030d1dabb650c75d5c5492980b866a1927c75
 w
@@ -81,3 +79,15 @@ W
 'app/src/tst/assets/wallet-context.jsonc,2/f/2f8371ba41afcb67d9051946cc189a09643637be
 F
 app/proguard-rules.pro,9/e/9e08934d811afe28fbc77aaa3c0d747b94348db9
+d
+4app/src/main/java/dgca/wallet/app/android/TimeExt.kt,6/d/6d8160a8010fc08e96179aa7feab24b7ce639223
+y
+Iapp/src/main/java/dgca/wallet/app/android/certificate/CertificatesCard.kt,e/b/ebccb03e1edf4e352b408fed7c4a8c67fd2c1e47
+~
+Napp/src/main/java/dgca/wallet/app/android/certificate/CertificatesViewModel.kt,1/4/14043f5d901a0c07be5487d3acdea1ad3a95e17a
+†
+Vapp/src/main/java/dgca/wallet/app/android/certificate/import/pdf/ImportPdfViewModel.kt,a/4/a441f2119a7c3cef7a83082973044efced9ff925
+…
+Uapp/src/main/java/dgca/wallet/app/android/certificate/pick/image/PickImageFragment.kt,9/f/9f33fb825dd5f9727c821f7469c2a1d5bebae026
+…
+Uapp/src/main/java/dgca/wallet/app/android/certificate/import/pdf/ImportPdfFragment.kt,2/9/29f5d96622568eb64493d26f3cae8f645f0f7450

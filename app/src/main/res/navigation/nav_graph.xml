@@ -70,14 +70,85 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
         <action
+            android:id="@+id/action_certificatesFragment_to_viewFileFragment"
+            app:destination="@id/viewFileFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+        <action
+            android:id="@+id/action_certificatesFragment_to_addNewDialogFragment"
+            app:destination="@id/addNewDialogFragment" />
+
+        <action
+            android:id="@+id/action_certificatesFragment_to_imagePhotoDialogFragment"
+            app:destination="@id/imagePhotoDialogFragment" />
+
+        <action
+            android:id="@+id/action_certificatesFragment_to_takePhotoFragment"
+            app:destination="@id/takePhotoFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+        <action
+            android:id="@+id/action_certificatesFragment_to_pickImageFragment"
+            app:destination="@id/pickImageFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+        <action
+            android:id="@+id/action_certificatesFragment_to_importPdfFragment"
+            app:destination="@id/importPdfFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+        <action
             android:id="@+id/action_certificatesFragment_to_claimCertificateFragment"
             app:destination="@id/claimCertificateFragment"
             app:enterAnim="@animator/nav_default_pop_enter_anim"
             app:exitAnim="@animator/nav_default_exit_anim"
             app:popEnterAnim="@animator/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/addNewDialogFragment"
+        android:name="dgca.wallet.app.android.certificate.AddNewBottomDialogFragment"
+        android:label="Add New"
+        tools:layout="@layout/dialog_fragment_add_new" />
+
+    <dialog
+        android:id="@+id/imagePhotoDialogFragment"
+        android:name="dgca.wallet.app.android.certificate.ImportImageDialogFragment"
+        android:label="Import Image"
+        tools:layout="@layout/dialog_fragment_import_image" />
+
+    <fragment
+        android:id="@+id/takePhotoFragment"
+        android:name="dgca.wallet.app.android.certificate.take.photo.TakePhotoFragment"
+        android:label="@string/take_photo"
+        tools:layout="@layout/fragment_take_photo">
 
     </fragment>
+
+    <fragment
+        android:id="@+id/pickImageFragment"
+        android:name="dgca.wallet.app.android.certificate.pick.image.PickImageFragment"
+        android:label="@string/pick_image"
+        tools:layout="@layout/fragment_pick_image" />
+
+    <fragment
+        android:id="@+id/importPdfFragment"
+        android:name="dgca.wallet.app.android.certificate.importe.pdf.ImportPdfFragment"
+        android:label="@string/import_pdf"
+        tools:layout="@layout/fragment_import_pdf" />
 
     <fragment
         android:id="@+id/codeReaderFragment"
@@ -97,7 +168,7 @@
 
     <fragment
         android:id="@+id/viewCertificateFragment"
-        android:name="dgca.wallet.app.android.certificate.view.ViewCertificateFragment"
+        android:name="dgca.wallet.app.android.certificate.view.certificate.ViewCertificateFragment"
         android:label="@string/your_certificate"
         tools:layout="@layout/fragment_certificate_view">
 
@@ -114,9 +185,21 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
+
+    <fragment
+        android:id="@+id/viewFileFragment"
+        android:name="dgca.wallet.app.android.certificate.view.file.ViewFileFragment"
+        android:label="@string/your_file"
+        tools:layout="@layout/fragment_file_view">
+
+        <argument
+            android:name="file"
+            app:argType="java.io.File" />
+    </fragment>
+
     <fragment
         android:id="@+id/certificateValidityFragment"
-        android:name="dgca.wallet.app.android.certificate.view.validity.CertificateValidityFragment"
+        android:name="dgca.wallet.app.android.certificate.view.certificate.validity.CertificateValidityFragment"
         android:label="@string/country_rules_validation"
         tools:layout="@layout/fragment_validity_certificate">
 
@@ -135,7 +218,7 @@
 
     <fragment
         android:id="@+id/rulesValidationFragment"
-        android:name="dgca.wallet.app.android.certificate.view.validity.rules.RulesValidationFragment"
+        android:name="dgca.wallet.app.android.certificate.view.certificate.validity.rules.RulesValidationFragment"
         android:label="@string/country_rules_validation"
         tools:layout="@layout/fragment_rules_validatation">
 

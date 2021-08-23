@@ -10,7 +10,7 @@
     <string name="certificate_wallet">Certificate Wallet</string>
     <string name="no_certificate_available">No Certificate available</string>
     <string name="click_span_code_to_add_to_your_wallet">Click Scan Code to add to your Wallet.</string>
-    <string name="scan_code">Scan Code</string>
+    <string name="add_new">Add New</string>
     <string name="check_validity">Check Validity</string>
     <string name="i_agree_check_validity">I agree, check validity</string>
     <string name="vaccination">Vaccination %1$s of %2$s</string>
@@ -78,9 +78,19 @@
     <string name="check_the_tan_and_try_again">Check the TAN and try again</string>
     <string name="share_image">Share Image</string>
     <string name="share_pdf">Share PDF</string>
-    <string name="share_image_title">Share Image</string>
-    <string name="share_pdf_title">Share PDF</string>
+    <string name="share">Share</string>
     <string name="file_preparation_error">File preparation failed</string>
+    <string name="scan_certificate">Scan certificate</string>
+    <string name="import_image">Import image</string>
+    <string name="import_pdf">Import PDF</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="pick_from_gallery">Pick From Gallery</string>
+    <string name="certificates">Certificates</string>
+    <string name="images">Images</string>
+    <string name="pdfs">PDFs</string>
+    <string name="pick_image">Pick Image</string>
+    <string name="error_importing_file">Error importing file</string>
+    <string name="your_file">Your File</string>
 
     <string name="no_nfc">There is no NFC module on this device</string>
     <string name="nfc_turn_on_title">NFC is turned off.</string>

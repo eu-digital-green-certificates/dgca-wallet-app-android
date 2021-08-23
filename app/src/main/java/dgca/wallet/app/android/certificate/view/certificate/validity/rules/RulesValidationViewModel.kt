@@ -20,7 +20,7 @@
  *  Created by osarapulov on 7/13/21 1:45 PM
  */
 
-package dgca.wallet.app.android.certificate.view.validity.rules
+package dgca.wallet.app.android.certificate.view.certificate.validity.rules
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

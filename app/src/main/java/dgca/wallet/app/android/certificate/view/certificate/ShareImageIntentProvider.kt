@@ -17,21 +17,14 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 6/18/21 9:12 AM
+ *  Created by osarapulov on 8/17/21 8:10 AM
  */
 
-package dgca.wallet.app.android.certificate.view.validity.rules
+package dgca.wallet.app.android.certificate.view.certificate
 
-import android.content.Context
-import dgca.verifier.app.engine.ValidationResult
-import dgca.wallet.app.android.certificate.view.validity.rules.RuleValidationResultCard
-import java.util.*
+import android.content.Intent
+import java.io.File
 
-fun ValidationResult.toRuleValidationResultCard(context: Context): RuleValidationResultCard {
-    return RuleValidationResultCard(
-        this.rule.getDescriptionFor(Locale.getDefault().language),
-        this.result,
-        this.current,
-        this.rule.countryCode
-    )
+interface ShareImageIntentProvider {
+    fun getShareImageIntent(file: File): Intent
 }
