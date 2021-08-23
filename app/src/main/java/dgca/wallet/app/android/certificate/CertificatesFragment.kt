@@ -29,15 +29,18 @@ import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.MainActivity
 import dgca.wallet.app.android.databinding.FragmentCertificatesBinding
+import java.io.File
 
 @AndroidEntryPoint
-class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCardClickListener {
+class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCardClickListener,
+    CertificateCardsAdapter.FileCardClickListener {
 
     private val viewModel by viewModels<CertificatesViewModel>()
     private var _binding: FragmentCertificatesBinding? = null
@@ -57,10 +60,7 @@ class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCard
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { requireActivity().finish() }
-        binding.scanCode.setOnClickListener {
-            val action = CertificatesFragmentDirections.actionCertificatesFragmentToCodeReaderFragment()
-            findNavController().navigate(action)
-        }
+        binding.scanCode.setOnClickListener { showAddNewDialog() }
 
         viewModel.certificates.observe(viewLifecycleOwner, {
             setCertificateCards(it)
@@ -69,13 +69,32 @@ class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCard
             binding.progressView.isVisible = it
         })
         viewModel.fetchCertificates()
+
+        setFragmentResultListener(AddNewBottomDialogFragment.REQUEST_KEY) { key, bundle ->
+            findNavController().navigateUp()
+            when (bundle.getInt(AddNewBottomDialogFragment.RESULT_KEY)) {
+                AddNewBottomDialogFragment.RESULT_SCAN_CODE -> showCodeReader()
+                AddNewBottomDialogFragment.RESULT_IMPORT_IMAGE -> showImportImage()
+                AddNewBottomDialogFragment.RESULT_IMPORT_PDF -> showImportPdf()
+                else -> throw IllegalStateException()
+            }
+        }
+
+        setFragmentResultListener(ImportImageDialogFragment.REQUEST_KEY) { key, bundle ->
+            findNavController().navigateUp()
+            when (bundle.getInt(ImportImageDialogFragment.RESULT_KEY)) {
+                ImportImageDialogFragment.RESULT_TAKE_PHOTO -> showTakePhoto()
+                ImportImageDialogFragment.RESULT_PICK_FROM_GALLERY -> showPickImage()
+                else -> throw IllegalStateException()
+            }
+        }
     }
 
-    private fun setCertificateCards(certificateCards: List<CertificateCard>) {
-        if (certificateCards.isNotEmpty()) {
+    private fun setCertificateCards(certificatesCards: List<CertificatesCard>) {
+        if (certificatesCards.isNotEmpty()) {
             binding.certificatesView.setHasFixedSize(true)
             binding.certificatesView.layoutManager = LinearLayoutManager(requireContext())
-            binding.certificatesView.adapter = CertificateCardsAdapter(certificateCards, this)
+            binding.certificatesView.adapter = CertificateCardsAdapter(certificatesCards, this, this)
             binding.certificatesView.visibility = View.VISIBLE
 
             binding.noAvailableOffersGroup.visibility = View.GONE
@@ -85,13 +104,48 @@ class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCard
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun showCodeReader() {
+        val action = CertificatesFragmentDirections.actionCertificatesFragmentToCodeReaderFragment()
+        findNavController().navigate(action)
+    }
+
+    private fun showImportImage() {
+        val action = CertificatesFragmentDirections.actionCertificatesFragmentToImagePhotoDialogFragment()
+        findNavController().navigate(action)
+    }
+
+    private fun showAddNewDialog() {
+        val action = CertificatesFragmentDirections.actionCertificatesFragmentToAddNewDialogFragment()
+        findNavController().navigate(action)
+    }
+
+    private fun showTakePhoto() {
+        val action = CertificatesFragmentDirections.actionCertificatesFragmentToTakePhotoFragment()
+        findNavController().navigate(action)
+    }
+
+    private fun showPickImage() {
+        val action = CertificatesFragmentDirections.actionCertificatesFragmentToPickImageFragment()
+        findNavController().navigate(action)
+    }
+
+    private fun showImportPdf() {
+        val action = CertificatesFragmentDirections.actionCertificatesFragmentToImportPdfFragment()
+        findNavController().navigate(action)
+    }
+
     override fun onCertificateCardClick(certificateId: Int) {
         val action = CertificatesFragmentDirections.actionCertificatesFragmentToViewCertificateFragment(certificateId)
         findNavController().navigate(action)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    override fun onFileCardClick(file: File) {
+        val action = CertificatesFragmentDirections.actionCertificatesFragmentToViewFileFragment(file)
+        findNavController().navigate(action)
     }
 }

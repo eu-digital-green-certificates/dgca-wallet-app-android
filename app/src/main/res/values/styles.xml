@@ -48,4 +48,13 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/text_size_medium</item>
     </style>
+
+    <style name="ButtomDialogButton" parent="Widget.MaterialComponents.TextView">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/default_half_margin</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
 </resources>

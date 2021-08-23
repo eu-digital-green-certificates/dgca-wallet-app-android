@@ -34,6 +34,7 @@ object Deps {
     const val androidx_constraint = "androidx.constraintlayout:constraintlayout:${Versions.androidx_constraint}"
     const val androidx_navigation_fragment = "androidx.navigation:navigation-fragment-ktx:${Versions.androidx_navigation}"
     const val androidx_navigation_ui = "androidx.navigation:navigation-ui-ktx:${Versions.androidx_navigation}"
+    const val androidx_fragment_ktx = "androidx.fragment:fragment-ktx:${Versions.androidx_fragment_ktx}"
     const val room_runtime = "androidx.room:room-runtime:${Versions.androidx_room}"
     const val androidx_worker_ktx = "androidx.work:work-runtime-ktx:${Versions.androidx_worker_ktx}"
     const val room_compiler = "androidx.room:room-compiler:${Versions.androidx_room}"

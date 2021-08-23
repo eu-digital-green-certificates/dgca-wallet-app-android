@@ -74,6 +74,7 @@ dependencies {
     implementation Deps.androidx_constraint
     implementation Deps.androidx_navigation_fragment
     implementation Deps.androidx_navigation_ui
+    implementation Deps.androidx_fragment_ktx
     implementation Deps.room_runtime
     implementation Deps.androidx_worker_ktx
     implementation Deps.room_ktx

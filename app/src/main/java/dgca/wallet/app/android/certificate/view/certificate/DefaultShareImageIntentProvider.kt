@@ -17,27 +17,22 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 5/11/21 12:20 AM
+ *  Created by osarapulov on 8/23/21 1:54 PM
  */
 
-package dgca.wallet.app.android.certificate
+package dgca.wallet.app.android.certificate.view.certificate
 
-import dgca.wallet.app.android.data.CertificateModel
-import dgca.wallet.app.android.data.local.CertificateEntity
-import java.time.LocalDate
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import androidx.core.content.FileProvider
+import java.io.File
+import javax.inject.Inject
 
-data class CertificateCard(
-    val certificateId: Int,
-    val qrCodeText: String,
-    val certificate: CertificateModel,
-    val tan: String,
-    val dateTaken: LocalDate
-) {
-    constructor(certificateEntity: CertificateEntity, certificateModel: CertificateModel) : this(
-        certificateEntity.id,
-        certificateEntity.qrCodeText,
-        certificateModel,
-        certificateEntity.tan,
-        certificateEntity.dateAdded
-    )
+class DefaultShareImageIntentProvider @Inject constructor(private val context: Context) : ShareImageIntentProvider {
+    override fun getShareImageIntent(file: File): Intent = Intent(Intent.ACTION_SEND).apply {
+        type = "image/jpeg"
+        val uri: Uri = FileProvider.getUriForFile(context, context.applicationContext.packageName + ".provider", file)
+        putExtra(Intent.EXTRA_STREAM, uri)
+    }
 }

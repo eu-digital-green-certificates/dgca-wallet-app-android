@@ -17,10 +17,10 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 5/11/21 2:35 PM
+ *  Created by osarapulov on 8/23/21 1:54 PM
  */
 
-package dgca.wallet.app.android.certificate.view
+package dgca.wallet.app.android.certificate.view.certificate
 
 import android.content.Intent
 import android.os.Bundle
@@ -40,7 +40,6 @@ import dgca.wallet.app.android.certificate.claim.bindText
 import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.getCertificateListData
 import dgca.wallet.app.android.databinding.FragmentCertificateViewBinding
-import java.io.File
 import javax.inject.Inject
 
 
@@ -78,7 +77,7 @@ class ViewCertificateFragment : Fragment() {
 
         viewModel.inProgress.observe(viewLifecycleOwner, { binding.progressView.isVisible = it })
         viewModel.certificate.observe(viewLifecycleOwner, {
-            val certificate = it.certificateCard.certificate
+            val certificate = it.certificatesCard.certificate
             binding.title.text = when {
                 certificate.vaccinations?.first() != null -> binding.root.resources.getString(
                     R.string.vaccination,
@@ -91,7 +90,7 @@ class ViewCertificateFragment : Fragment() {
             }
 
             binding.qrCode.setImageBitmap(it.qrCode)
-            binding.tan.text = getString(R.string.tan_placeholder, it.certificateCard.tan)
+            binding.tan.text = getString(R.string.tan_placeholder, it.certificatesCard.tan)
             showUserData(certificate)
             adapter.update(certificate.getCertificateListData())
         })
@@ -102,7 +101,7 @@ class ViewCertificateFragment : Fragment() {
         }
         viewModel.setCertificateId(args.certificateId, minEdge.toInt())
         binding.checkValidity.setOnClickListener {
-            viewModel.certificate.value?.certificateCard?.qrCodeText?.let {
+            viewModel.certificate.value?.certificatesCard?.qrCodeText?.let {
                 val action = ViewCertificateFragmentDirections.actionViewCertificateFragmentToCertificateValidityFragment(it)
                 findNavController().navigate(action)
             }
@@ -110,23 +109,11 @@ class ViewCertificateFragment : Fragment() {
         binding.shareImage.setOnClickListener { viewModel.shareImage(requireContext().filesDir) }
         binding.sharePdf.setOnClickListener { viewModel.sharePdf(requireContext().filesDir) }
         viewModel.shareImageFile.observe(viewLifecycleOwner) { event ->
-            event.getContentIfNotHandled()?.let {
-                if (it is FilePreparationResult.FileResult) {
-                    launchImageSharing(it.file)
-                } else {
-                    showFilePreparationError()
-                }
-            }
+            event.getContentIfNotHandled()?.let { launchSharing(it) }
         }
 
         viewModel.sharePdfFile.observe(viewLifecycleOwner) { event ->
-            event.getContentIfNotHandled()?.let {
-                if (it is FilePreparationResult.FileResult) {
-                    launchPdfImageSharing(it.file)
-                } else {
-                    showFilePreparationError()
-                }
-            }
+            event.getContentIfNotHandled()?.let { launchSharing(it) }
         }
     }
 
@@ -145,22 +132,17 @@ class ViewCertificateFragment : Fragment() {
         }
     }
 
-    private fun launchImageSharing(fileForSharing: File) {
-        startActivity(
-            Intent.createChooser(
-                shareImageIntentProvider.getShareImageIntent(fileForSharing),
-                getString(R.string.share_image_title)
+    private fun launchSharing(filePreparationResult: FilePreparationResult) {
+        if (filePreparationResult is FilePreparationResult.FileResult) {
+            startActivity(
+                Intent.createChooser(
+                    shareImageIntentProvider.getShareImageIntent(filePreparationResult.file),
+                    getString(R.string.share)
+                )
             )
-        )
-    }
-
-    private fun launchPdfImageSharing(fileForSharing: File) {
-        startActivity(
-            Intent.createChooser(
-                shareImageIntentProvider.getShareImageIntent(fileForSharing),
-                getString(R.string.share_pdf_title)
-            )
-        )
+        } else {
+            showFilePreparationError()
+        }
     }
 
     private fun showFilePreparationError() {

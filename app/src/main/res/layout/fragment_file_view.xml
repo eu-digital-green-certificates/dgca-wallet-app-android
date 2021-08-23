@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~  license-start
   ~  eu-digital-green-certificates / dgca-verifier-app-android
-  ~ 
+  ~
   ~  Copyright (C) 2021 T-Systems International GmbH and all other contributors
   ~
   ~  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,73 +17,53 @@
   ~  limitations under the License.
   ~  license-end
   ~
-  ~  Created by osarapulov on 5/7/21 9:30 AM
+  ~  Created by osarapulov on 8/23/21 1:56 PM
   -->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clickable="true"
-    android:focusable="true"
     tools:background="@color/white">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/certificatesView"
-        android:layout_width="0dp"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_container"
+        app:layout_constraintBottom_toTopOf="@+id/bottomContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/noCertificatesAvailable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:gravity="center"
-        android:text="@string/no_certificate_available"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout
+            android:id="@+id/fileInfoContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingVertical="10dp">
 
-    <TextView
-        android:id="@+id/clickScanToAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="@string/click_span_code_to_add_to_your_wallet"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/noCertificatesAvailable" />
-
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/noAvailableOffersGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:constraint_referenced_ids="noCertificatesAvailable,clickScanToAdd" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/fileImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                tools:src="@drawable/ic_logo_eu" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <View
         android:id="@+id/gradient"
         android:layout_width="match_parent"
         android:layout_height="10dp"
         android:background="@drawable/white_gradient"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_container"
+        app:layout_constraintBottom_toTopOf="@+id/bottomContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
-        android:id="@+id/bottom_container"
+        android:id="@+id/bottomContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -95,15 +75,14 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
-            android:id="@+id/scanCode"
+            android:id="@+id/share"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:backgroundTint="@color/blue"
             android:minWidth="130dp"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:text="@string/add_new"
+            android:text="@string/share"
             android:textAllCaps="false"
             android:textColor="@color/white" />
 
@@ -116,17 +95,17 @@
     </LinearLayout>
 
     <FrameLayout
-        android:id="@+id/progress_view"
+        android:id="@+id/progressView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/grey_transparent"
         android:clickable="true"
         android:elevation="4dp"
         android:focusableInTouchMode="true"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ProgressBar
-            android:id="@+id/progress_bar"
+            android:id="@+id/progressBar"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_gravity="center"

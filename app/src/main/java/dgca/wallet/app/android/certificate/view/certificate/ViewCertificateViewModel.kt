@@ -17,10 +17,10 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 5/10/21 11:48 PM
+ *  Created by osarapulov on 8/23/21 1:54 PM
  */
 
-package dgca.wallet.app.android.certificate.view
+package dgca.wallet.app.android.certificate.view.certificate
 
 import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
@@ -29,7 +29,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.wallet.app.android.Event
-import dgca.wallet.app.android.certificate.CertificateCard
+import dgca.wallet.app.android.certificate.CertificatesCard
 import dgca.wallet.app.android.data.WalletRepository
 import dgca.wallet.app.android.qr.QrCodeConverter
 import dgca.wallet.app.android.toFile
@@ -41,7 +41,7 @@ import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
-data class CertificateViewCard(val certificateCard: CertificateCard, val qrCode: Bitmap)
+data class CertificateViewCard(val certificatesCard: CertificatesCard.CertificateCard, val qrCode: Bitmap)
 
 sealed class FilePreparationResult {
     class FileResult(val file: File) : FilePreparationResult()
@@ -103,8 +103,11 @@ class ViewCertificateViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 try {
                     fileForSharing = certificate.value!!.qrCode.toFile(
-                        parentFile,
-                        "images/${File.separator}image_for_sharing.jpg"
+                        File(parentFile, "temp").apply {
+                            if (!exists() || !isDirectory) {
+                                mkdirs()
+                            }
+                        }, "${System.currentTimeMillis()}.jpeg"
                     )
                 } catch (exception: Exception) {
                     error = exception

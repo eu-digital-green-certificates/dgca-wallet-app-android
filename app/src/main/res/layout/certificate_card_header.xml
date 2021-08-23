@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~  license-start
   ~  eu-digital-green-certificates / dgca-verifier-app-android
   ~
@@ -18,14 +17,14 @@
   ~  limitations under the License.
   ~  license-end
   ~
-  ~  Created by osarapulov on 8/16/21 3:38 PM
+  ~  Created by osarapulov on 8/22/21 10:09 PM
   -->
 
-<paths xmlns:android="http://schemas.android.com/apk/res/android">
-    <files-path
-        name="myimages"
-        path="images/" />
-    <files-path
-        name="temp"
-        path="temp/" />
-</paths>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/title"
+    android:paddingStart="@dimen/default_margin"
+    android:paddingEnd="@dimen/default_margin"
+    android:paddingTop="@dimen/default_margin"
+    android:textSize="24sp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />

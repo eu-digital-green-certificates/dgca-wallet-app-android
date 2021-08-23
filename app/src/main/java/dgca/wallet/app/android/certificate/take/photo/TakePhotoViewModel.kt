@@ -1,6 +1,6 @@
 /*
  *  ---license-start
- *  eu-digital-green-certificates / dgca-wallet-app-android
+ *  eu-digital-green-certificates / dgca-verifier-app-android
  *  ---
  *  Copyright (C) 2021 T-Systems International GmbH and all other contributors
  *  ---
@@ -17,27 +17,26 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 8/17/21 8:29 AM
+ *  Created by osarapulov on 8/23/21 8:45 AM
  */
 
-package dgca.wallet.app.android.di
+package dgca.wallet.app.android.certificate.take.photo
 
 import android.content.Context
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import dgca.wallet.app.android.certificate.view.certificate.DefaultShareImageIntentProvider
-import dgca.wallet.app.android.certificate.view.certificate.ShareImageIntentProvider
-import javax.inject.Singleton
+import java.io.File
+import javax.inject.Inject
 
-@InstallIn(SingletonComponent::class)
-@Module
-class ApplicationModule {
-
-    @Singleton
-    @Provides
-    fun provideShareImageIntentProvider(@ApplicationContext context: Context): ShareImageIntentProvider =
-        DefaultShareImageIntentProvider(context)
+@HiltViewModel
+class TakePhotoViewModel @Inject constructor(@ApplicationContext private val context: Context) : ViewModel() {
+    val file: LiveData<File> = MutableLiveData(
+        File(
+            File(context.filesDir, "images").apply { if (!isDirectory || !exists()) mkdirs() },
+            "${System.currentTimeMillis()}.jpeg"
+        )
+    )
 }
