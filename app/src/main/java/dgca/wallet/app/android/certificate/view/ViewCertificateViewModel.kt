@@ -104,7 +104,7 @@ class ViewCertificateViewModel @Inject constructor(
                 try {
                     fileForSharing = certificate.value!!.qrCode.toFile(
                         parentFile,
-                        "images/${File.separator}image_for_sharing.jpg"
+                        "temp/${File.separator}${System.currentTimeMillis()}.jpeg"
                     )
                 } catch (exception: Exception) {
                     error = exception

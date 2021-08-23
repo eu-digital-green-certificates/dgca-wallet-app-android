@@ -31,7 +31,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dgca.wallet.app.android.data.WalletRepository
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
@@ -58,15 +57,25 @@ class CertificatesViewModel @Inject constructor(
             }
 
             val imagesDir = File(context.filesDir, "images")
-            val imageFiles = imagesDir.listFiles()?.filter {
-                return@filter true
-            } ?: emptyList()
-
-            if (imageFiles.isNotEmpty()) {
-                certificatesCards.add(CertificatesCard.ImagesHeader)
-                imageFiles.forEach {
-                    certificatesCards.add(CertificatesCard.FileCard(it))
+            val imageFileCards = mutableListOf<CertificatesCard.FileCard>()
+            val pdfFileCards = mutableListOf<CertificatesCard.FileCard>()
+            imagesDir.listFiles()?.reversed()?.forEach { file ->
+                when (file.extension) {
+                    "jpeg" -> imageFileCards.add(CertificatesCard.FileCard(file))
+                    "pdf" -> pdfFileCards.add(CertificatesCard.FileCard(file))
+                    else -> {
+                    }
                 }
+            }
+
+            if (imageFileCards.isNotEmpty()) {
+                certificatesCards.add(CertificatesCard.ImagesHeader)
+                certificatesCards.addAll(imageFileCards)
+            }
+
+            if (pdfFileCards.isNotEmpty()) {
+                certificatesCards.add(CertificatesCard.PdfsHeader)
+                certificatesCards.addAll(pdfFileCards)
             }
 
             _inProgress.value = false

@@ -50,7 +50,7 @@ class PickImageViewModel @Inject constructor(@ApplicationContext private val con
                     context.contentResolver.openInputStream(uri)?.use { inputStream ->
                         val file = File(
                             File(context.filesDir, "images").apply { if (!isDirectory || !exists()) mkdirs() },
-                            "${System.currentTimeMillis()}.jpg"
+                            "${System.currentTimeMillis()}.jpeg"
                         )
                         FileOutputStream(file).use { outputStream ->
                             val buffer = ByteArray(8 * 1024)

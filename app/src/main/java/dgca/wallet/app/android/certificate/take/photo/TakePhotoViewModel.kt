@@ -36,7 +36,7 @@ class TakePhotoViewModel @Inject constructor(@ApplicationContext private val con
     val file: LiveData<File> = MutableLiveData(
         File(
             File(context.filesDir, "images").apply { if (!isDirectory || !exists()) mkdirs() },
-            "${System.currentTimeMillis()}.jpg"
+            "${System.currentTimeMillis()}.jpeg"
         )
     )
 }
