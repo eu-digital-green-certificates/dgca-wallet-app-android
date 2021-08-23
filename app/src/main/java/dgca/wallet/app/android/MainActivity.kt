@@ -31,16 +31,21 @@ import android.view.MenuItem
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
-import dgca.wallet.app.android.certificate.CertificatesFragment
+import dgca.wallet.app.android.certificate.CertificatesFragmentDirections
 import dgca.wallet.app.android.databinding.ActivityMainBinding
+import dgca.wallet.app.android.nfc.NdefParser
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
+        navController = navHostFragment.navController
 
         val appBarConfiguration = AppBarConfiguration(
             topLevelDestinationIds = setOf(),
@@ -66,12 +71,7 @@ class MainActivity : AppCompatActivity() {
         if (NfcAdapter.ACTION_NDEF_DISCOVERED == intent.action) {
             intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)?.also { rawMessages ->
                 val messages: List<NdefMessage> = rawMessages.map { it as NdefMessage }
-                val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-                navHost.childFragmentManager.primaryNavigationFragment?.let { fragment ->
-                    if (fragment is CertificatesFragment && fragment.isVisible) {
-                        fragment.onNdefMessagesReceived(messages)
-                    }
-                }
+                parseNdefMessages(messages)
             }
         }
     }
@@ -82,8 +82,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
         return when (item.itemId) {
             R.id.settings -> {
                 navController.navigate(R.id.settingsFragment)
@@ -100,5 +98,29 @@ class MainActivity : AppCompatActivity() {
 
     fun disableBackButton() {
         binding.toolbar.navigationIcon = null
+    }
+
+    private fun parseNdefMessages(messages: List<NdefMessage>) {
+        if (messages.isEmpty()) {
+            return
+        }
+
+        val builder = StringBuilder()
+        val records = NdefParser.parse(messages[0])
+        val size = records.size
+
+        for (i in 0 until size) {
+            val record = records[i]
+            val str = record.str()
+            builder.append(str)
+        }
+
+        val qrCodeText = builder.toString()
+        if (qrCodeText.isNotEmpty()) {
+            val action = CertificatesFragmentDirections.actionCertificatesFragmentToClaimCertificateFragment(qrCodeText)
+            navController.navigate(action)
+        } else {
+            Timber.d("Received empty NDEFMessage")
+        }
     }
 }
