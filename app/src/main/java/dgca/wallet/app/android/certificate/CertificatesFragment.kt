@@ -112,8 +112,7 @@ class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCard
             findNavController().navigateUp()
             when (bundle.getInt(ImportImageDialogFragment.RESULT_KEY)) {
                 ImportImageDialogFragment.RESULT_TAKE_PHOTO -> showTakePhoto()
-                ImportImageDialogFragment.RESULT_PICK_FROM_GALLERY -> {
-                }
+                ImportImageDialogFragment.RESULT_PICK_FROM_GALLERY -> showPickImage()
                 else -> throw IllegalStateException()
             }
         }
@@ -168,6 +167,11 @@ class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCard
 
     private fun showTakePhoto() {
         val action = CertificatesFragmentDirections.actionCertificatesFragmentToTakePhotoFragment()
+        findNavController().navigate(action)
+    }
+
+    private fun showPickImage() {
+        val action = CertificatesFragmentDirections.actionCertificatesFragmentToPickImageFragment()
         findNavController().navigate(action)
     }
 }

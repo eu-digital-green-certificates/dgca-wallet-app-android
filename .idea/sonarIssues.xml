@@ -663,6 +663,41 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/import/image/pick/PickImageFragment.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/import/image/pick/PickImageViewModel.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/import/image/take/photo/TakePhotoViewModel.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/pick/PickImageFragment.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/pick/PickImageViewModel.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/pick/image/PickImageFragment.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/pick/image/PickImageViewModel.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/take/photo/TakePhotoFragment.kt">
           <value>
             <set />
@@ -1329,6 +1364,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/app/src/main/res/layout/fragment_certificates.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/layout/fragment_pick_image.xml">
           <value>
             <set />
           </value>

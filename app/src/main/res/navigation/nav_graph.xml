@@ -84,6 +84,14 @@
             app:exitAnim="@animator/nav_default_exit_anim"
             app:popEnterAnim="@animator/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+        <action
+            android:id="@+id/action_certificatesFragment_to_pickImageFragment"
+            app:destination="@id/pickImageFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
     <dialog
@@ -104,15 +112,13 @@
         android:label="@string/take_photo"
         tools:layout="@layout/fragment_take_photo">
 
-        <action
-            android:id="@+id/action_codeReaderFragment_to_claimCertificateFragment"
-            app:destination="@id/claimCertificateFragment"
-            app:enterAnim="@animator/nav_default_pop_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim"
-            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-
     </fragment>
+
+    <fragment
+        android:id="@+id/pickImageFragment"
+        android:name="dgca.wallet.app.android.certificate.pick.image.PickImageFragment"
+        android:label="@string/pick_image"
+        tools:layout="@layout/fragment_pick_image"></fragment>
 
     <fragment
         android:id="@+id/codeReaderFragment"

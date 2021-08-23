@@ -58,10 +58,9 @@ class CertificatesViewModel @Inject constructor(
             }
 
             val imagesDir = File(context.filesDir, "images")
-            val imageFiles = imagesDir.listFiles().filter {
-                Timber.tag("MYTAG").d("File: ${it.path}")
+            val imageFiles = imagesDir.listFiles()?.filter {
                 return@filter true
-            }
+            } ?: emptyList()
 
             if (imageFiles.isNotEmpty()) {
                 certificatesCards.add(CertificatesCard.ImagesHeader)

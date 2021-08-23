@@ -27,8 +27,6 @@ s
 Capp/src/main/java/dgca/wallet/app/android/data/local/Preferences.kt,7/9/7928cde8577ad1bfbb7da03134e8a692a42297ee
 ‡
 Wapp/src/main/java/dgca/wallet/app/android/certificate/view/validity/CountriesAdapter.kt,b/7/b7b4e72c0e1546d9d0ed4f0ec3d2d5056db1d21f
-x
-Happ/src/main/java/dgca/wallet/app/android/certificate/CertificateCard.kt,5/e/5e949daec43a2e86b01881aa7d2ff98777ebd12c
 w
 Gapp/src/main/java/dgca/wallet/app/android/worker/CountriesLoadWorker.kt,2/b/2b1030d1dabb650c75d5c5492980b866a1927c75
 w

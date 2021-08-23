@@ -87,4 +87,6 @@
     <string name="certificates">Certificates</string>
     <string name="images">Images</string>
     <string name="pdfs">PDFs</string>
+    <string name="pick_image">Pick Image</string>
+    <string name="error_importing_file">Error importing file</string>
 </resources>
