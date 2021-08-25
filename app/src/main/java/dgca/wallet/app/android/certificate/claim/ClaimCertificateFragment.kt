@@ -28,24 +28,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.R
+import dgca.wallet.app.android.base.BindingFragment
 import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.getCertificateListData
 import dgca.wallet.app.android.databinding.FragmentCertificateClaimBinding
 
 @AndroidEntryPoint
-class ClaimCertificateFragment : Fragment() {
+class ClaimCertificateFragment : BindingFragment<FragmentCertificateClaimBinding>() {
 
     private val args by navArgs<ClaimCertificateFragmentArgs>()
     private val viewModel by viewModels<ClaimCertificateViewModel>()
-    private var _binding: FragmentCertificateClaimBinding? = null
-    private val binding get() = _binding!!
+
     private lateinit var adapter: CertListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,10 +52,8 @@ class ClaimCertificateFragment : Fragment() {
         adapter = CertListAdapter(layoutInflater)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = FragmentCertificateClaimBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentCertificateClaimBinding =
+        FragmentCertificateClaimBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -88,19 +85,14 @@ class ClaimCertificateFragment : Fragment() {
         viewModel.init(args.qrCodeText)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     private fun CertificateModel.getType() = when {
-        this.vaccinations?.isNotEmpty() == true -> getString(
+        vaccinations?.isNotEmpty() == true -> getString(
             R.string.vaccination,
             this.vaccinations.first().doseNumber.toString(),
             this.vaccinations.first().totalSeriesOfDoses.toString()
         )
-        this.recoveryStatements?.isNotEmpty() == true -> getString(R.string.recovery)
-        this.tests?.isNotEmpty() == true -> getString(R.string.test)
+        recoveryStatements?.isNotEmpty() == true -> getString(R.string.recovery)
+        tests?.isNotEmpty() == true -> getString(R.string.test)
         else -> ""
     }
 

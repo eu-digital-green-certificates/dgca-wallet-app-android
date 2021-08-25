@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.49907407407407406" />
+        <entry key="app/src/main/res/layout/beam_main.xml" value="0.5349854227405247" />
+        <entry key="app/src/main/res/layout/dialog_fragment_add_new.xml" value="0.49907407407407406" />
+        <entry key="app/src/main/res/layout/fragment_certificate_claim.xml" value="0.49907407407407406" />
+        <entry key="app/src/main/res/layout/fragment_certificate_view.xml" value="0.33055555555555555" />
+        <entry key="app/src/main/res/layout/fragment_certificates.xml" value="0.33055555555555555" />
+        <entry key="app/src/main/res/xml/nfc_application_ids.xml" value="0.44722222222222224" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

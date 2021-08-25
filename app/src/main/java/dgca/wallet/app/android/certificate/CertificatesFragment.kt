@@ -28,46 +28,41 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.MainActivity
+import dgca.wallet.app.android.base.BindingFragment
 import dgca.wallet.app.android.databinding.FragmentCertificatesBinding
 import java.io.File
 
 @AndroidEntryPoint
-class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCardClickListener,
+class CertificatesFragment : BindingFragment<FragmentCertificatesBinding>(),
+    CertificateCardsAdapter.CertificateCardClickListener,
     CertificateCardsAdapter.FileCardClickListener {
 
     private val viewModel by viewModels<CertificatesViewModel>()
-    private var _binding: FragmentCertificatesBinding? = null
-    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity as MainActivity).clearBackground()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        (activity as MainActivity).disableBackButton()
-        _binding = FragmentCertificatesBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentCertificatesBinding =
+        FragmentCertificatesBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        (activity as MainActivity).disableBackButton()
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { requireActivity().finish() }
         binding.scanCode.setOnClickListener { showAddNewDialog() }
 
-        viewModel.certificates.observe(viewLifecycleOwner, {
-            setCertificateCards(it)
-        })
-        viewModel.inProgress.observe(viewLifecycleOwner, {
-            binding.progressView.isVisible = it
-        })
+        viewModel.certificates.observe(viewLifecycleOwner, { setCertificateCards(it) })
+        viewModel.inProgress.observe(viewLifecycleOwner, { binding.progressView.isVisible = it })
+
         viewModel.fetchCertificates()
 
         setFragmentResultListener(AddNewBottomDialogFragment.REQUEST_KEY) { key, bundle ->
@@ -102,11 +97,6 @@ class CertificatesFragment : Fragment(), CertificateCardsAdapter.CertificateCard
             binding.certificatesView.visibility = View.GONE
             binding.noAvailableOffersGroup.visibility = View.VISIBLE
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun showCodeReader() {

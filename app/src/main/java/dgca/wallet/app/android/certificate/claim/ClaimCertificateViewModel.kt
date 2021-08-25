@@ -146,7 +146,11 @@ class ClaimCertificateViewModel @Inject constructor(
                 )
 
                 val config = configRepository.local().getConfig()
-                claimResult = walletRepository.claimCertificate(config.getClaimUrl(BuildConfig.VERSION_NAME), prefixValidationService.encode(qrCode), request)
+                claimResult = walletRepository.claimCertificate(
+                    config.getClaimUrl(BuildConfig.VERSION_NAME),
+                    prefixValidationService.encode(qrCode),
+                    request
+                )
             }
             _inProgress.value = false
             claimResult?.success?.let { _event.value = Event(ClaimCertEvent.OnCertClaimed(true)) }
