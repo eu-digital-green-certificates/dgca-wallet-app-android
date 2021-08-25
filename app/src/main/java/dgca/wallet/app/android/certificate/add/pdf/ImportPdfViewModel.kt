@@ -1,6 +1,6 @@
 /*
  *  ---license-start
- *  eu-digital-green-certificates / dgca-wallet-app-android
+ *  eu-digital-green-certificates / dgca-verifier-app-android
  *  ---
  *  Copyright (C) 2021 T-Systems International GmbH and all other contributors
  *  ---
@@ -17,55 +17,65 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 8/23/21 10:16 AM
+ *  Created by osarapulov on 8/25/21 6:45 PM
  */
 
 package dgca.wallet.app.android.certificate.add.pdf
 
-import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
+import dgca.wallet.app.android.certificate.add.BitmapFetcher
+import dgca.wallet.app.android.certificate.add.FileSaver
+import dgca.wallet.app.android.certificate.add.QrCodeFetcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
-import java.io.FileOutputStream
 import javax.inject.Inject
 
+sealed class ImportPdfResult {
+    object Failed : ImportPdfResult()
+    object Success : ImportPdfResult()
+    class QrRecognised(val qr: String) : ImportPdfResult()
+}
+
 @HiltViewModel
-class ImportPdfViewModel @Inject constructor(@ApplicationContext private val context: Context) : ViewModel() {
-    private val _result = MutableLiveData<Boolean>()
-    val result: LiveData<Boolean> = _result
+class ImportPdfViewModel @Inject constructor(
+    private val bitmapFetcher: BitmapFetcher,
+    private val qrCodeFetcher: QrCodeFetcher,
+    private val fileSaver: FileSaver
+) : ViewModel() {
+    private val _result = MutableLiveData<ImportPdfResult>()
+    val result: LiveData<ImportPdfResult> = _result
 
     fun save(uri: Uri?) {
-        var res = false
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                if (uri != null) {
-                    context.contentResolver.openInputStream(uri)?.use { inputStream ->
-                        val file = File(
-                            File(context.filesDir, "images").apply { if (!isDirectory || !exists()) mkdirs() },
-                            "${System.currentTimeMillis()}.pdf"
-                        )
-                        FileOutputStream(file).use { outputStream ->
-                            val buffer = ByteArray(8 * 1024)
-                            var bytesRead: Int
-                            while (inputStream.read(buffer).also { bytesRead = it } != -1) {
-                                outputStream.write(buffer, 0, bytesRead)
-                            }
-                        }
-                        if (file.exists()) {
-                            res = true
-                        }
-                    }
-                }
+            withContext(Dispatchers.IO) { uri?.handle() ?: ImportPdfResult.Failed }.apply {
+                _result.value = this
             }
-            _result.value = res
+        }
+    }
+
+    private fun Uri.handle(): ImportPdfResult {
+        val qrCodeString: String? = try {
+            bitmapFetcher.loadBitmapByPdfUri(this)
+                .let { bitmap -> qrCodeFetcher.fetchQrCodeString(bitmap) }
+        } catch (exception: Exception) {
+            null
+        }
+
+        return if (qrCodeString?.isNotBlank() == true) {
+            ImportPdfResult.QrRecognised(qrCodeString)
+        } else {
+            val file = try {
+                fileSaver.saveFileFromUri(this, "images", "${System.currentTimeMillis()}.pdf")
+            } catch (exception: Exception) {
+                null
+            }
+            if (file?.exists() == true && file.isFile) ImportPdfResult.Success else ImportPdfResult.Failed
         }
     }
 }

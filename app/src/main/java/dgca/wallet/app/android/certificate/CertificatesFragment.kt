@@ -35,7 +35,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.MainActivity
 import dgca.wallet.app.android.base.BindingFragment
+import dgca.wallet.app.android.certificate.add.pdf.ImportPdfFragment
 import dgca.wallet.app.android.certificate.add.pick.image.PickImageFragment
+import dgca.wallet.app.android.certificate.add.take.photo.TakePhotoFragment
 import dgca.wallet.app.android.databinding.FragmentCertificatesBinding
 import java.io.File
 
@@ -85,12 +87,21 @@ class CertificatesFragment : BindingFragment<FragmentCertificatesBinding>(),
             }
         }
 
-        setFragmentResultListener(PickImageFragment.REQUEST_KEY) { key, bundle ->
-            val qr = bundle.getString(PickImageFragment.QR_KEY)
-            if (qr?.isNotBlank() == true) {
-                val action = CertificatesFragmentDirections.actionCertificatesFragmentToClaimCertificateFragment(qr)
-                findNavController().navigate(action)
-            }
+        setFragmentResultListener(TakePhotoFragment.REQUEST_KEY) { _, bundle ->
+            showImportDcc(bundle.getString(TakePhotoFragment.QR_KEY))
+        }
+        setFragmentResultListener(PickImageFragment.REQUEST_KEY) { _, bundle ->
+            showImportDcc(bundle.getString(PickImageFragment.QR_KEY))
+        }
+        setFragmentResultListener(ImportPdfFragment.REQUEST_KEY) { _, bundle ->
+            showImportDcc(bundle.getString(ImportPdfFragment.QR_KEY))
+        }
+    }
+
+    private fun showImportDcc(qr: String?) {
+        if (qr?.isNotBlank() == true) {
+            val action = CertificatesFragmentDirections.actionCertificatesFragmentToClaimCertificateFragment(qr)
+            findNavController().navigate(action)
         }
     }
 

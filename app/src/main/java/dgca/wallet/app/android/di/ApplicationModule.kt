@@ -48,7 +48,7 @@ class ApplicationModule {
 
     @Singleton
     @Provides
-    fun provideQrCodeFetcher(bitmapFetcher: BitmapFetcher): QrCodeFetcher = DefaultQrCodeFetcher(bitmapFetcher)
+    fun provideQrCodeFetcher(): QrCodeFetcher = DefaultQrCodeFetcher()
 
     @Singleton
     @Provides

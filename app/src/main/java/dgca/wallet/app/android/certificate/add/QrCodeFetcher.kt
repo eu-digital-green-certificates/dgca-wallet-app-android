@@ -22,8 +22,8 @@
 
 package dgca.wallet.app.android.certificate.add
 
-import android.net.Uri
+import android.graphics.Bitmap
 
 interface QrCodeFetcher {
-    fun fetchQrCodeStringByUri(uri: Uri): String
+    fun fetchQrCodeString(sourceBitmap: Bitmap): String
 }

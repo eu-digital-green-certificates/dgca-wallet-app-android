@@ -23,19 +23,16 @@
 package dgca.wallet.app.android.certificate.add
 
 import android.graphics.Bitmap
-import android.net.Uri
 import com.google.zxing.*
 import com.google.zxing.common.HybridBinarizer
 
-class DefaultQrCodeFetcher(private val bitmapFetcher: BitmapFetcher) : QrCodeFetcher {
+class DefaultQrCodeFetcher : QrCodeFetcher {
 
-    override fun fetchQrCodeStringByUri(uri: Uri): String = bitmapFetcher.loadBitmapByImageUri(uri).fetchQrCodeString()
-
-    private fun Bitmap.fetchQrCodeString(): String {
-        val intArray = IntArray(width * height)
+    override fun fetchQrCodeString(sourceBitmap: Bitmap): String {
+        val intArray = IntArray(sourceBitmap.width * sourceBitmap.height)
         //copy pixel data from the Bitmap into the 'intArray' array
-        getPixels(intArray, 0, width, 0, 0, width, height)
-        val source: LuminanceSource = RGBLuminanceSource(width, height, intArray)
+        sourceBitmap.getPixels(intArray, 0, sourceBitmap.width, 0, 0, sourceBitmap.width, sourceBitmap.height)
+        val source: LuminanceSource = RGBLuminanceSource(sourceBitmap.width, sourceBitmap.height, intArray)
         val bitmap = BinaryBitmap(HybridBinarizer(source))
         val reader: Reader = MultiFormatReader()
         val result: Result = reader.decode(bitmap)

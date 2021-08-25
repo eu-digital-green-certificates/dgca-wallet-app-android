@@ -30,7 +30,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,6 +44,11 @@ class ImportPdfFragment : Fragment() {
     private val viewModel by viewModels<ImportPdfViewModel>()
     private var _binding: FragmentImportPdfBinding? = null
     private val binding get() = _binding!!
+
+    companion object {
+        const val REQUEST_KEY = "ImportPdfFragment_REQUEST_KEY"
+        const val QR_KEY = "ImportPdfFragment_QR_KEY"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,18 +64,18 @@ class ImportPdfFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.result.observe(viewLifecycleOwner) { res ->
-            if (!res) {
-                Toast.makeText(requireContext(), R.string.error_importing_file, Toast.LENGTH_SHORT).show()
+            when (res) {
+                is ImportPdfResult.Failed -> Toast.makeText(requireContext(), R.string.error_importing_file, Toast.LENGTH_SHORT)
+                    .show()
+                is ImportPdfResult.QrRecognised -> setFragmentResult(REQUEST_KEY, bundleOf(QR_KEY to res.qr))
+                else -> {
+                }
             }
-            close()
+            findNavController().navigateUp()
         }
     }
 
     private val pickPdf = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { uri ->
         viewModel.save(uri.data?.data)
-    }
-
-    private fun close() {
-        findNavController().navigateUp()
     }
 }

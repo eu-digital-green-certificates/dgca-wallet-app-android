@@ -28,6 +28,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dgca.wallet.app.android.certificate.add.BitmapFetcher
 import dgca.wallet.app.android.certificate.add.FileSaver
 import dgca.wallet.app.android.certificate.add.QrCodeFetcher
 import dgca.wallet.app.android.certificate.add.UriProvider
@@ -45,6 +46,7 @@ sealed class TakePhotoResult {
 @HiltViewModel
 class TakePhotoViewModel @Inject constructor(
     private val qrCodeFetcher: QrCodeFetcher,
+    private val bitmapFetcher: BitmapFetcher,
     private val uriProvider: UriProvider,
     private val fileSaver: FileSaver
 ) : ViewModel() {
@@ -55,27 +57,27 @@ class TakePhotoViewModel @Inject constructor(
     fun handleResult() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                handleUri(uriLiveData.value!!)
+                uriLiveData.value?.handleUri() ?: TakePhotoResult.Failed
             }.apply {
                 _result.value = this
             }
         }
     }
 
-    private fun handleUri(uri: Uri): TakePhotoResult {
+    private fun Uri.handleUri(): TakePhotoResult {
         val qrCodeString: String? = try {
-            qrCodeFetcher.fetchQrCodeStringByUri(uri)
+            bitmapFetcher.loadBitmapByImageUri(this).let { bitmap -> qrCodeFetcher.fetchQrCodeString(bitmap) }
         } catch (exception: Exception) {
             null
         }
 
         return when {
-            qrCodeString?.isNotBlank() == true && uriProvider.deleteFileByUri(uri) -> {
+            qrCodeString?.isNotBlank() == true && uriProvider.deleteFileByUri(this) -> {
                 TakePhotoResult.QrRecognised(qrCodeString)
             }
             else -> {
                 val file = try {
-                    fileSaver.saveFileFromUri(uri, "images", "${System.currentTimeMillis()}.jpeg")
+                    fileSaver.saveFileFromUri(this, "images", "${System.currentTimeMillis()}.jpeg")
                 } catch (exception: Exception) {
                     null
                 }

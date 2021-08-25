@@ -28,6 +28,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dgca.wallet.app.android.certificate.add.BitmapFetcher
 import dgca.wallet.app.android.certificate.add.FileSaver
 import dgca.wallet.app.android.certificate.add.QrCodeFetcher
 import kotlinx.coroutines.Dispatchers
@@ -44,6 +45,7 @@ sealed class PickImageResult {
 @HiltViewModel
 class PickImageViewModel @Inject constructor(
     private val qrCodeFetcher: QrCodeFetcher,
+    private val bitmapFetcher: BitmapFetcher,
     private val fileSaver: FileSaver
 ) : ViewModel() {
     private val _result = MutableLiveData<PickImageResult>()
@@ -59,7 +61,7 @@ class PickImageViewModel @Inject constructor(
 
     private fun Uri.handle(): PickImageResult {
         val qrCodeString: String? = try {
-            qrCodeFetcher.fetchQrCodeStringByUri(this)
+            bitmapFetcher.loadBitmapByImageUri(this).let { bitmap -> qrCodeFetcher.fetchQrCodeString(bitmap) }
         } catch (exception: Exception) {
             null
         }

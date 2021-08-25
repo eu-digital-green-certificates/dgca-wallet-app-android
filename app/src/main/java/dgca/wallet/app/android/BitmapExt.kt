@@ -48,7 +48,7 @@ fun Bitmap.toFile(parentFile: File, relativePath: String): File {
 
 fun Bitmap.toPdfDocument(): PdfDocument {
     val document = PdfDocument()
-    val pageInfo = PdfDocument.PageInfo.Builder(this.width, this.height, 1).create()
+    val pageInfo = PdfDocument.PageInfo.Builder(this.width, this.height, 0).create()
     val page = document.startPage(pageInfo)
 
     page.canvas.drawPaint(Paint().apply { color = Color.WHITE })
