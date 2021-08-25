@@ -23,19 +23,22 @@
 package dgca.wallet.app.android.certificate.add.take.photo
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.FileProvider
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import dgca.wallet.app.android.R
+import dgca.wallet.app.android.certificate.add.pick.image.PickImageFragment
 import dgca.wallet.app.android.databinding.FragmentTakePhotoBinding
 
 
@@ -51,13 +54,21 @@ class TakePhotoFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.file.observe(viewLifecycleOwner) { file ->
-            val photoURI: Uri = FileProvider.getUriForFile(
-                requireContext(),
-                requireContext().applicationContext.packageName + ".provider",
-                file
-            )
-            takePhoto.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply { putExtra(MediaStore.EXTRA_OUTPUT, photoURI) })
+        viewModel.uriLiveData.observe(viewLifecycleOwner) { uri ->
+            takePhoto.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply { putExtra(MediaStore.EXTRA_OUTPUT, uri) })
+        }
+        viewModel.result.observe(viewLifecycleOwner) { res ->
+            when (res) {
+                is TakePhotoResult.Failed -> Toast.makeText(requireContext(), R.string.error_importing_file, Toast.LENGTH_SHORT)
+                    .show()
+                is TakePhotoResult.QrRecognised -> setFragmentResult(
+                    PickImageFragment.REQUEST_KEY,
+                    bundleOf(PickImageFragment.QR_KEY to res.qr)
+                )
+                else -> {
+                }
+            }
+            findNavController().navigateUp()
         }
     }
 
@@ -72,6 +83,6 @@ class TakePhotoFragment : Fragment() {
     }
 
     private val takePhoto = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { uri ->
-        findNavController().navigateUp()
+        viewModel.handleResult()
     }
 }

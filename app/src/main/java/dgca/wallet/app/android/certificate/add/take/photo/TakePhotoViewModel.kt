@@ -17,26 +17,70 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 8/23/21 8:45 AM
+ *  Created by osarapulov on 8/25/21 3:16 PM
  */
 
 package dgca.wallet.app.android.certificate.add.take.photo
 
-import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
-import java.io.File
+import dgca.wallet.app.android.certificate.add.FileSaver
+import dgca.wallet.app.android.certificate.add.QrCodeFetcher
+import dgca.wallet.app.android.certificate.add.UriProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+sealed class TakePhotoResult {
+    object Failed : TakePhotoResult()
+    object Success : TakePhotoResult()
+    class QrRecognised(val qr: String) : TakePhotoResult()
+}
+
 @HiltViewModel
-class TakePhotoViewModel @Inject constructor(@ApplicationContext private val context: Context) : ViewModel() {
-    val file: LiveData<File> = MutableLiveData(
-        File(
-            File(context.filesDir, "images").apply { if (!isDirectory || !exists()) mkdirs() },
-            "${System.currentTimeMillis()}.jpeg"
-        )
-    )
+class TakePhotoViewModel @Inject constructor(
+    private val qrCodeFetcher: QrCodeFetcher,
+    private val uriProvider: UriProvider,
+    private val fileSaver: FileSaver
+) : ViewModel() {
+    val uriLiveData: LiveData<Uri> = MutableLiveData(uriProvider.getUriFor("temp", "temp.jpeg"))
+    private val _result = MutableLiveData<TakePhotoResult>()
+    val result: LiveData<TakePhotoResult> = _result
+
+    fun handleResult() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                handleUri(uriLiveData.value!!)
+            }.apply {
+                _result.value = this
+            }
+        }
+    }
+
+    private fun handleUri(uri: Uri): TakePhotoResult {
+        val qrCodeString: String? = try {
+            qrCodeFetcher.fetchQrCodeStringByUri(uri)
+        } catch (exception: Exception) {
+            null
+        }
+
+        return when {
+            qrCodeString?.isNotBlank() == true && uriProvider.deleteFileByUri(uri) -> {
+                TakePhotoResult.QrRecognised(qrCodeString)
+            }
+            else -> {
+                val file = try {
+                    fileSaver.saveFileFromUri(uri, "images", "${System.currentTimeMillis()}.jpeg")
+                } catch (exception: Exception) {
+                    null
+                }
+                if (file?.exists() == true && file.isFile) TakePhotoResult.Success else TakePhotoResult.Failed
+            }
+        }
+    }
 }

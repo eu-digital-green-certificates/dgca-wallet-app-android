@@ -38,7 +38,7 @@ import javax.inject.Inject
 sealed class PickImageResult {
     object Failed : PickImageResult()
     object Success : PickImageResult()
-    class QRRecognised(val qr: String) : PickImageResult()
+    class QrRecognised(val qr: String) : PickImageResult()
 }
 
 @HiltViewModel
@@ -65,7 +65,7 @@ class PickImageViewModel @Inject constructor(
         }
 
         return if (qrCodeString?.isNotBlank() == true) {
-            PickImageResult.QRRecognised(qrCodeString)
+            PickImageResult.QrRecognised(qrCodeString)
         } else {
             val file = try {
                 fileSaver.saveFileFromUri(this, "images", "${System.currentTimeMillis()}.jpeg")

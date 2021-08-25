@@ -68,7 +68,7 @@ class PickImageFragment : Fragment() {
             when (res) {
                 is PickImageResult.Failed -> Toast.makeText(requireContext(), R.string.error_importing_file, Toast.LENGTH_SHORT)
                     .show()
-                is PickImageResult.QRRecognised -> setFragmentResult(REQUEST_KEY, bundleOf(QR_KEY to res.qr))
+                is PickImageResult.QrRecognised -> setFragmentResult(REQUEST_KEY, bundleOf(QR_KEY to res.qr))
                 else -> {
                 }
             }

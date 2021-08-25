@@ -28,10 +28,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dgca.wallet.app.android.certificate.add.DefaultFileSaver
-import dgca.wallet.app.android.certificate.add.DefaultQrCodeFetcher
-import dgca.wallet.app.android.certificate.add.FileSaver
-import dgca.wallet.app.android.certificate.add.QrCodeFetcher
+import dgca.wallet.app.android.certificate.add.*
 import dgca.wallet.app.android.certificate.view.certificate.DefaultShareImageIntentProvider
 import dgca.wallet.app.android.certificate.view.certificate.ShareImageIntentProvider
 import javax.inject.Singleton
@@ -47,11 +44,19 @@ class ApplicationModule {
 
     @Singleton
     @Provides
-    fun provideQrCodeFetcher(@ApplicationContext context: Context): QrCodeFetcher =
-        DefaultQrCodeFetcher(context)
+    fun provideBitmapFetcher(@ApplicationContext context: Context): BitmapFetcher = DefaultBitmapFetcher(context)
+
+    @Singleton
+    @Provides
+    fun provideQrCodeFetcher(bitmapFetcher: BitmapFetcher): QrCodeFetcher = DefaultQrCodeFetcher(bitmapFetcher)
 
     @Singleton
     @Provides
     fun provideFileSaver(@ApplicationContext context: Context): FileSaver =
         DefaultFileSaver(context)
+
+    @Singleton
+    @Provides
+    fun provideUriProvider(@ApplicationContext context: Context): UriProvider =
+        DefaultUriProvider(context)
 }

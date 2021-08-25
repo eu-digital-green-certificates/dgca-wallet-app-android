@@ -17,28 +17,16 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 8/25/21 12:17 PM
+ *  Created by osarapulov on 8/25/21 3:24 PM
  */
 
 package dgca.wallet.app.android.certificate.add
 
 import android.graphics.Bitmap
 import android.net.Uri
-import com.google.zxing.*
-import com.google.zxing.common.HybridBinarizer
 
-class DefaultQrCodeFetcher(private val bitmapFetcher: BitmapFetcher) : QrCodeFetcher {
+interface BitmapFetcher {
+    fun loadBitmapByImageUri(uri: Uri): Bitmap
 
-    override fun fetchQrCodeStringByUri(uri: Uri): String = bitmapFetcher.loadBitmapByImageUri(uri).fetchQrCodeString()
-
-    private fun Bitmap.fetchQrCodeString(): String {
-        val intArray = IntArray(width * height)
-        //copy pixel data from the Bitmap into the 'intArray' array
-        getPixels(intArray, 0, width, 0, 0, width, height)
-        val source: LuminanceSource = RGBLuminanceSource(width, height, intArray)
-        val bitmap = BinaryBitmap(HybridBinarizer(source))
-        val reader: Reader = MultiFormatReader()
-        val result: Result = reader.decode(bitmap)
-        return result.text
-    }
+    fun loadBitmapByPdfUri(uri: Uri): Bitmap
 }
