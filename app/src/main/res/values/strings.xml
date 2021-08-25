@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Wallet App</string>
+    <string name="nfc_service_description">Host Card Emulator Service</string>
+    <string name="nfc_aid_description">DCC AID</string>
 
     <string name="retry">Retry</string>
     <string name="biometric_dialog_title">Biometric login</string>
@@ -59,7 +61,6 @@
     <string name="passed">Passed</string>
     <string name="failed">Failed</string>
     <string name="open">Open</string>
-    <string name="negative">Negative</string>
     <string name="rule">Rule</string>
     <string name="passed_for">Passed for %1$s (see settings)</string>
     <string name="open_for">Open for %1$s (see settings)</string>
@@ -89,4 +90,13 @@
     <string name="pick_image">Pick Image</string>
     <string name="error_importing_file">Error importing file</string>
     <string name="your_file">Your File</string>
+
+    <string name="no_nfc">There is no NFC module on this device</string>
+    <string name="nfc_turn_on_title">NFC is turned off.</string>
+    <string name="nfc_turn_on_message">You need turn on NFC module for scanning. Wish turn on it now?</string>
+    <string name="nfc_turn_on_positive">Turn on</string>
+    <string name="nfc_turn_on_negative">Dismiss</string>
+    <string name="nfc_service_enabled">NFC Service enabled</string>
+    <string name="nfc_service_disabled">NFC Service disabled</string>
+    <string name="nfc_status_ok">NFC status ok</string>
 </resources>

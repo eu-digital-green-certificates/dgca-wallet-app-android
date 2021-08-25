@@ -22,31 +22,42 @@
 
 package dgca.wallet.app.android
 
+import android.content.Intent
+import android.nfc.NdefMessage
+import android.nfc.NfcAdapter
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
+import dgca.wallet.app.android.certificate.CertificatesFragmentDirections
 import dgca.wallet.app.android.databinding.ActivityMainBinding
+import dgca.wallet.app.android.nfc.NdefParser
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
+        navController = navHostFragment.navController
+
         val appBarConfiguration = AppBarConfiguration(
             topLevelDestinationIds = setOf(),
             fallbackOnNavigateUpListener = ::onSupportNavigateUp
@@ -54,6 +65,18 @@ class MainActivity : AppCompatActivity() {
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
 
         setSupportActionBar(binding.toolbar)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.certificatesFragment) {
+                checkNdefMessage(intent)
+            }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+
+        checkNdefMessage(intent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -62,8 +85,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
         return when (item.itemId) {
             R.id.settings -> {
                 navController.navigate(R.id.settingsFragment)
@@ -74,11 +95,49 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+
     fun clearBackground() {
         window.setBackgroundDrawable(ContextCompat.getDrawable(this, R.color.white))
     }
 
     fun disableBackButton() {
         binding.toolbar.navigationIcon = null
+    }
+
+    private fun checkNdefMessage(intent: Intent) {
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED == intent.action) {
+            intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)?.also { rawMessages ->
+                val messages: List<NdefMessage> = rawMessages.map { it as NdefMessage }
+                parseNdefMessages(messages)
+                intent.removeExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)
+            }
+        }
+    }
+
+    private fun parseNdefMessages(messages: List<NdefMessage>) {
+        if (messages.isEmpty()) {
+            return
+        }
+
+        val builder = StringBuilder()
+        val records = NdefParser.parse(messages[0])
+        val size = records.size
+
+        for (i in 0 until size) {
+            val record = records[i]
+            val str = record.str()
+            builder.append(str)
+        }
+
+        val qrCodeText = builder.toString()
+        if (qrCodeText.isNotEmpty()) {
+            val action = CertificatesFragmentDirections.actionCertificatesFragmentToClaimCertificateFragment(qrCodeText)
+            navController.navigate(action)
+        } else {
+            Timber.d("Received empty NDEFMessage")
+        }
     }
 }

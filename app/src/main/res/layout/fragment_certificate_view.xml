@@ -101,21 +101,21 @@
                 android:textSize="22sp"
                 tools:text="Gabriele Musterfrau" />
 
-<!--            <com.google.android.material.textview.MaterialTextView-->
-<!--                android:id="@+id/date_of_birth_title"-->
-<!--                style="@style/TextAppearance.Dgca.CertificateTitle"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="10dp"-->
-<!--                android:text="@string/date_of_birth_title"-->
-<!--                android:visibility="gone" />-->
+            <!--            <com.google.android.material.textview.MaterialTextView-->
+            <!--                android:id="@+id/date_of_birth_title"-->
+            <!--                style="@style/TextAppearance.Dgca.CertificateTitle"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="10dp"-->
+            <!--                android:text="@string/date_of_birth_title"-->
+            <!--                android:visibility="gone" />-->
 
-<!--            <com.google.android.material.textview.MaterialTextView-->
-<!--                android:id="@+id/date_of_birth"-->
-<!--                style="@style/TextAppearance.Dgca.CertificateValue"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                tools:text="Feb 26, 1988" />-->
+            <!--            <com.google.android.material.textview.MaterialTextView-->
+            <!--                android:id="@+id/date_of_birth"-->
+            <!--                style="@style/TextAppearance.Dgca.CertificateValue"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                tools:text="Feb 26, 1988" />-->
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"
@@ -184,6 +184,26 @@
             android:text="@string/share_pdf"
             android:textAllCaps="false"
             android:textColor="@color/white" />
+
+        <!-- TODO: update UI when provided by UI/UX team -->
+        <androidx.appcompat.widget.AppCompatToggleButton
+            android:id="@+id/nfcAction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/blue"
+            android:paddingHorizontal="@dimen/default_padding"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textOff="@string/nfc_service_disabled"
+            android:textOn="@string/nfc_service_enabled"
+            app:showText="true" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/nfc_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="@string/nfc_status_ok" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/logo"

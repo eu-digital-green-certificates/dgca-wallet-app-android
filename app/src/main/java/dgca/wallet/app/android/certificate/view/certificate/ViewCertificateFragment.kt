@@ -22,34 +22,43 @@
 
 package dgca.wallet.app.android.certificate.view.certificate
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.content.pm.PackageManager
+import android.nfc.NfcAdapter
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.*
 import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.R
+import dgca.wallet.app.android.base.BindingFragment
 import dgca.wallet.app.android.certificate.claim.CertListAdapter
 import dgca.wallet.app.android.certificate.claim.bindText
 import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.getCertificateListData
 import dgca.wallet.app.android.databinding.FragmentCertificateViewBinding
+import dgca.wallet.app.android.nfc.DCCApduService
+import dgca.wallet.app.android.nfc.DCCApduService.Companion.NFC_NDEF_KEY
+import dgca.wallet.app.android.nfc.showTurnOnNfcDialog
+import timber.log.Timber
 import javax.inject.Inject
 
-
 @AndroidEntryPoint
-class ViewCertificateFragment : Fragment() {
+class ViewCertificateFragment : BindingFragment<FragmentCertificateViewBinding>() {
+
     private val args by navArgs<ViewCertificateFragmentArgs>()
     private val viewModel by viewModels<ViewCertificateViewModel>()
-    private var _binding: FragmentCertificateViewBinding? = null
-    private val binding get() = _binding!!
+
     private lateinit var adapter: CertListAdapter
+    private var nfcAdapter: NfcAdapter? = null
 
     @Inject
     lateinit var shareImageIntentProvider: ShareImageIntentProvider
@@ -60,13 +69,14 @@ class ViewCertificateFragment : Fragment() {
         adapter = CertListAdapter(layoutInflater)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = FragmentCertificateViewBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentCertificateViewBinding =
+        FragmentCertificateViewBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        nfcAdapter = NfcAdapter.getDefaultAdapter(requireContext())
+
         val displayMetrics = DisplayMetrics()
         requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
         val minEdge = displayMetrics.widthPixels * 0.9
@@ -115,6 +125,19 @@ class ViewCertificateFragment : Fragment() {
         viewModel.sharePdfFile.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { launchSharing(it) }
         }
+
+        binding.nfcAction.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                initNFCFunction()
+            } else {
+                stopNfcService()
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopNfcService()
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -168,5 +191,57 @@ class ViewCertificateFragment : Fragment() {
         when (event) {
             is ViewCertificateViewModel.ViewCertEvent.OnCertDeleted -> findNavController().popBackStack()
         }
+    }
+
+    private fun initNFCFunction() {
+        if (!requireActivity().packageManager.hasSystemFeature(PackageManager.FEATURE_NFC_HOST_CARD_EMULATION)) {
+            binding.nfcStatus.text = getString(R.string.no_nfc)
+            return
+        }
+
+        if (nfcAdapter?.isEnabled == true) {
+            initNfcService()
+        } else {
+            showTurnOnNfcDialog()
+        }
+    }
+
+    private fun initNfcService() {
+        val certificate = viewModel.certificate.value?.certificatesCard
+        val intent = Intent(requireContext(), DCCApduService::class.java)
+        intent.putExtra(NFC_NDEF_KEY, certificate?.qrCodeText)
+        requireContext().startService(intent)
+
+        val filter = IntentFilter(NFC_BROADCAST)
+        requireContext().registerReceiver(nfcReceiver, filter)
+    }
+
+    private fun stopNfcService() {
+        if (nfcAdapter?.isEnabled == true) {
+            requireContext().stopService(Intent(requireContext(), DCCApduService::class.java))
+        }
+        binding.nfcAction.isChecked = false
+        try {
+            requireContext().unregisterReceiver(nfcReceiver)
+        } catch (ex: Exception) {
+            Timber.d("nfcReceiver not registered.")
+        }
+    }
+
+    private val nfcReceiver = object : BroadcastReceiver() {
+
+        override fun onReceive(context: Context, intent: Intent) {
+            if (intent.hasExtra(NFC_EXTRA_DCC_SENT)) {
+                if (intent.getBooleanExtra(NFC_EXTRA_DCC_SENT, false)) {
+                    viewModel.onCertificateShared()
+                    Toast.makeText(requireContext(), "DCC was sent successfully", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    companion object {
+        const val NFC_BROADCAST = "dgca.wallet.app.android.certificate.view.nfc_broadcast"
+        const val NFC_EXTRA_DCC_SENT = "nfc_dcc_sent"
     }
 }

@@ -62,14 +62,6 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
         <action
-            android:id="@+id/action_certificatesFragment_to_claimCertificateFragment"
-            app:destination="@id/claimCertificateFragment"
-            app:enterAnim="@animator/nav_default_pop_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim"
-            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-
-        <action
             android:id="@+id/action_certificatesFragment_to_viewCertificateFragment"
             app:destination="@id/viewCertificateFragment"
             app:enterAnim="@animator/nav_default_pop_enter_anim"
@@ -112,6 +104,14 @@
         <action
             android:id="@+id/action_certificatesFragment_to_importPdfFragment"
             app:destination="@id/importPdfFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+        <action
+            android:id="@+id/action_certificatesFragment_to_claimCertificateFragment"
+            app:destination="@id/claimCertificateFragment"
             app:enterAnim="@animator/nav_default_pop_enter_anim"
             app:exitAnim="@animator/nav_default_exit_anim"
             app:popEnterAnim="@animator/nav_default_pop_enter_anim"
