@@ -34,10 +34,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.MainActivity
-import dgca.wallet.app.android.certificate.add.pick.image.PickImageFragment
 import dgca.wallet.app.android.base.BindingFragment
+import dgca.wallet.app.android.certificate.add.pick.image.PickImageFragment
 import dgca.wallet.app.android.databinding.FragmentCertificatesBinding
-import timber.log.Timber
 import java.io.File
 
 @AndroidEntryPoint
@@ -91,7 +90,6 @@ class CertificatesFragment : BindingFragment<FragmentCertificatesBinding>(),
             if (qr?.isNotBlank() == true) {
                 val action = CertificatesFragmentDirections.actionCertificatesFragmentToClaimCertificateFragment(qr)
                 findNavController().navigate(action)
-                Timber.tag("MYTAG").d("QR = $qr")
             }
         }
     }

@@ -51,10 +51,9 @@ class PickImageViewModel @Inject constructor(
 
     fun save(uri: Uri?) {
         viewModelScope.launch {
-            val res: PickImageResult = withContext(Dispatchers.IO) {
-                uri?.handle() ?: PickImageResult.Failed
+            withContext(Dispatchers.IO) { uri?.handle() ?: PickImageResult.Failed }.apply {
+                _result.value = this
             }
-            _result.value = res
         }
     }
 
