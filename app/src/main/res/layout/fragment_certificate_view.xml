@@ -190,7 +190,10 @@
             android:id="@+id/nfcAction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:backgroundTint="@color/blue"
+            android:paddingHorizontal="@dimen/default_padding"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
             android:textOff="@string/nfc_service_disabled"
             android:textOn="@string/nfc_service_enabled"
             app:showText="true" />
