@@ -17,51 +17,47 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 8/23/21 8:46 AM
+ *  Created by osarapulov on 8/25/21 12:12 PM
  */
 
-package dgca.wallet.app.android.certificate.pick.image
+package dgca.wallet.app.android.certificate.add.take.photo
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import dgca.wallet.app.android.R
-import dgca.wallet.app.android.databinding.FragmentPickImageBinding
+import dgca.wallet.app.android.databinding.FragmentTakePhotoBinding
 
 
 @AndroidEntryPoint
-class PickImageFragment : Fragment() {
-    private val viewModel by viewModels<PickImageViewModel>()
-    private var _binding: FragmentPickImageBinding? = null
+class TakePhotoFragment : Fragment() {
+    private val viewModel by viewModels<TakePhotoViewModel>()
+    private var _binding: FragmentTakePhotoBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        pickImage.launch(Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
-            type = "image/jpeg"
-        })
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = FragmentPickImageBinding.inflate(inflater, container, false)
+        _binding = FragmentTakePhotoBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.result.observe(viewLifecycleOwner) { res ->
-            if (!res) {
-                Toast.makeText(requireContext(), R.string.error_importing_file, Toast.LENGTH_SHORT).show()
-            }
-            close()
+        viewModel.file.observe(viewLifecycleOwner) { file ->
+            val photoURI: Uri = FileProvider.getUriForFile(
+                requireContext(),
+                requireContext().applicationContext.packageName + ".provider",
+                file
+            )
+            takePhoto.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply { putExtra(MediaStore.EXTRA_OUTPUT, photoURI) })
         }
     }
 
@@ -75,11 +71,7 @@ class PickImageFragment : Fragment() {
         (activity as AppCompatActivity?)!!.supportActionBar!!.show()
     }
 
-    private val pickImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { uri ->
-        viewModel.save(uri.data?.data)
-    }
-
-    private fun close() {
+    private val takePhoto = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { uri ->
         findNavController().navigateUp()
     }
 }

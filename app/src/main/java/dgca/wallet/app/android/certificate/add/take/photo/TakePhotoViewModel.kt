@@ -20,7 +20,7 @@
  *  Created by osarapulov on 8/23/21 8:45 AM
  */
 
-package dgca.wallet.app.android.certificate.take.photo
+package dgca.wallet.app.android.certificate.add.take.photo
 
 import android.content.Context
 import androidx.lifecycle.LiveData

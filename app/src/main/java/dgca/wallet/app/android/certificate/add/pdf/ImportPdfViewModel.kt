@@ -20,7 +20,7 @@
  *  Created by osarapulov on 8/23/21 10:16 AM
  */
 
-package dgca.wallet.app.android.certificate.importe.pdf
+package dgca.wallet.app.android.certificate.add.pdf
 
 import android.content.Context
 import android.net.Uri
