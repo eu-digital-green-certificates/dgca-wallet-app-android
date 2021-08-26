@@ -28,5 +28,5 @@ import android.net.Uri
 interface BitmapFetcher {
     fun loadBitmapByImageUri(uri: Uri): Bitmap
 
-    fun loadBitmapByPdfUri(uri: Uri): Bitmap
+    fun loadBitmapByPdfUri(uri: Uri): List<Bitmap>
 }

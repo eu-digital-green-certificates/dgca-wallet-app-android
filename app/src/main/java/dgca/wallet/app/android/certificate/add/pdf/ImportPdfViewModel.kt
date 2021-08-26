@@ -22,6 +22,7 @@
 
 package dgca.wallet.app.android.certificate.add.pdf
 
+import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -36,6 +37,7 @@ import dgca.wallet.app.android.certificate.add.QrCodeFetcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 
 sealed class ImportPdfResult {
@@ -63,18 +65,34 @@ class ImportPdfViewModel @Inject constructor(
     }
 
     private fun Uri.handle(): ImportPdfResult {
-        val qrCodeString: String? = try {
-            bitmapFetcher.loadBitmapByPdfUri(this)
-                .let { bitmap -> qrCodeFetcher.fetchQrCodeString(bitmap) }
+        val qrStrings = mutableListOf<String>()
+        var bitmaps: List<Bitmap>? = null
+        try {
+            bitmaps = bitmapFetcher.loadBitmapByPdfUri(this)
+            bitmaps.forEach { bitmap ->
+                qrStrings.add(qrCodeFetcher.fetchQrCodeString(bitmap))
+                bitmap.recycle()
+            }
         } catch (exception: Exception) {
-            null
+            Timber.d(exception, "Error fetching qr strings from bitmaps")
+        } finally {
+            bitmaps?.forEach { bitmap -> bitmap.recycle() }
         }
 
-        val greenCertificate: GreenCertificate? =
-            qrCodeString?.let { qrString -> greenCertificateFetcher.fetchGreenCertificateFromQrString(qrString) }
+        var qrString = ""
+        var greenCertificate: GreenCertificate? = null
+
+        qrStrings.forEach { curQrString ->
+            val curGreenCertificate = greenCertificateFetcher.fetchGreenCertificateFromQrString(curQrString)
+            if (curGreenCertificate != null) {
+                qrString = curQrString
+                greenCertificate = curGreenCertificate
+                return@forEach
+            }
+        }
 
         return if (greenCertificate != null) {
-            ImportPdfResult.QrRecognised(qrCodeString)
+            ImportPdfResult.QrRecognised(qrString)
         } else {
             val file = try {
                 fileSaver.saveFileFromUri(this, "images", "${System.currentTimeMillis()}.pdf")

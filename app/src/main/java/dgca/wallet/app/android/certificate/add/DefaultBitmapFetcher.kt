@@ -29,6 +29,9 @@ import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 
 class DefaultBitmapFetcher(context: Context) : BitmapFetcher {
     private val appContext = context.applicationContext
@@ -41,14 +44,33 @@ class DefaultBitmapFetcher(context: Context) : BitmapFetcher {
         }.copy(Bitmap.Config.ARGB_8888, true)
     }
 
-    override fun loadBitmapByPdfUri(uri: Uri): Bitmap =
+    override fun loadBitmapByPdfUri(uri: Uri): List<Bitmap> =
         appContext.contentResolver.openFileDescriptor(uri, "r")!!.use { fileDescriptor ->
             PdfRenderer(fileDescriptor).use { pdfRenderer ->
-                pdfRenderer.openPage(0).use { page ->
-                    val bitmap = Bitmap.createBitmap(page.width, page.height, Bitmap.Config.ARGB_8888)
-                    page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
-                    bitmap
+                val bitmaps = mutableListOf<Bitmap>()
+                for (i in 0 until pdfRenderer.pageCount) {
+                    pdfRenderer.openPage(i).use { page ->
+                        val bitmap = Bitmap.createBitmap(page.width, page.height, Bitmap.Config.ARGB_8888)
+                        page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+                        bitmaps.add(bitmap)
+
+
+                        //create a file to write bitmap data
+                        val f = File(appContext.filesDir, "myfile.jpeg");
+                        f.createNewFile();
+
+                        val bos = ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
+                        val bitmapdata: ByteArray = bos.toByteArray();
+
+                        val fos = FileOutputStream(f);
+                        fos.write(bitmapdata);
+                        fos.flush();
+                        fos.close();
+
+                    }
                 }
+                bitmaps.toList()
             }
         }
 }
