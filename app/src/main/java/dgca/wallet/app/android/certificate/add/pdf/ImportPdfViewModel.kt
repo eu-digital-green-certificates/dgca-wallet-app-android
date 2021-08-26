@@ -28,6 +28,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dgca.verifier.app.decoder.model.GreenCertificate
+import dgca.wallet.app.android.certificate.GreenCertificateFetcher
 import dgca.wallet.app.android.certificate.add.BitmapFetcher
 import dgca.wallet.app.android.certificate.add.FileSaver
 import dgca.wallet.app.android.certificate.add.QrCodeFetcher
@@ -46,7 +48,8 @@ sealed class ImportPdfResult {
 class ImportPdfViewModel @Inject constructor(
     private val bitmapFetcher: BitmapFetcher,
     private val qrCodeFetcher: QrCodeFetcher,
-    private val fileSaver: FileSaver
+    private val fileSaver: FileSaver,
+    private val greenCertificateFetcher: GreenCertificateFetcher
 ) : ViewModel() {
     private val _result = MutableLiveData<ImportPdfResult>()
     val result: LiveData<ImportPdfResult> = _result
@@ -67,7 +70,10 @@ class ImportPdfViewModel @Inject constructor(
             null
         }
 
-        return if (qrCodeString?.isNotBlank() == true) {
+        val greenCertificate: GreenCertificate? =
+            qrCodeString?.let { qrString -> greenCertificateFetcher.fetchGreenCertificateFromQrString(qrString) }
+
+        return if (greenCertificate != null) {
             ImportPdfResult.QrRecognised(qrCodeString)
         } else {
             val file = try {

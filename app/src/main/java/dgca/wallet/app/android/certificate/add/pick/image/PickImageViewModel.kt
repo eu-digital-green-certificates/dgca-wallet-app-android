@@ -28,6 +28,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dgca.verifier.app.decoder.model.GreenCertificate
+import dgca.wallet.app.android.certificate.GreenCertificateFetcher
 import dgca.wallet.app.android.certificate.add.BitmapFetcher
 import dgca.wallet.app.android.certificate.add.FileSaver
 import dgca.wallet.app.android.certificate.add.QrCodeFetcher
@@ -46,7 +48,8 @@ sealed class PickImageResult {
 class PickImageViewModel @Inject constructor(
     private val qrCodeFetcher: QrCodeFetcher,
     private val bitmapFetcher: BitmapFetcher,
-    private val fileSaver: FileSaver
+    private val fileSaver: FileSaver,
+    private val greenCertificateFetcher: GreenCertificateFetcher
 ) : ViewModel() {
     private val _result = MutableLiveData<PickImageResult>()
     val result: LiveData<PickImageResult> = _result
@@ -66,7 +69,10 @@ class PickImageViewModel @Inject constructor(
             null
         }
 
-        return if (qrCodeString?.isNotBlank() == true) {
+        val greenCertificate: GreenCertificate? =
+            qrCodeString?.let { qrString -> greenCertificateFetcher.fetchGreenCertificateFromQrString(qrString) }
+
+        return if (greenCertificate != null) {
             PickImageResult.QrRecognised(qrCodeString)
         } else {
             val file = try {
