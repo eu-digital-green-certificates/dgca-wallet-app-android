@@ -37,6 +37,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.R
+import dgca.wallet.app.android.certificate.add.ADD_QR_STRING_KEY
+import dgca.wallet.app.android.certificate.add.ADD_REQUEST_KEY
 import dgca.wallet.app.android.databinding.FragmentImportPdfBinding
 
 @AndroidEntryPoint
@@ -44,11 +46,6 @@ class ImportPdfFragment : Fragment() {
     private val viewModel by viewModels<ImportPdfViewModel>()
     private var _binding: FragmentImportPdfBinding? = null
     private val binding get() = _binding!!
-
-    companion object {
-        const val REQUEST_KEY = "ImportPdfFragment_REQUEST_KEY"
-        const val QR_KEY = "ImportPdfFragment_QR_KEY"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,7 +64,7 @@ class ImportPdfFragment : Fragment() {
             when (res) {
                 is ImportPdfResult.Failed -> Toast.makeText(requireContext(), R.string.error_importing_file, Toast.LENGTH_SHORT)
                     .show()
-                is ImportPdfResult.QrRecognised -> setFragmentResult(REQUEST_KEY, bundleOf(QR_KEY to res.qr))
+                is ImportPdfResult.QrRecognised -> setFragmentResult(ADD_REQUEST_KEY, bundleOf(ADD_QR_STRING_KEY to res.qr))
                 else -> {
                 }
             }

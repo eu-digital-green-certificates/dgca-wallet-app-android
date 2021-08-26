@@ -37,16 +37,13 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.R
+import dgca.wallet.app.android.certificate.add.ADD_QR_STRING_KEY
+import dgca.wallet.app.android.certificate.add.ADD_REQUEST_KEY
 import dgca.wallet.app.android.databinding.FragmentPickImageBinding
 
 
 @AndroidEntryPoint
 class PickImageFragment : Fragment() {
-    companion object {
-        const val REQUEST_KEY = "PickImageFragment_REQUEST_KEY"
-        const val QR_KEY = "PickImageFragment_QR_KEY"
-    }
-
     private val viewModel by viewModels<PickImageViewModel>()
     private var _binding: FragmentPickImageBinding? = null
     private val binding get() = _binding!!
@@ -68,7 +65,7 @@ class PickImageFragment : Fragment() {
             when (res) {
                 is PickImageResult.Failed -> Toast.makeText(requireContext(), R.string.error_importing_file, Toast.LENGTH_SHORT)
                     .show()
-                is PickImageResult.QrRecognised -> setFragmentResult(REQUEST_KEY, bundleOf(QR_KEY to res.qr))
+                is PickImageResult.QrRecognised -> setFragmentResult(ADD_REQUEST_KEY, bundleOf(ADD_QR_STRING_KEY to res.qr))
                 else -> {
                 }
             }

@@ -38,6 +38,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.R
+import dgca.wallet.app.android.certificate.add.ADD_QR_STRING_KEY
+import dgca.wallet.app.android.certificate.add.ADD_REQUEST_KEY
 import dgca.wallet.app.android.databinding.FragmentTakePhotoBinding
 
 
@@ -46,11 +48,6 @@ class TakePhotoFragment : Fragment() {
     private val viewModel by viewModels<TakePhotoViewModel>()
     private var _binding: FragmentTakePhotoBinding? = null
     private val binding get() = _binding!!
-
-    companion object {
-        const val REQUEST_KEY = "TakePhotoFragment_REQUEST_KEY"
-        const val QR_KEY = "TakePhotoFragment_QR_KEY"
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentTakePhotoBinding.inflate(inflater, container, false)
@@ -65,7 +62,7 @@ class TakePhotoFragment : Fragment() {
             when (res) {
                 is TakePhotoResult.Failed -> Toast.makeText(requireContext(), R.string.error_importing_file, Toast.LENGTH_SHORT)
                     .show()
-                is TakePhotoResult.QrRecognised -> setFragmentResult(REQUEST_KEY, bundleOf(QR_KEY to res.qr))
+                is TakePhotoResult.QrRecognised -> setFragmentResult(ADD_REQUEST_KEY, bundleOf(ADD_QR_STRING_KEY to res.qr))
                 else -> {
                 }
             }
