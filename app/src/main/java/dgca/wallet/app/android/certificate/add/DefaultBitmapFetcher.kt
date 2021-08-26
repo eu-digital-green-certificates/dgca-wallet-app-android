@@ -41,14 +41,19 @@ class DefaultBitmapFetcher(context: Context) : BitmapFetcher {
         }.copy(Bitmap.Config.ARGB_8888, true)
     }
 
-    override fun loadBitmapByPdfUri(uri: Uri): Bitmap =
+    @Throws(Exception::class)
+    override fun loadBitmapByPdfUri(uri: Uri): List<Bitmap> =
         appContext.contentResolver.openFileDescriptor(uri, "r")!!.use { fileDescriptor ->
             PdfRenderer(fileDescriptor).use { pdfRenderer ->
-                pdfRenderer.openPage(0).use { page ->
-                    val bitmap = Bitmap.createBitmap(page.width, page.height, Bitmap.Config.ARGB_8888)
-                    page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
-                    bitmap
+                val bitmaps = mutableListOf<Bitmap>()
+                for (i in 0 until pdfRenderer.pageCount) {
+                    pdfRenderer.openPage(i).use { page ->
+                        val bitmap = Bitmap.createBitmap(page.width, page.height, Bitmap.Config.ARGB_8888)
+                        page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+                        bitmaps.add(bitmap)
+                    }
                 }
+                bitmaps.toList()
             }
         }
 }

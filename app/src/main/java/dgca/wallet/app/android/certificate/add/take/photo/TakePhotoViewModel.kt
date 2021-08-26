@@ -28,6 +28,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dgca.verifier.app.decoder.model.GreenCertificate
+import dgca.wallet.app.android.certificate.GreenCertificateFetcher
 import dgca.wallet.app.android.certificate.add.BitmapFetcher
 import dgca.wallet.app.android.certificate.add.FileSaver
 import dgca.wallet.app.android.certificate.add.QrCodeFetcher
@@ -48,7 +50,8 @@ class TakePhotoViewModel @Inject constructor(
     private val qrCodeFetcher: QrCodeFetcher,
     private val bitmapFetcher: BitmapFetcher,
     private val uriProvider: UriProvider,
-    private val fileSaver: FileSaver
+    private val fileSaver: FileSaver,
+    private val greenCertificateFetcher: GreenCertificateFetcher
 ) : ViewModel() {
     val uriLiveData: LiveData<Uri> = MutableLiveData(uriProvider.getUriFor("temp", "temp.jpeg"))
     private val _result = MutableLiveData<TakePhotoResult>()
@@ -70,9 +73,13 @@ class TakePhotoViewModel @Inject constructor(
         } catch (exception: Exception) {
             null
         }
+        val greenCertificate: GreenCertificate? =
+            qrCodeString?.let { qrString -> greenCertificateFetcher.fetchGreenCertificateFromQrString(qrString) }
 
         return when {
-            qrCodeString?.isNotBlank() == true && uriProvider.deleteFileByUri(this) -> {
+            greenCertificate != null && uriProvider.deleteFileByUri(
+                this
+            ) -> {
                 TakePhotoResult.QrRecognised(qrCodeString)
             }
             else -> {

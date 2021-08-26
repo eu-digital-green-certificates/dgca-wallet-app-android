@@ -44,6 +44,8 @@ import dgca.verifier.app.decoder.prefixvalidation.PrefixValidationService
 import dgca.verifier.app.decoder.schema.DefaultSchemaValidator
 import dgca.verifier.app.decoder.schema.SchemaValidator
 import dgca.verifier.app.decoder.services.X509
+import dgca.wallet.app.android.certificate.DefaultGreenCertificateFetcher
+import dgca.wallet.app.android.certificate.GreenCertificateFetcher
 import javax.inject.Singleton
 
 /**
@@ -93,4 +95,22 @@ object DecoderModule {
     @Singleton
     @Provides
     fun provideCryptoService(x509: X509): CryptoService = VerificationCryptoService(x509)
+
+    @Singleton
+    @Provides
+    fun provide(
+        prefixValidationService: PrefixValidationService,
+        base45Service: Base45Service,
+        compressorService: CompressorService,
+        coseService: CoseService,
+        schemaValidator: SchemaValidator,
+        cborService: CborService,
+    ): GreenCertificateFetcher = DefaultGreenCertificateFetcher(
+        prefixValidationService,
+        base45Service,
+        compressorService,
+        coseService,
+        schemaValidator,
+        cborService
+    )
 }

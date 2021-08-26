@@ -17,17 +17,15 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 8/25/21 3:24 PM
+ *  Created by osarapulov on 8/26/21 10:35 AM
  */
 
-package dgca.wallet.app.android.certificate.add
+package dgca.wallet.app.android.certificate
 
-import android.graphics.Bitmap
-import android.net.Uri
+import dgca.verifier.app.decoder.model.GreenCertificate
 
-interface BitmapFetcher {
-    fun loadBitmapByImageUri(uri: Uri): Bitmap
+interface GreenCertificateFetcher {
+    fun fetchDataFromQrString(qrString: String): Pair<ByteArray?, GreenCertificate?>
 
-    @Throws(Exception::class)
-    fun loadBitmapByPdfUri(uri: Uri): List<Bitmap>
+    fun fetchGreenCertificateFromQrString(qrString: String): GreenCertificate?
 }

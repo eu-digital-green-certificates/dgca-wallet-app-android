@@ -22,18 +22,22 @@
 
 package dgca.wallet.app.android.certificate.add.pdf
 
+import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dgca.verifier.app.decoder.model.GreenCertificate
+import dgca.wallet.app.android.certificate.GreenCertificateFetcher
 import dgca.wallet.app.android.certificate.add.BitmapFetcher
 import dgca.wallet.app.android.certificate.add.FileSaver
 import dgca.wallet.app.android.certificate.add.QrCodeFetcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 
 sealed class ImportPdfResult {
@@ -46,7 +50,8 @@ sealed class ImportPdfResult {
 class ImportPdfViewModel @Inject constructor(
     private val bitmapFetcher: BitmapFetcher,
     private val qrCodeFetcher: QrCodeFetcher,
-    private val fileSaver: FileSaver
+    private val fileSaver: FileSaver,
+    private val greenCertificateFetcher: GreenCertificateFetcher
 ) : ViewModel() {
     private val _result = MutableLiveData<ImportPdfResult>()
     val result: LiveData<ImportPdfResult> = _result
@@ -60,15 +65,34 @@ class ImportPdfViewModel @Inject constructor(
     }
 
     private fun Uri.handle(): ImportPdfResult {
-        val qrCodeString: String? = try {
-            bitmapFetcher.loadBitmapByPdfUri(this)
-                .let { bitmap -> qrCodeFetcher.fetchQrCodeString(bitmap) }
+        val qrStrings = mutableListOf<String>()
+        var bitmaps: List<Bitmap>? = null
+        try {
+            bitmaps = bitmapFetcher.loadBitmapByPdfUri(this)
+            bitmaps.forEach { bitmap ->
+                qrStrings.add(qrCodeFetcher.fetchQrCodeString(bitmap))
+                bitmap.recycle()
+            }
         } catch (exception: Exception) {
-            null
+            Timber.d(exception, "Error fetching qr strings from bitmaps")
+        } finally {
+            bitmaps?.forEach { bitmap -> bitmap.recycle() }
         }
 
-        return if (qrCodeString?.isNotBlank() == true) {
-            ImportPdfResult.QrRecognised(qrCodeString)
+        var qrString = ""
+        var greenCertificate: GreenCertificate? = null
+
+        qrStrings.forEach { curQrString ->
+            val curGreenCertificate = greenCertificateFetcher.fetchGreenCertificateFromQrString(curQrString)
+            if (curGreenCertificate != null) {
+                qrString = curQrString
+                greenCertificate = curGreenCertificate
+                return@forEach
+            }
+        }
+
+        return if (greenCertificate != null) {
+            ImportPdfResult.QrRecognised(qrString)
         } else {
             val file = try {
                 fileSaver.saveFileFromUri(this, "images", "${System.currentTimeMillis()}.pdf")
