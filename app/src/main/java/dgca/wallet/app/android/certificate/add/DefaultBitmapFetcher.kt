@@ -41,6 +41,7 @@ class DefaultBitmapFetcher(context: Context) : BitmapFetcher {
         }.copy(Bitmap.Config.ARGB_8888, true)
     }
 
+    @Throws(Exception::class)
     override fun loadBitmapByPdfUri(uri: Uri): List<Bitmap> =
         appContext.contentResolver.openFileDescriptor(uri, "r")!!.use { fileDescriptor ->
             PdfRenderer(fileDescriptor).use { pdfRenderer ->
