@@ -17,10 +17,10 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 8/23/21 10:12 AM
+ *  Created by osarapulov on 8/25/21 12:11 PM
  */
 
-package dgca.wallet.app.android.certificate.importe.pdf
+package dgca.wallet.app.android.certificate.add.pdf
 
 import android.content.Intent
 import android.os.Bundle
@@ -30,11 +30,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.R
+import dgca.wallet.app.android.certificate.add.ADD_QR_STRING_KEY
+import dgca.wallet.app.android.certificate.add.ADD_REQUEST_KEY
 import dgca.wallet.app.android.databinding.FragmentImportPdfBinding
 
 @AndroidEntryPoint
@@ -57,18 +61,18 @@ class ImportPdfFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.result.observe(viewLifecycleOwner) { res ->
-            if (!res) {
-                Toast.makeText(requireContext(), R.string.error_importing_file, Toast.LENGTH_SHORT).show()
+            when (res) {
+                is ImportPdfResult.Failed -> Toast.makeText(requireContext(), R.string.error_importing_file, Toast.LENGTH_SHORT)
+                    .show()
+                is ImportPdfResult.QrRecognised -> setFragmentResult(ADD_REQUEST_KEY, bundleOf(ADD_QR_STRING_KEY to res.qr))
+                else -> {
+                }
             }
-            close()
+            findNavController().navigateUp()
         }
     }
 
     private val pickPdf = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { uri ->
         viewModel.save(uri.data?.data)
-    }
-
-    private fun close() {
-        findNavController().navigateUp()
     }
 }

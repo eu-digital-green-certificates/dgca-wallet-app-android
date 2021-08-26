@@ -1,6 +1,6 @@
 /*
  *  ---license-start
- *  eu-digital-green-certificates / dgca-verifier-app-android
+ *  eu-digital-green-certificates / dgca-wallet-app-android
  *  ---
  *  Copyright (C) 2021 T-Systems International GmbH and all other contributors
  *  ---
@@ -17,26 +17,27 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 8/23/21 8:45 AM
+ *  Created by osarapulov on 8/25/21 4:41 PM
  */
 
-package dgca.wallet.app.android.certificate.take.photo
+package dgca.wallet.app.android.certificate.add
 
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
+import android.net.Uri
+import androidx.core.content.FileProvider
+import androidx.documentfile.provider.DocumentFile
 import java.io.File
-import javax.inject.Inject
 
-@HiltViewModel
-class TakePhotoViewModel @Inject constructor(@ApplicationContext private val context: Context) : ViewModel() {
-    val file: LiveData<File> = MutableLiveData(
+class DefaultUriProvider(context: Context) : UriProvider {
+    private val appContext = context.applicationContext
+
+    override fun getUriFor(targetDirectoryName: String, fileName: String): Uri = FileProvider.getUriForFile(
+        appContext, appContext.packageName + ".provider",
         File(
-            File(context.filesDir, "images").apply { if (!isDirectory || !exists()) mkdirs() },
-            "${System.currentTimeMillis()}.jpeg"
+            File(appContext.filesDir, targetDirectoryName).apply { if (!isDirectory || !exists()) mkdirs() },
+            fileName
         )
     )
+
+    override fun deleteFileByUri(uri: Uri): Boolean = DocumentFile.fromSingleUri(appContext, uri)!!.delete()
 }

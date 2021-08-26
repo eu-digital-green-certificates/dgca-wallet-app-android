@@ -35,6 +35,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.MainActivity
 import dgca.wallet.app.android.base.BindingFragment
+import dgca.wallet.app.android.certificate.add.ADD_QR_STRING_KEY
+import dgca.wallet.app.android.certificate.add.ADD_REQUEST_KEY
 import dgca.wallet.app.android.databinding.FragmentCertificatesBinding
 import java.io.File
 
@@ -82,6 +84,17 @@ class CertificatesFragment : BindingFragment<FragmentCertificatesBinding>(),
                 ImportImageDialogFragment.RESULT_PICK_FROM_GALLERY -> showPickImage()
                 else -> throw IllegalStateException()
             }
+        }
+
+        setFragmentResultListener(ADD_REQUEST_KEY) { _, bundle ->
+            showImportDcc(bundle.getString(ADD_QR_STRING_KEY))
+        }
+    }
+
+    private fun showImportDcc(qr: String?) {
+        if (!qr.isNullOrBlank()) {
+            val action = CertificatesFragmentDirections.actionCertificatesFragmentToClaimCertificateFragment(qr)
+            findNavController().navigate(action)
         }
     }
 

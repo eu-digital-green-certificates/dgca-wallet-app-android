@@ -28,6 +28,9 @@
     <TextView
         android:id="@+id/takePhoto"
         style="@style/ButtomDialogButton"
+        android:gravity="center_vertical"
+        android:minHeight="48dp"
+        android:paddingHorizontal="16dp"
         android:text="@string/take_photo"
         app:layout_constraintBottom_toTopOf="@id/pickFromGallery"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,6 +40,8 @@
     <TextView
         android:id="@+id/pickFromGallery"
         style="@style/ButtomDialogButton"
+        android:gravity="center_vertical"
+        android:minHeight="48dp"
         android:text="@string/pick_from_gallery"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -132,7 +132,7 @@
 
     <fragment
         android:id="@+id/takePhotoFragment"
-        android:name="dgca.wallet.app.android.certificate.take.photo.TakePhotoFragment"
+        android:name="dgca.wallet.app.android.certificate.add.take.photo.TakePhotoFragment"
         android:label="@string/take_photo"
         tools:layout="@layout/fragment_take_photo">
 
@@ -140,13 +140,13 @@
 
     <fragment
         android:id="@+id/pickImageFragment"
-        android:name="dgca.wallet.app.android.certificate.pick.image.PickImageFragment"
+        android:name="dgca.wallet.app.android.certificate.add.pick.image.PickImageFragment"
         android:label="@string/pick_image"
         tools:layout="@layout/fragment_pick_image" />
 
     <fragment
         android:id="@+id/importPdfFragment"
-        android:name="dgca.wallet.app.android.certificate.importe.pdf.ImportPdfFragment"
+        android:name="dgca.wallet.app.android.certificate.add.pdf.ImportPdfFragment"
         android:label="@string/import_pdf"
         tools:layout="@layout/fragment_import_pdf" />
 

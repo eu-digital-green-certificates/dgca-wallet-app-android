@@ -135,8 +135,11 @@ class ViewCertificateViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 try {
                     fileForSharing = certificate.value!!.qrCode.toPdfDocument().toFile(
-                        parentFile,
-                        "images/${File.separator}pdf_for_sharing.pdf"
+                        File(parentFile, "temp").apply {
+                            if (!exists() || !isDirectory) {
+                                mkdirs()
+                            }
+                        }, "${System.currentTimeMillis()}.pdf"
                     )
                 } catch (exception: Exception) {
                     error = exception
