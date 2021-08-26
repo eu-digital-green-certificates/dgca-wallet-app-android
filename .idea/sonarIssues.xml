@@ -603,7 +603,17 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/DefaultGreenCertificateFetcher.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/FileCard.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/dgca/wallet/app/android/certificate/GreenCertificateFetcher.kt">
           <value>
             <set />
           </value>

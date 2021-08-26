@@ -28,16 +28,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.verifier.app.decoder.*
-import dgca.verifier.app.decoder.base45.Base45Service
-import dgca.verifier.app.decoder.cbor.CborService
-import dgca.verifier.app.decoder.compression.CompressorService
-import dgca.verifier.app.decoder.cose.CoseService
 import dgca.verifier.app.decoder.model.GreenCertificate
-import dgca.verifier.app.decoder.model.VerificationResult
 import dgca.verifier.app.decoder.prefixvalidation.PrefixValidationService
-import dgca.verifier.app.decoder.schema.SchemaValidator
 import dgca.wallet.app.android.BuildConfig
 import dgca.wallet.app.android.Event
+import dgca.wallet.app.android.certificate.GreenCertificateFetcher
 import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.ConfigRepository
 import dgca.wallet.app.android.data.WalletRepository
@@ -56,12 +51,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ClaimCertificateViewModel @Inject constructor(
+    private val greenCertificateFetcher: GreenCertificateFetcher,
     private val prefixValidationService: PrefixValidationService,
-    private val base45Service: Base45Service,
-    private val compressorService: CompressorService,
-    private val coseService: CoseService,
-    private val schemaValidator: SchemaValidator,
-    private val cborService: CborService,
     private val configRepository: ConfigRepository,
     private val walletRepository: WalletRepository
 ) : ViewModel() {
@@ -81,26 +72,9 @@ class ClaimCertificateViewModel @Inject constructor(
     fun init(qrCodeText: String) {
         viewModelScope.launch {
             _inProgress.value = true
-            withContext(Dispatchers.IO) {
-                val verificationResult = VerificationResult()
-                val plainInput = prefixValidationService.decode(qrCodeText, verificationResult)
-                val compressedCose = base45Service.decode(plainInput, verificationResult)
-                val coseResult: ByteArray? = compressorService.decode(compressedCose, verificationResult)
-
-                if (coseResult == null) {
-                    Timber.d("Verification failed: Too many bytes read")
-                    return@withContext
-                }
-                cose = coseResult
-
-                val coseData = coseService.decode(cose, verificationResult)
-                if (coseData == null) {
-                    Timber.d("Verification failed: COSE not decoded")
-                    return@withContext
-                }
-
-                schemaValidator.validate(coseData.cbor, verificationResult)
-                greenCertificate = cborService.decode(coseData.cbor, verificationResult)
+            withContext(Dispatchers.IO) { greenCertificateFetcher.fetchDataFromQrString(qrCodeText) }.apply {
+                cose = first ?: cose
+                greenCertificate = second
             }
             _inProgress.value = false
             _certificate.value = greenCertificate?.toCertificateModel()
