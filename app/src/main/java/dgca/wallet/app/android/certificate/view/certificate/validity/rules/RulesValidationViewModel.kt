@@ -65,7 +65,7 @@ class RulesValidationViewModel @Inject constructor(
     private val _validationResults = MutableLiveData<List<ValidationResult>?>()
     val validationResults: LiveData<List<ValidationResult>?> = _validationResults
 
-    private val _inProgress = MutableLiveData<Boolean>(true)
+    private val _inProgress = MutableLiveData(true)
     val inProgress: LiveData<Boolean> = _inProgress
 
     fun validate(qrCodeText: String, selectedCountry: String, zonedDateTime: ZonedDateTime) {

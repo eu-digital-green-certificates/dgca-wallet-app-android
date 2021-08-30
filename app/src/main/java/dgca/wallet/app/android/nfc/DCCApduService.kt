@@ -284,7 +284,5 @@ class DCCApduService : HostApduService() {
 
     companion object {
         const val NFC_NDEF_KEY = "ndefMessage"
-        const val NFC_TAG_DCC = "DCC:"
-        const val NFC_TAG_TAN = "TAN:"
     }
 }

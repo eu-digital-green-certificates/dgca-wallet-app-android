@@ -21,10 +21,11 @@
   -->
 
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/title"
-    android:paddingStart="@dimen/default_margin"
-    android:paddingEnd="@dimen/default_margin"
-    android:paddingTop="@dimen/default_margin"
-    android:textSize="24sp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" />
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="@dimen/default_padding"
+    android:paddingVertical="4dp"
+    android:textSize="20sp"
+    tools:text="Certificates" />

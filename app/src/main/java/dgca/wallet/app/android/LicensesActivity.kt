@@ -13,23 +13,22 @@
  *  Created by Matthieu De Beule on 11/06/2021, 08:39
  */
 
-package dgca.wallet.app.android;
+package dgca.wallet.app.android
 
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.util.Linkify
 import android.widget.ArrayAdapter
-import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import dgca.wallet.app.android.databinding.ActivityLicensesBinding
-import dgca.wallet.app.android.databinding.FragmentSettingsBinding
 import java.nio.charset.Charset
 import java.util.*
 
 //Largely inspired by https://github.com/mozilla-mobile/fenix/pull/13767/
 class LicensesActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityLicensesBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
