@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~  license-start
   ~  eu-digital-green-certificates / dgca-verifier-app-android
   ~
@@ -21,7 +20,7 @@
   ~  Created by osarapulov on 8/16/21 3:38 PM
   -->
 
-<paths xmlns:android="http://schemas.android.com/apk/res/android">
+<paths>
     <files-path
         name="myimages"
         path="images/" />

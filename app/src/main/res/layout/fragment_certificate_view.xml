@@ -20,7 +20,7 @@
   ~  Created by osarapulov on 5/7/21 9:32 AM
   -->
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content"
@@ -31,187 +31,182 @@
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:paddingHorizontal="@dimen/default_padding"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toTopOf="@+id/bottom_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/person_info_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingVertical="10dp">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/qrCode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                tools:src="@drawable/ic_logo_eu" />
-
-            <TextView
-                android:id="@+id/tan"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                tools:text="TAN: GG23AWFRQ" />
-
-            <TextView
-                android:id="@+id/certificate_type_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:fontFamily="sans-serif-light"
-                android:text="@string/certificate_type"
-                android:textSize="18sp" />
+            android:padding="@dimen/default_padding">
 
             <TextView
                 android:id="@+id/title"
+                style="@style/TextAppearance.Dgca.GeneralTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:lines="1"
-                android:textColor="@color/black"
-                android:textSize="22sp"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Vaccination 1 of 2" />
-
-            <TextView
-                android:id="@+id/name_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:fontFamily="sans-serif-light"
-                android:text="@string/name"
-                android:textSize="18sp" />
+                tools:text="Vaccination1 of 2" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/person_full_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:textSize="22sp"
+                android:textSize="18sp"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                tools:layout_editor_absoluteX="0dp"
                 tools:text="Gabriele Musterfrau" />
 
-            <!--            <com.google.android.material.textview.MaterialTextView-->
-            <!--                android:id="@+id/date_of_birth_title"-->
-            <!--                style="@style/TextAppearance.Dgca.CertificateTitle"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginTop="10dp"-->
-            <!--                android:text="@string/date_of_birth_title"-->
-            <!--                android:visibility="gone" />-->
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/qrCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/person_full_name"
+                tools:layout_editor_absoluteX="0dp"
+                tools:src="@drawable/ic_logo_eu" />
 
-            <!--            <com.google.android.material.textview.MaterialTextView-->
-            <!--                android:id="@+id/date_of_birth"-->
-            <!--                style="@style/TextAppearance.Dgca.CertificateValue"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                tools:text="Feb 26, 1988" />-->
+            <TextView
+                android:id="@+id/tan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintTop_toBottomOf="@+id/qrCode"
+                tools:layout_editor_absoluteX="0dp"
+                tools:text="TAN: GG23AWFRQ" />
+
+            <Button
+                android:id="@+id/checkValidity"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/check_validity"
+                android:textAllCaps="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tan"
+                app:layout_constraintWidth_percent="0.7"
+                app:strokeColor="@color/blue" />
+
+            <View
+                android:id="@+id/gradient"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/default_margin"
+                android:background="@color/grey_transparent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/checkValidity" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/default_margin"
+                android:overScrollMode="never"
+                app:layout_constraintTop_toBottomOf="@+id/gradient" />
+
+            <Button
+                android:id="@+id/shareImage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin"
+                android:backgroundTint="@color/blue"
+                android:text="@string/share_image"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recycler_view"
+                app:layout_constraintWidth_percent="0.7" />
+
+            <Button
+                android:id="@+id/sharePdf"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/blue"
+                android:text="@string/share_pdf"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/shareImage"
+                app:layout_constraintWidth_percent="0.7" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/nfc_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:overScrollMode="never" />
+                android:gravity="center_vertical"
+                android:text="@string/nfc_status_ok"
+                app:layout_constraintEnd_toEndOf="@+id/sharePdf"
+                app:layout_constraintStart_toStartOf="@+id/sharePdf"
+                app:layout_constraintTop_toBottomOf="@+id/sharePdf" />
 
-        </LinearLayout>
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/nfcAction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:checked="false"
+                android:paddingHorizontal="@dimen/default_padding"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textOff=""
+                android:textOn=""
+                app:layout_constraintEnd_toEndOf="@+id/nfc_description"
+                app:layout_constraintTop_toBottomOf="@+id/nfc_description"
+                app:showText="true" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/nfc_switch_text"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:drawableStart="@drawable/ic_nfc"
+                android:drawablePadding="5dp"
+                android:gravity="center_vertical"
+                android:text="@string/nfc_off"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/nfcAction"
+                app:layout_constraintEnd_toStartOf="@+id/nfcAction"
+                app:layout_constraintStart_toStartOf="@+id/sharePdf"
+                app:layout_constraintTop_toTopOf="@+id/nfcAction" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/nfc_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="nfc_switch_text, nfcAction, nfc_description" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/logo"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/eu_logo_big"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nfc_switch_text"
+                app:layout_goneMarginTop="@dimen/default_margin" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
-
-    <View
-        android:id="@+id/gradient"
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="@drawable/white_gradient"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_container"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/bottom_container"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/default_margin"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <Button
-            android:id="@+id/checkValidity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/blue"
-            android:minWidth="130dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:text="@string/check_validity"
-            android:textAllCaps="false"
-            android:textColor="@color/white" />
-
-        <Button
-            android:id="@+id/shareImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/blue"
-            android:minWidth="130dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:text="@string/share_image"
-            android:textAllCaps="false"
-            android:textColor="@color/white" />
-
-        <Button
-            android:id="@+id/sharePdf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/blue"
-            android:minWidth="130dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:text="@string/share_pdf"
-            android:textAllCaps="false"
-            android:textColor="@color/white" />
-
-        <!-- TODO: update UI when provided by UI/UX team -->
-        <androidx.appcompat.widget.AppCompatToggleButton
-            android:id="@+id/nfcAction"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/blue"
-            android:paddingHorizontal="@dimen/default_padding"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textOff="@string/nfc_service_disabled"
-            android:textOn="@string/nfc_service_enabled"
-            app:showText="true" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/nfc_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="@string/nfc_status_ok" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/logo"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/eu_logo_big" />
-    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/progress_view"
@@ -231,4 +226,4 @@
             android:indeterminateTint="@color/blue" />
     </FrameLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

@@ -22,13 +22,11 @@
 
 package dgca.wallet.app.android.certificate
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dgca.wallet.app.android.data.WalletRepository
 import kotlinx.coroutines.launch
 import java.io.File
@@ -36,7 +34,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CertificatesViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val walletRepository: WalletRepository
 ) : ViewModel() {
 
@@ -46,7 +43,7 @@ class CertificatesViewModel @Inject constructor(
     private val _inProgress = MutableLiveData<Boolean>()
     val inProgress: LiveData<Boolean> = _inProgress
 
-    fun fetchCertificates() {
+    fun fetchCertificates(filesDir: File) {
         _inProgress.value = true
         viewModelScope.launch {
             val certificateCards = walletRepository.getCertificates()
@@ -56,7 +53,7 @@ class CertificatesViewModel @Inject constructor(
                 certificatesCards.addAll(certificateCards)
             }
 
-            val imagesDir = File(context.filesDir, "images")
+            val imagesDir = File(filesDir, "images")
             val imageFileCards = mutableListOf<CertificatesCard.FileCard>()
             val pdfFileCards = mutableListOf<CertificatesCard.FileCard>()
             imagesDir.listFiles()?.reversed()?.forEach { file ->

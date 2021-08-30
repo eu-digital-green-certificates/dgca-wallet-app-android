@@ -23,7 +23,6 @@
 package dgca.wallet.app.android.certificate.claim
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dgca.wallet.app.android.data.TestModel
@@ -35,7 +34,10 @@ class TestViewHolder(private val binding: ItemTestBinding) : RecyclerView.ViewHo
     fun bind(data: TestModel) {
         binding.testResultValue.text = data.resultType.value
         binding.dateOfCollectionValue.text = data.dateTimeOfCollection.toFormattedDateTime()
-        (data.dateTimeOfTestResult?.toFormattedDateTime() ?: "").bindText(binding.dateOfTestResultTitle, binding.dateOfTestResultValue)
+        (data.dateTimeOfTestResult?.toFormattedDateTime() ?: "").bindText(
+            binding.dateOfTestResultTitle,
+            binding.dateOfTestResultValue
+        )
 
         binding.diseaseValue.text = data.disease.value
         binding.typeOfTestValue.text = data.typeOfTest.value

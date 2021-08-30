@@ -34,8 +34,6 @@ import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.verifier.app.engine.UTC_ZONE_ID
 import dgca.verifier.app.engine.data.source.countries.COUNTRIES_MAP
-import dgca.wallet.app.android.certificate.view.certificate.validity.CertificateValidityFragmentArgs
-import dgca.wallet.app.android.certificate.view.certificate.validity.CertificateValidityFragmentDirections
 import dgca.wallet.app.android.data.local.rules.Converters
 import dgca.wallet.app.android.databinding.FragmentValidityCertificateBinding
 import java.time.LocalDate
@@ -51,7 +49,7 @@ class CertificateValidityFragment : Fragment() {
 
     private val viewModel by viewModels<CertificateValidityViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentValidityCertificateBinding.inflate(inflater, container, false)
         return binding.root
     }

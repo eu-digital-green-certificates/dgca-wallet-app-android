@@ -65,7 +65,7 @@ class CertificatesFragment : BindingFragment<FragmentCertificatesBinding>(),
         viewModel.certificates.observe(viewLifecycleOwner, { setCertificateCards(it) })
         viewModel.inProgress.observe(viewLifecycleOwner, { binding.progressView.isVisible = it })
 
-        viewModel.fetchCertificates()
+        viewModel.fetchCertificates(requireContext().filesDir)
 
         setFragmentResultListener(AddNewBottomDialogFragment.REQUEST_KEY) { key, bundle ->
             findNavController().navigateUp()

@@ -22,17 +22,21 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingVertical="@dimen/default_padding"
+    tools:background="@color/white">
 
     <TextView
         android:id="@+id/scanCertificate"
         style="@style/ButtomDialogButton"
+        android:drawablePadding="@dimen/default_padding"
         android:gravity="center_vertical"
         android:minHeight="48dp"
         android:paddingHorizontal="16dp"
         android:text="@string/scan_certificate"
-        app:layout_constraintBottom_toTopOf="@id/importImage"
+        app:drawableStartCompat="@drawable/ic_scan"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -40,10 +44,11 @@
     <TextView
         android:id="@+id/importImage"
         style="@style/ButtomDialogButton"
+        android:drawablePadding="@dimen/default_padding"
         android:gravity="center_vertical"
         android:minHeight="48dp"
         android:text="@string/import_image"
-        app:layout_constraintBottom_toTopOf="@id/importPdf"
+        app:drawableStartCompat="@drawable/ic_import_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/scanCertificate" />
@@ -51,10 +56,11 @@
     <TextView
         android:id="@+id/importPdf"
         style="@style/ButtomDialogButton"
+        android:drawablePadding="@dimen/default_padding"
         android:gravity="center_vertical"
         android:minHeight="48dp"
         android:text="@string/import_pdf"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:drawableStartCompat="@drawable/ic_import_pdf"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/importImage" />

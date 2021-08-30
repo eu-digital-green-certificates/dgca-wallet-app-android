@@ -84,35 +84,36 @@
 
     <LinearLayout
         android:id="@+id/bottom_container"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/default_margin"
+        android:clipToPadding="false"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/default_padding"
+        android:weightSum="2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/logo"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="0.5"
+            android:scaleType="centerInside"
+            android:src="@drawable/eu_logo_big" />
+
         <Button
             android:id="@+id/scanCode"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/blue"
-            android:minWidth="130dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
+            android:layout_weight="1.5"
+            android:backgroundTint="@color/green"
+            android:minHeight="50dp"
             android:text="@string/add_new"
             android:textAllCaps="false"
             android:textColor="@color/white" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/logo"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/eu_logo_big" />
     </LinearLayout>
 
     <FrameLayout

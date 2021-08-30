@@ -41,8 +41,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.R
 import dgca.wallet.app.android.base.BindingFragment
 import dgca.wallet.app.android.certificate.claim.CertListAdapter
-import dgca.wallet.app.android.certificate.claim.bindText
-import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.getCertificateListData
 import dgca.wallet.app.android.databinding.FragmentCertificateViewBinding
 import dgca.wallet.app.android.nfc.DCCApduService
@@ -101,7 +99,7 @@ class ViewCertificateFragment : BindingFragment<FragmentCertificateViewBinding>(
 
             binding.qrCode.setImageBitmap(it.qrCode)
             binding.tan.text = getString(R.string.tan_placeholder, it.certificatesCard.tan)
-            showUserData(certificate)
+            binding.personFullName.text = certificate.getFullName()
             adapter.update(certificate.getCertificateListData())
         })
         viewModel.event.observe(viewLifecycleOwner) { event ->
@@ -129,8 +127,10 @@ class ViewCertificateFragment : BindingFragment<FragmentCertificateViewBinding>(
         binding.nfcAction.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 initNFCFunction()
+                binding.nfcSwitchText.text = getString(R.string.nfc_on)
             } else {
                 stopNfcService()
+                binding.nfcSwitchText.text = getString(R.string.nfc_off)
             }
         }
     }
@@ -172,21 +172,6 @@ class ViewCertificateFragment : BindingFragment<FragmentCertificateViewBinding>(
         Toast.makeText(requireContext(), R.string.file_preparation_error, Toast.LENGTH_SHORT).show()
     }
 
-    private fun showUserData(certificate: CertificateModel) {
-        certificate.getFullName().bindText(binding.nameTitle, binding.personFullName)
-
-//        val dateOfBirthday = certificate.dateOfBirth.parseFromTo(YEAR_MONTH_DAY, FORMATTED_YEAR_MONTH_DAY)
-//        if (dateOfBirthday.isNotBlank()) {
-//            binding.dateOfBirth.text = dateOfBirthday
-//            View.VISIBLE
-//        } else {
-//            View.GONE
-//        }.apply {
-//            binding.dateOfBirthTitle.visibility = this
-//            binding.dateOfBirth.visibility = this
-//        }
-    }
-
     private fun onViewModelEvent(event: ViewCertificateViewModel.ViewCertEvent) {
         when (event) {
             is ViewCertificateViewModel.ViewCertEvent.OnCertDeleted -> findNavController().popBackStack()
@@ -195,7 +180,7 @@ class ViewCertificateFragment : BindingFragment<FragmentCertificateViewBinding>(
 
     private fun initNFCFunction() {
         if (!requireActivity().packageManager.hasSystemFeature(PackageManager.FEATURE_NFC_HOST_CARD_EMULATION)) {
-            binding.nfcStatus.text = getString(R.string.no_nfc)
+            binding.nfcGroup.isVisible = false
             return
         }
 
