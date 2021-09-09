@@ -98,4 +98,5 @@
     <string name="nfc_status_ok">Allow data exchange when your phone is close to another device (5cm or closer)</string>
     <string name="nfc_on">NFC on</string>
     <string name="nfc_off">NFC off</string>
+    <string name="complete_action_using">Complete action using</string>
 </resources>
