@@ -111,7 +111,7 @@
             android:layout_weight="1.5"
             android:backgroundTint="@color/green"
             android:minHeight="50dp"
-            android:text="@string/add_new"
+            android:text="@string/scan_import"
             android:textAllCaps="false"
             android:textColor="@color/white" />
     </LinearLayout>
