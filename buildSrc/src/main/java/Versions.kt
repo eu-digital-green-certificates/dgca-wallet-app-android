@@ -76,4 +76,6 @@ object Versions {
     // Instrumented tests
     const val test_ext = "1.1.2"
     const val test_rules = "1.3.0"
+    const val mockito_core_version = "3.9.0"
+    const val mockito_kotlin_version = "3.2.0"
 }
