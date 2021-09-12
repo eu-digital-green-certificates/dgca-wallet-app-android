@@ -70,6 +70,7 @@ class ModelFetcherDialogFragment : DialogFragment() {
                     FETCH_MODEL_REQUEST_KEY,
                     bundleOf(CLAIM_GREEN_CERTIFICATE_RESULT_KEY to modelFetcherResult.toClaimCertificateModel())
                 )
+                else -> setFragmentResult(FETCH_MODEL_REQUEST_KEY, bundleOf())
             }
         }
     }
