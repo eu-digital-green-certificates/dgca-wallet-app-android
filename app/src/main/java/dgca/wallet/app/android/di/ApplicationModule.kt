@@ -28,9 +28,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dgca.wallet.app.android.certificate.add.*
 import dgca.wallet.app.android.certificate.view.certificate.DefaultShareImageIntentProvider
 import dgca.wallet.app.android.certificate.view.certificate.ShareImageIntentProvider
+import dgca.wallet.app.android.wallet.scan_import.*
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)

@@ -24,7 +24,7 @@ package dgca.wallet.app.android.data
 
 import dgca.verifier.app.decoder.CertificateDecoder
 import dgca.verifier.app.decoder.CertificateDecodingResult
-import dgca.wallet.app.android.certificate.CertificatesCard
+import dgca.wallet.app.android.wallet.CertificatesCard
 import dgca.wallet.app.android.data.local.CertificateDao
 import dgca.wallet.app.android.data.local.CertificateEntity
 import dgca.wallet.app.android.data.local.toCertificateModel

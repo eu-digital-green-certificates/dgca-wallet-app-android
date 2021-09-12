@@ -36,9 +36,9 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
-import dgca.wallet.app.android.certificate.CertificatesFragmentDirections
 import dgca.wallet.app.android.databinding.ActivityMainBinding
 import dgca.wallet.app.android.nfc.NdefParser
+import dgca.wallet.app.android.wallet.CertificatesFragmentDirections
 import timber.log.Timber
 
 @AndroidEntryPoint

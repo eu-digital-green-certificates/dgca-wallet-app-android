@@ -49,7 +49,7 @@
 
     <fragment
         android:id="@+id/certificatesFragment"
-        android:name="dgca.wallet.app.android.certificate.CertificatesFragment"
+        android:name="dgca.wallet.app.android.wallet.CertificatesFragment"
         android:label="@string/certificate_wallet"
         tools:layout="@layout/fragment_certificates">
 
@@ -120,19 +120,19 @@
 
     <dialog
         android:id="@+id/addNewDialogFragment"
-        android:name="dgca.wallet.app.android.certificate.AddNewBottomDialogFragment"
+        android:name="dgca.wallet.app.android.wallet.AddNewBottomDialogFragment"
         android:label="Add New"
         tools:layout="@layout/dialog_fragment_add_new" />
 
     <dialog
         android:id="@+id/imagePhotoDialogFragment"
-        android:name="dgca.wallet.app.android.certificate.ImportImageDialogFragment"
+        android:name="dgca.wallet.app.android.wallet.ImportImageDialogFragment"
         android:label="Import Image"
         tools:layout="@layout/dialog_fragment_import_image" />
 
     <fragment
         android:id="@+id/takePhotoFragment"
-        android:name="dgca.wallet.app.android.certificate.add.take.photo.TakePhotoFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.image.take.photo.TakePhotoFragment"
         android:label="@string/take_photo"
         tools:layout="@layout/fragment_take_photo">
 
@@ -140,13 +140,13 @@
 
     <fragment
         android:id="@+id/pickImageFragment"
-        android:name="dgca.wallet.app.android.certificate.add.pick.image.PickImageFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.image.pick.image.PickImageFragment"
         android:label="@string/pick_image"
         tools:layout="@layout/fragment_pick_image" />
 
     <fragment
         android:id="@+id/importPdfFragment"
-        android:name="dgca.wallet.app.android.certificate.add.pdf.ImportPdfFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.pdf.ImportPdfFragment"
         android:label="@string/import_pdf"
         tools:layout="@layout/fragment_import_pdf" />
 
