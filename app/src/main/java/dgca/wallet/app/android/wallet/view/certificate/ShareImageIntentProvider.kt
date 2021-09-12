@@ -20,7 +20,7 @@
  *  Created by osarapulov on 8/17/21 8:10 AM
  */
 
-package dgca.wallet.app.android.certificate.view.certificate
+package dgca.wallet.app.android.wallet.view.certificate
 
 import android.content.Intent
 import java.io.File

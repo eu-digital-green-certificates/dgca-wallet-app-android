@@ -20,7 +20,7 @@
  *  Created by osarapulov on 8/23/21 1:56 PM
  */
 
-package dgca.wallet.app.android.certificate.view.file
+package dgca.wallet.app.android.wallet.view.file
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

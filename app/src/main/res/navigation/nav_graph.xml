@@ -168,7 +168,7 @@
 
     <fragment
         android:id="@+id/viewCertificateFragment"
-        android:name="dgca.wallet.app.android.certificate.view.certificate.ViewCertificateFragment"
+        android:name="dgca.wallet.app.android.wallet.view.certificate.ViewCertificateFragment"
         android:label="@string/your_certificate"
         tools:layout="@layout/fragment_certificate_view">
 
@@ -188,7 +188,7 @@
 
     <fragment
         android:id="@+id/viewFileFragment"
-        android:name="dgca.wallet.app.android.certificate.view.file.ViewFileFragment"
+        android:name="dgca.wallet.app.android.wallet.view.file.ViewFileFragment"
         android:label="@string/your_file"
         tools:layout="@layout/fragment_file_view">
 
@@ -199,7 +199,7 @@
 
     <fragment
         android:id="@+id/certificateValidityFragment"
-        android:name="dgca.wallet.app.android.certificate.view.certificate.validity.CertificateValidityFragment"
+        android:name="dgca.wallet.app.android.wallet.view.certificate.validity.CertificateValidityFragment"
         android:label="@string/country_rules_validation"
         tools:layout="@layout/fragment_validity_certificate">
 
@@ -218,7 +218,7 @@
 
     <fragment
         android:id="@+id/rulesValidationFragment"
-        android:name="dgca.wallet.app.android.certificate.view.certificate.validity.rules.RulesValidationFragment"
+        android:name="dgca.wallet.app.android.wallet.view.certificate.validity.rules.RulesValidationFragment"
         android:label="@string/country_rules_validation"
         tools:layout="@layout/fragment_rules_validatation">
 
@@ -237,7 +237,7 @@
 
     <fragment
         android:id="@+id/tanFragment"
-        android:name="dgca.wallet.app.android.certificate.claim.TanFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.qr.certificate.TanFragment"
         android:label="@string/tan_cert_title"
         tools:layout="@layout/fragment_certificate_tan">
 
@@ -252,7 +252,7 @@
     </fragment>
     <fragment
         android:id="@+id/claimCertificateFragment"
-        android:name="dgca.wallet.app.android.certificate.claim.ClaimCertificateFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.qr.certificate.ClaimCertificateFragment"
         android:label="@string/claim_cert_title"
         app:enterAnim="@animator/nav_default_pop_enter_anim"
         app:exitAnim="@animator/nav_default_exit_anim"

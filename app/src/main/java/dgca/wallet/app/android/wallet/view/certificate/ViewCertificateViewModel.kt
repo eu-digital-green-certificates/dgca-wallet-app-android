@@ -1,6 +1,6 @@
 /*
  *  ---license-start
- *  eu-digital-green-certificates / dgca-verifier-app-android
+ *  eu-digital-green-certificates / dgca-wallet-app-android
  *  ---
  *  Copyright (C) 2021 T-Systems International GmbH and all other contributors
  *  ---
@@ -20,7 +20,7 @@
  *  Created by osarapulov on 8/23/21 1:54 PM
  */
 
-package dgca.wallet.app.android.certificate.view.certificate
+package dgca.wallet.app.android.wallet.view.certificate
 
 import android.graphics.Bitmap
 import androidx.lifecycle.LiveData

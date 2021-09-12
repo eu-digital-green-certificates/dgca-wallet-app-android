@@ -20,7 +20,7 @@
  *  Created by osarapulov on 8/23/21 1:54 PM
  */
 
-package dgca.wallet.app.android.certificate.view.file
+package dgca.wallet.app.android.wallet.view.file
 
 import android.content.Intent
 import android.os.Bundle
@@ -32,7 +32,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.R
-import dgca.wallet.app.android.certificate.view.certificate.ShareImageIntentProvider
+import dgca.wallet.app.android.wallet.view.certificate.ShareImageIntentProvider
 import dgca.wallet.app.android.databinding.FragmentFileViewBinding
 import javax.inject.Inject
 

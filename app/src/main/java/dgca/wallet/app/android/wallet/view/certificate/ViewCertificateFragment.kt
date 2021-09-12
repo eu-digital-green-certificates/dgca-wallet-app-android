@@ -1,6 +1,6 @@
 /*
  *  ---license-start
- *  eu-digital-green-certificates / dgca-verifier-app-android
+ *  eu-digital-green-certificates / dgca-wallet-app-android
  *  ---
  *  Copyright (C) 2021 T-Systems International GmbH and all other contributors
  *  ---
@@ -20,7 +20,7 @@
  *  Created by osarapulov on 8/23/21 1:54 PM
  */
 
-package dgca.wallet.app.android.certificate.view.certificate
+package dgca.wallet.app.android.wallet.view.certificate
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -40,7 +40,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.R
 import dgca.wallet.app.android.base.BindingFragment
-import dgca.wallet.app.android.certificate.claim.CertListAdapter
+import dgca.wallet.app.android.wallet.scan_import.qr.certificate.CertListAdapter
 import dgca.wallet.app.android.data.getCertificateListData
 import dgca.wallet.app.android.databinding.FragmentCertificateViewBinding
 import dgca.wallet.app.android.nfc.DCCApduService

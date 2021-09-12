@@ -20,7 +20,7 @@
  *  Created by osarapulov on 7/12/21 1:22 PM
  */
 
-package dgca.wallet.app.android.certificate.view.certificate.validity
+package dgca.wallet.app.android.wallet.view.certificate.validity
 
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel

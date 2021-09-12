@@ -20,7 +20,7 @@
  *  Created by osarapulov on 7/8/21 12:01 AM
  */
 
-package dgca.wallet.app.android.certificate.view.certificate.validity
+package dgca.wallet.app.android.wallet.view.certificate.validity
 
 import android.view.LayoutInflater
 import android.view.View

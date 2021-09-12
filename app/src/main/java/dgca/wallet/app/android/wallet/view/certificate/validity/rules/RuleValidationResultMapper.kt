@@ -20,10 +20,11 @@
  *  Created by osarapulov on 6/18/21 9:12 AM
  */
 
-package dgca.wallet.app.android.certificate.view.certificate.validity.rules
+package dgca.wallet.app.android.wallet.view.certificate.validity.rules
 
 import android.content.Context
 import dgca.verifier.app.engine.ValidationResult
+import dgca.wallet.app.android.wallet.view.certificate.validity.rules.RuleValidationResultCard
 import java.util.*
 
 fun ValidationResult.toRuleValidationResultCard(context: Context): RuleValidationResultCard {
