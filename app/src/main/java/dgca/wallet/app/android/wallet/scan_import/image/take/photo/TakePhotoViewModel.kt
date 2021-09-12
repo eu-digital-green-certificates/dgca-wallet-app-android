@@ -29,11 +29,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.verifier.app.decoder.model.GreenCertificate
-import dgca.wallet.app.android.wallet.scan_import.GreenCertificateFetcher
-import dgca.wallet.app.android.wallet.scan_import.BitmapFetcher
-import dgca.wallet.app.android.wallet.scan_import.FileSaver
-import dgca.wallet.app.android.wallet.scan_import.QrCodeFetcher
-import dgca.wallet.app.android.wallet.scan_import.UriProvider
+import dgca.wallet.app.android.data.CertificateModel
+import dgca.wallet.app.android.data.local.toCertificateModel
+import dgca.wallet.app.android.wallet.scan_import.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -42,7 +40,12 @@ import javax.inject.Inject
 sealed class TakePhotoResult {
     object Failed : TakePhotoResult()
     object Success : TakePhotoResult()
-    class QrRecognised(val qr: String) : TakePhotoResult()
+    class GreenCertificateRecognised(
+        val qrCodeText: String,
+        val dgci: String,
+        val cose: ByteArray,
+        val certificateModel: CertificateModel
+    ) : TakePhotoResult()
 }
 
 @HiltViewModel
@@ -73,14 +76,20 @@ class TakePhotoViewModel @Inject constructor(
         } catch (exception: Exception) {
             null
         }
-        val greenCertificate: GreenCertificate? =
-            qrCodeString?.let { qrString -> greenCertificateFetcher.fetchGreenCertificateFromQrString(qrString) }
+        val greenCertificateData = qrCodeString?.let { qrString -> greenCertificateFetcher.fetchDataFromQrString(qrString) }
+        val cose: ByteArray? = greenCertificateData?.first
+        val greenCertificate: GreenCertificate? = greenCertificateData?.second
 
         return when {
-            greenCertificate != null && uriProvider.deleteFileByUri(
+            greenCertificate != null && cose != null && uriProvider.deleteFileByUri(
                 this
             ) -> {
-                TakePhotoResult.QrRecognised(qrCodeString)
+                TakePhotoResult.GreenCertificateRecognised(
+                    qrCodeString,
+                    greenCertificate.getDgci(),
+                    cose,
+                    greenCertificate.toCertificateModel()
+                )
             }
             else -> {
                 val file = try {

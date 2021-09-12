@@ -30,9 +30,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.verifier.app.decoder.model.GreenCertificate
-import dgca.wallet.app.android.wallet.scan_import.GreenCertificateFetcher
+import dgca.wallet.app.android.data.CertificateModel
+import dgca.wallet.app.android.data.local.toCertificateModel
 import dgca.wallet.app.android.wallet.scan_import.BitmapFetcher
 import dgca.wallet.app.android.wallet.scan_import.FileSaver
+import dgca.wallet.app.android.wallet.scan_import.GreenCertificateFetcher
 import dgca.wallet.app.android.wallet.scan_import.QrCodeFetcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,7 +45,12 @@ import javax.inject.Inject
 sealed class ImportPdfResult {
     object Failed : ImportPdfResult()
     object Success : ImportPdfResult()
-    class QrRecognised(val qr: String) : ImportPdfResult()
+    class GreenCertificateRecognised(
+        val qrCodeText: String,
+        val dgci: String,
+        val cose: ByteArray,
+        val certificateModel: CertificateModel
+    ) : ImportPdfResult()
 }
 
 @HiltViewModel
@@ -80,19 +87,27 @@ class ImportPdfViewModel @Inject constructor(
         }
 
         var qrString = ""
+        var cose: ByteArray? = null
         var greenCertificate: GreenCertificate? = null
 
         qrStrings.forEach { curQrString ->
-            val curGreenCertificate = greenCertificateFetcher.fetchGreenCertificateFromQrString(curQrString)
-            if (curGreenCertificate != null) {
+            val greenCertificateData: Pair<ByteArray?, GreenCertificate?> =
+                greenCertificateFetcher.fetchDataFromQrString(curQrString)
+            if (greenCertificateData.first != null && greenCertificateData.second != null) {
                 qrString = curQrString
-                greenCertificate = curGreenCertificate
+                cose = greenCertificateData.first
+                greenCertificate = greenCertificateData.second
                 return@forEach
             }
         }
 
-        return if (greenCertificate != null) {
-            ImportPdfResult.QrRecognised(qrString)
+        return if (qrString.isNotBlank() && greenCertificate != null && cose != null) {
+            ImportPdfResult.GreenCertificateRecognised(
+                qrString,
+                greenCertificate!!.getDgci(),
+                cose!!,
+                greenCertificate!!.toCertificateModel()
+            )
         } else {
             val file = try {
                 fileSaver.saveFileFromUri(this, "images", "${System.currentTimeMillis()}.pdf")

@@ -38,9 +38,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.R
-import dgca.wallet.app.android.wallet.scan_import.ADD_QR_STRING_KEY
-import dgca.wallet.app.android.wallet.scan_import.ADD_REQUEST_KEY
 import dgca.wallet.app.android.databinding.FragmentTakePhotoBinding
+import dgca.wallet.app.android.wallet.scan_import.ADD_CLAIM_GREEN_CERTIFICATE_MODEL_KEY
+import dgca.wallet.app.android.wallet.scan_import.ADD_REQUEST_KEY
+import dgca.wallet.app.android.wallet.scan_import.qr.certificate.ClaimGreenCertificateModel
 
 
 @AndroidEntryPoint
@@ -62,7 +63,10 @@ class TakePhotoFragment : Fragment() {
             when (res) {
                 is TakePhotoResult.Failed -> Toast.makeText(requireContext(), R.string.error_importing_file, Toast.LENGTH_SHORT)
                     .show()
-                is TakePhotoResult.QrRecognised -> setFragmentResult(ADD_REQUEST_KEY, bundleOf(ADD_QR_STRING_KEY to res.qr))
+                is TakePhotoResult.GreenCertificateRecognised -> setFragmentResult(
+                    ADD_REQUEST_KEY,
+                    bundleOf(ADD_CLAIM_GREEN_CERTIFICATE_MODEL_KEY to res.toClaimCertificateModel())
+                )
                 else -> {
                 }
             }
@@ -84,3 +88,6 @@ class TakePhotoFragment : Fragment() {
         viewModel.handleResult()
     }
 }
+
+fun TakePhotoResult.GreenCertificateRecognised.toClaimCertificateModel(): ClaimGreenCertificateModel =
+    ClaimGreenCertificateModel(this.qrCodeText, this.dgci, this.cose, this.certificateModel)

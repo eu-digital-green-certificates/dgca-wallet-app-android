@@ -37,9 +37,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.R
-import dgca.wallet.app.android.wallet.scan_import.ADD_QR_STRING_KEY
-import dgca.wallet.app.android.wallet.scan_import.ADD_REQUEST_KEY
 import dgca.wallet.app.android.databinding.FragmentImportPdfBinding
+import dgca.wallet.app.android.wallet.scan_import.ADD_CLAIM_GREEN_CERTIFICATE_MODEL_KEY
+import dgca.wallet.app.android.wallet.scan_import.ADD_REQUEST_KEY
+import dgca.wallet.app.android.wallet.scan_import.qr.certificate.ClaimGreenCertificateModel
 
 @AndroidEntryPoint
 class ImportPdfFragment : Fragment() {
@@ -64,7 +65,10 @@ class ImportPdfFragment : Fragment() {
             when (res) {
                 is ImportPdfResult.Failed -> Toast.makeText(requireContext(), R.string.error_importing_file, Toast.LENGTH_SHORT)
                     .show()
-                is ImportPdfResult.QrRecognised -> setFragmentResult(ADD_REQUEST_KEY, bundleOf(ADD_QR_STRING_KEY to res.qr))
+                is ImportPdfResult.GreenCertificateRecognised -> setFragmentResult(
+                    ADD_REQUEST_KEY,
+                    bundleOf(ADD_CLAIM_GREEN_CERTIFICATE_MODEL_KEY to res.toClaimCertificateModel())
+                )
                 else -> {
                 }
             }
@@ -76,3 +80,6 @@ class ImportPdfFragment : Fragment() {
         viewModel.save(uri.data?.data)
     }
 }
+
+fun ImportPdfResult.GreenCertificateRecognised.toClaimCertificateModel(): ClaimGreenCertificateModel =
+    ClaimGreenCertificateModel(this.qrCodeText, this.dgci, this.cose, this.certificateModel)

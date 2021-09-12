@@ -23,5 +23,5 @@
 package dgca.wallet.app.android.wallet.scan_import
 
 const val ADD_REQUEST_KEY = "ADD_REQUEST"
-const val ADD_QR_STRING_KEY = "ADD_QR_STRING"
+const val ADD_CLAIM_GREEN_CERTIFICATE_MODEL_KEY = "ADD_CLAIM_GREEN_CERTIFICATE_MODEL"
 
