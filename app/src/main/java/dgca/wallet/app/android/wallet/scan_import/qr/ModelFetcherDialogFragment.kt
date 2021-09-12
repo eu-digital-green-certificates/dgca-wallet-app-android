@@ -30,11 +30,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.databinding.DialogFragmentModelFetcherBinding
+import dgca.wallet.app.android.wallet.scan_import.qr.certificate.ClaimGreenCertificateModel
 
 @AndroidEntryPoint
 class ModelFetcherDialogFragment : DialogFragment() {
@@ -59,4 +62,18 @@ class ModelFetcherDialogFragment : DialogFragment() {
             setStyle(STYLE_NO_FRAME, android.R.style.Theme)
         }
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewModel.modelFetcherResult.observe(viewLifecycleOwner) { modelFetcherResult ->
+            when (modelFetcherResult) {
+                is ModelFetcherResult.GreenCertificateRecognised -> setFragmentResult(
+                    FETCH_MODEL_REQUEST_KEY,
+                    bundleOf(CLAIM_GREEN_CERTIFICATE_RESULT_KEY to modelFetcherResult.toClaimCertificateModel())
+                )
+            }
+        }
+    }
 }
+
+fun ModelFetcherResult.GreenCertificateRecognised.toClaimCertificateModel(): ClaimGreenCertificateModel =
+    ClaimGreenCertificateModel(this.qrCodeText, this.dgci, this.cose, this.certificateModel)

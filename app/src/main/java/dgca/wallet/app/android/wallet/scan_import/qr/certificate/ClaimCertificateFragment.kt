@@ -63,7 +63,7 @@ class ClaimCertificateFragment : BindingFragment<FragmentCertificateClaimBinding
 
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>(TanFragment.TAN_KEY)
             ?.observe(viewLifecycleOwner) { tan ->
-                viewModel.save(args.qrCodeText, tan)
+                viewModel.save(args.claimCertificateModel, tan)
             }
 
         binding.saveBtn.setOnClickListener {
@@ -76,13 +76,8 @@ class ClaimCertificateFragment : BindingFragment<FragmentCertificateClaimBinding
                 onViewModelEvent(it)
             }
         }
-        viewModel.certificate.observe(viewLifecycleOwner, { certificate ->
-            if (certificate != null) {
-                showUserData(certificate)
-                adapter.update(certificate.getCertificateListData())
-            }
-        })
-        viewModel.init(args.qrCodeText)
+
+        showUserData(args.claimCertificateModel.certificateModel)
     }
 
     private fun CertificateModel.getType() = when {
@@ -110,6 +105,8 @@ class ClaimCertificateFragment : BindingFragment<FragmentCertificateClaimBinding
 //            binding.dateOfBirthTitle.visibility = this
 //            binding.dateOfBirth.visibility = this
 //        }
+
+        adapter.update(certificate.getCertificateListData())
     }
 
     private fun onViewModelEvent(event: ClaimCertificateViewModel.ClaimCertEvent) {

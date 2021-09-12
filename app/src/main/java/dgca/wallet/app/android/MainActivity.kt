@@ -136,8 +136,8 @@ class MainActivity : AppCompatActivity() {
 
         val qrCodeText = builder.toString()
         if (qrCodeText.isNotEmpty()) {
-            val action = CertificatesFragmentDirections.actionCertificatesFragmentToClaimCertificateFragment(qrCodeText)
-            navController.navigate(action)
+//            val action = CertificatesFragmentDirections.actionCertificatesFragmentToClaimCertificateFragment(qrCodeText)
+//            navController.navigate(action)
         } else {
             Timber.d("Received empty NDEFMessage")
         }

@@ -28,19 +28,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.verifier.app.decoder.*
-import dgca.verifier.app.decoder.model.GreenCertificate
 import dgca.verifier.app.decoder.prefixvalidation.PrefixValidationService
 import dgca.wallet.app.android.BuildConfig
 import dgca.wallet.app.android.Event
-import dgca.wallet.app.android.wallet.scan_import.GreenCertificateFetcher
-import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.ConfigRepository
 import dgca.wallet.app.android.data.WalletRepository
-import dgca.wallet.app.android.data.local.toCertificateModel
 import dgca.wallet.app.android.data.remote.ApiResult
 import dgca.wallet.app.android.data.remote.ClaimResponse
 import dgca.wallet.app.android.model.ClaimRequest
 import dgca.wallet.app.android.model.PublicKeyData
+import dgca.wallet.app.android.wallet.scan_import.GreenCertificateFetcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -57,45 +54,22 @@ class ClaimCertificateViewModel @Inject constructor(
     private val walletRepository: WalletRepository
 ) : ViewModel() {
 
-    private val _certificate = MutableLiveData<CertificateModel?>()
-    val certificate: LiveData<CertificateModel?> = _certificate
-
     private val _inProgress = MutableLiveData<Boolean>()
     val inProgress: LiveData<Boolean> = _inProgress
 
     private val _event = MutableLiveData<Event<ClaimCertEvent>>()
     val event: LiveData<Event<ClaimCertEvent>> = _event
 
-    private var cose: ByteArray = ByteArray(0)
-    private var greenCertificate: GreenCertificate? = null
-
-    fun init(qrCodeText: String) {
-        viewModelScope.launch {
-            _inProgress.value = true
-            withContext(Dispatchers.IO) { greenCertificateFetcher.fetchDataFromQrString(qrCodeText) }.apply {
-                cose = first ?: cose
-                greenCertificate = second
-            }
-            _inProgress.value = false
-            _certificate.value = greenCertificate?.toCertificateModel()
-        }
-    }
-
-    fun save(qrCode: String, tan: String) {
+    fun save(claimGreenCertificateModel: ClaimGreenCertificateModel, tan: String) {
         viewModelScope.launch {
             _inProgress.value = true
             var claimResult: ApiResult<ClaimResponse>? = null
 
             withContext(Dispatchers.IO) {
-                if (greenCertificate == null || cose.isEmpty()) {
-                    return@withContext
-                }
-
-                val dgci = greenCertificate?.getDgci()
-                val certHash = cose.getValidationDataFromCOSE().toHash()
+                val certHash = claimGreenCertificateModel.cose.getValidationDataFromCOSE().toHash()
                 val tanHash = tan.toByteArray().toHash()
 
-                val keyPairData = cose.generateKeyPair()
+                val keyPairData = claimGreenCertificateModel.cose.generateKeyPair()
                 val keyPair: KeyPair? = keyPairData?.keyPair
                 val sigAlg = keyPairData?.algo
 
@@ -111,7 +85,7 @@ class ClaimCertificateViewModel @Inject constructor(
 
                 val signature = generateClaimSignature(tanHash, certHash, keyData.value, keyPair.private, sigAlg)
                 val request = ClaimRequest(
-                    dgci,
+                    claimGreenCertificateModel.dgci,
                     certHash,
                     tanHash,
                     keyData,
@@ -122,7 +96,7 @@ class ClaimCertificateViewModel @Inject constructor(
                 val config = configRepository.local().getConfig()
                 claimResult = walletRepository.claimCertificate(
                     config.getClaimUrl(BuildConfig.VERSION_NAME),
-                    prefixValidationService.encode(qrCode),
+                    prefixValidationService.encode(claimGreenCertificateModel.qrCodeText),
                     request
                 )
             }

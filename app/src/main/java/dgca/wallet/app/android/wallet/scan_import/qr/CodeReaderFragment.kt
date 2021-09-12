@@ -31,6 +31,7 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.findNavController
@@ -43,6 +44,7 @@ import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.R
 import dgca.wallet.app.android.databinding.FragmentCodeReaderBinding
+import dgca.wallet.app.android.wallet.scan_import.qr.certificate.ClaimGreenCertificateModel
 
 private const val CAMERA_REQUEST_CODE = 1003
 
@@ -66,7 +68,7 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
             lastText = result.text
             beepManager.playBeepSoundAndVibrate()
 
-            navigateToVerificationPage(result.text)
+            naviageToModelFetcherPage(result.text)
         }
 
         override fun possibleResultPoints(resultPoints: List<ResultPoint>) {}
@@ -88,6 +90,14 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
         binding.barcodeScanner.decoderFactory = DefaultDecoderFactory(formats)
         binding.barcodeScanner.decodeContinuous(callback)
         beepManager = BeepManager(requireActivity())
+
+        setFragmentResultListener(FETCH_MODEL_REQUEST_KEY) { _, bundle ->
+            findNavController().navigateUp()
+            val claimGreenCertificateModel: ClaimGreenCertificateModel? = bundle.getParcelable(CLAIM_GREEN_CERTIFICATE_RESULT_KEY)
+            if (claimGreenCertificateModel != null) {
+                naviageToClaimCertificatePage(claimGreenCertificateModel)
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -107,9 +117,15 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
         binding.barcodeScanner.pause()
     }
 
-    private fun navigateToVerificationPage(qrCodeText: String) {
+    private fun naviageToModelFetcherPage(qrCodeText: String) {
         val action =
             CodeReaderFragmentDirections.actionCodeReaderFragmentToModelFetcherDialogFragment(qrCodeText)
+        findNavController().navigate(action)
+    }
+
+    private fun naviageToClaimCertificatePage(claimGreenCertificateModel: ClaimGreenCertificateModel) {
+        val action =
+            CodeReaderFragmentDirections.actionCodeReaderFragmentToClaimCertificateFragment(claimGreenCertificateModel)
         findNavController().navigate(action)
     }
 

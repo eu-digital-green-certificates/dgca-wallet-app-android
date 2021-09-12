@@ -278,8 +278,8 @@
         tools:layout="@layout/fragment_certificate_claim">
 
         <argument
-            android:name="qrCodeText"
-            app:argType="string" />
+            android:name="claimCertificateModel"
+            app:argType="dgca.wallet.app.android.wallet.scan_import.qr.certificate.ClaimGreenCertificateModel" />
 
         <action
             android:id="@+id/action_claimCertificateFragment_to_tanFragment"

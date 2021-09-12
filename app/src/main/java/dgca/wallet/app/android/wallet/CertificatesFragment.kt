@@ -93,8 +93,8 @@ class CertificatesFragment : BindingFragment<FragmentCertificatesBinding>(),
 
     private fun showImportDcc(qr: String?) {
         if (!qr.isNullOrBlank()) {
-            val action = CertificatesFragmentDirections.actionCertificatesFragmentToClaimCertificateFragment(qr)
-            findNavController().navigate(action)
+//            val action = CertificatesFragmentDirections.actionCertificatesFragmentToClaimCertificateFragment(qr)
+//            findNavController().navigate(action)
         }
     }
 

@@ -22,13 +22,63 @@
 
 package dgca.wallet.app.android.wallet.scan_import.qr
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dgca.verifier.app.decoder.model.GreenCertificate
+import dgca.wallet.app.android.data.CertificateModel
+import dgca.wallet.app.android.data.local.toCertificateModel
+import dgca.wallet.app.android.model.BookingSystemModel
+import dgca.wallet.app.android.wallet.scan_import.GreenCertificateFetcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-@HiltViewModel
-class ModelFetcherViewModel @Inject constructor() : ViewModel() {
-    fun init(qrCodeText: String) {
+sealed class ModelFetcherResult {
+    class GreenCertificateRecognised(
+        val qrCodeText: String,
+        val dgci: String,
+        val cose: ByteArray,
+        val certificateModel: CertificateModel
+    ) : ModelFetcherResult()
 
+    class BookingSystemModelRecognised(val bookingSystemModel: BookingSystemModel) : ModelFetcherResult()
+
+    object NotApplicable : ModelFetcherResult()
+}
+
+@HiltViewModel
+class ModelFetcherViewModel @Inject constructor(
+    private val greenCertificateFetcher: GreenCertificateFetcher,
+) : ViewModel() {
+    private val _modelFetcherResult = MutableLiveData<ModelFetcherResult>()
+    val modelFetcherResult: LiveData<ModelFetcherResult> = _modelFetcherResult
+
+    fun init(qrCodeText: String) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val greenCertificateRecognised: ModelFetcherResult.GreenCertificateRecognised? =
+                    tryToFetchGreenCertificate(qrCodeText)
+                if (greenCertificateRecognised != null) return@withContext greenCertificateRecognised
+                return@withContext ModelFetcherResult.NotApplicable
+            }.apply {
+                _modelFetcherResult.value = this
+            }
+        }
+    }
+
+    private fun tryToFetchGreenCertificate(qrCodeText: String): ModelFetcherResult.GreenCertificateRecognised? {
+        val res: Pair<ByteArray?, GreenCertificate?> = greenCertificateFetcher.fetchDataFromQrString(qrCodeText)
+        val cose: ByteArray? = res.first
+        val greenCertificate: GreenCertificate? = res.second
+        return if (cose != null && greenCertificate != null) {
+            val certificateModel = greenCertificate.toCertificateModel()
+            ModelFetcherResult.GreenCertificateRecognised(qrCodeText, greenCertificate.getDgci(), cose, certificateModel)
+        } else {
+            null
+        }
     }
 }
