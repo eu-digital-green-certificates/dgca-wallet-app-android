@@ -152,9 +152,15 @@
 
     <fragment
         android:id="@+id/codeReaderFragment"
-        android:name="dgca.wallet.app.android.CodeReaderFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.qr.CodeReaderFragment"
         android:label="@string/qr_reader_title"
         tools:layout="@layout/fragment_code_reader">
+
+        <action
+            android:id="@+id/action_codeReaderFragment_to_modelFetcherDialogFragment"
+            app:destination="@id/modelFetcherDialogFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim" />
 
         <action
             android:id="@+id/action_codeReaderFragment_to_claimCertificateFragment"
@@ -165,6 +171,17 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
     </fragment>
+
+    <dialog
+        android:id="@+id/modelFetcherDialogFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.qr.ModelFetcherDialogFragment"
+        android:label="Model Fetcher"
+        tools:layout="@layout/dialog_fragment_model_fetcher">
+
+        <argument
+            android:name="qrCodeText"
+            app:argType="string" />
+    </dialog>
 
     <fragment
         android:id="@+id/viewCertificateFragment"

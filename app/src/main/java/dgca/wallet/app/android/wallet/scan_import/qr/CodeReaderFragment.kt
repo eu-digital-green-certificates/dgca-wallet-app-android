@@ -41,7 +41,6 @@ import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import dagger.hilt.android.AndroidEntryPoint
-import dgca.wallet.app.android.CodeReaderFragmentDirections
 import dgca.wallet.app.android.R
 import dgca.wallet.app.android.databinding.FragmentCodeReaderBinding
 
@@ -109,7 +108,8 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
     }
 
     private fun navigateToVerificationPage(qrCodeText: String) {
-        val action = CodeReaderFragmentDirections.actionCodeReaderFragmentToClaimCertificateFragment(qrCodeText)
+        val action =
+            CodeReaderFragmentDirections.actionCodeReaderFragmentToModelFetcherDialogFragment(qrCodeText)
         findNavController().navigate(action)
     }
 
