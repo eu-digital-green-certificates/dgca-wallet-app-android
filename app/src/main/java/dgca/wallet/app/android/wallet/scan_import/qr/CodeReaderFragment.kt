@@ -68,7 +68,7 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
             lastText = result.text
             beepManager.playBeepSoundAndVibrate()
 
-            naviageToModelFetcherPage(result.text)
+            navigateeToModelFetcherPage(result.text)
         }
 
         override fun possibleResultPoints(resultPoints: List<ResultPoint>) {}
@@ -117,7 +117,7 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
         binding.barcodeScanner.pause()
     }
 
-    private fun naviageToModelFetcherPage(qrCodeText: String) {
+    private fun navigateeToModelFetcherPage(qrCodeText: String) {
         val action =
             CodeReaderFragmentDirections.actionCodeReaderFragmentToModelFetcherDialogFragment(qrCodeText)
         findNavController().navigate(action)

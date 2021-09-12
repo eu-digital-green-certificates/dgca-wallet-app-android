@@ -1,6 +1,6 @@
 /*
  *  ---license-start
- *  eu-digital-green-certificates / dgca-verifier-app-android
+ *  eu-digital-green-certificates / dgca-wallet-app-android
  *  ---
  *  Copyright (C) 2021 T-Systems International GmbH and all other contributors
  *  ---
@@ -38,7 +38,10 @@ import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.databinding.ActivityMainBinding
 import dgca.wallet.app.android.nfc.NdefParser
-import dgca.wallet.app.android.wallet.CertificatesFragmentDirections
+import dgca.wallet.app.android.wallet.scan_import.qr.CLAIM_GREEN_CERTIFICATE_RESULT_KEY
+import dgca.wallet.app.android.wallet.scan_import.qr.CodeReaderFragmentDirections
+import dgca.wallet.app.android.wallet.scan_import.qr.FETCH_MODEL_REQUEST_KEY
+import dgca.wallet.app.android.wallet.scan_import.qr.certificate.ClaimGreenCertificateModel
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -73,6 +76,16 @@ class MainActivity : AppCompatActivity() {
                 checkNdefMessage(intent)
             }
         }
+
+        supportFragmentManager.setFragmentResultListener(FETCH_MODEL_REQUEST_KEY, this) { _, bundle ->
+            navController.navigateUp()
+            val claimGreenCertificateModel: ClaimGreenCertificateModel? = bundle.getParcelable(CLAIM_GREEN_CERTIFICATE_RESULT_KEY)
+            if (claimGreenCertificateModel != null) {
+                navigateToClaimCertificatePage(claimGreenCertificateModel)
+            }
+        }
+
+        navi
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -136,10 +149,16 @@ class MainActivity : AppCompatActivity() {
 
         val qrCodeText = builder.toString()
         if (qrCodeText.isNotEmpty()) {
-//            val action = CertificatesFragmentDirections.actionCertificatesFragmentToClaimCertificateFragment(qrCodeText)
-//            navController.navigate(action)
+            val action = CodeReaderFragmentDirections.actionCodeReaderFragmentToModelFetcherDialogFragment(qrCodeText)
+            navController.navigate(action)
         } else {
             Timber.d("Received empty NDEFMessage")
         }
+    }
+
+    private fun navigateToClaimCertificatePage(claimGreenCertificateModel: ClaimGreenCertificateModel) {
+        val action =
+            CodeReaderFragmentDirections.actionCodeReaderFragmentToClaimCertificateFragment(claimGreenCertificateModel)
+        navController.navigate(action)
     }
 }
