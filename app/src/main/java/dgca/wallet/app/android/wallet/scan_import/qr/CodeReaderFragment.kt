@@ -96,11 +96,11 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
             findNavController().navigateUp()
             val claimGreenCertificateModel: ClaimGreenCertificateModel? = bundle.getParcelable(CLAIM_GREEN_CERTIFICATE_RESULT_KEY)
             if (claimGreenCertificateModel != null) {
-                naviageToClaimCertificatePage(claimGreenCertificateModel)
+                navigateToClaimCertificatePage(claimGreenCertificateModel)
             } else {
                 val bookingSystemModel: BookingSystemModel? = bundle.getParcelable(BOOKING_SYSTEM_MODEL_RESULT_KEY)
                 if (bookingSystemModel != null) {
-                    naviageToBookingSystemConsentPage(bookingSystemModel)
+                    navigateToBookingSystemConsentPage(bookingSystemModel)
                 }
             }
         }
@@ -129,13 +129,15 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
         findNavController().navigate(action)
     }
 
-    private fun naviageToClaimCertificatePage(claimGreenCertificateModel: ClaimGreenCertificateModel) {
+    private fun navigateToClaimCertificatePage(claimGreenCertificateModel: ClaimGreenCertificateModel) {
+        binding.barcodeScanner.pause()
         val action =
             CodeReaderFragmentDirections.actionCodeReaderFragmentToClaimCertificateFragment(claimGreenCertificateModel)
         findNavController().navigate(action)
     }
 
-    private fun naviageToBookingSystemConsentPage(bookingSystemModel: BookingSystemModel) {
+    private fun navigateToBookingSystemConsentPage(bookingSystemModel: BookingSystemModel) {
+        binding.barcodeScanner.pause()
         val action =
             CodeReaderFragmentDirections.actionCodeReaderFragmentToBookingSystemConsentFragment(bookingSystemModel)
         findNavController().navigate(action)
