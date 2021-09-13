@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~  license-start
-  ~  eu-digital-green-certificates / dgca-verifier-app-android
+  ~  eu-digital-green-certificates / dgca-wallet-app-android
   ~
   ~  Copyright (C) 2021 T-Systems International GmbH and all other contributors
   ~
@@ -49,7 +49,7 @@
 
     <fragment
         android:id="@+id/certificatesFragment"
-        android:name="dgca.wallet.app.android.certificate.CertificatesFragment"
+        android:name="dgca.wallet.app.android.wallet.CertificatesFragment"
         android:label="@string/certificate_wallet"
         tools:layout="@layout/fragment_certificates">
 
@@ -110,6 +110,12 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
         <action
+            android:id="@+id/action_certificatesFragment_to_modelFetcherDialogFragment"
+            app:destination="@id/modelFetcherDialogFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim" />
+
+        <action
             android:id="@+id/action_certificatesFragment_to_claimCertificateFragment"
             app:destination="@id/claimCertificateFragment"
             app:enterAnim="@animator/nav_default_pop_enter_anim"
@@ -120,19 +126,19 @@
 
     <dialog
         android:id="@+id/addNewDialogFragment"
-        android:name="dgca.wallet.app.android.certificate.AddNewBottomDialogFragment"
+        android:name="dgca.wallet.app.android.wallet.AddNewBottomDialogFragment"
         android:label="Add New"
         tools:layout="@layout/dialog_fragment_add_new" />
 
     <dialog
         android:id="@+id/imagePhotoDialogFragment"
-        android:name="dgca.wallet.app.android.certificate.ImportImageDialogFragment"
+        android:name="dgca.wallet.app.android.wallet.ImportImageDialogFragment"
         android:label="Import Image"
         tools:layout="@layout/dialog_fragment_import_image" />
 
     <fragment
         android:id="@+id/takePhotoFragment"
-        android:name="dgca.wallet.app.android.certificate.add.take.photo.TakePhotoFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.image.take.photo.TakePhotoFragment"
         android:label="@string/take_photo"
         tools:layout="@layout/fragment_take_photo">
 
@@ -140,21 +146,27 @@
 
     <fragment
         android:id="@+id/pickImageFragment"
-        android:name="dgca.wallet.app.android.certificate.add.pick.image.PickImageFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.image.pick.image.PickImageFragment"
         android:label="@string/pick_image"
         tools:layout="@layout/fragment_pick_image" />
 
     <fragment
         android:id="@+id/importPdfFragment"
-        android:name="dgca.wallet.app.android.certificate.add.pdf.ImportPdfFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.pdf.ImportPdfFragment"
         android:label="@string/import_pdf"
         tools:layout="@layout/fragment_import_pdf" />
 
     <fragment
         android:id="@+id/codeReaderFragment"
-        android:name="dgca.wallet.app.android.CodeReaderFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.qr.CodeReaderFragment"
         android:label="@string/qr_reader_title"
         tools:layout="@layout/fragment_code_reader">
+
+        <action
+            android:id="@+id/action_codeReaderFragment_to_modelFetcherDialogFragment"
+            app:destination="@id/modelFetcherDialogFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim" />
 
         <action
             android:id="@+id/action_codeReaderFragment_to_claimCertificateFragment"
@@ -166,9 +178,20 @@
 
     </fragment>
 
+    <dialog
+        android:id="@+id/modelFetcherDialogFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.qr.ModelFetcherDialogFragment"
+        android:label="Model Fetcher"
+        tools:layout="@layout/dialog_fragment_model_fetcher">
+
+        <argument
+            android:name="qrCodeText"
+            app:argType="string" />
+    </dialog>
+
     <fragment
         android:id="@+id/viewCertificateFragment"
-        android:name="dgca.wallet.app.android.certificate.view.certificate.ViewCertificateFragment"
+        android:name="dgca.wallet.app.android.wallet.view.certificate.ViewCertificateFragment"
         android:label="@string/your_certificate"
         tools:layout="@layout/fragment_certificate_view">
 
@@ -188,7 +211,7 @@
 
     <fragment
         android:id="@+id/viewFileFragment"
-        android:name="dgca.wallet.app.android.certificate.view.file.ViewFileFragment"
+        android:name="dgca.wallet.app.android.wallet.view.file.ViewFileFragment"
         android:label="@string/your_file"
         tools:layout="@layout/fragment_file_view">
 
@@ -199,7 +222,7 @@
 
     <fragment
         android:id="@+id/certificateValidityFragment"
-        android:name="dgca.wallet.app.android.certificate.view.certificate.validity.CertificateValidityFragment"
+        android:name="dgca.wallet.app.android.wallet.view.certificate.validity.CertificateValidityFragment"
         android:label="@string/country_rules_validation"
         tools:layout="@layout/fragment_validity_certificate">
 
@@ -218,7 +241,7 @@
 
     <fragment
         android:id="@+id/rulesValidationFragment"
-        android:name="dgca.wallet.app.android.certificate.view.certificate.validity.rules.RulesValidationFragment"
+        android:name="dgca.wallet.app.android.wallet.view.certificate.validity.rules.RulesValidationFragment"
         android:label="@string/country_rules_validation"
         tools:layout="@layout/fragment_rules_validatation">
 
@@ -237,7 +260,7 @@
 
     <fragment
         android:id="@+id/tanFragment"
-        android:name="dgca.wallet.app.android.certificate.claim.TanFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.qr.certificate.TanFragment"
         android:label="@string/tan_cert_title"
         tools:layout="@layout/fragment_certificate_tan">
 
@@ -252,7 +275,7 @@
     </fragment>
     <fragment
         android:id="@+id/claimCertificateFragment"
-        android:name="dgca.wallet.app.android.certificate.claim.ClaimCertificateFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.qr.certificate.ClaimCertificateFragment"
         android:label="@string/claim_cert_title"
         app:enterAnim="@animator/nav_default_pop_enter_anim"
         app:exitAnim="@animator/nav_default_exit_anim"
@@ -261,8 +284,8 @@
         tools:layout="@layout/fragment_certificate_claim">
 
         <argument
-            android:name="qrCodeText"
-            app:argType="string" />
+            android:name="claimCertificateModel"
+            app:argType="dgca.wallet.app.android.wallet.scan_import.qr.certificate.ClaimGreenCertificateModel" />
 
         <action
             android:id="@+id/action_claimCertificateFragment_to_tanFragment"

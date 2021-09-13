@@ -1,6 +1,6 @@
 /*
  *  ---license-start
- *  eu-digital-green-certificates / dgca-verifier-app-android
+ *  eu-digital-green-certificates / dgca-wallet-app-android
  *  ---
  *  Copyright (C) 2021 T-Systems International GmbH and all other contributors
  *  ---
@@ -74,6 +74,8 @@ object Deps {
     const val test_runtime_only = "org.junit.jupiter:junit-jupiter-engine:${Versions.junit_jupiter}"
     const val test_hamcrest = "org.hamcrest:hamcrest:${Versions.hamcrest}"
     const val test_runner = "androidx.test:runner:${Versions.test_rules}}"
+    const val mockito_core = "org.mockito:mockito-core:${Versions.mockito_core_version}"
+    const val mockito_kotlin = "org.mockito.kotlin:mockito-kotlin:${Versions.mockito_kotlin_version}"
 
     const val test_ext = "androidx.test.ext:junit:${Versions.test_ext}"
     const val test_rules = "androidx.test:rules:${Versions.test_rules}"

@@ -22,13 +22,17 @@
 
 package dgca.wallet.app.android.data
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class CertificateModel(
     val person: PersonModel,
     val dateOfBirth: String,
     val vaccinations: List<VaccinationModel>?,
     val tests: List<TestModel>?,
     val recoveryStatements: List<RecoveryModel>?
-) {
+): Parcelable {
 
     fun getFullName(): String {
         val givenName: String? = person.givenName?.trim()
@@ -54,13 +58,15 @@ data class CertificateModel(
     }
 }
 
+@Parcelize
 data class PersonModel(
     val standardisedFamilyName: String,
     val familyName: String?,
     val standardisedGivenName: String?,
     val givenName: String?
-)
+): Parcelable
 
+@Parcelize
 data class VaccinationModel(
     override val disease: DiseaseType,
     val vaccine: VaccinePropylaxisType,
@@ -72,8 +78,9 @@ data class VaccinationModel(
     val countryOfVaccination: String,
     val certificateIssuer: String,
     val certificateIdentifier: String
-) : CertificateData
+) : CertificateData, Parcelable
 
+@Parcelize
 data class TestModel(
     override val disease: DiseaseType,
     val typeOfTest: TypeOfTest,
@@ -87,7 +94,7 @@ data class TestModel(
     val certificateIssuer: String,
     val certificateIdentifier: String,
     val resultType: TestResult
-) : CertificateData
+) : CertificateData, Parcelable
 
 enum class TestResult(val value: String) {
     DETECTED("DETECTED"),
@@ -131,6 +138,7 @@ enum class ManufacturerType(val value: String) {
     UNDEFINED("UNDEFINED")
 }
 
+@Parcelize
 data class RecoveryModel(
     override val disease: DiseaseType,
     val dateOfFirstPositiveTest: String,
@@ -139,7 +147,7 @@ data class RecoveryModel(
     val certificateValidFrom: String,
     val certificateValidUntil: String,
     val certificateIdentifier: String
-) : CertificateData
+) : CertificateData, Parcelable
 
 interface CertificateData {
     val disease: DiseaseType

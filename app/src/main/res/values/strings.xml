@@ -10,7 +10,7 @@
     <string name="certificate_wallet">Certificate Wallet</string>
     <string name="no_certificate_available">No Certificate available</string>
     <string name="click_span_code_to_add_to_your_wallet">Click Scan Code to add to your Wallet.</string>
-    <string name="add_new">Add new</string>
+    <string name="scan_import">Scan / Import</string>
     <string name="check_validity">Check Validity</string>
     <string name="i_agree_check_validity">I agree, check validity</string>
     <string name="vaccination">Vaccination %1$s of %2$s</string>
@@ -79,7 +79,7 @@
     <string name="share_pdf">Share PDF</string>
     <string name="share">Share</string>
     <string name="file_preparation_error">File preparation failed</string>
-    <string name="scan_certificate">Scan certificate</string>
+    <string name="scan_qr_code">Scan QR code</string>
     <string name="import_image">Import image</string>
     <string name="import_pdf">Import PDF</string>
     <string name="take_photo">Take Photo</string>
@@ -99,4 +99,5 @@
     <string name="nfc_on">NFC on</string>
     <string name="nfc_off">NFC off</string>
     <string name="complete_action_using">Complete action using</string>
+    <string name="validate_or_add_to_your_wallet_app">Validate or add to your wallet app</string>
 </resources>

@@ -27,7 +27,7 @@
 
     <TextView
         android:id="@+id/takePhoto"
-        style="@style/ButtomDialogButton"
+        style="@style/BottomDialogButton"
         android:gravity="center_vertical"
         android:minHeight="48dp"
         android:paddingHorizontal="16dp"
@@ -39,7 +39,7 @@
 
     <TextView
         android:id="@+id/pickFromGallery"
-        style="@style/ButtomDialogButton"
+        style="@style/BottomDialogButton"
         android:gravity="center_vertical"
         android:minHeight="48dp"
         android:text="@string/pick_from_gallery"
