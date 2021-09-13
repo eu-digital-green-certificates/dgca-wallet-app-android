@@ -79,6 +79,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         navHostFragment.childFragmentManager.setFragmentResultListener(
             FETCH_MODEL_REQUEST_KEY, this
         ) { _, bundle ->
+            navController.removeOnDestinationChangedListener(this)
             navController.navigateUp()
             val claimGreenCertificateModel: ClaimGreenCertificateModel? =
                 bundle.getParcelable(CLAIM_GREEN_CERTIFICATE_RESULT_KEY)
@@ -91,6 +92,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     navigateToBookingSystemModelConsentPage(bookingSystemModel)
                 }
             }
+            navController.addOnDestinationChangedListener(this)
         }
     }
 
@@ -163,7 +165,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
     private fun navigateToClaimCertificatePage(claimGreenCertificateModel: ClaimGreenCertificateModel) {
-        navController.removeOnDestinationChangedListener(this)
         val action =
             CertificatesFragmentDirections.actionCertificatesFragmentToClaimCertificateFragment(claimGreenCertificateModel)
         navController.navigate(action)
@@ -171,7 +172,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
     private fun navigateToBookingSystemModelConsentPage(bookingSystemModel: BookingSystemModel) {
-        navController.removeOnDestinationChangedListener(this)
         val action =
             CertificatesFragmentDirections.actionCertificatesFragmentToBookingSystemConsentFragment(bookingSystemModel)
         navController.navigate(action)
