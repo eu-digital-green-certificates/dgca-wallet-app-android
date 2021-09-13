@@ -122,6 +122,15 @@
             app:exitAnim="@animator/nav_default_exit_anim"
             app:popEnterAnim="@animator/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+        <!-- TODO: update navigation. For test purpose. -->
+        <action
+            android:id="@+id/action_certificatesFragment_to_certificateSelectorFragment"
+            app:destination="@id/certificateSelectorFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
     <dialog
@@ -302,6 +311,14 @@
             app:exitAnim="@animator/nav_default_exit_anim"
             app:popEnterAnim="@animator/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/certificateSelectorFragment"
+        android:name="dgca.wallet.app.android.wallet.view.CertificateSelectorFragment"
+        android:label="Step 2"
+        tools:layout="@layout/fragment_certificate_selector">
 
     </fragment>
 

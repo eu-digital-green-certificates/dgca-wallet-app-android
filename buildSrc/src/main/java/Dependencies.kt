@@ -31,6 +31,7 @@ object Deps {
     const val androidx_core = "androidx.core:core-ktx:${Versions.androidx_core}"
     const val androidx_appcompat = "androidx.appcompat:appcompat:${Versions.androidx_appcompat}"
     const val androidx_material = "com.google.android.material:material:${Versions.androidx_material}"
+    const val androidx_recycler_view = "androidx.recyclerview:recyclerview:${Versions.androidx_recycler_view}"
     const val androidx_constraint = "androidx.constraintlayout:constraintlayout:${Versions.androidx_constraint}"
     const val androidx_navigation_fragment = "androidx.navigation:navigation-fragment-ktx:${Versions.androidx_navigation}"
     const val androidx_navigation_ui = "androidx.navigation:navigation-ui-ktx:${Versions.androidx_navigation}"

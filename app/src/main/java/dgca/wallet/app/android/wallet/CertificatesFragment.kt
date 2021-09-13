@@ -61,7 +61,14 @@ class CertificatesFragment : BindingFragment<FragmentCertificatesBinding>(),
 
         (activity as MainActivity).disableBackButton()
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { requireActivity().finish() }
-        binding.scanCode.setOnClickListener { showAddNewDialog() }
+        binding.scanCode.setOnClickListener {
+//            TODO: for flow tests.
+            val action =
+                CertificatesFragmentDirections.actionCertificatesFragmentToCertificateSelectorFragment()
+            findNavController().navigate(action)
+
+//            showAddNewDialog()
+        }
 
         viewModel.certificates.observe(viewLifecycleOwner, { setCertificateCards(it) })
         viewModel.inProgress.observe(viewLifecycleOwner, { binding.progressView.isVisible = it })

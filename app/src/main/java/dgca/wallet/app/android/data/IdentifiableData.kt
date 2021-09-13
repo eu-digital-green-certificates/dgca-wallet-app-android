@@ -17,14 +17,11 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 5/17/21 8:22 AM
+ *  Created by mykhailo.nester on 13/09/2021, 20:45
  */
 
-package dgca.wallet.app.android.data.local
+package dgca.wallet.app.android.data
 
-import dgca.wallet.app.android.data.Config
-import dgca.wallet.app.android.data.ConfigDataSource
-
-interface MutableConfigDataSource : ConfigDataSource {
-    fun setConfig(config: Config): Config
+interface IdentifiableData {
+    val id: String
 }

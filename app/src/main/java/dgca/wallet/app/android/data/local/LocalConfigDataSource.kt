@@ -25,7 +25,7 @@ package dgca.wallet.app.android.data.local
 import android.content.Context
 import com.fasterxml.jackson.databind.ObjectMapper
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dgca.wallet.app.android.configs.Config
+import dgca.wallet.app.android.data.Config
 import timber.log.Timber
 import java.io.*
 import javax.inject.Inject
