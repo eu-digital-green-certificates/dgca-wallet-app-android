@@ -44,6 +44,7 @@ import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.R
 import dgca.wallet.app.android.databinding.FragmentCodeReaderBinding
+import dgca.wallet.app.android.model.BookingSystemModel
 import dgca.wallet.app.android.wallet.scan_import.qr.certificate.ClaimGreenCertificateModel
 
 private const val CAMERA_REQUEST_CODE = 1003
@@ -68,7 +69,7 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
             lastText = result.text
             beepManager.playBeepSoundAndVibrate()
 
-            navigateeToModelFetcherPage(result.text)
+            navigateToModelFetcherPage(result.text)
         }
 
         override fun possibleResultPoints(resultPoints: List<ResultPoint>) {}
@@ -96,6 +97,11 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
             val claimGreenCertificateModel: ClaimGreenCertificateModel? = bundle.getParcelable(CLAIM_GREEN_CERTIFICATE_RESULT_KEY)
             if (claimGreenCertificateModel != null) {
                 naviageToClaimCertificatePage(claimGreenCertificateModel)
+            } else {
+                val bookingSystemModel: BookingSystemModel? = bundle.getParcelable(BOOKING_SYSTEM_MODEL_RESULT_KEY)
+                if (bookingSystemModel != null) {
+                    naviageToBookingSystemConsentPage(bookingSystemModel)
+                }
             }
         }
     }
@@ -117,7 +123,7 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
         binding.barcodeScanner.pause()
     }
 
-    private fun navigateeToModelFetcherPage(qrCodeText: String) {
+    private fun navigateToModelFetcherPage(qrCodeText: String) {
         val action =
             CodeReaderFragmentDirections.actionCodeReaderFragmentToModelFetcherDialogFragment(qrCodeText)
         findNavController().navigate(action)
@@ -126,6 +132,12 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
     private fun naviageToClaimCertificatePage(claimGreenCertificateModel: ClaimGreenCertificateModel) {
         val action =
             CodeReaderFragmentDirections.actionCodeReaderFragmentToClaimCertificateFragment(claimGreenCertificateModel)
+        findNavController().navigate(action)
+    }
+
+    private fun naviageToBookingSystemConsentPage(bookingSystemModel: BookingSystemModel) {
+        val action =
+            CodeReaderFragmentDirections.actionCodeReaderFragmentToBookingSystemConsentFragment(bookingSystemModel)
         findNavController().navigate(action)
     }
 
