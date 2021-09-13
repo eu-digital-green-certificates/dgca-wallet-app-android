@@ -41,6 +41,7 @@ import dgca.wallet.app.android.R
 import dgca.wallet.app.android.databinding.FragmentTakePhotoBinding
 import dgca.wallet.app.android.wallet.scan_import.ADD_CLAIM_GREEN_CERTIFICATE_MODEL_KEY
 import dgca.wallet.app.android.wallet.scan_import.ADD_REQUEST_KEY
+import dgca.wallet.app.android.wallet.scan_import.BOOKING_SYSTEM_MODEL_KEY
 import dgca.wallet.app.android.wallet.scan_import.qr.certificate.ClaimGreenCertificateModel
 
 
@@ -66,6 +67,10 @@ class TakePhotoFragment : Fragment() {
                 is TakePhotoResult.GreenCertificateRecognised -> setFragmentResult(
                     ADD_REQUEST_KEY,
                     bundleOf(ADD_CLAIM_GREEN_CERTIFICATE_MODEL_KEY to res.toClaimCertificateModel())
+                )
+                is TakePhotoResult.BookingSystemModelRecognised -> setFragmentResult(
+                    ADD_REQUEST_KEY,
+                    bundleOf(BOOKING_SYSTEM_MODEL_KEY to res.bookingSystemModel)
                 )
                 else -> {
                 }
