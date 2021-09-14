@@ -36,8 +36,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.MainActivity
 import dgca.wallet.app.android.base.BindingFragment
 import dgca.wallet.app.android.databinding.FragmentCertificatesBinding
+import dgca.wallet.app.android.model.BookingSystemModel
 import dgca.wallet.app.android.wallet.scan_import.ADD_CLAIM_GREEN_CERTIFICATE_MODEL_KEY
 import dgca.wallet.app.android.wallet.scan_import.ADD_REQUEST_KEY
+import dgca.wallet.app.android.wallet.scan_import.BOOKING_SYSTEM_MODEL_KEY
 import dgca.wallet.app.android.wallet.scan_import.qr.certificate.ClaimGreenCertificateModel
 import java.io.File
 
@@ -95,16 +97,29 @@ class CertificatesFragment : BindingFragment<FragmentCertificatesBinding>(),
         }
 
         setFragmentResultListener(ADD_REQUEST_KEY) { _, bundle ->
-            showImportDcc(bundle.getParcelable(ADD_CLAIM_GREEN_CERTIFICATE_MODEL_KEY))
+            val claimGreenCertificateModel: ClaimGreenCertificateModel? =
+                bundle.getParcelable(ADD_CLAIM_GREEN_CERTIFICATE_MODEL_KEY)
+            if (claimGreenCertificateModel != null) {
+                showImportDcc(claimGreenCertificateModel)
+            } else {
+                val bookingSystemModel: BookingSystemModel? = bundle.getParcelable(BOOKING_SYSTEM_MODEL_KEY)
+                if (bookingSystemModel != null) {
+                    showBookingSystemConsentPage(bookingSystemModel)
+                }
+            }
         }
     }
 
-    private fun showImportDcc(claimGreenCertificateModel: ClaimGreenCertificateModel?) {
-        if (claimGreenCertificateModel != null) {
-            val action =
-                CertificatesFragmentDirections.actionCertificatesFragmentToClaimCertificateFragment(claimGreenCertificateModel)
-            findNavController().navigate(action)
-        }
+    private fun showImportDcc(claimGreenCertificateModel: ClaimGreenCertificateModel) {
+        val action =
+            CertificatesFragmentDirections.actionCertificatesFragmentToClaimCertificateFragment(claimGreenCertificateModel)
+        findNavController().navigate(action)
+    }
+
+    private fun showBookingSystemConsentPage(bookingSystemModel: BookingSystemModel) {
+        val action =
+            CertificatesFragmentDirections.actionCertificatesFragmentToBookingSystemConsentFragment(bookingSystemModel)
+        findNavController().navigate(action)
     }
 
     private fun setCertificateCards(certificatesCards: List<CertificatesCard>) {

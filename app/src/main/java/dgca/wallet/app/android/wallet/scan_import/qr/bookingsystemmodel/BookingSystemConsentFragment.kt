@@ -17,29 +17,17 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/10/21 11:42 AM
+ *  Created by osarapulov on 9/13/21 2:22 PM
  */
 
-package dgca.wallet.app.android.model
+package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel
 
-import android.os.Parcelable
-import com.fasterxml.jackson.annotation.JsonProperty
-import kotlinx.parcelize.Parcelize
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import dgca.wallet.app.android.base.BindingFragment
+import dgca.wallet.app.android.databinding.FragmentBookingSystemConsentBinding
 
-@Parcelize
-data class BookingSystemModel(
-    @JsonProperty("protocol")
-    val protocol: String,
-    @JsonProperty("protocolVersion")
-    val protocolVersion: String,
-    @JsonProperty("serviceIdentity")
-    val serviceIdentity: String,
-    @JsonProperty("token")
-    val token: String,
-    @JsonProperty("consent")
-    val consent: String,
-    @JsonProperty("subject")
-    val subject: String,
-    @JsonProperty("serviceProvider")
-    val serviceProvider: String
-) : Parcelable
+class BookingSystemConsentFragment : BindingFragment<FragmentBookingSystemConsentBinding>() {
+    override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBookingSystemConsentBinding =
+        FragmentBookingSystemConsentBinding.inflate(inflater, container, false)
+}

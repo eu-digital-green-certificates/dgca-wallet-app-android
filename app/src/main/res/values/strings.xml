@@ -100,6 +100,7 @@
     <string name="nfc_off">NFC off</string>
     <string name="complete_action_using">Complete action using</string>
     <string name="validate_or_add_to_your_wallet_app">Validate or add to your wallet app</string>
+    <string name="booking_system_consent_title">Booking System Consent Title</string>
     <string name="valid_until">Valid until %1$s</string>
     <string name="certificates_fount_title">%1$s certificates found</string>
 </resources>
