@@ -40,7 +40,10 @@ In either case open a terminal pointing to the directory you put the sources in.
 
 #### XYZ (Maven, Docker ...) based build
 
-- [ ] TODO: Add instructions for different build types
+- To build project - it's required to add config json file to application assets folder. Structure of the file should be similar to:
+'app/src/acc/assets/wallet-context.jsonc' or 'app/src/tst/assets/wallet-context.jsonc', depending on chosen flavor.
+After related file has been added - it's name should be passed via gradle properties:
+gradlew -PCONFIG_FILE_NAME="config.json"
 
 ## Documentation  
 

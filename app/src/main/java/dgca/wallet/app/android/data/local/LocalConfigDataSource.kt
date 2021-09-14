@@ -26,6 +26,7 @@ import android.content.Context
 import com.fasterxml.jackson.databind.ObjectMapper
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dgca.wallet.app.android.data.Config
+import dgca.wallet.app.android.BuildConfig
 import timber.log.Timber
 import java.io.*
 import javax.inject.Inject
@@ -38,7 +39,6 @@ class LocalConfigDataSource @Inject constructor(
     private lateinit var config: Config
 
     companion object {
-        const val DEFAULT_CONFIG_FILE = "wallet-context.jsonc"
         const val CONFIG_FILE = "config.json"
     }
 
@@ -76,7 +76,7 @@ class LocalConfigDataSource @Inject constructor(
     }
 
     private fun defaultConfig(): Config =
-        context.assets.open(DEFAULT_CONFIG_FILE).bufferedReader().use {
+        context.assets.open(BuildConfig.CONFIG_FILE_NAME).bufferedReader().use {
             objectMapper.readValue(it.readText(), Config::class.java)
         }
 }
