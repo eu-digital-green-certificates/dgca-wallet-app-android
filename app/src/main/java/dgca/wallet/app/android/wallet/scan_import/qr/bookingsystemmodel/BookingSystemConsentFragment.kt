@@ -45,6 +45,12 @@ class BookingSystemConsentFragment : BindingFragment<FragmentBookingSystemConsen
         }
 
         populateView(args.bookingSystemModel)
+
+        binding.allow.setOnClickListener {
+            val action =
+                BookingSystemConsentFragmentDirections.actionBookingSystemConsentFragmentToCertificateSelectorFragment()
+            findNavController().navigate(action)
+        }
     }
 
     private fun populateView(bookingSystemModel: BookingSystemModel) {

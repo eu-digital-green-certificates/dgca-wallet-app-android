@@ -23,7 +23,6 @@
 package dgca.wallet.app.android.data
 
 import dgca.wallet.app.android.BuildConfig
-import dgca.wallet.app.android.configs.Config
 import dgca.wallet.app.android.data.local.MutableConfigDataSource
 import dgca.wallet.app.android.data.remote.RemoteConfigDataSource
 import javax.inject.Inject

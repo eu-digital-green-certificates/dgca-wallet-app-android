@@ -130,6 +130,7 @@
             app:exitAnim="@animator/nav_default_exit_anim"
             app:popEnterAnim="@animator/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
     </fragment>
 
     <dialog
@@ -322,6 +323,14 @@
     </fragment>
 
     <fragment
+        android:id="@+id/certificateSelectorFragment"
+        android:name="dgca.wallet.app.android.wallet.view.CertificateSelectorFragment"
+        android:label="Step 2"
+        tools:layout="@layout/fragment_certificate_selector">
+
+    </fragment>
+
+    <fragment
         android:id="@+id/bookingSystemConsentFragment"
         android:name="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.BookingSystemConsentFragment"
         android:label="@string/step_1"
@@ -334,5 +343,13 @@
         <argument
             android:name="bookingSystemModel"
             app:argType="dgca.wallet.app.android.model.BookingSystemModel" />
+
+        <action
+            android:id="@+id/action_bookingSystemConsentFragment_to_certificateSelectorFragment"
+            app:destination="@id/certificateSelectorFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 </navigation>

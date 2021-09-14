@@ -22,7 +22,7 @@
 
 package dgca.wallet.app.android.data.remote
 
-import dgca.wallet.app.android.configs.Config
+import dgca.wallet.app.android.data.Config
 import javax.inject.Inject
 
 class DefaultRemoteConfigDataSource @Inject constructor(private val apiService: ApiService) : RemoteConfigDataSource {

@@ -107,4 +107,6 @@
     <string name="consent">Consent</string>
     <string name="deny">Deny</string>
     <string name="allow">Allow</string>
+    <string name="valid_until">Valid until %1$s</string>
+    <string name="certificates_fount_title">%1$s certificates found</string>
 </resources>
