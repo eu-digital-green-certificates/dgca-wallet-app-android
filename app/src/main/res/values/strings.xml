@@ -22,6 +22,7 @@
     <string name="check_country_rules_conformance_of_your_certificate">Check country rules conformance of your certificate</string>
 
     <string name="qr_reader_title">Step1: Scan Code</string>
+    <string name="step_1">Step1</string>
     <string name="claim_cert_title">Step2: Your Data</string>
     <string name="tan_cert_title">Step3: TAN</string>
     <string name="tan_code">TAN Code</string>
@@ -100,5 +101,10 @@
     <string name="nfc_off">NFC off</string>
     <string name="complete_action_using">Complete action using</string>
     <string name="validate_or_add_to_your_wallet_app">Validate or add to your wallet app</string>
-    <string name="booking_system_consent_title">Booking System Consent Title</string>
+    <string name="qr_code_from">QR Code from %1$s</string>
+    <string name="subject">Subject</string>
+    <string name="service_provider">Service provider</string>
+    <string name="consent">Consent</string>
+    <string name="deny">Deny</string>
+    <string name="allow">Allow</string>
 </resources>

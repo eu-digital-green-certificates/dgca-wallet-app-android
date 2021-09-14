@@ -21,7 +21,160 @@
   -->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:background="@color/white">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontalGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.4" />
+
+    <TextView
+        android:id="@+id/headerTitle"
+        style="@style/BookingSystemHeaderTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/default_margin"
+        android:layout_marginTop="@dimen/default_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="QR Code from Airline.com" />
+
+    <TextView
+        android:id="@+id/subjectTitle"
+        style="@style/BookingSystemTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginTop="@dimen/default_double_margin"
+        android:layout_marginEnd="@dimen/default_half_margin"
+        android:text="@string/subject"
+        app:layout_constraintEnd_toStartOf="@id/horizontalGuideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerTitle" />
+
+    <TextView
+        android:id="@+id/subjectValue"
+        style="@style/BookingSystemContent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_half_margin"
+        android:layout_marginTop="@dimen/default_double_margin"
+        android:layout_marginEnd="@dimen/default_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/horizontalGuideline"
+        app:layout_constraintTop_toBottomOf="@id/headerTitle"
+        tools:text="Flight AIR094, 2DDB5L Alfred König. Long long text" />
+
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/subjectBottomBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="subjectTitle, subjectValue" />
+
+    <TextView
+        android:id="@+id/serviceProviderTitle"
+        style="@style/BookingSystemTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginTop="@dimen/default_half_margin"
+        android:layout_marginEnd="@dimen/default_half_margin"
+        android:text="@string/service_provider"
+        app:layout_constraintEnd_toStartOf="@id/horizontalGuideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/subjectBottomBarrier" />
+
+    <TextView
+        android:id="@+id/serviceProviderValue"
+        style="@style/BookingSystemContent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_half_margin"
+        android:layout_marginTop="@dimen/default_half_margin"
+        android:layout_marginEnd="@dimen/default_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/horizontalGuideline"
+        app:layout_constraintTop_toBottomOf="@id/subjectBottomBarrier"
+        tools:text="Airlane" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/serviceProviderBottomBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="serviceProviderTitle, serviceProviderValue" />
+
+    <TextView
+        android:id="@+id/consentTitle"
+        style="@style/BookingSystemTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/default_margin"
+        android:layout_marginTop="@dimen/default_double_margin"
+        android:text="@string/consent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/serviceProviderBottomBarrier" />
+
+    <View
+        android:id="@+id/cardBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="@dimen/default_half_margin"
+        android:layout_marginTop="@dimen/default_half_margin"
+        android:background="@drawable/consent_dialog_background"
+        app:layout_constraintBottom_toBottomOf="@id/deny"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/consentTitle" />
+
+    <TextView
+        android:id="@+id/consentValue"
+        style="@style/BookingSystemContent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/default_margin"
+        android:layout_marginTop="@dimen/default_margin"
+        android:text="@string/consent"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/consentTitle"
+        tools:text="The wallet app wants to check your Digital COVID certificate" />
+
+    <Button
+        android:id="@+id/deny"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginEnd="@dimen/default_half_margin"
+        android:text="@string/deny"
+        app:layout_constraintEnd_toStartOf="@id/allow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/consentValue" />
+
+    <Button
+        android:id="@+id/allow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_half_margin"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:backgroundTint="@color/yellow"
+        android:text="@string/allow"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/deny"
+        app:layout_constraintTop_toBottomOf="@id/consentValue" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
