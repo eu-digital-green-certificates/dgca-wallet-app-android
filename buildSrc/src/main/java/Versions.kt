@@ -24,7 +24,7 @@ object Versions {
 
     // Base
     const val gradle = "4.1.3"
-    const val kotlin = "1.5.0"
+    const val kotlin = "1.4.32"
     const val desugar_jdk_libs = "1.1.5"
     const val androidx_core = "1.3.2"
     const val androidx_appcompat = "1.2.0"
