@@ -37,7 +37,7 @@ jobs:
     - name: build
       working-directory: ./dgca-wallet-app-android
       run: |-
-        ./gradlew --no-daemon build
+        ./gradlew --no-daemon build -PCONFIG_FILE_NAME="wallet-context.jsonc"s
     - name: sign-tst
       working-directory: ./dgca-wallet-app-android
       run: |-
