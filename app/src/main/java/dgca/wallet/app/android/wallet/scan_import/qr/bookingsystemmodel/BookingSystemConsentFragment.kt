@@ -26,6 +26,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dgca.wallet.app.android.R
 import dgca.wallet.app.android.base.BindingFragment
@@ -39,6 +40,10 @@ class BookingSystemConsentFragment : BindingFragment<FragmentBookingSystemConsen
         FragmentBookingSystemConsentBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.deny.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
         populateView(args.bookingSystemModel)
     }
 
