@@ -22,12 +22,25 @@
 
 package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel
 
+import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import dgca.wallet.app.android.base.BindingFragment
 import dgca.wallet.app.android.databinding.FragmentBookingSystemConsentBinding
 
 class BookingSystemConsentFragment : BindingFragment<FragmentBookingSystemConsentBinding>() {
     override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBookingSystemConsentBinding =
         FragmentBookingSystemConsentBinding.inflate(inflater, container, false)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.nextBtn.setOnClickListener {
+            val action =
+                BookingSystemConsentFragmentDirections.actionBookingSystemConsentFragmentToCertificateSelectorFragment()
+            findNavController().navigate(action)
+        }
+    }
 }
