@@ -324,9 +324,17 @@
 
     <fragment
         android:id="@+id/certificateSelectorFragment"
-        android:name="dgca.wallet.app.android.wallet.view.CertificateSelectorFragment"
-        android:label="Step 2"
+        android:name="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.certselector.CertificateSelectorFragment"
+        android:label="@string/step_2"
         tools:layout="@layout/fragment_certificate_selector">
+
+        <action
+            android:id="@+id/action_certificateSelectorFragment_to_transmissionConsentFragment"
+            app:destination="@id/transmissionConsentFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
     </fragment>
 
@@ -351,5 +359,17 @@
             app:exitAnim="@animator/nav_default_exit_anim"
             app:popEnterAnim="@animator/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/transmissionConsentFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission.TransmissionConsentFragment"
+        android:label="@string/step_3"
+        tools:layout="@layout/fragment_transmission_consent">
+
+        <argument
+            android:name="certModel"
+            app:argType="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.certselector.SelectableCertificateModel" />
+
     </fragment>
 </navigation>

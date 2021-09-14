@@ -23,6 +23,8 @@
 
     <string name="qr_reader_title">Step1: Scan Code</string>
     <string name="step_1">Step1</string>
+    <string name="step_2">Step2</string>
+    <string name="step_3">Step3</string>
     <string name="claim_cert_title">Step2: Your Data</string>
     <string name="tan_cert_title">Step3: TAN</string>
     <string name="tan_code">TAN Code</string>
@@ -109,4 +111,6 @@
     <string name="allow">Allow</string>
     <string name="valid_until">Valid until %1$s</string>
     <string name="certificates_fount_title">%1$s certificates found</string>
+    <string name="cancel">Cancel</string>
+    <string name="grand_permission">Grand Permission</string>
 </resources>
