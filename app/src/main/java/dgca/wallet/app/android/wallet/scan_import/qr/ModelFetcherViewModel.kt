@@ -26,6 +26,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fasterxml.jackson.databind.ObjectMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.verifier.app.decoder.model.GreenCertificate
 import dgca.wallet.app.android.data.CertificateModel
@@ -35,6 +36,7 @@ import dgca.wallet.app.android.wallet.scan_import.GreenCertificateFetcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 
 sealed class ModelFetcherResult {
@@ -53,6 +55,7 @@ sealed class ModelFetcherResult {
 @HiltViewModel
 class ModelFetcherViewModel @Inject constructor(
     private val greenCertificateFetcher: GreenCertificateFetcher,
+    private val objectMapper: ObjectMapper
 ) : ViewModel() {
     private val _modelFetcherResult = MutableLiveData<ModelFetcherResult>()
     val modelFetcherResult: LiveData<ModelFetcherResult> = _modelFetcherResult
@@ -63,6 +66,15 @@ class ModelFetcherViewModel @Inject constructor(
                 val greenCertificateRecognised: ModelFetcherResult.GreenCertificateRecognised? =
                     tryToFetchGreenCertificate(qrCodeText)
                 if (greenCertificateRecognised != null) return@withContext greenCertificateRecognised
+                val bookingSystemModel: BookingSystemModel? = runCatching {
+                    objectMapper.readValue(qrCodeText, BookingSystemModel::class.java)
+                }.getOrElse {
+                    Timber.e(it)
+                    null
+                }
+                if (bookingSystemModel != null) return@withContext ModelFetcherResult.BookingSystemModelRecognised(
+                    bookingSystemModel
+                )
                 return@withContext ModelFetcherResult.NotApplicable
             }.apply {
                 _modelFetcherResult.value = this

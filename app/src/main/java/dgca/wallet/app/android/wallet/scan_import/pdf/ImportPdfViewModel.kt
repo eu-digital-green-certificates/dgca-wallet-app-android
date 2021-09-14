@@ -28,10 +28,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fasterxml.jackson.databind.ObjectMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.verifier.app.decoder.model.GreenCertificate
 import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.local.toCertificateModel
+import dgca.wallet.app.android.model.BookingSystemModel
 import dgca.wallet.app.android.wallet.scan_import.BitmapFetcher
 import dgca.wallet.app.android.wallet.scan_import.FileSaver
 import dgca.wallet.app.android.wallet.scan_import.GreenCertificateFetcher
@@ -51,6 +53,10 @@ sealed class ImportPdfResult {
         val cose: ByteArray,
         val certificateModel: CertificateModel
     ) : ImportPdfResult()
+
+    class BookingSystemModelRecognised(
+        val bookingSystemModel: BookingSystemModel
+    ) : ImportPdfResult()
 }
 
 @HiltViewModel
@@ -58,7 +64,8 @@ class ImportPdfViewModel @Inject constructor(
     private val bitmapFetcher: BitmapFetcher,
     private val qrCodeFetcher: QrCodeFetcher,
     private val fileSaver: FileSaver,
-    private val greenCertificateFetcher: GreenCertificateFetcher
+    private val greenCertificateFetcher: GreenCertificateFetcher,
+    private val objectMapper: ObjectMapper
 ) : ViewModel() {
     private val _result = MutableLiveData<ImportPdfResult>()
     val result: LiveData<ImportPdfResult> = _result
@@ -109,12 +116,17 @@ class ImportPdfViewModel @Inject constructor(
                 greenCertificate!!.toCertificateModel()
             )
         } else {
-            val file = try {
-                fileSaver.saveFileFromUri(this, "images", "${System.currentTimeMillis()}.pdf")
-            } catch (exception: Exception) {
-                null
+            runCatching {
+                objectMapper.readValue(qrString, BookingSystemModel::class.java)
+                    .let { ImportPdfResult.BookingSystemModelRecognised(it) }
+            }.getOrElse {
+                val file = try {
+                    fileSaver.saveFileFromUri(this, "images", "${System.currentTimeMillis()}.pdf")
+                } catch (exception: Exception) {
+                    null
+                }
+                if (file?.exists() == true && file.isFile) ImportPdfResult.Success else ImportPdfResult.Failed
             }
-            if (file?.exists() == true && file.isFile) ImportPdfResult.Success else ImportPdfResult.Failed
         }
     }
 }

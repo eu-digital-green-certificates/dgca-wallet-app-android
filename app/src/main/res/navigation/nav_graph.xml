@@ -122,6 +122,14 @@
             app:exitAnim="@animator/nav_default_exit_anim"
             app:popEnterAnim="@animator/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+        <action
+            android:id="@+id/action_certificatesFragment_to_bookingSystemConsentFragment"
+            app:destination="@id/bookingSystemConsentFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
     <dialog
@@ -171,6 +179,14 @@
         <action
             android:id="@+id/action_codeReaderFragment_to_claimCertificateFragment"
             app:destination="@id/claimCertificateFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+        <action
+            android:id="@+id/action_codeReaderFragment_to_bookingSystemConsentFragment"
+            app:destination="@id/bookingSystemConsentFragment"
             app:enterAnim="@animator/nav_default_pop_enter_anim"
             app:exitAnim="@animator/nav_default_exit_anim"
             app:popEnterAnim="@animator/nav_default_pop_enter_anim"
@@ -305,4 +321,18 @@
 
     </fragment>
 
+    <fragment
+        android:id="@+id/bookingSystemConsentFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.BookingSystemConsentFragment"
+        android:label="@string/booking_system_consent_title"
+        app:enterAnim="@animator/nav_default_pop_enter_anim"
+        app:exitAnim="@animator/nav_default_exit_anim"
+        app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"
+        tools:layout="@layout/fragment_certificate_claim">
+
+        <argument
+            android:name="bookingSystemModel"
+            app:argType="dgca.wallet.app.android.model.BookingSystemModel" />
+    </fragment>
 </navigation>
