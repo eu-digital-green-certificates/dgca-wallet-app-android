@@ -353,6 +353,12 @@
             app:argType="dgca.wallet.app.android.model.BookingSystemModel" />
 
         <action
+            android:id="@+id/action_bookingSystemConsentFragment_to_identityFetcherDialogFragment"
+            app:destination="@id/identityFetcherDialogFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim" />
+
+        <action
             android:id="@+id/action_bookingSystemConsentFragment_to_certificateSelectorFragment"
             app:destination="@id/certificateSelectorFragment"
             app:enterAnim="@animator/nav_default_pop_enter_anim"
@@ -360,6 +366,17 @@
             app:popEnterAnim="@animator/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
+
+    <dialog
+        android:id="@+id/identityFetcherDialogFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.IdentityFetcherDialogFragment"
+        android:label="Identity Fetcher"
+        tools:layout="@layout/dialog_fragment_identity_fetcher">
+
+        <argument
+            android:name="bookingSystemModel"
+            app:argType="dgca.wallet.app.android.model.BookingSystemModel" />
+    </dialog>
 
     <fragment
         android:id="@+id/transmissionConsentFragment"

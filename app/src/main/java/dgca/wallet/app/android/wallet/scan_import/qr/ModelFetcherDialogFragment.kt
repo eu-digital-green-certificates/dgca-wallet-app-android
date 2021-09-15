@@ -31,16 +31,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.core.os.bundleOf
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
+import dgca.wallet.app.android.base.BindingDialogFragment
 import dgca.wallet.app.android.databinding.DialogFragmentModelFetcherBinding
 import dgca.wallet.app.android.wallet.scan_import.qr.certificate.ClaimGreenCertificateModel
 
 @AndroidEntryPoint
-class ModelFetcherDialogFragment : DialogFragment() {
+class ModelFetcherDialogFragment : BindingDialogFragment<DialogFragmentModelFetcherBinding>() {
     private val viewModel by viewModels<ModelFetcherViewModel>()
     private val args by navArgs<ModelFetcherDialogFragmentArgs>()
 
@@ -48,6 +48,10 @@ class ModelFetcherDialogFragment : DialogFragment() {
         super.onCreate(savedInstanceState)
         viewModel.init(args.qrCodeText)
     }
+
+    override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): DialogFragmentModelFetcherBinding =
+        DialogFragmentModelFetcherBinding.inflate(inflater, container, false)
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
