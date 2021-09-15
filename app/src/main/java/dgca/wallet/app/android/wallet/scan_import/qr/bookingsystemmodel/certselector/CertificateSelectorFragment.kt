@@ -1,6 +1,6 @@
 /*
  *  ---license-start
- *  eu-digital-green-certificates / dgca-verifier-app-android
+ *  eu-digital-green-certificates / dgca-wallet-app-android
  *  ---
  *  Copyright (C) 2021 T-Systems International GmbH and all other contributors
  *  ---
@@ -17,10 +17,10 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by mykhailo.nester on 13/09/2021, 18:44
+ *  Created by mykhailo.nester on 14/09/2021, 20:45
  */
 
-package dgca.wallet.app.android.wallet.view
+package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.certselector
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -28,6 +28,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.MainActivity
@@ -38,7 +39,7 @@ import dgca.wallet.app.android.databinding.FragmentCertificateSelectorBinding
 @AndroidEntryPoint
 class CertificateSelectorFragment : BindingFragment<FragmentCertificateSelectorBinding>() {
 
-    //    private val args by navArgs<CertificateSelectorViewModel>()
+    //    private val args by navArgs<>()
     private val viewModel by viewModels<CertificateSelectorViewModel>()
 
     private lateinit var adapter: CertificateSelectorAdapter
@@ -48,11 +49,11 @@ class CertificateSelectorFragment : BindingFragment<FragmentCertificateSelectorB
         (activity as MainActivity).clearBackground()
 
         adapter = CertificateSelectorAdapter(layoutInflater, viewModel)
-//        viewModel.event.observe(this) { event ->
-//            event.getContentIfNotHandled()?.let {
-//                onViewModelEvent(it)
-//            }
-//        }
+        viewModel.event.observe(this) { event ->
+            event.getContentIfNotHandled()?.let {
+                onViewModelEvent(it)
+            }
+        }
         viewModel.init()
     }
 
@@ -74,6 +75,9 @@ class CertificateSelectorFragment : BindingFragment<FragmentCertificateSelectorB
                 binding.nextButton.isVisible = true
             }
         }
+        binding.nextButton.setOnClickListener {
+            viewModel.onNextClick()
+        }
     }
 
     private fun onViewModelUiEvent(event: CertificateSelectorViewModel.CertificateViewUiEvent) {
@@ -81,6 +85,16 @@ class CertificateSelectorFragment : BindingFragment<FragmentCertificateSelectorB
             CertificateSelectorViewModel.CertificateViewUiEvent.OnHideLoading -> binding.progressView.isVisible = false
             CertificateSelectorViewModel.CertificateViewUiEvent.OnShowLoading -> binding.progressView.isVisible = true
             CertificateSelectorViewModel.CertificateViewUiEvent.OnError -> {
+            }
+        }
+    }
+
+    private fun onViewModelEvent(event: CertificateSelectorViewModel.CertificateEvent) {
+        when (event) {
+            is CertificateSelectorViewModel.CertificateEvent.OnCertificateAdvisorSelected -> {
+                val action =
+                    CertificateSelectorFragmentDirections.actionCertificateSelectorFragmentToTransmissionConsentFragment(event.certModel)
+                findNavController().navigate(action)
             }
         }
     }

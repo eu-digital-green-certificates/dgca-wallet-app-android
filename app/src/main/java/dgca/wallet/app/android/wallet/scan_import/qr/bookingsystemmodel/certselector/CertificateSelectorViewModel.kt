@@ -17,10 +17,10 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/10/21 12:58 PM
+ *  Created by mykhailo.nester on 14/09/2021, 19:54
  */
 
-package dgca.wallet.app.android.wallet.view
+package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.certselector
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -28,7 +28,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.wallet.app.android.Event
-import dgca.wallet.app.android.data.IdentifiableData
 import dgca.wallet.app.android.data.WalletRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -94,6 +93,21 @@ class CertificateSelectorViewModel @Inject constructor(
         _certificates.value = list.toList()
     }
 
+    fun onNextClick() {
+        viewModelScope.launch {
+            _uiEvent.value = Event(CertificateViewUiEvent.OnShowLoading)
+
+            withContext(Dispatchers.IO) {
+                // TODO: API Calls
+                delay(1500)
+            }
+            _uiEvent.value = Event(CertificateViewUiEvent.OnHideLoading)
+            selected?.let {
+                _event.value = Event(CertificateEvent.OnCertificateAdvisorSelected(it))
+            }
+        }
+    }
+
     sealed class CertificateViewUiEvent {
         object OnShowLoading : CertificateViewUiEvent()
         object OnHideLoading : CertificateViewUiEvent()
@@ -101,13 +115,6 @@ class CertificateSelectorViewModel @Inject constructor(
     }
 
     sealed class CertificateEvent {
-        data class OnCertificateAdvisorSelected(val isSelected: Boolean) : CertificateEvent()
+        data class OnCertificateAdvisorSelected(val certModel: SelectableCertificateModel) : CertificateEvent()
     }
 }
-
-data class SelectableCertificateModel(
-    override val id: String,
-    val title: String,
-    val validUntil: String,
-    val selected: Boolean = false
-) : IdentifiableData
