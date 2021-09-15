@@ -26,7 +26,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -82,10 +82,50 @@ class TransmissionConsentFragment : BindingFragment<FragmentTransmissionConsentB
 
     private fun onViewModelEvent(event: TransmissionConsentViewModel.TransmissionConsentEvent) {
         when (event) {
-            TransmissionConsentViewModel.TransmissionConsentEvent.OnPermissionAccepted -> {
-                Toast.makeText(requireContext(), "Certificate transferred", Toast.LENGTH_SHORT).show()
-                findNavController().popBackStack(R.id.certificatesFragment, false)
+            TransmissionConsentViewModel.TransmissionConsentEvent.OnCertificateTransmitted -> {
+                showDialog(
+                    getString(R.string.cert_transferred),
+                    true,
+                    positiveBtnText = getString(R.string.ok),
+                    action = {
+                        findNavController().popBackStack(R.id.certificatesFragment, false)
+                    }
+                )
+            }
+            TransmissionConsentViewModel.TransmissionConsentEvent.OnCertificateTransmissionFailed -> {
+                showDialog(
+                    getString(R.string.cert_transfer_failed),
+                    positiveBtnText = getString(R.string.ok),
+                    negativeBtnText = getString(R.string.retry),
+                    action = {
+                        viewModel.retry()
+                    }
+                )
             }
         }
+    }
+
+    private fun showDialog(
+        message: String,
+        isOneAction: Boolean = false,
+        positiveBtnText: String = "",
+        negativeBtnText: String = "",
+        action: () -> Unit
+    ) {
+        val builder = AlertDialog.Builder(requireContext())
+            .setMessage(message)
+            .setCancelable(false)
+            .setPositiveButton(positiveBtnText) { dialog, _ ->
+                action.invoke()
+                dialog.dismiss()
+            }
+
+        if (!isOneAction) {
+            builder.setNegativeButton(negativeBtnText) { dialog, _ -> dialog.dismiss() }
+        }
+
+
+        builder.create()
+        builder.show()
     }
 }
