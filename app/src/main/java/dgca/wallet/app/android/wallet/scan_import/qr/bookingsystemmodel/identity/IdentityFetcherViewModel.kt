@@ -26,6 +26,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.wallet.app.android.model.BookingSystemModel
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.identity.GetIdentityDocumentUseCase
@@ -38,6 +39,7 @@ sealed class IdentityFetcherResult {
     object Fail : IdentityFetcherResult()
 }
 
+@HiltViewModel
 class IdentityFetcherViewModel @Inject constructor(
     private val getIdentityDocumentUseCase: GetIdentityDocumentUseCase
 ) : ViewModel() {

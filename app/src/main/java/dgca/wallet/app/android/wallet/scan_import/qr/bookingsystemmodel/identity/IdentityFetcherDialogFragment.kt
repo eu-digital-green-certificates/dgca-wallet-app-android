@@ -34,12 +34,14 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.base.BindingDialogFragment
 import dgca.wallet.app.android.databinding.DialogFragmentIdentityFetcherBinding
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.IdentityFetcherResult
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.IdentityFetcherViewModel
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
 
+@AndroidEntryPoint
 class IdentityFetcherDialogFragment : BindingDialogFragment<DialogFragmentIdentityFetcherBinding>() {
     private val viewModel by viewModels<IdentityFetcherViewModel>()
     private val args by navArgs<IdentityFetcherDialogFragmentArgs>()
