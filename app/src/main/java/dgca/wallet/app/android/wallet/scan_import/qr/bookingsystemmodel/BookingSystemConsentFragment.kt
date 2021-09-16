@@ -58,16 +58,20 @@ class BookingSystemConsentFragment : BindingFragment<FragmentBookingSystemConsen
             findNavController().navigateUp()
             val identityDocument: IdentityDocument? =
                 bundle.getParcelable(IdentityFetcherDialogFragment.IdentityFetcherIdentityDocumentParam)
-            Toast.makeText(
-                requireContext(), "${
-                    if (identityDocument != null) {
-                        "Success"
-                    } else {
-                        "Fail"
-                    }
-                }", Toast.LENGTH_SHORT
-            ).show()
+            if (identityDocument != null) {
+                showCertificatesSelector(identityDocument)
+            } else {
+                Toast.makeText(
+                    requireContext(), "Fail", Toast.LENGTH_SHORT
+                ).show()
+            }
         }
+    }
+
+    private fun showCertificatesSelector(identityDocument: IdentityDocument) {
+        val action =
+            BookingSystemConsentFragmentDirections.actionBookingSystemConsentFragmentToCertificateSelectorFragment()
+        findNavController().navigate(action)
     }
 
     private fun populateView(bookingSystemModel: BookingSystemModel) {

@@ -45,7 +45,7 @@ class IdentityFetcherViewModel @Inject constructor() : ViewModel() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 delay(2000)
-                IdentityFetcherResult.Fail
+                IdentityFetcherResult.Success(IdentityDocument(("name")))
             }.let { identityFetcherResult ->
                 _identityFetcherResult.value = identityFetcherResult
             }
