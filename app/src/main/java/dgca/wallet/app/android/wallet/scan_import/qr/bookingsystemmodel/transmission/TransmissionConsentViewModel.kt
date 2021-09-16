@@ -59,8 +59,12 @@ class TransmissionConsentViewModel @Inject constructor(
                 delay(1500)
             }
             _uiEvent.value = Event(TransmissionConsentUiEvent.OnHideLoading)
-            _event.value = Event(TransmissionConsentEvent.OnPermissionAccepted)
+            _event.value = Event(TransmissionConsentEvent.OnCertificateTransmitted)
         }
+    }
+
+    fun retry() {
+//        TODO: retry logic
     }
 
     sealed class TransmissionConsentUiEvent {
@@ -70,6 +74,7 @@ class TransmissionConsentViewModel @Inject constructor(
     }
 
     sealed class TransmissionConsentEvent {
-        object OnPermissionAccepted : TransmissionConsentEvent()
+        object OnCertificateTransmitted : TransmissionConsentEvent()
+        object OnCertificateTransmissionFailed : TransmissionConsentEvent()
     }
 }
