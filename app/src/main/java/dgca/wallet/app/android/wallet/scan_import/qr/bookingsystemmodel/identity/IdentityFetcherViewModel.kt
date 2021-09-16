@@ -17,7 +17,7 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/15/21 4:45 PM
+ *  Created by osarapulov on 9/16/21 3:23 PM
  */
 
 package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel
@@ -26,10 +26,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import dgca.wallet.app.android.model.BookingSystemModel
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.identity.GetIdentityDocumentUseCase
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 
 sealed class IdentityFetcherResult {
@@ -37,18 +38,22 @@ sealed class IdentityFetcherResult {
     object Fail : IdentityFetcherResult()
 }
 
-class IdentityFetcherViewModel @Inject constructor() : ViewModel() {
+class IdentityFetcherViewModel @Inject constructor(
+    private val getIdentityDocumentUseCase: GetIdentityDocumentUseCase
+) : ViewModel() {
     private val _identityFetcherResult = MutableLiveData<IdentityFetcherResult>()
     val identityFetcherResult: LiveData<IdentityFetcherResult> = _identityFetcherResult
 
-    init {
+    fun initialize(bookingSystemModel: BookingSystemModel) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                delay(2000)
-                IdentityFetcherResult.Success(IdentityDocument(("name")))
-            }.let { identityFetcherResult ->
-                _identityFetcherResult.value = identityFetcherResult
+            val identityDocument: IdentityDocument? = try {
+                getIdentityDocumentUseCase.run(bookingSystemModel.serviceIdentity)
+            } catch (exception: Exception) {
+                Timber.e("Error fetching identity document")
+                null
             }
+
+            _identityFetcherResult.value = if (identityDocument != null) IdentityFetcherResult.Success(identityDocument) else null
         }
     }
 }

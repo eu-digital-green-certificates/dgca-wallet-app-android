@@ -34,6 +34,8 @@ import dgca.wallet.app.android.R
 import dgca.wallet.app.android.base.BindingFragment
 import dgca.wallet.app.android.databinding.FragmentBookingSystemConsentBinding
 import dgca.wallet.app.android.model.BookingSystemModel
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.identity.IdentityFetcherDialogFragment
 
 class BookingSystemConsentFragment : BindingFragment<FragmentBookingSystemConsentBinding>() {
     private val args by navArgs<BookingSystemConsentFragmentArgs>()

@@ -369,7 +369,7 @@
 
     <dialog
         android:id="@+id/identityFetcherDialogFragment"
-        android:name="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.IdentityFetcherDialogFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.identity.IdentityFetcherDialogFragment"
         android:label="Identity Fetcher"
         tools:layout="@layout/dialog_fragment_identity_fetcher">
 

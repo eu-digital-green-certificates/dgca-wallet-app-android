@@ -17,10 +17,10 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/15/21 4:44 PM
+ *  Created by osarapulov on 9/16/21 3:22 PM
  */
 
-package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel
+package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.identity
 
 import android.app.Dialog
 import android.graphics.Color
@@ -36,6 +36,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import dgca.wallet.app.android.base.BindingDialogFragment
 import dgca.wallet.app.android.databinding.DialogFragmentIdentityFetcherBinding
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.IdentityFetcherResult
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.IdentityFetcherViewModel
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
 
 class IdentityFetcherDialogFragment : BindingDialogFragment<DialogFragmentIdentityFetcherBinding>() {
     private val viewModel by viewModels<IdentityFetcherViewModel>()
@@ -64,6 +67,7 @@ class IdentityFetcherDialogFragment : BindingDialogFragment<DialogFragmentIdenti
                 bundleOf(IdentityFetcherIdentityDocumentParam to identityDocument)
             )
         }
+        viewModel.initialize(args.bookingSystemModel)
     }
 
     companion object {
