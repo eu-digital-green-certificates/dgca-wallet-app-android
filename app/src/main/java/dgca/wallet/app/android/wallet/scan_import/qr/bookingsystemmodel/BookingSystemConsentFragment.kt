@@ -26,6 +26,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dgca.wallet.app.android.R
@@ -48,9 +50,28 @@ class BookingSystemConsentFragment : BindingFragment<FragmentBookingSystemConsen
 
         binding.allow.setOnClickListener {
             val action =
-                BookingSystemConsentFragmentDirections.actionBookingSystemConsentFragmentToCertificateSelectorFragment()
+                BookingSystemConsentFragmentDirections.actionBookingSystemConsentFragmentToIdentityFetcherDialogFragment(args.bookingSystemModel)
             findNavController().navigate(action)
         }
+
+        setFragmentResultListener(IdentityFetcherDialogFragment.IdentityFetcherRequestKey) { key, bundle ->
+            findNavController().navigateUp()
+            val identityDocument: IdentityDocument? =
+                bundle.getParcelable(IdentityFetcherDialogFragment.IdentityFetcherIdentityDocumentParam)
+            if (identityDocument != null) {
+                showCertificatesSelector(identityDocument)
+            } else {
+                Toast.makeText(
+                    requireContext(), "Fail", Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    private fun showCertificatesSelector(identityDocument: IdentityDocument) {
+        val action =
+            BookingSystemConsentFragmentDirections.actionBookingSystemConsentFragmentToCertificateSelectorFragment()
+        findNavController().navigate(action)
     }
 
     private fun populateView(bookingSystemModel: BookingSystemModel) {
