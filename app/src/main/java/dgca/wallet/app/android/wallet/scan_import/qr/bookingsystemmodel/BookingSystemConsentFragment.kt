@@ -36,6 +36,7 @@ import dgca.wallet.app.android.databinding.FragmentBookingSystemConsentBinding
 import dgca.wallet.app.android.model.BookingSystemModel
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.identity.IdentityFetcherDialogFragment
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission.DefaultDialogFragment
 
 class BookingSystemConsentFragment : BindingFragment<FragmentBookingSystemConsentBinding>() {
     private val args by navArgs<BookingSystemConsentFragmentArgs>()
@@ -63,9 +64,12 @@ class BookingSystemConsentFragment : BindingFragment<FragmentBookingSystemConsen
             if (identityDocument != null) {
                 showCertificatesSelector(identityDocument)
             } else {
-                Toast.makeText(
-                    requireContext(), "Fail", Toast.LENGTH_SHORT
-                ).show()
+                val params = DefaultDialogFragment.BuildOptions(
+                    message = getString(R.string.something_went_wrong),
+                    positiveBtnText = getString(R.string.ok),
+                    isOneButton = true
+                )
+                DefaultDialogFragment.newInstance(params).show(childFragmentManager, DefaultDialogFragment.TAG)
             }
         }
     }
