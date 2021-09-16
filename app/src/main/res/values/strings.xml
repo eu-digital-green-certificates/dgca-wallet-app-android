@@ -113,4 +113,7 @@
     <string name="certificates_fount_title">%1$s certificates found</string>
     <string name="cancel">Cancel</string>
     <string name="grand_permission">Grand Permission</string>
+    <string name="ok">Ok</string>
+    <string name="cert_transferred">Certificate transferred</string>
+    <string name="cert_transfer_failed">Failed to transfer certificate</string>
 </resources>
