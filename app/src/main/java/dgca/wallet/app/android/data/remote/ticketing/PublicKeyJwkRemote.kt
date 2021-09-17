@@ -17,13 +17,20 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/16/21 2:56 PM
+ *  Created by osarapulov on 9/16/21 3:02 PM
  */
 
-package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data
+package dgca.wallet.app.android.data.remote.ticketing
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import com.fasterxml.jackson.annotation.JsonProperty
 
-@Parcelize
-class AccessTokenService : Parcelable
+class PublicKeyJwkRemote(
+    @JsonProperty("x5c")
+    val x5c: String,
+    @JsonProperty("kid")
+    val kid: String,
+    @JsonProperty("alg")
+    val alg: String,
+    @JsonProperty("use")
+    val use: String
+)

@@ -20,11 +20,11 @@
  *  Created by osarapulov on 9/17/21 8:41 AM
  */
 
-package dgca.wallet.app.android.data.remote
+package dgca.wallet.app.android.data.remote.ticketing
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-class Service(
+class ServiceRemote(
     @JsonProperty("id")
     val id: String,
     @JsonProperty("type")

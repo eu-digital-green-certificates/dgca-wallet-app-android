@@ -26,4 +26,4 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class IdentityDocument(val accessTokenService: AccessTokenService, val validationServices: Set<ValidationService>) : Parcelable
+data class IdentityDocument(val accessTokenService: Service, val validationServices: Set<Service>) : Parcelable

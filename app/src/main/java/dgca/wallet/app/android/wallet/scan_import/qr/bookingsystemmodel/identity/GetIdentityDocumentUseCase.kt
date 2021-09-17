@@ -22,11 +22,11 @@
 
 package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.identity
 
-import dgca.wallet.app.android.data.remote.ticketing.ServiceType
+import dgca.wallet.app.android.data.remote.ticketing.ServiceTypeRemote
 import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
-import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.AccessTokenService
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
-import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.ValidationService
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.Service
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.toService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -34,20 +34,20 @@ import timber.log.Timber
 class GetIdentityDocumentUseCase(private val ticketingApiService: TicketingApiService) {
     suspend fun run(identityUrl: String): IdentityDocument? = withContext(Dispatchers.IO) {
         ticketingApiService.getIdentity(identityUrl).body()?.let { identityResponse ->
-            var accessTokenService: AccessTokenService? = null
-            val validationServices = mutableSetOf<ValidationService>()
-            identityResponse.services.forEach { service ->
-                when (service.type) {
-                    ServiceType.ACCESS_TOKEN_SERVICE.type -> {
+            var accessTokenService: Service? = null
+            val validationServices = mutableSetOf<Service>()
+            identityResponse.servicesRemote.forEach { serviceRemote ->
+                when (serviceRemote.type) {
+                    ServiceTypeRemote.ACCESS_TOKEN_SERVICERemote.type -> {
                         if (accessTokenService != null) {
                             throw IllegalArgumentException("Only one access token service should be available")
                         } else {
-                            accessTokenService = AccessTokenService()
+                            accessTokenService = serviceRemote.toService()
                         }
                     }
-                    ServiceType.VALIDATION_SERVICE.type -> validationServices.add(ValidationService())
+                    ServiceTypeRemote.VALIDATION_SERVICERemote.type -> validationServices.add(serviceRemote.toService())
                     else -> {
-                        Timber.d("Found service of type: '${service.type}'")
+                        Timber.d("Found service of type: '${serviceRemote.type}'")
                     }
                 }
             }
