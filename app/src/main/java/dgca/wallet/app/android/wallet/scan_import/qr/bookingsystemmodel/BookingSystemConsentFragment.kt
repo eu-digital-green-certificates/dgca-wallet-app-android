@@ -77,9 +77,9 @@ class BookingSystemConsentFragment : BindingFragment<FragmentBookingSystemConsen
 
         setFragmentResultListener(AccessTokenFetcherDialogFragment.AccessTokenFetcherRequestKey) { key, bundle ->
             findNavController().navigateUp()
-            val identityDocument: AccessTokenResponse? =
+            val accessTokenResponse: AccessTokenResponse? =
                 bundle.getParcelable(AccessTokenFetcherDialogFragment.AccessTokenFetcherAccessTokenParamKey)
-            if (identityDocument != null) {
+            if (accessTokenResponse != null) {
                 Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
             } else {
                 val params = DefaultDialogFragment.BuildOptions(
