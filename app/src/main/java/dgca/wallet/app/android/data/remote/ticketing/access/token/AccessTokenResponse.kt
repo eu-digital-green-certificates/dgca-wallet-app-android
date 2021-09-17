@@ -17,11 +17,9 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/16/21 3:17 PM
+ *  Created by osarapulov on 9/17/21 9:07 AM
  */
 
-package dgca.wallet.app.android.data.remote.ticketing
+package dgca.wallet.app.android.data.remote.ticketing.access.token
 
-enum class ServiceTypeRemote(val type: String) {
-    VALIDATION_SERVICERemote("ValidationService"), ACCESS_TOKEN_SERVICERemote("AccessTokenService")
-}
+class AccessTokenResponse

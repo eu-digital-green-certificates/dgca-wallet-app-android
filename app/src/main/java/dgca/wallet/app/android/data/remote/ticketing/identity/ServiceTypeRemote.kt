@@ -17,20 +17,11 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/16/21 3:02 PM
+ *  Created by osarapulov on 9/16/21 3:17 PM
  */
 
-package dgca.wallet.app.android.data.remote.ticketing
+package dgca.wallet.app.android.data.remote.ticketing.identity
 
-import com.fasterxml.jackson.annotation.JsonProperty
-
-class PublicKeyJwkRemote(
-    @JsonProperty("x5c")
-    val x5c: String,
-    @JsonProperty("kid")
-    val kid: String,
-    @JsonProperty("alg")
-    val alg: String,
-    @JsonProperty("use")
-    val use: String
-)
+enum class ServiceTypeRemote(val type: String) {
+    VALIDATION_SERVICERemote("ValidationService"), ACCESS_TOKEN_SERVICERemote("AccessTokenService")
+}

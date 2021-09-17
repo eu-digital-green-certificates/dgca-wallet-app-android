@@ -23,6 +23,7 @@
 package dgca.wallet.app.android.data.remote.ticketing
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import dgca.wallet.app.android.data.remote.ticketing.identity.IdentityResponse
 import org.apache.commons.io.IOUtils
 import org.junit.Assert.assertNotNull
 import org.junit.Test

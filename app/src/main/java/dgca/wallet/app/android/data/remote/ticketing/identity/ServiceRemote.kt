@@ -17,26 +17,20 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/16/21 2:55 PM
+ *  Created by osarapulov on 9/17/21 9:07 AM
  */
 
-package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data
+package dgca.wallet.app.android.data.remote.ticketing.identity
 
-import android.os.Parcelable
-import dgca.wallet.app.android.data.remote.ticketing.identity.ServiceRemote
-import kotlinx.parcelize.Parcelize
+import com.fasterxml.jackson.annotation.JsonProperty
 
-@Parcelize
-data class Service(
+class ServiceRemote(
+    @JsonProperty("id")
     val id: String,
+    @JsonProperty("type")
     val type: String,
+    @JsonProperty("serviceEndpoint")
     val serviceEndpoint: String,
+    @JsonProperty("name")
     val name: String
-) : Parcelable
-
-fun ServiceRemote.toService(): Service = Service(
-    id = id,
-    type = type,
-    serviceEndpoint = serviceEndpoint,
-    name = name
 )

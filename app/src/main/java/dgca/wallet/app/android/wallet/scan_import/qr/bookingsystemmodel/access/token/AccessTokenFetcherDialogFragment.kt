@@ -36,6 +36,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.base.BindingDialogFragment
+import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenResponse
 import dgca.wallet.app.android.databinding.DialogFragmentProgressBarBinding
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.identity.IdentityFetcherDialogFragmentArgs
@@ -58,21 +59,21 @@ class AccessTokenFetcherDialogFragment : BindingDialogFragment<DialogFragmentPro
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.accessTokenFetcherResult.observe(viewLifecycleOwner) {
-            val identityDocument: IdentityDocument? = if (it is AccessTokenFetcherResult.Success) {
-                it.identityDocument
+            val accessTokenResponse: AccessTokenResponse? = if (it is AccessTokenFetcherResult.Success) {
+                it.accessTokenResponse
             } else {
                 null
             }
             setFragmentResult(
-                IdentityFetcherRequestKey,
-                bundleOf(IdentityFetcherIdentityDocumentParam to identityDocument)
+                AccessTokenFetcherRequestKey,
+                bundleOf(AccessTokenFetcherAccessTokenParamKey to accessTokenResponse)
             )
         }
         viewModel.initialize(args.identityDocument)
     }
 
     companion object {
-        const val IdentityFetcherRequestKey = "IdentityFetcherRequest"
-        const val IdentityFetcherIdentityDocumentParam = "IdentityFetcherIdentityDocumentParam"
+        const val AccessTokenFetcherRequestKey = "AccessTokenFetcherRequest"
+        const val AccessTokenFetcherAccessTokenParamKey = "AccessTokenFetcherAccessTokenParam"
     }
 }

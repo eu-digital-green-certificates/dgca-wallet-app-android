@@ -17,20 +17,20 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/17/21 8:41 AM
+ *  Created by osarapulov on 9/17/21 9:07 AM
  */
 
-package dgca.wallet.app.android.data.remote.ticketing
+package dgca.wallet.app.android.data.remote.ticketing.identity
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenResponse
+import retrofit2.Response
+import retrofit2.http.GET
+import retrofit2.http.Url
 
-class ServiceRemote(
-    @JsonProperty("id")
-    val id: String,
-    @JsonProperty("type")
-    val type: String,
-    @JsonProperty("serviceEndpoint")
-    val serviceEndpoint: String,
-    @JsonProperty("name")
-    val name: String
-)
+interface TicketingApiService {
+    @GET
+    suspend fun getIdentity(@Url url: String): Response<IdentityResponse>
+
+    @GET
+    suspend fun getAccessToken(@Url url: String): Response<AccessTokenResponse>
+}

@@ -26,7 +26,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
+import dgca.wallet.app.android.data.remote.ticketing.identity.TicketingApiService
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.access.token.GetAccessTokenUseCase
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.identity.GetIdentityDocumentUseCase
 import retrofit2.Retrofit
 import javax.inject.Singleton
@@ -44,4 +45,9 @@ object TicketingModule {
     @Provides
     internal fun provideGetIdentityDocumentUseCase(ticketingApiService: TicketingApiService): GetIdentityDocumentUseCase =
         GetIdentityDocumentUseCase(ticketingApiService)
+
+    @Singleton
+    @Provides
+    internal fun provideGetAccessTokenUseCase(ticketingApiService: TicketingApiService): GetAccessTokenUseCase =
+        GetAccessTokenUseCase(ticketingApiService)
 }

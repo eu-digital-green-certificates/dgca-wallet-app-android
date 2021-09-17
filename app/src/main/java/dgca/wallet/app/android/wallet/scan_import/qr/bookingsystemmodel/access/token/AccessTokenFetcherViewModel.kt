@@ -27,37 +27,34 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenResponse
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
-import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.identity.GetIdentityDocumentUseCase
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed class AccessTokenFetcherResult {
-    data class Success(val identityDocument: IdentityDocument) : AccessTokenFetcherResult()
+    data class Success(val accessTokenResponse: AccessTokenResponse) : AccessTokenFetcherResult()
     object Fail : AccessTokenFetcherResult()
 }
 
 @HiltViewModel
 class AccessTokenFetcherViewModel @Inject constructor(
-    private val getIdentityDocumentUseCase: GetIdentityDocumentUseCase
+    private val getAccessTokenUseCase: GetAccessTokenUseCase
 ) : ViewModel() {
     private val _accessTokenFetcherResult = MutableLiveData<AccessTokenFetcherResult>()
     val accessTokenFetcherResult: LiveData<AccessTokenFetcherResult> = _accessTokenFetcherResult
 
     fun initialize(identityDocument: IdentityDocument) {
         viewModelScope.launch {
-            delay(2000)
-            _accessTokenFetcherResult.value = AccessTokenFetcherResult.Fail
-//            val identityDocument: IdentityDocument? = try {
-//                getIdentityDocumentUseCase.run(bookingSystemModel.serviceIdentity)
-//            } catch (exception: Exception) {
-//                Timber.e("Error fetching identity document")
-//                null
-//            }
-//
-//            _accessTokenFetcherResult.value =
-//                if (identityDocument != null) AccessTokenFetcherResult.Success(identityDocument) else null
+            val accessTokenResponse: AccessTokenResponse? = try {
+                getAccessTokenUseCase.run(identityDocument)
+            } catch (exception: Exception) {
+                null
+            }
+            _accessTokenFetcherResult.value =
+                if (accessTokenResponse == null) AccessTokenFetcherResult.Fail else AccessTokenFetcherResult.Success(
+                    accessTokenResponse
+                )
         }
     }
 }

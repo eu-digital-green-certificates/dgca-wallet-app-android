@@ -26,13 +26,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dgca.wallet.app.android.R
 import dgca.wallet.app.android.base.BindingFragment
+import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenResponse
 import dgca.wallet.app.android.databinding.FragmentBookingSystemConsentBinding
 import dgca.wallet.app.android.model.BookingSystemModel
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.access.token.AccessTokenFetcherDialogFragment
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.identity.IdentityFetcherDialogFragment
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission.DefaultDialogFragment
@@ -62,6 +65,22 @@ class BookingSystemConsentFragment : BindingFragment<FragmentBookingSystemConsen
                 bundle.getParcelable(IdentityFetcherDialogFragment.IdentityFetcherIdentityDocumentParam)
             if (identityDocument != null) {
                 showAccessTokenFetcher(identityDocument)
+            } else {
+                val params = DefaultDialogFragment.BuildOptions(
+                    message = getString(R.string.something_went_wrong),
+                    positiveBtnText = getString(R.string.ok),
+                    isOneButton = true
+                )
+                DefaultDialogFragment.newInstance(params).show(childFragmentManager, DefaultDialogFragment.TAG)
+            }
+        }
+
+        setFragmentResultListener(AccessTokenFetcherDialogFragment.AccessTokenFetcherRequestKey) { key, bundle ->
+            findNavController().navigateUp()
+            val identityDocument: AccessTokenResponse? =
+                bundle.getParcelable(AccessTokenFetcherDialogFragment.AccessTokenFetcherAccessTokenParamKey)
+            if (identityDocument != null) {
+                Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
             } else {
                 val params = DefaultDialogFragment.BuildOptions(
                     message = getString(R.string.something_went_wrong),

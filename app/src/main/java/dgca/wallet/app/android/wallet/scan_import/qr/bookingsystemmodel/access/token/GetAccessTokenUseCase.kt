@@ -22,8 +22,9 @@
 
 package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.access.token
 
-import dgca.wallet.app.android.data.remote.ticketing.ServiceTypeRemote
-import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
+import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenResponse
+import dgca.wallet.app.android.data.remote.ticketing.identity.ServiceTypeRemote
+import dgca.wallet.app.android.data.remote.ticketing.identity.TicketingApiService
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.Service
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.toService
@@ -32,29 +33,7 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 class GetAccessTokenUseCase(private val ticketingApiService: TicketingApiService) {
-    suspend fun run(identityUrl: String): IdentityDocument? = withContext(Dispatchers.IO) {
-        ticketingApiService.getIdentity(identityUrl).body()?.let { identityResponse ->
-            var accessTokenService: Service? = null
-            val validationServices = mutableSetOf<Service>()
-            identityResponse.servicesRemote.forEach { serviceRemote ->
-                when (serviceRemote.type) {
-                    ServiceTypeRemote.ACCESS_TOKEN_SERVICERemote.type -> {
-                        if (accessTokenService != null) {
-                            throw IllegalArgumentException("Only one access token service should be available")
-                        } else {
-                            accessTokenService = serviceRemote.toService()
-                        }
-                    }
-                    ServiceTypeRemote.VALIDATION_SERVICERemote.type -> validationServices.add(serviceRemote.toService())
-                    else -> {
-                        Timber.d("Found validation service of type: '${serviceRemote.type}'")
-                    }
-                }
-            }
-            if (accessTokenService != null && validationServices.isNotEmpty()) IdentityDocument(
-                accessTokenService!!,
-                validationServices
-            ) else null
-        }
+    suspend fun run(identityDocument: IdentityDocument): AccessTokenResponse? = withContext(Dispatchers.IO) {
+        ticketingApiService.getAccessToken(identityDocument.accessTokenService.serviceEndpoint).body()
     }
 }

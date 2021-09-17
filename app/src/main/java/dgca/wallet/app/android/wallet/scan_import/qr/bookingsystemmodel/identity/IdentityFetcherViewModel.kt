@@ -49,7 +49,7 @@ class IdentityFetcherViewModel @Inject constructor(
     fun initialize(bookingSystemModel: BookingSystemModel) {
         viewModelScope.launch {
             val identityDocument: IdentityDocument? = try {
-                getIdentityDocumentUseCase.run(bookingSystemModel.serviceIdentity)
+                getIdentityDocumentUseCase.run(bookingSystemModel)
             } catch (exception: Exception) {
                 Timber.e("Error fetching identity document")
                 null

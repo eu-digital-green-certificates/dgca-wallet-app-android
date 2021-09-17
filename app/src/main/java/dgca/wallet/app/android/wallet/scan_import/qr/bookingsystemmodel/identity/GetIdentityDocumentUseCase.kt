@@ -22,8 +22,9 @@
 
 package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.identity
 
-import dgca.wallet.app.android.data.remote.ticketing.ServiceTypeRemote
-import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
+import dgca.wallet.app.android.data.remote.ticketing.identity.ServiceTypeRemote
+import dgca.wallet.app.android.data.remote.ticketing.identity.TicketingApiService
+import dgca.wallet.app.android.model.BookingSystemModel
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.Service
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.toService
@@ -32,8 +33,8 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 class GetIdentityDocumentUseCase(private val ticketingApiService: TicketingApiService) {
-    suspend fun run(identityUrl: String): IdentityDocument? = withContext(Dispatchers.IO) {
-        ticketingApiService.getIdentity(identityUrl).body()?.let { identityResponse ->
+    suspend fun run(bookingSystemModel: BookingSystemModel): IdentityDocument? = withContext(Dispatchers.IO) {
+        ticketingApiService.getIdentity(bookingSystemModel.serviceIdentity).body()?.let { identityResponse ->
             var accessTokenService: Service? = null
             val validationServices = mutableSetOf<Service>()
             identityResponse.servicesRemote.forEach { serviceRemote ->
