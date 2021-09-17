@@ -22,4 +22,10 @@
 
 package dgca.wallet.app.android.data.remote.ticketing.access.token
 
-class AccessTokenResponse
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+// TODO remove parcelable dependency.
+
+@Parcelize
+class AccessTokenResponse : Parcelable
