@@ -28,7 +28,7 @@ import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenReq
 import dgca.wallet.app.android.model.AccessTokenResult
 import dgca.wallet.app.android.model.BookingSystemModel
 import dgca.wallet.app.android.model.PublicKeyData
-import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.Service
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.security.KeyPair
@@ -36,7 +36,11 @@ import java.security.KeyPairGenerator
 import java.util.*
 
 class GetAccessTokenUseCase(private val ticketingApiService: TicketingApiService) {
-    suspend fun run(bookingSystemModel: BookingSystemModel, identityDocument: IdentityDocument): AccessTokenResult =
+    suspend fun run(
+        bookingSystemModel: BookingSystemModel,
+        accessTokenService: Service,
+        validationService: Service
+    ): AccessTokenResult =
         withContext(Dispatchers.IO) {
             val keyPairGen = KeyPairGenerator.getInstance("EC")
             keyPairGen.initialize(256)
@@ -49,9 +53,9 @@ class GetAccessTokenUseCase(private val ticketingApiService: TicketingApiService
             )
 
             ticketingApiService.getAccessToken(
-                identityDocument.accessTokenService.serviceEndpoint,
+                accessTokenService.serviceEndpoint,
                 "Bearer ${bookingSystemModel.token}",
-                AccessTokenRequest(identityDocument.validationServices.first().id, publicKeyData)
+                AccessTokenRequest(validationService.id, publicKeyData)
             ).body().let {
                 AccessTokenResult(keyPair.private)
             }

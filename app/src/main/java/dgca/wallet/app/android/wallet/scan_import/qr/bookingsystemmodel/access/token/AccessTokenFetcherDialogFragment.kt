@@ -67,7 +67,7 @@ class AccessTokenFetcherDialogFragment : BindingDialogFragment<DialogFragmentPro
                 bundleOf(AccessTokenFetcherAccessTokenParamKey to accessTokenResult)
             )
         }
-        viewModel.initialize(args.bookingSystemModel, args.identityDocument)
+        viewModel.initialize(args.bookingSystemModel, args.accessTokenService, args.validationService)
     }
 
     companion object {

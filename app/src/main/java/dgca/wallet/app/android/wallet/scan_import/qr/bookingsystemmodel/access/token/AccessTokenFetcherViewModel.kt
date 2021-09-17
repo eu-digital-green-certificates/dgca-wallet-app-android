@@ -29,7 +29,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.wallet.app.android.model.AccessTokenResult
 import dgca.wallet.app.android.model.BookingSystemModel
-import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.Service
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -46,10 +46,10 @@ class AccessTokenFetcherViewModel @Inject constructor(
     private val _accessTokenFetcherResult = MutableLiveData<AccessTokenFetcherResult>()
     val accessTokenFetcherResult: LiveData<AccessTokenFetcherResult> = _accessTokenFetcherResult
 
-    fun initialize(bookingSystemModel: BookingSystemModel, identityDocument: IdentityDocument) {
+    fun initialize(bookingSystemModel: BookingSystemModel, accessTokenService: Service, validationService: Service) {
         viewModelScope.launch {
             val accessTokenResult: AccessTokenResult? = try {
-                getAccessTokenUseCase.run(bookingSystemModel, identityDocument)
+                getAccessTokenUseCase.run(bookingSystemModel, accessTokenService, validationService)
             } catch (exception: Exception) {
                 Timber.e(exception, "Error fetching access token")
                 null

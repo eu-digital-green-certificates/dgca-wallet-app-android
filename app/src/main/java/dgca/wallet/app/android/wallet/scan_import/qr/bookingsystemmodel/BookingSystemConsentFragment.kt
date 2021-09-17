@@ -36,6 +36,7 @@ import dgca.wallet.app.android.model.AccessTokenResult
 import dgca.wallet.app.android.model.BookingSystemModel
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.access.token.AccessTokenFetcherDialogFragment
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.Service
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.identity.IdentityFetcherDialogFragment
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission.DefaultDialogFragment
 
@@ -62,15 +63,21 @@ class BookingSystemConsentFragment : BindingFragment<FragmentBookingSystemConsen
             findNavController().navigateUp()
             val identityDocument: IdentityDocument? =
                 bundle.getParcelable(IdentityFetcherDialogFragment.IdentityFetcherIdentityDocumentParam)
-            if (identityDocument != null) {
-                showAccessTokenFetcher(args.bookingSystemModel, identityDocument)
-            } else {
+            if (identityDocument == null || identityDocument.validationServices.isEmpty()) {
                 val params = DefaultDialogFragment.BuildOptions(
                     message = getString(R.string.something_went_wrong),
                     positiveBtnText = getString(R.string.ok),
                     isOneButton = true
                 )
                 DefaultDialogFragment.newInstance(params).show(childFragmentManager, DefaultDialogFragment.TAG)
+            } else if (false && identityDocument.validationServices.size == 1) {
+                showAccessTokenFetcher(
+                    args.bookingSystemModel,
+                    identityDocument.accessTokenService,
+                    identityDocument.validationServices.first()
+                )
+            } else {
+                showValidationServiceSelector(args.bookingSystemModel, identityDocument)
             }
         }
 
@@ -91,10 +98,22 @@ class BookingSystemConsentFragment : BindingFragment<FragmentBookingSystemConsen
         }
     }
 
-    private fun showAccessTokenFetcher(bookingSystemModel: BookingSystemModel, identityDocument: IdentityDocument) {
+    private fun showValidationServiceSelector(bookingSystemModel: BookingSystemModel, identityDocument: IdentityDocument) {
+        val action =
+            BookingSystemConsentFragmentDirections.actionBookingSystemConsentFragmentToValidationServiceSelectorFragment(
+                bookingSystemModel, identityDocument
+            )
+        findNavController().navigate(action)
+    }
+
+    private fun showAccessTokenFetcher(
+        bookingSystemModel: BookingSystemModel,
+        accessTokenService: Service,
+        validationService: Service
+    ) {
         val action =
             BookingSystemConsentFragmentDirections.actionBookingSystemConsentFragmentToAccessTokenFetcherDialogFragment(
-                bookingSystemModel, identityDocument
+                bookingSystemModel, accessTokenService, validationService
             )
         findNavController().navigate(action)
     }
