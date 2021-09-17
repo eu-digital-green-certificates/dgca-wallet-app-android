@@ -22,8 +22,8 @@
 
 package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.identity
 
-import dgca.wallet.app.android.data.remote.ticketing.identity.ServiceTypeRemote
 import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
+import dgca.wallet.app.android.data.remote.ticketing.identity.ServiceTypeRemote
 import dgca.wallet.app.android.model.BookingSystemModel
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.Service

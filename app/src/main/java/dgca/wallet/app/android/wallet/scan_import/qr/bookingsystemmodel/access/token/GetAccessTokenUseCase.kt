@@ -22,9 +22,7 @@
 
 package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.access.token
 
-import dgca.verifier.app.decoder.generateKeyPair
 import dgca.verifier.app.decoder.model.KeyPairData
-import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenResponse
 import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
 import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenRequest
 import dgca.wallet.app.android.model.AccessTokenResult
