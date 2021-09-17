@@ -17,20 +17,14 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/17/21 9:07 AM
+ *  Created by osarapulov on 9/17/21 9:03 PM
  */
 
-package dgca.wallet.app.android.data.remote.ticketing.identity
+package dgca.wallet.app.android.model
 
-import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenResponse
-import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Url
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+import java.security.PrivateKey
 
-interface TicketingApiService {
-    @GET
-    suspend fun getIdentity(@Url url: String): Response<IdentityResponse>
-
-    @GET
-    suspend fun getAccessToken(@Url url: String): Response<AccessTokenResponse>
-}
+@Parcelize
+data class AccessTokenResult(val privateKey: PrivateKey) : Parcelable

@@ -22,18 +22,40 @@
 
 package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.access.token
 
+import dgca.verifier.app.decoder.generateKeyPair
+import dgca.verifier.app.decoder.model.KeyPairData
 import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenResponse
-import dgca.wallet.app.android.data.remote.ticketing.identity.ServiceTypeRemote
-import dgca.wallet.app.android.data.remote.ticketing.identity.TicketingApiService
+import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
+import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenRequest
+import dgca.wallet.app.android.model.AccessTokenResult
+import dgca.wallet.app.android.model.BookingSystemModel
+import dgca.wallet.app.android.model.PublicKeyData
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
-import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.Service
-import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.toService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import timber.log.Timber
+import java.security.KeyPair
+import java.security.KeyPairGenerator
+import java.util.*
 
 class GetAccessTokenUseCase(private val ticketingApiService: TicketingApiService) {
-    suspend fun run(identityDocument: IdentityDocument): AccessTokenResponse? = withContext(Dispatchers.IO) {
-        ticketingApiService.getAccessToken(identityDocument.accessTokenService.serviceEndpoint).body()
-    }
+    suspend fun run(bookingSystemModel: BookingSystemModel, identityDocument: IdentityDocument): AccessTokenResult =
+        withContext(Dispatchers.IO) {
+            val keyPairGen = KeyPairGenerator.getInstance("EC")
+            keyPairGen.initialize(256)
+            val keyPairData = KeyPairData("SHA256withECDSA", keyPairGen.generateKeyPair())
+            val keyPair: KeyPair = keyPairData.keyPair
+
+            val publicKeyData = PublicKeyData(
+                keyPair.public.algorithm,
+                Base64.getEncoder().encodeToString(keyPair.public.encoded)
+            )
+
+            ticketingApiService.getAccessToken(
+                identityDocument.accessTokenService.serviceEndpoint,
+                "Bearer ${bookingSystemModel.token}",
+                AccessTokenRequest(identityDocument.validationServices.first().id, publicKeyData)
+            ).body().let {
+                AccessTokenResult(keyPair.private)
+            }
+        }
 }

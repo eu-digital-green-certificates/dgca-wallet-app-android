@@ -2,8 +2,8 @@
   "protocol": "DCCVALIDATION",
   "protocolVersion": "1.0.0",
   "serviceIdentity": "https://dgca-booking-demo-eu-test.cfapps.eu10.hana.ondemand.com/identity",
-  "token": "eyJhbGciOiJFUzI1NiIsImtpZCI6IjIzNDMifQ.eyJpc3MiOiJodHRwczovL3NlcnZpY2Vwcm92aWRlciIsInN1Y     iI6Ik     FERURERERERERERERERERERCIsImlhdCI6MTUxNjIzOTAyMiwiZXhwIjoxNTE2MjM5MDIyfQ.Gdnw1LF1BccpYKcT     Au yNL_KeY1Z0juz9WU9660BedgRzrZplxUZRjr09JIlZNtgZtqgAZ9Pma3kgPhUln9Gufw",
-  "consent": "I want to check your DCC to confirm your booking!:)",
-  "subject": "Booking Nr. …",
-  "serviceProvider": "Service Provider.com"
+  "token": "eyJ0eXAiOiJKV1QiLCJraWQiOiJiUzhEMi9XejV0WT0iLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJWYWxpZGF0aW9uIERlY29yYXRvciBEZXJ2aWNlIiwiZXhwIjoxNjMxOTAwMDgyLCJzdWIiOiIyOTQwMzUzZC02YWQ2LTRkNDgtYTIzOS01ZDgxOTAxZTJmM2UifQ.0uNIFNO39UsjYpICY4TTqOnbUOXtOQXPHgsPouM1cBq4QD_eKIGjcMetM3fM00LPUJRURX5aL7LRq189otLw_Q",
+  "consent": "Please confirm to start the DCC Exchange flow. If you not confirm, the flow is aborted.",
+  "subject": "2940353d-6ad6-4d48-a239-5d81901e2f3e",
+  "serviceProvider": "Booking Demo"
 }

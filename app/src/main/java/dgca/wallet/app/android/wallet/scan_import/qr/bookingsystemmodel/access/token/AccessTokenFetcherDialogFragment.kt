@@ -36,10 +36,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.base.BindingDialogFragment
-import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenResponse
 import dgca.wallet.app.android.databinding.DialogFragmentProgressBarBinding
-import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
-import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.identity.IdentityFetcherDialogFragmentArgs
+import dgca.wallet.app.android.model.AccessTokenResult
 
 @AndroidEntryPoint
 class AccessTokenFetcherDialogFragment : BindingDialogFragment<DialogFragmentProgressBarBinding>() {
@@ -59,17 +57,17 @@ class AccessTokenFetcherDialogFragment : BindingDialogFragment<DialogFragmentPro
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.accessTokenFetcherResult.observe(viewLifecycleOwner) {
-            val accessTokenResponse: AccessTokenResponse? = if (it is AccessTokenFetcherResult.Success) {
-                it.accessTokenResponse
+            val accessTokenResult: AccessTokenResult? = if (it is AccessTokenFetcherResult.Success) {
+                it.accessTokenResult
             } else {
                 null
             }
             setFragmentResult(
                 AccessTokenFetcherRequestKey,
-                bundleOf(AccessTokenFetcherAccessTokenParamKey to accessTokenResponse)
+                bundleOf(AccessTokenFetcherAccessTokenParamKey to accessTokenResult)
             )
         }
-        viewModel.initialize(args.identityDocument)
+        viewModel.initialize(args.bookingSystemModel, args.identityDocument)
     }
 
     companion object {

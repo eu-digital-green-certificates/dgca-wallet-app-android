@@ -31,8 +31,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dgca.wallet.app.android.R
 import dgca.wallet.app.android.base.BindingFragment
-import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenResponse
 import dgca.wallet.app.android.databinding.FragmentBookingSystemConsentBinding
+import dgca.wallet.app.android.model.AccessTokenResult
 import dgca.wallet.app.android.model.BookingSystemModel
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.access.token.AccessTokenFetcherDialogFragment
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
@@ -63,7 +63,7 @@ class BookingSystemConsentFragment : BindingFragment<FragmentBookingSystemConsen
             val identityDocument: IdentityDocument? =
                 bundle.getParcelable(IdentityFetcherDialogFragment.IdentityFetcherIdentityDocumentParam)
             if (identityDocument != null) {
-                showAccessTokenFetcher(identityDocument)
+                showAccessTokenFetcher(args.bookingSystemModel, identityDocument)
             } else {
                 val params = DefaultDialogFragment.BuildOptions(
                     message = getString(R.string.something_went_wrong),
@@ -76,10 +76,10 @@ class BookingSystemConsentFragment : BindingFragment<FragmentBookingSystemConsen
 
         setFragmentResultListener(AccessTokenFetcherDialogFragment.AccessTokenFetcherRequestKey) { key, bundle ->
             findNavController().navigateUp()
-            val accessTokenResponse: AccessTokenResponse? =
+            val accessTokenResult: AccessTokenResult? =
                 bundle.getParcelable(AccessTokenFetcherDialogFragment.AccessTokenFetcherAccessTokenParamKey)
-            if (accessTokenResponse != null) {
-                showCertificatesSelector(accessTokenResponse)
+            if (accessTokenResult != null) {
+                showCertificatesSelector(accessTokenResult)
             } else {
                 val params = DefaultDialogFragment.BuildOptions(
                     message = getString(R.string.something_went_wrong),
@@ -91,17 +91,19 @@ class BookingSystemConsentFragment : BindingFragment<FragmentBookingSystemConsen
         }
     }
 
-    private fun showAccessTokenFetcher(identityDocument: IdentityDocument) {
+    private fun showAccessTokenFetcher(bookingSystemModel: BookingSystemModel, identityDocument: IdentityDocument) {
         val action =
             BookingSystemConsentFragmentDirections.actionBookingSystemConsentFragmentToAccessTokenFetcherDialogFragment(
-                identityDocument
+                bookingSystemModel, identityDocument
             )
         findNavController().navigate(action)
     }
 
-    private fun showCertificatesSelector(accessTokenResponse: AccessTokenResponse) {
+    private fun showCertificatesSelector(accessTokenResult: AccessTokenResult) {
         val action =
-            BookingSystemConsentFragmentDirections.actionBookingSystemConsentFragmentToCertificateSelectorFragment()
+            BookingSystemConsentFragmentDirections.actionBookingSystemConsentFragmentToCertificateSelectorFragment(
+                accessTokenResult
+            )
         findNavController().navigate(action)
     }
 

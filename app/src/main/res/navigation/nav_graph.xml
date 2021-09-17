@@ -328,6 +328,10 @@
         android:label="@string/step_2"
         tools:layout="@layout/fragment_certificate_selector">
 
+        <argument
+            android:name="bookingSystemModel"
+            app:argType="dgca.wallet.app.android.model.AccessTokenResult" />
+
         <action
             android:id="@+id/action_certificateSelectorFragment_to_transmissionConsentFragment"
             app:destination="@id/transmissionConsentFragment"
@@ -389,6 +393,10 @@
         android:name="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.access.token.AccessTokenFetcherDialogFragment"
         android:label="Access Token Fetcher"
         tools:layout="@layout/dialog_fragment_progress_bar">
+
+        <argument
+            android:name="bookingSystemModel"
+            app:argType="dgca.wallet.app.android.model.BookingSystemModel" />
 
         <argument
             android:name="identityDocument"
