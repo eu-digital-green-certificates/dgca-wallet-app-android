@@ -29,6 +29,7 @@ import android.os.Parcelable
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
+import dgca.wallet.app.android.R
 import kotlinx.parcelize.Parcelize
 
 class DefaultDialogFragment : DialogFragment() {
@@ -60,6 +61,12 @@ class DefaultDialogFragment : DialogFragment() {
         const val KEY_BUILD_OPTIONS = "key_build_options"
         const val ACTION_NEGATIVE = 0
         const val ACTION_POSITIVE = 1
+
+        fun newInstance(buildOptions: BuildOptions) = DefaultDialogFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable(KEY_BUILD_OPTIONS, buildOptions)
+            }
+        }
     }
 
     @Parcelize

@@ -26,14 +26,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dgca.wallet.app.android.R
 import dgca.wallet.app.android.base.BindingFragment
+import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenResponse
 import dgca.wallet.app.android.databinding.FragmentBookingSystemConsentBinding
 import dgca.wallet.app.android.model.BookingSystemModel
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.access.token.AccessTokenFetcherDialogFragment
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.identity.IdentityFetcherDialogFragment
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission.DefaultDialogFragment
 
 class BookingSystemConsentFragment : BindingFragment<FragmentBookingSystemConsentBinding>() {
     private val args by navArgs<BookingSystemConsentFragmentArgs>()
@@ -59,16 +63,43 @@ class BookingSystemConsentFragment : BindingFragment<FragmentBookingSystemConsen
             val identityDocument: IdentityDocument? =
                 bundle.getParcelable(IdentityFetcherDialogFragment.IdentityFetcherIdentityDocumentParam)
             if (identityDocument != null) {
-                showCertificatesSelector(identityDocument)
+                showAccessTokenFetcher(identityDocument)
             } else {
-                Toast.makeText(
-                    requireContext(), "Fail", Toast.LENGTH_SHORT
-                ).show()
+                val params = DefaultDialogFragment.BuildOptions(
+                    message = getString(R.string.something_went_wrong),
+                    positiveBtnText = getString(R.string.ok),
+                    isOneButton = true
+                )
+                DefaultDialogFragment.newInstance(params).show(childFragmentManager, DefaultDialogFragment.TAG)
+            }
+        }
+
+        setFragmentResultListener(AccessTokenFetcherDialogFragment.AccessTokenFetcherRequestKey) { key, bundle ->
+            findNavController().navigateUp()
+            val accessTokenResponse: AccessTokenResponse? =
+                bundle.getParcelable(AccessTokenFetcherDialogFragment.AccessTokenFetcherAccessTokenParamKey)
+            if (accessTokenResponse != null) {
+                showCertificatesSelector(accessTokenResponse)
+            } else {
+                val params = DefaultDialogFragment.BuildOptions(
+                    message = getString(R.string.something_went_wrong),
+                    positiveBtnText = getString(R.string.ok),
+                    isOneButton = true
+                )
+                DefaultDialogFragment.newInstance(params).show(childFragmentManager, DefaultDialogFragment.TAG)
             }
         }
     }
 
-    private fun showCertificatesSelector(identityDocument: IdentityDocument) {
+    private fun showAccessTokenFetcher(identityDocument: IdentityDocument) {
+        val action =
+            BookingSystemConsentFragmentDirections.actionBookingSystemConsentFragmentToAccessTokenFetcherDialogFragment(
+                identityDocument
+            )
+        findNavController().navigate(action)
+    }
+
+    private fun showCertificatesSelector(accessTokenResponse: AccessTokenResponse) {
         val action =
             BookingSystemConsentFragmentDirections.actionBookingSystemConsentFragmentToCertificateSelectorFragment()
         findNavController().navigate(action)

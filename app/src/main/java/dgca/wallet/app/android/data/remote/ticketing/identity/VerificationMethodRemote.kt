@@ -17,13 +17,20 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/15/21 5:25 PM
+ *  Created by osarapulov on 9/17/21 9:07 AM
  */
 
-package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel
+package dgca.wallet.app.android.data.remote.ticketing.identity
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import com.fasterxml.jackson.annotation.JsonProperty
 
-@Parcelize
-data class IdentityDocument(val name: String = "") : Parcelable
+class VerificationMethodRemote(
+    @JsonProperty("id")
+    val id: String,
+    @JsonProperty("type")
+    val type: String,
+    @JsonProperty("controller")
+    val controller: String,
+    @JsonProperty("publicKeyJWK")
+    val publicKeyJwkRemote: PublicKeyJwkRemote
+)

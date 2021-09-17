@@ -1,7 +1,7 @@
 {
   "protocol": "DCCVALIDATION",
   "protocolVersion": "1.0.0",
-  "serviceIdentity": "http://dccexampleprovider/dcc/identity",
+  "serviceIdentity": "https://dgca-booking-demo-eu-test.cfapps.eu10.hana.ondemand.com/identity",
   "token": "eyJhbGciOiJFUzI1NiIsImtpZCI6IjIzNDMifQ.eyJpc3MiOiJodHRwczovL3NlcnZpY2Vwcm92aWRlciIsInN1Y     iI6Ik     FERURERERERERERERERERERCIsImlhdCI6MTUxNjIzOTAyMiwiZXhwIjoxNTE2MjM5MDIyfQ.Gdnw1LF1BccpYKcT     Au yNL_KeY1Z0juz9WU9660BedgRzrZplxUZRjr09JIlZNtgZtqgAZ9Pma3kgPhUln9Gufw",
   "consent": "I want to check your DCC to confirm your booking!:)",
   "subject": "Booking Nr. …",

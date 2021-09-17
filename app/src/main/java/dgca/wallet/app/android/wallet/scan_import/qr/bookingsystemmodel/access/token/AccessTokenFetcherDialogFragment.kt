@@ -17,10 +17,10 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/15/21 4:44 PM
+ *  Created by osarapulov on 9/16/21 3:22 PM
  */
 
-package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel
+package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.access.token
 
 import android.app.Dialog
 import android.graphics.Color
@@ -34,15 +34,20 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.base.BindingDialogFragment
-import dgca.wallet.app.android.databinding.DialogFragmentIdentityFetcherBinding
+import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenResponse
+import dgca.wallet.app.android.databinding.DialogFragmentProgressBarBinding
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.identity.IdentityFetcherDialogFragmentArgs
 
-class IdentityFetcherDialogFragment : BindingDialogFragment<DialogFragmentIdentityFetcherBinding>() {
-    private val viewModel by viewModels<IdentityFetcherViewModel>()
-    private val args by navArgs<IdentityFetcherDialogFragmentArgs>()
+@AndroidEntryPoint
+class AccessTokenFetcherDialogFragment : BindingDialogFragment<DialogFragmentProgressBarBinding>() {
+    private val viewModel by viewModels<AccessTokenFetcherViewModel>()
+    private val args by navArgs<AccessTokenFetcherDialogFragmentArgs>()
 
-    override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): DialogFragmentIdentityFetcherBinding =
-        DialogFragmentIdentityFetcherBinding.inflate(inflater, container, false)
+    override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): DialogFragmentProgressBarBinding =
+        DialogFragmentProgressBarBinding.inflate(inflater, container, false)
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return super.onCreateDialog(savedInstanceState).apply {
@@ -53,21 +58,22 @@ class IdentityFetcherDialogFragment : BindingDialogFragment<DialogFragmentIdenti
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.identityFetcherResult.observe(viewLifecycleOwner) {
-            val identityDocument: IdentityDocument? = if (it is IdentityFetcherResult.Success) {
-                it.identityDocument
+        viewModel.accessTokenFetcherResult.observe(viewLifecycleOwner) {
+            val accessTokenResponse: AccessTokenResponse? = if (it is AccessTokenFetcherResult.Success) {
+                it.accessTokenResponse
             } else {
                 null
             }
             setFragmentResult(
-                IdentityFetcherRequestKey,
-                bundleOf(IdentityFetcherIdentityDocumentParam to identityDocument)
+                AccessTokenFetcherRequestKey,
+                bundleOf(AccessTokenFetcherAccessTokenParamKey to accessTokenResponse)
             )
         }
+        viewModel.initialize(args.identityDocument)
     }
 
     companion object {
-        const val IdentityFetcherRequestKey = "IdentityFetcherRequest"
-        const val IdentityFetcherIdentityDocumentParam = "IdentityFetcherIdentityDocumentParam"
+        const val AccessTokenFetcherRequestKey = "AccessTokenFetcherRequest"
+        const val AccessTokenFetcherAccessTokenParamKey = "AccessTokenFetcherAccessTokenParam"
     }
 }

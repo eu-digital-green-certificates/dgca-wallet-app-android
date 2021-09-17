@@ -92,30 +92,20 @@ class TransmissionConsentFragment : BindingFragment<FragmentTransmissionConsentB
     private fun onViewModelEvent(event: TransmissionConsentViewModel.TransmissionConsentEvent) {
         when (event) {
             TransmissionConsentViewModel.TransmissionConsentEvent.OnCertificateTransmitted -> {
-                val dialog = DefaultDialogFragment()
-                dialog.arguments = Bundle().apply {
-                    putParcelable(
-                        KEY_BUILD_OPTIONS, DefaultDialogFragment.BuildOptions(
-                            message = getString(R.string.cert_transferred),
-                            positiveBtnText = getString(R.string.ok),
-                            isOneButton = true
-                        )
-                    )
-                }
-                dialog.show(childFragmentManager, DefaultDialogFragment.TAG)
+                val params = DefaultDialogFragment.BuildOptions(
+                    message = getString(R.string.cert_transferred),
+                    positiveBtnText = getString(R.string.ok),
+                    isOneButton = true
+                )
+                DefaultDialogFragment.newInstance(params).show(childFragmentManager, DefaultDialogFragment.TAG)
             }
             TransmissionConsentViewModel.TransmissionConsentEvent.OnCertificateTransmissionFailed -> {
-                val dialog = DefaultDialogFragment()
-                dialog.arguments = Bundle().apply {
-                    putParcelable(
-                        KEY_BUILD_OPTIONS, DefaultDialogFragment.BuildOptions(
-                            message = getString(R.string.cert_transfer_failed),
-                            positiveBtnText = getString(R.string.ok),
-                            negativeBtnText = getString(R.string.retry)
-                        )
-                    )
-                }
-                dialog.show(childFragmentManager, DefaultDialogFragment.TAG)
+                val params = DefaultDialogFragment.BuildOptions(
+                    message = getString(R.string.cert_transfer_failed),
+                    positiveBtnText = getString(R.string.ok),
+                    negativeBtnText = getString(R.string.retry)
+                )
+                DefaultDialogFragment.newInstance(params).show(childFragmentManager, DefaultDialogFragment.TAG)
             }
         }
     }
