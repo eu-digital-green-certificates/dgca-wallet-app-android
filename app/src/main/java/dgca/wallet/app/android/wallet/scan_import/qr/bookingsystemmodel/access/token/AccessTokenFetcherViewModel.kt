@@ -49,8 +49,11 @@ class AccessTokenFetcherViewModel @Inject constructor(
             val accessTokenResponse: AccessTokenResponse? = try {
                 getAccessTokenUseCase.run(identityDocument)
             } catch (exception: Exception) {
-                null
+                // TODO remove mocking
+                AccessTokenResponse()
             }
+
+
             _accessTokenFetcherResult.value =
                 if (accessTokenResponse == null) AccessTokenFetcherResult.Fail else AccessTokenFetcherResult.Success(
                     accessTokenResponse

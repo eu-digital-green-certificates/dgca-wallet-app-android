@@ -26,7 +26,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -80,7 +79,7 @@ class BookingSystemConsentFragment : BindingFragment<FragmentBookingSystemConsen
             val accessTokenResponse: AccessTokenResponse? =
                 bundle.getParcelable(AccessTokenFetcherDialogFragment.AccessTokenFetcherAccessTokenParamKey)
             if (accessTokenResponse != null) {
-                Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
+                showCertificatesSelector(accessTokenResponse)
             } else {
                 val params = DefaultDialogFragment.BuildOptions(
                     message = getString(R.string.something_went_wrong),
@@ -100,7 +99,7 @@ class BookingSystemConsentFragment : BindingFragment<FragmentBookingSystemConsen
         findNavController().navigate(action)
     }
 
-    private fun showCertificatesSelector(identityDocument: IdentityDocument) {
+    private fun showCertificatesSelector(accessTokenResponse: AccessTokenResponse) {
         val action =
             BookingSystemConsentFragmentDirections.actionBookingSystemConsentFragmentToCertificateSelectorFragment()
         findNavController().navigate(action)
