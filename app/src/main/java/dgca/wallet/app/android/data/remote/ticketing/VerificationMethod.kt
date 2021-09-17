@@ -25,12 +25,12 @@ package dgca.wallet.app.android.data.remote.ticketing
 import com.fasterxml.jackson.annotation.JsonProperty
 
 class VerificationMethod(
+    @JsonProperty("id")
+    val id: String,
     @JsonProperty("type")
     val type: String,
     @JsonProperty("controller")
     val controller: String,
     @JsonProperty("publicKeyJWK")
-    val publicKeyJwk: PublicKeyJwk,
-    @JsonProperty("id")
-    val id: String
+    val publicKeyJwk: PublicKeyJwk
 )

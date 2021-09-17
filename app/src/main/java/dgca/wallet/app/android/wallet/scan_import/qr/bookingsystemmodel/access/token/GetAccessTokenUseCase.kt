@@ -20,10 +20,10 @@
  *  Created by osarapulov on 9/16/21 2:43 PM
  */
 
-package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.identity
+package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.access.token
 
-import dgca.wallet.app.android.data.remote.ticketing.ServiceType
 import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
+import dgca.wallet.app.android.data.remote.ticketing.ServiceType
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.AccessTokenService
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.ValidationService
@@ -31,13 +31,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-class GetIdentityDocumentUseCase(private val ticketingApiService: TicketingApiService) {
+class GetAccessTokenUseCase(private val ticketingApiService: TicketingApiService) {
     suspend fun run(identityUrl: String): IdentityDocument? = withContext(Dispatchers.IO) {
         ticketingApiService.getIdentity(identityUrl).body()?.let { identityResponse ->
             var accessTokenService: AccessTokenService? = null
             val validationServices = mutableSetOf<ValidationService>()
-            identityResponse.services.forEach { service ->
-                when (service.type) {
+            identityResponse.verificationMethods.forEach { verificationMethod ->
+                when (verificationMethod.type) {
                     ServiceType.ACCESS_TOKEN_SERVICE.type -> {
                         if (accessTokenService != null) {
                             throw IllegalArgumentException("Only one access token service should be available")
@@ -47,7 +47,7 @@ class GetIdentityDocumentUseCase(private val ticketingApiService: TicketingApiSe
                     }
                     ServiceType.VALIDATION_SERVICE.type -> validationServices.add(ValidationService())
                     else -> {
-                        Timber.d("Found service of type: '${service.type}'")
+                        Timber.d("Found validation service of type: '${verificationMethod.type}'")
                     }
                 }
             }
@@ -55,6 +55,8 @@ class GetIdentityDocumentUseCase(private val ticketingApiService: TicketingApiSe
                 accessTokenService!!,
                 validationServices
             ) else null
+        }.let {
+            IdentityDocument(AccessTokenService(), setOf(ValidationService()))
         }
     }
 }

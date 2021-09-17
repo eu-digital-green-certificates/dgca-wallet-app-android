@@ -23,10 +23,13 @@
 package dgca.wallet.app.android.data.remote.ticketing
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import dgca.wallet.app.android.data.remote.Service
 
 class IdentityResponse(
+    @JsonProperty("id")
+    val id: String,
     @JsonProperty("verificationMethod")
     val verificationMethods: Set<VerificationMethod>,
-    @JsonProperty("id")
-    val id: String
+    @JsonProperty("service")
+    val services: Set<Service>
 )
