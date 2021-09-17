@@ -30,6 +30,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenResponse
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 sealed class AccessTokenFetcherResult {
@@ -49,10 +50,12 @@ class AccessTokenFetcherViewModel @Inject constructor(
             val accessTokenResponse: AccessTokenResponse? = try {
                 getAccessTokenUseCase.run(identityDocument)
             } catch (exception: Exception) {
-                // TODO remove mocking
-                AccessTokenResponse()
+                Timber.e(exception, "Error fetching access token")
+                null
             }
 
+            // TODO remove mocking
+                ?: AccessTokenResponse()
 
             _accessTokenFetcherResult.value =
                 if (accessTokenResponse == null) AccessTokenFetcherResult.Fail else AccessTokenFetcherResult.Success(
