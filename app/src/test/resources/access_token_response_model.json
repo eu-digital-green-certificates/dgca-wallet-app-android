@@ -1,0 +1,32 @@
+{
+  "jti": null,
+  "iss": "Validation Decorator Dervice",
+  "iat": 1632124159,
+  "sub": "979f5f60-6142-48a3-b75a-d5aaa49e1602",
+  "aud": "https://dgca-validation-service-eu-test.cfapps.eu10.hana.ondemand.com/validate",
+  "exp": 1632127759,
+  "t": 2,
+  "v": "1.0",
+  "vc": {
+    "hash": null,
+    "lang": "en-en",
+    "fnt": "FirstName",
+    "gnt": "LastName",
+    "dob": null,
+    "coa": "DK",
+    "cod": "TT",
+    "roa": "DK",
+    "rod": "TT",
+    "type": [
+      "r",
+      "v",
+      "t"
+    ],
+    "category": [
+      "Standard"
+    ],
+    "validationClock": "2021-09-21T15:57:51.734807Z",
+    "validFrom": "2021-09-21T07:33:51.734807Z",
+    "validTo": "2021-09-23T07:33:51.734807Z"
+  }
+}

@@ -17,12 +17,13 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/10/21 11:48 AM
+ *  Created by osarapulov on 9/20/21 10:59 AM
  */
 
 package dgca.wallet.app.android.model
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenResponse
 import org.apache.commons.io.IOUtils
 import org.junit.Assert.assertNotNull
 import org.junit.Test
@@ -32,20 +33,20 @@ import java.io.InputStream
 import java.nio.charset.Charset
 
 @RunWith(MockitoJUnitRunner::class)
-class BookingSystemModelTest {
+class AccessTokenResponseTest {
     private val objectMapper = ObjectMapper().apply { findAndRegisterModules() }
 
     @Test
-    fun shouldConvertBookingSystemModel() {
-        val bookingSystemModelIs: InputStream =
-            javaClass.classLoader!!.getResourceAsStream(BOOKING_SYSTEM_MODEL_FILE_NAME)
-        val bookingSystemModelString: String = IOUtils.toString(bookingSystemModelIs, Charset.defaultCharset())
-        val bookingSystemModel: BookingSystemModel =
-            objectMapper.readValue(bookingSystemModelString, BookingSystemModel::class.java)
-        assertNotNull(bookingSystemModel)
+    fun shouldConvertAccessTokenResponseModel() {
+        val accessTokenResponseModelIs: InputStream =
+            javaClass.classLoader!!.getResourceAsStream(ACCESS_TOKEN_RESPONSE_MODEL_FILE_NAME)
+        val accessTokenResponseModelString: String = IOUtils.toString(accessTokenResponseModelIs, Charset.defaultCharset())
+        val accessTokenResponseModel: AccessTokenResponse =
+            objectMapper.readValue(accessTokenResponseModelString, AccessTokenResponse::class.java)
+        assertNotNull(accessTokenResponseModel)
     }
 
     companion object {
-        const val BOOKING_SYSTEM_MODEL_FILE_NAME = "booking_system_model.json"
+        const val ACCESS_TOKEN_RESPONSE_MODEL_FILE_NAME = "access_token_response_model.json"
     }
 }
