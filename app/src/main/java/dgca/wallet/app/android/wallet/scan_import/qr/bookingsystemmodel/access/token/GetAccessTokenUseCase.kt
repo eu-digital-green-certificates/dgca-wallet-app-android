@@ -40,7 +40,7 @@ class GetAccessTokenUseCase(private val ticketingApiService: TicketingApiService
         bookingSystemModel: BookingSystemModel,
         accessTokenService: Service,
         validationService: Service
-    ): AccessTokenResult =
+    ): AccessTokenResult? =
         withContext(Dispatchers.IO) {
             val keyPairGen = KeyPairGenerator.getInstance("EC")
             keyPairGen.initialize(256)
@@ -56,7 +56,7 @@ class GetAccessTokenUseCase(private val ticketingApiService: TicketingApiService
                 accessTokenService.serviceEndpoint,
                 "Bearer ${bookingSystemModel.token}",
                 AccessTokenRequest(validationService.id, publicKeyData)
-            ).body().let {
+            ).body()?.let {
                 AccessTokenResult(keyPair.private)
             }
         }
