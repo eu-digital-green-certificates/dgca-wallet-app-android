@@ -69,7 +69,7 @@ class CertificateSelectorFragment : BindingFragment<FragmentCertificateSelectorB
 
         viewModel.uiEvent.observe(viewLifecycleOwner) { event -> onViewModelUiEvent(event.peekContent()) }
         viewModel.certificates.observe(viewLifecycleOwner) {
-            binding.title.text = getString(R.string.certificates_fount_title, it.size.toString())
+            binding.title.text = getString(R.string.certificates_found_title, it.size.toString())
             adapter.update(it)
             if (it.isNotEmpty()) {
                 binding.nextButton.isVisible = true

@@ -36,7 +36,7 @@ class GetIdentityDocumentUseCase(private val ticketingApiService: TicketingApiSe
     suspend fun run(bookingSystemModel: BookingSystemModel): IdentityDocument? = withContext(Dispatchers.IO) {
         ticketingApiService.getIdentity(bookingSystemModel.serviceIdentity).body()?.let { identityResponse ->
             var accessTokenService: Service? = null
-            val validationServices = mutableSetOf<Service>()
+            val validationServices = mutableListOf<Service>()
             identityResponse.servicesRemote.forEach { serviceRemote ->
                 when (serviceRemote.type) {
                     ServiceTypeRemote.ACCESS_TOKEN_SERVICERemote.type -> {

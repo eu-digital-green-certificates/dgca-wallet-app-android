@@ -17,13 +17,16 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/16/21 2:56 PM
+ *  Created by osarapulov on 9/20/21 1:45 PM
  */
 
-package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data
+package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.serviceselector
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import dgca.wallet.app.android.data.IdentifiableData
 
-@Parcelize
-data class IdentityDocument(val accessTokenService: Service, val validationServices: List<Service>) : Parcelable
+data class SelectableValidationServiceModel(
+    override val id: String,
+    val title: String,
+    val subTitle: String,
+    val selected: Boolean = false
+) : IdentifiableData
