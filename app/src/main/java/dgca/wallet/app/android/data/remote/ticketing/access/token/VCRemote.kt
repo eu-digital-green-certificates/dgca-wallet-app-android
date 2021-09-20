@@ -17,30 +17,41 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/17/21 9:07 AM
+ *  Created by osarapulov on 9/17/21 8:09 PM
  */
 
 package dgca.wallet.app.android.data.remote.ticketing.access.token
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.time.ZonedDateTime
 
-data class AccessTokenResponse(
-    @JsonProperty("jti")
-    val jti: String?,
-    @JsonProperty("iss")
-    val iss: String,
-    @JsonProperty("iat")
-    val iat: Long,
-    @JsonProperty("sub")
-    val sub: String,
-    @JsonProperty("aud")
-    val aud: String,
-    @JsonProperty("exp")
-    val exp: Long,
-    @JsonProperty("t")
-    val t: Long,
-    @JsonProperty("v")
-    val v: String,
-    @JsonProperty("vc")
-    val vc: VCRemote
+data class VCRemote(
+    @JsonProperty("hash")
+    val hash: String?,
+    @JsonProperty("lang")
+    val lang: String,
+    @JsonProperty("fnt")
+    val fnt: String,
+    @JsonProperty("gnt")
+    val gnt: String,
+    @JsonProperty("dob")
+    val dob: String?,
+    @JsonProperty("coa")
+    val coa: String,
+    @JsonProperty("cod")
+    val cod: String,
+    @JsonProperty("roa")
+    val roa: String,
+    @JsonProperty("rod")
+    val rod: String,
+    @JsonProperty("type")
+    val type: List<String>,
+    @JsonProperty("category")
+    val category: List<String>,
+    @JsonProperty("validationClock")
+    val validationClock: ZonedDateTime,
+    @JsonProperty("validFrom")
+    val validFrom: ZonedDateTime,
+    @JsonProperty("validTo")
+    val validTo: ZonedDateTime
 )

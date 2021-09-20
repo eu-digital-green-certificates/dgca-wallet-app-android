@@ -323,22 +323,6 @@
     </fragment>
 
     <fragment
-        android:id="@+id/certificateSelectorFragment"
-        android:name="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.certselector.CertificateSelectorFragment"
-        android:label="@string/step_2"
-        tools:layout="@layout/fragment_certificate_selector">
-
-        <action
-            android:id="@+id/action_certificateSelectorFragment_to_transmissionConsentFragment"
-            app:destination="@id/transmissionConsentFragment"
-            app:enterAnim="@animator/nav_default_pop_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim"
-            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-
-    </fragment>
-
-    <fragment
         android:id="@+id/bookingSystemConsentFragment"
         android:name="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.BookingSystemConsentFragment"
         android:label="@string/step_1"
@@ -371,6 +355,14 @@
             app:exitAnim="@animator/nav_default_exit_anim"
             app:popEnterAnim="@animator/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+        <action
+            android:id="@+id/action_bookingSystemConsentFragment_to_validationServiceSelectorFragment"
+            app:destination="@id/validationServiceSelectorFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
     <dialog
@@ -391,9 +383,67 @@
         tools:layout="@layout/dialog_fragment_progress_bar">
 
         <argument
+            android:name="bookingSystemModel"
+            app:argType="dgca.wallet.app.android.model.BookingSystemModel" />
+
+        <argument
+            android:name="accessTokenService"
+            app:argType="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.Service" />
+
+        <argument
+            android:name="validationService"
+            app:argType="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.Service" />
+    </dialog>
+
+    <fragment
+        android:id="@+id/validationServiceSelectorFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.serviceselector.ValidationServiceSelectorFragment"
+        android:label="@string/step_2"
+        tools:layout="@layout/fragment_validation_service_selector">
+
+        <argument
+            android:name="bookingSystemModel"
+            app:argType="dgca.wallet.app.android.model.BookingSystemModel" />
+
+        <argument
             android:name="identityDocument"
             app:argType="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument" />
-    </dialog>
+
+        <action
+            android:id="@+id/action_validationServiceSelectorFragment_to_accessTokenFetcherDialogFragment"
+            app:destination="@id/accessTokenFetcherDialogFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim" />
+
+        <action
+            android:id="@+id/action_validationServiceSelectorFragment_to_certificateSelectorFragment"
+            app:destination="@id/certificateSelectorFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/certificateSelectorFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.certselector.CertificateSelectorFragment"
+        android:label="@string/step_2"
+        tools:layout="@layout/fragment_certificate_selector">
+
+        <argument
+            android:name="accessTokenResult"
+            app:argType="dgca.wallet.app.android.model.AccessTokenResult" />
+
+        <action
+            android:id="@+id/action_certificateSelectorFragment_to_transmissionConsentFragment"
+            app:destination="@id/transmissionConsentFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/transmissionConsentFragment"

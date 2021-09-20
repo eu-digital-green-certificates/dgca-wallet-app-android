@@ -27,14 +27,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenResponse
-import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
+import dgca.wallet.app.android.model.AccessTokenResult
+import dgca.wallet.app.android.model.BookingSystemModel
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.Service
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
 sealed class AccessTokenFetcherResult {
-    data class Success(val accessTokenResponse: AccessTokenResponse) : AccessTokenFetcherResult()
+    data class Success(val accessTokenResult: AccessTokenResult) : AccessTokenFetcherResult()
     object Fail : AccessTokenFetcherResult()
 }
 
@@ -45,21 +46,18 @@ class AccessTokenFetcherViewModel @Inject constructor(
     private val _accessTokenFetcherResult = MutableLiveData<AccessTokenFetcherResult>()
     val accessTokenFetcherResult: LiveData<AccessTokenFetcherResult> = _accessTokenFetcherResult
 
-    fun initialize(identityDocument: IdentityDocument) {
+    fun initialize(bookingSystemModel: BookingSystemModel, accessTokenService: Service, validationService: Service) {
         viewModelScope.launch {
-            val accessTokenResponse: AccessTokenResponse? = try {
-                getAccessTokenUseCase.run(identityDocument)
+            val accessTokenResult: AccessTokenResult? = try {
+                getAccessTokenUseCase.run(bookingSystemModel, accessTokenService, validationService)
             } catch (exception: Exception) {
                 Timber.e(exception, "Error fetching access token")
                 null
             }
 
-            // TODO remove mocking
-                ?: AccessTokenResponse()
-
             _accessTokenFetcherResult.value =
-                if (accessTokenResponse == null) AccessTokenFetcherResult.Fail else AccessTokenFetcherResult.Success(
-                    accessTokenResponse
+                if (accessTokenResult == null) AccessTokenFetcherResult.Fail else AccessTokenFetcherResult.Success(
+                    accessTokenResult
                 )
         }
     }
