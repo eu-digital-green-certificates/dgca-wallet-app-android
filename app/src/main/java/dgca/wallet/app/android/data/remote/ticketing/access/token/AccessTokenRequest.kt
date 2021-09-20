@@ -29,5 +29,5 @@ data class AccessTokenRequest(
     @JsonProperty("service")
     val service: String,
     @JsonProperty("pubKey")
-    val pubKey: PublicKeyData
+    val pubKey: String
 )
