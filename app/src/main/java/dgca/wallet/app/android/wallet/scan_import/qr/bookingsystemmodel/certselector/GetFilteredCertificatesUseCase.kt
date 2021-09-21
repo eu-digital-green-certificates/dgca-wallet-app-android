@@ -24,11 +24,9 @@ package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.certsel
 
 import dgca.wallet.app.android.data.WalletRepository
 import dgca.wallet.app.android.model.AccessTokenResult
-import dgca.wallet.app.android.toZonedDateTime
 import dgca.wallet.app.android.wallet.CertificatesCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.time.ZonedDateTime
 import java.util.*
 
 

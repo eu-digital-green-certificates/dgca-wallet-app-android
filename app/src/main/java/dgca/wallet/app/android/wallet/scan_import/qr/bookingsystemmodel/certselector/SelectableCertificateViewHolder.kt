@@ -26,7 +26,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dgca.wallet.app.android.R
+import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.databinding.ItemSelectableCertificateBinding
+import dgca.wallet.app.android.getTitle
+import java.time.ZonedDateTime
 
 class SelectableCertificateViewHolder(
     private val binding: ItemSelectableCertificateBinding,
@@ -45,29 +48,11 @@ class SelectableCertificateViewHolder(
     }
 
     fun bind(model: SelectableCertificateModel) {
-        val certificateCard = model.certificateCard
-        var validUntil: String? = null
-        binding.title.text = when {
-            certificateCard.certificate.vaccinations?.first() != null -> {
-                binding.root.resources.getString(
-                    R.string.vaccination,
-                    certificateCard.certificate.vaccinations.first().doseNumber.toString(),
-                    certificateCard.certificate.vaccinations.first().totalSeriesOfDoses.toString()
-                )
-            }
-            certificateCard.certificate.recoveryStatements?.isNotEmpty() == true -> {
-                validUntil = certificateCard.certificate.recoveryStatements.first().certificateValidUntil
-                binding.root.resources.getString(
-                    R.string.recovery
-                )
-            }
-            certificateCard.certificate.tests?.isNotEmpty() == true -> {
-                binding.root.resources.getString(R.string.test)
-            }
-            else -> ""
-        }
+        val certificateModel: CertificateModel = model.certificateCard.certificate
+        val validUntil: ZonedDateTime? = certificateModel.getValidTo()
+        binding.title.text = certificateModel.getTitle(binding.itemView.resources)
         binding.description.text =
-            if (validUntil.isNullOrBlank()) binding.root.resources.getString(R.string.no_expiration_date) else binding.root.resources.getString(
+            if (validUntil == null) binding.root.resources.getString(R.string.no_expiration_date) else binding.root.resources.getString(
                 R.string.valid_until,
                 validUntil
             )
