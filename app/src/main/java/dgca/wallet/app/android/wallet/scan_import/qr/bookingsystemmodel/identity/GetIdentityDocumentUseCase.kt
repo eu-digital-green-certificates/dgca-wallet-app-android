@@ -34,13 +34,7 @@ import timber.log.Timber
 
 class GetIdentityDocumentUseCase(private val ticketingApiService: TicketingApiService) {
     suspend fun run(bookingSystemModel: BookingSystemModel): IdentityDocument? = withContext(Dispatchers.IO) {
-        ticketingApiService.getIdentity(bookingSystemModel.serviceIdentity.let {
-            return@let if (it.startsWith("https://")) {
-                it
-            } else {
-                "https://$it"
-            }
-        }).body()?.let { identityResponse ->
+        ticketingApiService.getIdentity(bookingSystemModel.serviceIdentity).body()?.let { identityResponse ->
             var accessTokenService: Service? = null
             val validationServices = mutableListOf<Service>()
             identityResponse.servicesRemote.forEach { serviceRemote ->
