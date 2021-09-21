@@ -29,8 +29,7 @@ import java.time.LocalDate
 
 @Entity(tableName = "valuesets")
 class ValueSetLocal(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    @PrimaryKey
     val valueSetId: String,
     val valueSetDate: LocalDate,
     val valueSetValues: JsonNode
