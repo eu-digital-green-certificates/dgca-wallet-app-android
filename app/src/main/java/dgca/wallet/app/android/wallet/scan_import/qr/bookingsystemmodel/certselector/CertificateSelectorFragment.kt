@@ -68,11 +68,11 @@ class CertificateSelectorFragment : BindingFragment<FragmentCertificateSelectorB
         binding.recyclerView.adapter = adapter
 
         viewModel.uiEvent.observe(viewLifecycleOwner) { event -> onViewModelUiEvent(event.peekContent()) }
-        viewModel.certificates.observe(viewLifecycleOwner) {
-            binding.title.text = getString(R.string.certificates_found_title, it.size.toString())
-            adapter.update(it)
-            if (it.isNotEmpty()) {
-                binding.nextButton.isVisible = true
+        viewModel.certificatesContainer.observe(viewLifecycleOwner) {
+            binding.title.text = getString(R.string.certificates_found_title, it.selectableCertificateModelList.size.toString())
+            adapter.update(it.selectableCertificateModelList)
+            if (it.selectedCertificate != null) {
+                binding.nextButton.visibility = View.VISIBLE
             }
         }
         binding.nextButton.setOnClickListener {

@@ -29,19 +29,25 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.wallet.app.android.Event
 import dgca.wallet.app.android.data.WalletRepository
+import dgca.wallet.app.android.wallet.CertificatesCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+data class CertificatesContainer(
+    val selectedCertificate: CertificatesCard? = null,
+    val selectableCertificateModelList: List<SelectableCertificateModel>
+)
+
 @HiltViewModel
 class CertificateSelectorViewModel @Inject constructor(
     private val walletRepository: WalletRepository
 ) : ViewModel() {
 
-    private val _certificates = MutableLiveData<List<SelectableCertificateModel>>()
-    val certificates: LiveData<List<SelectableCertificateModel>> = _certificates
+    private val _certificatesContainer = MutableLiveData<CertificatesContainer>()
+    val certificatesContainer: LiveData<CertificatesContainer> = _certificatesContainer
 
     private val _uiEvent = MutableLiveData<Event<CertificateViewUiEvent>>()
     val uiEvent: LiveData<Event<CertificateViewUiEvent>> = _uiEvent
@@ -49,7 +55,7 @@ class CertificateSelectorViewModel @Inject constructor(
     private val _event = MutableLiveData<Event<CertificateEvent>>()
     val event: LiveData<Event<CertificateEvent>> = _event
 
-    private var certificateList = mutableListOf<SelectableCertificateModel>()
+    private lateinit var certificateList: List<CertificatesCard.CertificateCard>
     private var selected: SelectableCertificateModel? = null
 
     fun init() {
@@ -60,25 +66,30 @@ class CertificateSelectorViewModel @Inject constructor(
         viewModelScope.launch {
             _uiEvent.value = Event(CertificateViewUiEvent.OnShowLoading)
 
+            val selectableCertificateModelList = mutableListOf<SelectableCertificateModel>()
             withContext(Dispatchers.IO) {
-                // TODO: implement certificate filtering
-                delay(1500)
-
-                for (i in 0..10) {
-                    certificateList.add(SelectableCertificateModel(i.toString(), "$i Test result", "18.09.2021"))
+                certificateList = walletRepository.getCertificates()?.toList() ?: emptyList()
+                certificateList.forEach {
+                    selectableCertificateModelList.add(
+                        SelectableCertificateModel(
+                            it.certificateId.toString(),
+                            "title",
+                            "validUntil",
+                            false
+                        )
+                    )
                 }
             }
-            _certificates.value = certificateList
+            _certificatesContainer.value = CertificatesContainer(null, selectableCertificateModelList)
             _uiEvent.value = Event(CertificateViewUiEvent.OnHideLoading)
         }
     }
 
     fun onCertificateSelected(position: Int) {
-        val list = _certificates.value?.toMutableList()
-        if (position == -1 || list == null) {
-            return
-        }
-
+        val certificatesContainer: CertificatesContainer = _certificatesContainer.value!!
+        val list: MutableList<SelectableCertificateModel> =
+            certificatesContainer.selectableCertificateModelList.toMutableList()
+        val selectedCertificateCard: CertificatesCard.CertificateCard = certificateList[position]
         selected?.let { model ->
             val index = list.indexOfFirst { model == it }
             if (index != -1) {
@@ -90,7 +101,7 @@ class CertificateSelectorViewModel @Inject constructor(
         selected = copy
         list[position] = copy
 
-        _certificates.value = list.toList()
+        _certificatesContainer.value = CertificatesContainer(selectedCertificateCard, list.toList())
     }
 
     fun onNextClick() {
