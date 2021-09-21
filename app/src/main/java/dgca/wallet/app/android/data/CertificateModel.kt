@@ -36,6 +36,7 @@ data class CertificateModel(
     val recoveryStatements: List<RecoveryModel>?
 ) : Parcelable {
 
+
     fun getFullName(): String {
         val givenName: String? = person.givenName?.trim()
         val familyName: String? = person.familyName?.trim()

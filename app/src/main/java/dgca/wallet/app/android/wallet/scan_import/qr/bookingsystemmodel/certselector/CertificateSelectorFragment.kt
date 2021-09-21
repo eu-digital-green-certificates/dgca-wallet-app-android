@@ -94,7 +94,10 @@ class CertificateSelectorFragment : BindingFragment<FragmentCertificateSelectorB
         when (event) {
             is CertificateSelectorViewModel.CertificateEvent.OnCertificateAdvisorSelected -> {
                 val action =
-                    CertificateSelectorFragmentDirections.actionCertificateSelectorFragmentToTransmissionConsentFragment()//event.certModel)
+                    CertificateSelectorFragmentDirections.actionCertificateSelectorFragmentToTransmissionConsentFragment(
+                        event.certModel.certificateCard.certificate,
+                        event.certModel.certificateCard.qrCodeText
+                    )
                 findNavController().navigate(action)
             }
         }

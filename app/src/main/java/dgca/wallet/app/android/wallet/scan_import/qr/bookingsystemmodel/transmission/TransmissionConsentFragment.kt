@@ -35,14 +35,14 @@ import dgca.wallet.app.android.MainActivity
 import dgca.wallet.app.android.R
 import dgca.wallet.app.android.base.BindingFragment
 import dgca.wallet.app.android.databinding.FragmentTransmissionConsentBinding
+import dgca.wallet.app.android.getTitle
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission.DefaultDialogFragment.Companion.ACTION_NEGATIVE
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission.DefaultDialogFragment.Companion.ACTION_POSITIVE
-import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission.DefaultDialogFragment.Companion.KEY_BUILD_OPTIONS
 
 @AndroidEntryPoint
 class TransmissionConsentFragment : BindingFragment<FragmentTransmissionConsentBinding>() {
 
-//    private val args by navArgs<TransmissionConsentFragmentArgs>()
+    private val args by navArgs<TransmissionConsentFragmentArgs>()
     private val viewModel by viewModels<TransmissionConsentViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,8 +63,12 @@ class TransmissionConsentFragment : BindingFragment<FragmentTransmissionConsentB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        binding.title.text = args.certModel.title
-//        binding.description.text = getString(R.string.valid_until, args.certModel.validUntil)
+        binding.title.text = args.certificateModel.getTitle(resources)
+        val validTo = args.certificateModel.getValidTo()
+        binding.description.text = if (validTo == null) getString(R.string.no_expiration_date) else getString(
+            R.string.valid_until,
+            args.certificateModel.getValidTo()
+        )
 
         viewModel.uiEvent.observe(viewLifecycleOwner) { event -> onViewModelUiEvent(event.peekContent()) }
 
