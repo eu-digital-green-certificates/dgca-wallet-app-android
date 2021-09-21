@@ -27,8 +27,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.R
 import dgca.wallet.app.android.base.BindingFragment
@@ -42,12 +44,20 @@ import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmis
 @AndroidEntryPoint
 class ValidationServiceSelectorFragment : BindingFragment<FragmentValidationServiceSelectorBinding>() {
     private val args by navArgs<ValidationServiceSelectorFragmentArgs>()
+    private val viewModel by viewModels<ValidationServiceViewModel>()
+
+    private lateinit var adapter: ValidationServicesSelectorAdapter
 
     override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentValidationServiceSelectorBinding =
         FragmentValidationServiceSelectorBinding.inflate(inflater, container, false)
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val layoutManager = LinearLayoutManager(requireContext())
+        binding.validationServiceList.layoutManager = layoutManager
+
+        adapter = ValidationServicesSelectorAdapter(layoutInflater, viewModel)
+        binding.validationServiceList.adapter = adapter
+
         setFragmentResultListener(AccessTokenFetcherDialogFragment.AccessTokenFetcherRequestKey) { key, bundle ->
             findNavController().navigateUp()
             val accessTokenResult: AccessTokenResult? =
@@ -64,7 +74,26 @@ class ValidationServiceSelectorFragment : BindingFragment<FragmentValidationServ
             }
         }
 
-        binding.button.setOnClickListener {
+        viewModel.validationServicesContainer.observe(viewLifecycleOwner) { validationServicesContainer ->
+            binding.title.text =
+                getString(
+                    R.string.validation_services_found_title,
+                    validationServicesContainer.selectableValidationServiceModelList.size.toString()
+                )
+            adapter.update(validationServicesContainer.selectableValidationServiceModelList)
+            binding.nextButton.visibility = if (validationServicesContainer.selectedService != null) View.VISIBLE else View.GONE
+            binding.nextButton.setOnClickListener {
+                showAccessTokenFetcher(
+                    args.bookingSystemModel,
+                    args.identityDocument.accessTokenService,
+                    validationServicesContainer.selectedService!!
+                )
+            }
+        }
+
+        viewModel.init(args.identityDocument.validationServices)
+
+        binding.nextButton.setOnClickListener {
             showAccessTokenFetcher(
                 args.bookingSystemModel,
                 args.identityDocument.accessTokenService,

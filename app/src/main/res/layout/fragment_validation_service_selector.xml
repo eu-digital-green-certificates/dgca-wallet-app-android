@@ -27,13 +27,49 @@
     android:layout_height="match_parent"
     tools:background="@color/white">
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="@dimen/default_margin"
+        android:letterSpacing="-0.01"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="1 validation service found" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/validationServiceList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_margin"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toTopOf="@+id/nextButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:itemCount="20"
+        tools:listitem="@layout/item_validation_service" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/nextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="@dimen/default_margin"
+        android:layout_marginVertical="20dp"
+        android:backgroundTint="@color/yellow"
+        android:minWidth="120dp"
+        android:text="@string/next"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/validationServiceList"
+        app:layout_constraintVertical_bias="0"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

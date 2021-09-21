@@ -70,7 +70,7 @@ class BookingSystemConsentFragment : BindingFragment<FragmentBookingSystemConsen
                     isOneButton = true
                 )
                 DefaultDialogFragment.newInstance(params).show(childFragmentManager, DefaultDialogFragment.TAG)
-            } else if (false && identityDocument.validationServices.size == 1) {
+            } else if (identityDocument.validationServices.size == 1) {
                 showAccessTokenFetcher(
                     args.bookingSystemModel,
                     identityDocument.accessTokenService,
