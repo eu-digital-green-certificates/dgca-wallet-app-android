@@ -62,7 +62,15 @@ class GetAccessTokenUseCase(private val ticketingApiService: TicketingApiService
             )
             val accessTokenResponseBody: AccessTokenResponse? = accessTokenResponse.body()
             accessTokenResponseBody?.let {
-                AccessTokenResult(keyPair.private)
+                AccessTokenResult(
+                    it.vc.firstName,
+                    it.vc.lastName,
+                    it.vc.dateOfBirth,
+                    it.vc.greenCertificateTypes,
+                    it.vc.validFrom,
+                    it.vc.validTo,
+                    keyPair.private
+                )
             }
         }
 }

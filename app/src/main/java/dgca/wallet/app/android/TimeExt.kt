@@ -31,7 +31,7 @@ const val YEAR_MONTH_DAY = "yyyy-MM-dd"
 const val FORMATTED_YEAR_MONTH_DAY = "MMM d, yyyy"
 private const val FORMATTED_DATE_TIME = "MMM d, yyyy, HH:mm"
 
-private fun String.toZonedDateTime(): ZonedDateTime? = try {
+fun String.toZonedDateTime(): ZonedDateTime? = try {
     ZonedDateTime.parse(this)
 } catch (error: Throwable) {
     null

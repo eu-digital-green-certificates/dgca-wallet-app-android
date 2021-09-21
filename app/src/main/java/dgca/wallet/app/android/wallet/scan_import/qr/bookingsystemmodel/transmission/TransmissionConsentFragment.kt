@@ -42,7 +42,7 @@ import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmis
 @AndroidEntryPoint
 class TransmissionConsentFragment : BindingFragment<FragmentTransmissionConsentBinding>() {
 
-    private val args by navArgs<TransmissionConsentFragmentArgs>()
+//    private val args by navArgs<TransmissionConsentFragmentArgs>()
     private val viewModel by viewModels<TransmissionConsentViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,8 +63,8 @@ class TransmissionConsentFragment : BindingFragment<FragmentTransmissionConsentB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.title.text = args.certModel.title
-        binding.description.text = getString(R.string.valid_until, args.certModel.validUntil)
+//        binding.title.text = args.certModel.title
+//        binding.description.text = getString(R.string.valid_until, args.certModel.validUntil)
 
         viewModel.uiEvent.observe(viewLifecycleOwner) { event -> onViewModelUiEvent(event.peekContent()) }
 

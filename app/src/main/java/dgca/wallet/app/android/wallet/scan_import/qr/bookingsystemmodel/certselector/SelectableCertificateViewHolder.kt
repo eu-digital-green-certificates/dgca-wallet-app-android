@@ -45,8 +45,32 @@ class SelectableCertificateViewHolder(
     }
 
     fun bind(model: SelectableCertificateModel) {
-        binding.title.text = model.title
-        binding.description.text = itemView.context.getString(R.string.valid_until, model.validUntil)
+        val certificateCard = model.certificateCard
+        var validUntil: String? = null
+        binding.title.text = when {
+            certificateCard.certificate.vaccinations?.first() != null -> {
+                binding.root.resources.getString(
+                    R.string.vaccination,
+                    certificateCard.certificate.vaccinations.first().doseNumber.toString(),
+                    certificateCard.certificate.vaccinations.first().totalSeriesOfDoses.toString()
+                )
+            }
+            certificateCard.certificate.recoveryStatements?.isNotEmpty() == true -> {
+                validUntil = certificateCard.certificate.recoveryStatements.first().certificateValidUntil
+                binding.root.resources.getString(
+                    R.string.recovery
+                )
+            }
+            certificateCard.certificate.tests?.isNotEmpty() == true -> {
+                binding.root.resources.getString(R.string.test)
+            }
+            else -> ""
+        }
+        binding.description.text =
+            if (validUntil.isNullOrBlank()) binding.root.resources.getString(R.string.no_expiration_date) else binding.root.resources.getString(
+                R.string.valid_until,
+                validUntil
+            )
         binding.radioButton.isChecked = model.selected
     }
 }

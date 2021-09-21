@@ -31,11 +31,11 @@ data class VCRemote(
     @JsonProperty("lang")
     val lang: String,
     @JsonProperty("fnt")
-    val fnt: String,
+    val firstName: String,
     @JsonProperty("gnt")
-    val gnt: String,
+    val lastName: String,
     @JsonProperty("dob")
-    val dob: String?,
+    val dateOfBirth: String?,
     @JsonProperty("coa")
     val coa: String,
     @JsonProperty("cod")
@@ -45,7 +45,7 @@ data class VCRemote(
     @JsonProperty("rod")
     val rod: String,
     @JsonProperty("type")
-    val type: List<String>,
+    val greenCertificateTypes: List<String>,
     @JsonProperty("category")
     val category: List<String>,
     @JsonProperty("validationClock")

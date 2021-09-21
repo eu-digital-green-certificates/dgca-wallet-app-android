@@ -29,6 +29,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.MainActivity
@@ -39,7 +40,7 @@ import dgca.wallet.app.android.databinding.FragmentCertificateSelectorBinding
 @AndroidEntryPoint
 class CertificateSelectorFragment : BindingFragment<FragmentCertificateSelectorBinding>() {
 
-    //    private val args by navArgs<>()
+    private val args by navArgs<CertificateSelectorFragmentArgs>()
     private val viewModel by viewModels<CertificateSelectorViewModel>()
 
     private lateinit var adapter: CertificateSelectorAdapter
@@ -54,7 +55,7 @@ class CertificateSelectorFragment : BindingFragment<FragmentCertificateSelectorB
                 onViewModelEvent(it)
             }
         }
-        viewModel.init()
+        viewModel.init(args.accessTokenResult)
     }
 
     override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentCertificateSelectorBinding =
@@ -93,7 +94,7 @@ class CertificateSelectorFragment : BindingFragment<FragmentCertificateSelectorB
         when (event) {
             is CertificateSelectorViewModel.CertificateEvent.OnCertificateAdvisorSelected -> {
                 val action =
-                    CertificateSelectorFragmentDirections.actionCertificateSelectorFragmentToTransmissionConsentFragment(event.certModel)
+                    CertificateSelectorFragmentDirections.actionCertificateSelectorFragmentToTransmissionConsentFragment()//event.certModel)
                 findNavController().navigate(action)
             }
         }

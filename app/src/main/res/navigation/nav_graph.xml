@@ -451,9 +451,9 @@
         android:label="@string/step_3"
         tools:layout="@layout/fragment_transmission_consent">
 
-        <argument
-            android:name="certModel"
-            app:argType="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.certselector.SelectableCertificateModel" />
+<!--        <argument-->
+<!--            android:name="certModel"-->
+<!--            app:argType="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.certselector.SelectableCertificateModel" />-->
 
     </fragment>
 </navigation>
