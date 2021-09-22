@@ -26,12 +26,20 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dgca.wallet.app.android.R
+import dgca.wallet.app.android.YEAR_MONTH_DAY
+import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.databinding.ItemSelectableCertificateBinding
+import dgca.wallet.app.android.getTitle
+import java.text.SimpleDateFormat
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class SelectableCertificateViewHolder(
     private val binding: ItemSelectableCertificateBinding,
     private val viewModel: CertificateSelectorViewModel
 ) : RecyclerView.ViewHolder(binding.root) {
+    private val formatter = DateTimeFormatter.ofPattern(YEAR_MONTH_DAY, Locale.US)
 
     companion object {
         fun create(inflater: LayoutInflater, parent: ViewGroup, model: CertificateSelectorViewModel) =
@@ -45,8 +53,14 @@ class SelectableCertificateViewHolder(
     }
 
     fun bind(model: SelectableCertificateModel) {
-        binding.title.text = model.title
-        binding.description.text = itemView.context.getString(R.string.valid_until, model.validUntil)
+        val certificateModel: CertificateModel = model.certificateCard.certificate
+        val validUntil: ZonedDateTime? = certificateModel.getValidTo()
+        binding.title.text = certificateModel.getTitle(binding.itemView.resources)
+        binding.description.text =
+            if (validUntil == null) binding.root.resources.getString(R.string.no_expiration_date) else binding.root.resources.getString(
+                R.string.valid_until,
+                formatter.format(validUntil)
+            )
         binding.radioButton.isChecked = model.selected
     }
 }

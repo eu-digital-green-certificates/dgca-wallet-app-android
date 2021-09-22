@@ -17,23 +17,13 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/17/21 9:03 PM
+ *  Created by osarapulov on 9/22/21 11:02 AM
  */
 
-package dgca.wallet.app.android.model
+package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-import java.security.PrivateKey
-import java.time.ZonedDateTime
+class JwtObject(val header: String, val body: String)
 
-@Parcelize
-data class AccessTokenResult(
-    val firstName: String,
-    val lastName: String,
-    val dateOfBirth: String?,
-    val greenCertificateTypes: List<String>,
-    val validFrom: ZonedDateTime,
-    val validTo: ZonedDateTime,
-    val privateKey: PrivateKey
-) : Parcelable
+interface JwtTokenParser {
+    fun parse(jwtToken: String): JwtObject
+}

@@ -22,6 +22,8 @@
 
 package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.access.token
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import dgca.verifier.app.decoder.model.KeyPairData
 import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
 import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenRequest
@@ -29,15 +31,20 @@ import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenRes
 import dgca.wallet.app.android.model.AccessTokenResult
 import dgca.wallet.app.android.model.BookingSystemModel
 import dgca.wallet.app.android.model.PublicKeyData
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.JwtTokenParser
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.Service
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import retrofit2.Response
+import java.net.HttpURLConnection
 import java.security.KeyPair
 import java.security.KeyPairGenerator
 import java.util.*
 
-class GetAccessTokenUseCase(private val ticketingApiService: TicketingApiService) {
+class GetAccessTokenUseCase(
+    private val ticketingApiService: TicketingApiService,
+    private val objectMapper: ObjectMapper,
+    private val jwtTokenParser: JwtTokenParser
+) {
     suspend fun run(
         bookingSystemModel: BookingSystemModel,
         accessTokenService: Service,
@@ -55,14 +62,27 @@ class GetAccessTokenUseCase(private val ticketingApiService: TicketingApiService
             )
 
             val accessTokenRequest = AccessTokenRequest(validationService.id, publicKeyData.value)
-            val accessTokenResponse: Response<AccessTokenResponse> = ticketingApiService.getAccessToken(
+            val response = ticketingApiService.getAccessToken(
                 accessTokenService.serviceEndpoint,
                 "Bearer ${bookingSystemModel.token}",
                 accessTokenRequest
             )
-            val accessTokenResponseBody: AccessTokenResponse? = accessTokenResponse.body()
-            accessTokenResponseBody?.let {
-                AccessTokenResult(keyPair.private)
+            if (response.isSuccessful && response.code() == HttpURLConnection.HTTP_OK) {
+                response.body()?.string()?.let { jwtTokenParser.parse(it) }
+                    ?.let { objectMapper.readValue<AccessTokenResponse>(it.body) }
+                    ?.let {
+                        AccessTokenResult(
+                            it.vc.firstName,
+                            it.vc.lastName,
+                            it.vc.dateOfBirth,
+                            it.vc.greenCertificateTypes,
+                            it.vc.validFrom,
+                            it.vc.validTo,
+                            keyPair.private
+                        )
+                    }
+            } else {
+                null
             }
         }
 }

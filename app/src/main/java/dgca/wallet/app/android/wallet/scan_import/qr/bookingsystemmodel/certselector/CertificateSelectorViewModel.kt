@@ -28,20 +28,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.wallet.app.android.Event
-import dgca.wallet.app.android.data.WalletRepository
+import dgca.wallet.app.android.model.AccessTokenResult
+import dgca.wallet.app.android.wallet.CertificatesCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+data class CertificatesContainer(
+    val selectedCertificate: CertificatesCard? = null,
+    val selectableCertificateModelList: List<SelectableCertificateModel>
+)
+
 @HiltViewModel
 class CertificateSelectorViewModel @Inject constructor(
-    private val walletRepository: WalletRepository
+    private val getFilteredCertificatesUseCase: GetFilteredCertificatesUseCase
 ) : ViewModel() {
 
-    private val _certificates = MutableLiveData<List<SelectableCertificateModel>>()
-    val certificates: LiveData<List<SelectableCertificateModel>> = _certificates
+    private val _certificatesContainer = MutableLiveData<CertificatesContainer>()
+    val certificatesContainer: LiveData<CertificatesContainer> = _certificatesContainer
 
     private val _uiEvent = MutableLiveData<Event<CertificateViewUiEvent>>()
     val uiEvent: LiveData<Event<CertificateViewUiEvent>> = _uiEvent
@@ -49,36 +55,31 @@ class CertificateSelectorViewModel @Inject constructor(
     private val _event = MutableLiveData<Event<CertificateEvent>>()
     val event: LiveData<Event<CertificateEvent>> = _event
 
-    private var certificateList = mutableListOf<SelectableCertificateModel>()
+    private lateinit var certificateList: List<CertificatesCard.CertificateCard>
     private var selected: SelectableCertificateModel? = null
 
-    fun init() {
-        getCertificates()
+    fun init(accessTokenResult: AccessTokenResult) {
+        getCertificates(accessTokenResult)
     }
 
-    private fun getCertificates() {
+    private fun getCertificates(accessTokenResult: AccessTokenResult) {
         viewModelScope.launch {
             _uiEvent.value = Event(CertificateViewUiEvent.OnShowLoading)
 
             withContext(Dispatchers.IO) {
-                // TODO: implement certificate filtering
-                delay(1500)
-
-                for (i in 0..10) {
-                    certificateList.add(SelectableCertificateModel(i.toString(), "$i Test result", "18.09.2021"))
-                }
+                certificateList = getFilteredCertificatesUseCase.run(accessTokenResult)
             }
-            _certificates.value = certificateList
+
+            _certificatesContainer.value = CertificatesContainer(null, certificateList.toSelectableCertificateModelList())
             _uiEvent.value = Event(CertificateViewUiEvent.OnHideLoading)
         }
     }
 
     fun onCertificateSelected(position: Int) {
-        val list = _certificates.value?.toMutableList()
-        if (position == -1 || list == null) {
-            return
-        }
-
+        val certificatesContainer: CertificatesContainer = _certificatesContainer.value!!
+        val list: MutableList<SelectableCertificateModel> =
+            certificatesContainer.selectableCertificateModelList.toMutableList()
+        val selectedCertificateCard: CertificatesCard.CertificateCard = certificateList[position]
         selected?.let { model ->
             val index = list.indexOfFirst { model == it }
             if (index != -1) {
@@ -90,7 +91,7 @@ class CertificateSelectorViewModel @Inject constructor(
         selected = copy
         list[position] = copy
 
-        _certificates.value = list.toList()
+        _certificatesContainer.value = CertificatesContainer(selectedCertificateCard, list.toList())
     }
 
     fun onNextClick() {
@@ -106,6 +107,20 @@ class CertificateSelectorViewModel @Inject constructor(
                 _event.value = Event(CertificateEvent.OnCertificateAdvisorSelected(it))
             }
         }
+    }
+
+    private fun List<CertificatesCard.CertificateCard>.toSelectableCertificateModelList(): List<SelectableCertificateModel> {
+        val selectableCertificateModelList = mutableListOf<SelectableCertificateModel>()
+        forEach { certificateCard ->
+            selectableCertificateModelList.add(
+                SelectableCertificateModel(
+                    certificateCard.certificateId.toString(),
+                    certificateCard,
+                    false
+                )
+            )
+        }
+        return selectableCertificateModelList
     }
 
     sealed class CertificateViewUiEvent {

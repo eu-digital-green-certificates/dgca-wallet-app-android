@@ -22,14 +22,11 @@
 
 package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.certselector
 
-import android.os.Parcelable
 import dgca.wallet.app.android.data.IdentifiableData
-import kotlinx.parcelize.Parcelize
+import dgca.wallet.app.android.wallet.CertificatesCard
 
-@Parcelize
 data class SelectableCertificateModel(
     override val id: String,
-    val title: String,
-    val validUntil: String,
+    val certificateCard: CertificatesCard.CertificateCard,
     val selected: Boolean = false
-) : IdentifiableData, Parcelable
+) : IdentifiableData

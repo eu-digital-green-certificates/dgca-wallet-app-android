@@ -17,23 +17,17 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/17/21 9:03 PM
+ *  Created by osarapulov on 9/22/21 2:35 PM
  */
 
-package dgca.wallet.app.android.model
+package dgca.wallet.app.android.data.remote.ticketing.access.token
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-import java.security.PrivateKey
-import java.time.ZonedDateTime
+import com.fasterxml.jackson.annotation.JsonProperty
+import dgca.wallet.app.android.data.remote.ticketing.identity.VerificationMethodRemote
 
-@Parcelize
-data class AccessTokenResult(
-    val firstName: String,
-    val lastName: String,
-    val dateOfBirth: String?,
-    val greenCertificateTypes: List<String>,
-    val validFrom: ZonedDateTime,
-    val validTo: ZonedDateTime,
-    val privateKey: PrivateKey
-) : Parcelable
+data class ValidationServiceIdentityResponse(
+    @JsonProperty("id")
+    val id: String,
+    @JsonProperty("verificationMethod")
+    val verificationMethodsRemote: Set<VerificationMethodRemote>,
+)

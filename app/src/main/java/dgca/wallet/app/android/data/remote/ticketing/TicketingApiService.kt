@@ -25,6 +25,7 @@ package dgca.wallet.app.android.data.remote.ticketing
 import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenRequest
 import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenResponse
 import dgca.wallet.app.android.data.remote.ticketing.identity.IdentityResponse
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -41,5 +42,5 @@ interface TicketingApiService {
         @Url url: String,
         @Header("Authorization") authHeader: String,
         @Body body: AccessTokenRequest
-    ): Response<AccessTokenResponse>
+    ): Response<ResponseBody>
 }

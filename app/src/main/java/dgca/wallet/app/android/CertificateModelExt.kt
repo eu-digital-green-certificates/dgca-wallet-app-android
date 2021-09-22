@@ -17,23 +17,23 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/17/21 9:03 PM
+ *  Created by osarapulov on 9/21/21 6:45 PM
  */
 
-package dgca.wallet.app.android.model
+package dgca.wallet.app.android
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-import java.security.PrivateKey
-import java.time.ZonedDateTime
+import android.content.res.Resources
+import dgca.wallet.app.android.data.CertificateModel
 
-@Parcelize
-data class AccessTokenResult(
-    val firstName: String,
-    val lastName: String,
-    val dateOfBirth: String?,
-    val greenCertificateTypes: List<String>,
-    val validFrom: ZonedDateTime,
-    val validTo: ZonedDateTime,
-    val privateKey: PrivateKey
-) : Parcelable
+fun CertificateModel.getTitle(res: Resources): String = when {
+    vaccinations?.first() != null -> res.getString(
+        R.string.vaccination,
+        vaccinations.first().doseNumber.toString(),
+        vaccinations.first().totalSeriesOfDoses.toString()
+    )
+    recoveryStatements?.isNotEmpty() == true -> res.getString(
+        R.string.recovery
+    )
+    tests?.isNotEmpty() == true -> res.getString(R.string.test)
+    else -> ""
+}

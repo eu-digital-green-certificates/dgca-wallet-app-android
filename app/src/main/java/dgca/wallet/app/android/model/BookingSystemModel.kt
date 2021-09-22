@@ -34,6 +34,8 @@ data class BookingSystemModel(
     val protocolVersion: String,
     @JsonProperty("serviceIdentity")
     val serviceIdentity: String,
+    @JsonProperty("privacyUrl")
+    val privacyUrl: String,
     @JsonProperty("token")
     val token: String,
     @JsonProperty("consent")
