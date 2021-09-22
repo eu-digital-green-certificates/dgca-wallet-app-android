@@ -27,12 +27,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dgca.verifier.app.decoder.model.KeyPairData
+import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenResponse
 import dgca.wallet.app.android.data.remote.ticketing.access.token.ValidationServiceIdentityResponse
 import dgca.wallet.app.android.model.AccessTokenResult
 import dgca.wallet.app.android.model.BookingSystemModel
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.Service
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.security.KeyPair
+import java.security.KeyPairGenerator
 import javax.inject.Inject
 
 sealed class AccessTokenFetcherResult {
@@ -50,24 +54,30 @@ class AccessTokenFetcherViewModel @Inject constructor(
 
     fun initialize(bookingSystemModel: BookingSystemModel, accessTokenService: Service, validationService: Service) {
         viewModelScope.launch {
-            val accessTokenResult: AccessTokenResult? =
-                fetchAccessToken(bookingSystemModel, accessTokenService, validationService)
+            val keyPairGen = KeyPairGenerator.getInstance("EC")
+            keyPairGen.initialize(256)
+            val keyPairData = KeyPairData("SHA256withECDSA", keyPairGen.generateKeyPair())
+            val keyPair: KeyPair = keyPairData.keyPair
+
+            val accessTokenResponse: AccessTokenResponse? =
+                fetchAccessToken(keyPair, bookingSystemModel, accessTokenService, validationService)
             val validationServiceIdentityResponse: ValidationServiceIdentityResponse? =
                 fetchValidationServiceIdentity(validationService)
 
             _accessTokenFetcherResult.value =
-                if (accessTokenResult == null || validationServiceIdentityResponse == null) AccessTokenFetcherResult.Fail else AccessTokenFetcherResult.Success(
-                    accessTokenResult
+                if (accessTokenResponse == null || validationServiceIdentityResponse == null) AccessTokenFetcherResult.Fail else AccessTokenFetcherResult.Success(
+                    prepareAccessTokenResult(keyPair, accessTokenResponse, validationServiceIdentityResponse)
                 )
         }
     }
 
     private suspend fun fetchAccessToken(
+        keyPair: KeyPair,
         bookingSystemModel: BookingSystemModel,
         accessTokenService: Service,
         validationService: Service
-    ): AccessTokenResult? = try {
-        getAccessTokenUseCase.run(bookingSystemModel, accessTokenService, validationService)
+    ): AccessTokenResponse? = try {
+        getAccessTokenUseCase.run(keyPair, bookingSystemModel, accessTokenService, validationService)
     } catch (exception: Exception) {
         Timber.e(exception, "Error fetching access token")
         null
@@ -78,5 +88,21 @@ class AccessTokenFetcherViewModel @Inject constructor(
     } catch (exception: Exception) {
         Timber.e(exception, "Error fetching validation service idendity")
         null
+    }
+
+    private fun prepareAccessTokenResult(
+        keyPair: KeyPair,
+        accessTokenResponse: AccessTokenResponse,
+        validationServiceIdentityResponse: ValidationServiceIdentityResponse
+    ): AccessTokenResult {
+        return AccessTokenResult(
+            accessTokenResponse.vc.firstName,
+            accessTokenResponse.vc.lastName,
+            accessTokenResponse.vc.dateOfBirth,
+            accessTokenResponse.vc.greenCertificateTypes,
+            accessTokenResponse.vc.validFrom,
+            accessTokenResponse.vc.validTo,
+            keyPair.private
+        )
     }
 }

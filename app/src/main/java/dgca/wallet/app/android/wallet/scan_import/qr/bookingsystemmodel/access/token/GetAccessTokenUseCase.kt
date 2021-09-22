@@ -24,20 +24,16 @@ package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.access.
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import dgca.verifier.app.decoder.model.KeyPairData
 import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
 import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenRequest
 import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenResponse
-import dgca.wallet.app.android.model.AccessTokenResult
 import dgca.wallet.app.android.model.BookingSystemModel
-import dgca.wallet.app.android.model.PublicKeyData
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.JwtTokenParser
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.Service
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
 import java.security.KeyPair
-import java.security.KeyPairGenerator
 import java.util.*
 
 class GetAccessTokenUseCase(
@@ -46,22 +42,14 @@ class GetAccessTokenUseCase(
     private val jwtTokenParser: JwtTokenParser
 ) {
     suspend fun run(
+        keyPair: KeyPair,
         bookingSystemModel: BookingSystemModel,
         accessTokenService: Service,
         validationService: Service
-    ): AccessTokenResult? =
+    ): AccessTokenResponse? =
         withContext(Dispatchers.IO) {
-            val keyPairGen = KeyPairGenerator.getInstance("EC")
-            keyPairGen.initialize(256)
-            val keyPairData = KeyPairData("SHA256withECDSA", keyPairGen.generateKeyPair())
-            val keyPair: KeyPair = keyPairData.keyPair
-
-            val publicKeyData = PublicKeyData(
-                keyPair.public.algorithm,
-                Base64.getEncoder().encodeToString(keyPair.public.encoded)
-            )
-
-            val accessTokenRequest = AccessTokenRequest(validationService.id, publicKeyData.value)
+            val accessTokenRequest =
+                AccessTokenRequest(validationService.id, Base64.getEncoder().encodeToString(keyPair.public.encoded))
             val response = ticketingApiService.getAccessToken(
                 accessTokenService.serviceEndpoint,
                 "Bearer ${bookingSystemModel.token}",
@@ -70,17 +58,6 @@ class GetAccessTokenUseCase(
             if (response.isSuccessful && response.code() == HttpURLConnection.HTTP_OK) {
                 response.body()?.string()?.let { jwtTokenParser.parse(it) }
                     ?.let { objectMapper.readValue<AccessTokenResponse>(it.body) }
-                    ?.let {
-                        AccessTokenResult(
-                            it.vc.firstName,
-                            it.vc.lastName,
-                            it.vc.dateOfBirth,
-                            it.vc.greenCertificateTypes,
-                            it.vc.validFrom,
-                            it.vc.validTo,
-                            keyPair.private
-                        )
-                    }
             } else {
                 null
             }
