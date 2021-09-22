@@ -40,6 +40,7 @@ import dgca.wallet.app.android.getTitle
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission.DefaultDialogFragment.Companion.ACTION_NEGATIVE
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission.DefaultDialogFragment.Companion.ACTION_POSITIVE
 import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 @AndroidEntryPoint
@@ -70,7 +71,7 @@ class TransmissionConsentFragment : BindingFragment<FragmentTransmissionConsentB
         val validTo = args.certificateModel.getValidTo()
         binding.description.text = if (validTo == null) getString(R.string.no_expiration_date) else getString(
             R.string.valid_until,
-            SimpleDateFormat(YEAR_MONTH_DAY, Locale.US).format(validTo.toLocalDate())
+            DateTimeFormatter.ofPattern(YEAR_MONTH_DAY, Locale.US).format(validTo.toLocalDate())
         )
 
         viewModel.uiEvent.observe(viewLifecycleOwner) { event -> onViewModelUiEvent(event.peekContent()) }
