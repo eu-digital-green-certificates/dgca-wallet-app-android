@@ -22,12 +22,15 @@
 
 package dgca.wallet.app.android.di
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dgca.wallet.app.android.data.WalletRepository
 import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.DefaultJwtTokenParser
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.JwtTokenParser
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.access.token.GetAccessTokenUseCase
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.certselector.GetFilteredCertificatesUseCase
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.identity.GetIdentityDocumentUseCase
@@ -50,8 +53,15 @@ object TicketingModule {
 
     @Singleton
     @Provides
-    internal fun provideGetAccessTokenUseCase(ticketingApiService: TicketingApiService): GetAccessTokenUseCase =
-        GetAccessTokenUseCase(ticketingApiService)
+    internal fun provideJwtTokenParser(walletRepository: WalletRepository): JwtTokenParser = DefaultJwtTokenParser()
+
+    @Singleton
+    @Provides
+    internal fun provideGetAccessTokenUseCase(
+        ticketingApiService: TicketingApiService,
+        objectMapper: ObjectMapper,
+        jwtTokenParser: JwtTokenParser
+    ): GetAccessTokenUseCase = GetAccessTokenUseCase(ticketingApiService, objectMapper, jwtTokenParser)
 
     @Singleton
     @Provides

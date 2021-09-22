@@ -2,8 +2,9 @@
   "protocol": "DCCVALIDATION",
   "protocolVersion": "1.0.0",
   "serviceIdentity": "https://dgca-booking-demo-eu-test.cfapps.eu10.hana.ondemand.com/identity",
-  "token": "eyJ0eXAiOiJKV1QiLCJraWQiOiJiUzhEMi9XejV0WT0iLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJWYWxpZGF0aW9uIERlY29yYXRvciBEZXJ2aWNlIiwiZXhwIjoxNjMxOTAwMDgyLCJzdWIiOiIyOTQwMzUzZC02YWQ2LTRkNDgtYTIzOS01ZDgxOTAxZTJmM2UifQ.0uNIFNO39UsjYpICY4TTqOnbUOXtOQXPHgsPouM1cBq4QD_eKIGjcMetM3fM00LPUJRURX5aL7LRq189otLw_Q",
+  "privacyUrl": "https://validation-decorator.example",
+  "token": "eyJ0eXAiOiJKV1QiLCJraWQiOiJiUzhEMi9XejV0WT0iLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJWYWxpZGF0aW9uIERlY29yYXRvciBTZXJ2aWNlIiwiZXhwIjoxNjMyMjk2NjYwLCJzdWIiOiIwYjA3ZmFiZC1hZDRiLTRiZWItYWE0Mi04MGM0NGY4ZmYzZWYifQ.5HY8VaD-Y1DfPDBT6xTKIiXzw2BWU6Xe_NovmWX1PFTwtxbnGQKLWoRZGvmh8tG1Zk4Ry1wnuAM74Z0EukbmAg",
   "consent": "Please confirm to start the DCC Exchange flow. If you not confirm, the flow is aborted.",
-  "subject": "2940353d-6ad6-4d48-a239-5d81901e2f3e",
+  "subject": "0b07fabd-ad4b-4beb-aa42-80c44f8ff3ef",
   "serviceProvider": "Booking Demo"
 }

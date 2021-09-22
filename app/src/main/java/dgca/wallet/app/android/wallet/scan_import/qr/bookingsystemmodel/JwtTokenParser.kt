@@ -17,31 +17,13 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/10/21 11:42 AM
+ *  Created by osarapulov on 9/22/21 11:02 AM
  */
 
-package dgca.wallet.app.android.model
+package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel
 
-import android.os.Parcelable
-import com.fasterxml.jackson.annotation.JsonProperty
-import kotlinx.parcelize.Parcelize
+class JwtObject(val header: String, val body: String)
 
-@Parcelize
-data class BookingSystemModel(
-    @JsonProperty("protocol")
-    val protocol: String,
-    @JsonProperty("protocolVersion")
-    val protocolVersion: String,
-    @JsonProperty("serviceIdentity")
-    val serviceIdentity: String,
-    @JsonProperty("privacyUrl")
-    val privacyUrl: String,
-    @JsonProperty("token")
-    val token: String,
-    @JsonProperty("consent")
-    val consent: String,
-    @JsonProperty("subject")
-    val subject: String,
-    @JsonProperty("serviceProvider")
-    val serviceProvider: String
-) : Parcelable
+interface JwtTokenParser {
+    fun parse(jwtToken: String): JwtObject
+}
