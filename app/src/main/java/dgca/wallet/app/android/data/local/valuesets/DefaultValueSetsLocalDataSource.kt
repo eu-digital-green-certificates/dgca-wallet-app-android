@@ -26,24 +26,33 @@ import dgca.verifier.app.engine.data.ValueSet
 import dgca.verifier.app.engine.data.ValueSetIdentifier
 import dgca.verifier.app.engine.data.source.local.valuesets.ValueSetsLocalDataSource
 
-class DefaultValueSetsLocalDataSource(private val dao: ValueSetsDao) : ValueSetsLocalDataSource {
+class DefaultValueSetsLocalDataSource(
+    private val dao: ValueSetsDao
+) : ValueSetsLocalDataSource {
+
     override suspend fun updateValueSets(valueSets: List<ValueSet>) {
         dao.apply {
             deleteAll()
-            insert(*valueSets.toValueSetsLocal().toTypedArray())
+            insert(*valueSets.map { it.toValueSetLocal() }.toTypedArray())
         }
     }
 
-    override suspend fun addValueSets(valueSetIdentifiers: List<ValueSetIdentifier>, valueSets: List<ValueSet>) {
-        TODO("Not yet implemented")
+    override suspend fun addValueSets(
+        valueSetIdentifiers: List<ValueSetIdentifier>,
+        valueSets: List<ValueSet>
+    ) {
+        dao.insertSets(
+            *valueSetIdentifiers.map { it.toValueSetIdentifierLocal() }.toTypedArray(),
+            *valueSets.map { it.toValueSetLocal() }.toTypedArray()
+        )
     }
 
     override suspend fun removeValueSetsBy(setIds: List<String>) {
-        TODO("Not yet implemented")
+        dao.deleteSetsBy(setIds)
     }
 
-    override suspend fun getValueSets(): List<ValueSet> = dao.getAll().toValueSets()
-    override suspend fun getValueSetIdentifiers(): List<ValueSetIdentifier> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getValueSets(): List<ValueSet> = dao.getAll().map { it.toValueSet() }
+
+    override suspend fun getValueSetIdentifiers(): List<ValueSetIdentifier> =
+        dao.getAllIdentifiers().map { it.toValueSetIdentifier() }
 }
