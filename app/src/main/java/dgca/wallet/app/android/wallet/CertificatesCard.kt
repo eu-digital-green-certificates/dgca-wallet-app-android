@@ -22,10 +22,8 @@
 
 package dgca.wallet.app.android.wallet
 
-import android.os.Parcelable
 import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.local.CertificateEntity
-import kotlinx.parcelize.Parcelize
 import java.io.File
 import java.time.Instant
 import java.time.LocalDate
