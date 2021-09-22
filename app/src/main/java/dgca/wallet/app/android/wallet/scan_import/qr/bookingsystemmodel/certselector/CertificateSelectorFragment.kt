@@ -95,6 +95,7 @@ class CertificateSelectorFragment : BindingFragment<FragmentCertificateSelectorB
             is CertificateSelectorViewModel.CertificateEvent.OnCertificateAdvisorSelected -> {
                 val action =
                     CertificateSelectorFragmentDirections.actionCertificateSelectorFragmentToTransmissionConsentFragment(
+                        args.accessTokenResult,
                         event.certModel.certificateCard.certificate,
                         event.certModel.certificateCard.qrCodeText
                     )

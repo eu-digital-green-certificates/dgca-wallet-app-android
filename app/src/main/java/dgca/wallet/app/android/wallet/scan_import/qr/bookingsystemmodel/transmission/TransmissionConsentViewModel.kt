@@ -29,6 +29,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.wallet.app.android.Event
 import dgca.wallet.app.android.data.WalletRepository
+import dgca.wallet.app.android.model.AccessTokenResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -50,7 +51,7 @@ class TransmissionConsentViewModel @Inject constructor(
 
     }
 
-    fun onPermissionAccepted() {
+    fun onPermissionAccepted(qrString: String, accessTokenResult: AccessTokenResult) {
         viewModelScope.launch {
             _uiEvent.value = Event(TransmissionConsentUiEvent.OnShowLoading)
 

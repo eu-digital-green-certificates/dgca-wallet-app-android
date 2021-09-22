@@ -95,14 +95,6 @@ class AccessTokenFetcherViewModel @Inject constructor(
         accessTokenResponse: AccessTokenResponse,
         validationServiceIdentityResponse: ValidationServiceIdentityResponse
     ): AccessTokenResult {
-        return AccessTokenResult(
-            accessTokenResponse.vc.firstName,
-            accessTokenResponse.vc.lastName,
-            accessTokenResponse.vc.dateOfBirth,
-            accessTokenResponse.vc.greenCertificateTypes,
-            accessTokenResponse.vc.validFrom,
-            accessTokenResponse.vc.validTo,
-            keyPair.private
-        )
+        return AccessTokenResult(keyPair, accessTokenResponse, validationServiceIdentityResponse)
     }
 }

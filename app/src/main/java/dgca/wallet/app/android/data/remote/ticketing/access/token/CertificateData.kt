@@ -22,10 +22,13 @@
 
 package dgca.wallet.app.android.data.remote.ticketing.access.token
 
+import android.os.Parcelable
 import com.fasterxml.jackson.annotation.JsonProperty
+import kotlinx.parcelize.Parcelize
 import java.time.ZonedDateTime
 
-data class VCRemote(
+@Parcelize
+data class CertificateData(
     @JsonProperty("hash")
     val hash: String?,
     @JsonProperty("lang")
@@ -54,4 +57,4 @@ data class VCRemote(
     val validFrom: ZonedDateTime,
     @JsonProperty("validTo")
     val validTo: ZonedDateTime
-)
+): Parcelable

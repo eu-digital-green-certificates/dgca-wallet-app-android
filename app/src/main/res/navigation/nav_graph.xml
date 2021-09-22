@@ -452,6 +452,10 @@
         tools:layout="@layout/fragment_transmission_consent">
 
         <argument
+            android:name="accessTokenResult"
+            app:argType="dgca.wallet.app.android.model.AccessTokenResult" />
+
+        <argument
             android:name="certificateModel"
             app:argType="dgca.wallet.app.android.data.CertificateModel" />
 

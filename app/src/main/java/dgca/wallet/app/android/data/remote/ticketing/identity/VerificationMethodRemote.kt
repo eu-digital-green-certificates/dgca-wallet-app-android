@@ -22,8 +22,13 @@
 
 package dgca.wallet.app.android.data.remote.ticketing.identity
 
+import android.os.Parcelable
 import com.fasterxml.jackson.annotation.JsonProperty
+import kotlinx.parcelize.Parcelize
 
+// TODO divide remote and domain models
+
+@Parcelize
 class VerificationMethodRemote(
     @JsonProperty("id")
     val id: String,
@@ -33,4 +38,4 @@ class VerificationMethodRemote(
     val controller: String,
     @JsonProperty("publicKeyJWK")
     val publicKeyJwkRemote: PublicKeyJwkRemote
-)
+): Parcelable

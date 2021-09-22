@@ -23,17 +23,14 @@
 package dgca.wallet.app.android.model
 
 import android.os.Parcelable
+import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenResponse
+import dgca.wallet.app.android.data.remote.ticketing.access.token.ValidationServiceIdentityResponse
 import kotlinx.parcelize.Parcelize
-import java.security.PrivateKey
-import java.time.ZonedDateTime
+import java.security.KeyPair
 
 @Parcelize
 data class AccessTokenResult(
-    val firstName: String,
-    val lastName: String,
-    val dateOfBirth: String?,
-    val greenCertificateTypes: List<String>,
-    val validFrom: ZonedDateTime,
-    val validTo: ZonedDateTime,
-    val privateKey: PrivateKey
+    val keyPair: KeyPair,
+    val accessTokenResponse: AccessTokenResponse,
+    val validationServiceIdentityResponse: ValidationServiceIdentityResponse,
 ) : Parcelable

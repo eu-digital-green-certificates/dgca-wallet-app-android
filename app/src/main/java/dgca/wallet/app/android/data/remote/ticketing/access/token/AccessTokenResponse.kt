@@ -22,8 +22,13 @@
 
 package dgca.wallet.app.android.data.remote.ticketing.access.token
 
+import android.os.Parcelable
 import com.fasterxml.jackson.annotation.JsonProperty
+import kotlinx.parcelize.Parcelize
 
+// TODO divide remote and domain models
+
+@Parcelize
 data class AccessTokenResponse(
     @JsonProperty("jti")
     val jti: String?,
@@ -42,5 +47,5 @@ data class AccessTokenResponse(
     @JsonProperty("v")
     val v: String,
     @JsonProperty("vc")
-    val vc: VCRemote
-)
+    val certificateData: CertificateData
+): Parcelable

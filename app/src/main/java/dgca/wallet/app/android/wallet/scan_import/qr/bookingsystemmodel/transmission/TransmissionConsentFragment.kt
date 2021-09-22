@@ -39,7 +39,6 @@ import dgca.wallet.app.android.databinding.FragmentTransmissionConsentBinding
 import dgca.wallet.app.android.getTitle
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission.DefaultDialogFragment.Companion.ACTION_NEGATIVE
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission.DefaultDialogFragment.Companion.ACTION_POSITIVE
-import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -77,7 +76,7 @@ class TransmissionConsentFragment : BindingFragment<FragmentTransmissionConsentB
         viewModel.uiEvent.observe(viewLifecycleOwner) { event -> onViewModelUiEvent(event.peekContent()) }
 
         binding.grantPermission.setOnClickListener {
-            viewModel.onPermissionAccepted()
+            viewModel.onPermissionAccepted(args.qrString, args.accessTokenResult)
         }
 
         childFragmentManager.setFragmentResultListener(DefaultDialogFragment.KEY_REQUEST, viewLifecycleOwner) { _, bundle ->

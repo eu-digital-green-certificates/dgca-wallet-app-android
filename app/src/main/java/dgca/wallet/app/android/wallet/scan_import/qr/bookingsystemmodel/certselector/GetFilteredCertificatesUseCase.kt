@@ -52,9 +52,9 @@ class GetFilteredCertificatesUseCase(private val walletRepository: WalletReposit
         accessTokenResult: AccessTokenResult,
         certificateCard: CertificatesCard.CertificateCard
     ): Boolean {
-        if (accessTokenResult.greenCertificateTypes.contains("v") && certificateCard.certificate.vaccinations?.isNotEmpty() == true) return true
-        if (accessTokenResult.greenCertificateTypes.contains("r") && certificateCard.certificate.recoveryStatements?.isNotEmpty() == true) return true
-        if (accessTokenResult.greenCertificateTypes.contains("t") && certificateCard.certificate.tests?.isNotEmpty() == true) return true
+        if (accessTokenResult.accessTokenResponse.certificateData.greenCertificateTypes.contains("v") && certificateCard.certificate.vaccinations?.isNotEmpty() == true) return true
+        if (accessTokenResult.accessTokenResponse.certificateData.greenCertificateTypes.contains("r") && certificateCard.certificate.recoveryStatements?.isNotEmpty() == true) return true
+        if (accessTokenResult.accessTokenResponse.certificateData.greenCertificateTypes.contains("t") && certificateCard.certificate.tests?.isNotEmpty() == true) return true
         return false
     }
 
@@ -62,9 +62,9 @@ class GetFilteredCertificatesUseCase(private val walletRepository: WalletReposit
         accessTokenResult: AccessTokenResult,
         certificateCard: CertificatesCard.CertificateCard
     ): Boolean {
-        if (accessTokenResult.firstName.isNotBlank() && accessTokenResult.firstName != certificateCard.certificate.person.givenName) return false
-        if (accessTokenResult.lastName.isNotBlank() && accessTokenResult.lastName != certificateCard.certificate.person.familyName) return false
-        if (accessTokenResult.dateOfBirth?.isNotBlank() == true && accessTokenResult.dateOfBirth != certificateCard.certificate.dateOfBirth) return false
+        if (accessTokenResult.accessTokenResponse.certificateData.firstName.isNotBlank() && accessTokenResult.accessTokenResponse.certificateData.firstName != certificateCard.certificate.person.givenName) return false
+        if (accessTokenResult.accessTokenResponse.certificateData.lastName.isNotBlank() && accessTokenResult.accessTokenResponse.certificateData.lastName != certificateCard.certificate.person.familyName) return false
+        if (accessTokenResult.accessTokenResponse.certificateData.dateOfBirth?.isNotBlank() == true && accessTokenResult.accessTokenResponse.certificateData.dateOfBirth != certificateCard.certificate.dateOfBirth) return false
         return true
     }
 
@@ -74,9 +74,9 @@ class GetFilteredCertificatesUseCase(private val walletRepository: WalletReposit
     ): Boolean {
         if (true) return true
         val validFrom = certificateCard.certificate.getValidFrom()
-        if (validFrom == null || validFrom.isBefore(accessTokenResult.validFrom)) return false
+        if (validFrom == null || validFrom.isBefore(accessTokenResult.accessTokenResponse.certificateData.validFrom)) return false
         val validTo = certificateCard.certificate.getValidTo()
-        if (validTo == null || validTo.isBefore(accessTokenResult.validTo)) return false
+        if (validTo == null || validTo.isBefore(accessTokenResult.accessTokenResponse.certificateData.validTo)) return false
         return true
     }
 }
