@@ -33,11 +33,14 @@ import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.MainActivity
 import dgca.wallet.app.android.R
+import dgca.wallet.app.android.YEAR_MONTH_DAY
 import dgca.wallet.app.android.base.BindingFragment
 import dgca.wallet.app.android.databinding.FragmentTransmissionConsentBinding
 import dgca.wallet.app.android.getTitle
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission.DefaultDialogFragment.Companion.ACTION_NEGATIVE
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission.DefaultDialogFragment.Companion.ACTION_POSITIVE
+import java.text.SimpleDateFormat
+import java.util.*
 
 @AndroidEntryPoint
 class TransmissionConsentFragment : BindingFragment<FragmentTransmissionConsentBinding>() {
@@ -67,7 +70,7 @@ class TransmissionConsentFragment : BindingFragment<FragmentTransmissionConsentB
         val validTo = args.certificateModel.getValidTo()
         binding.description.text = if (validTo == null) getString(R.string.no_expiration_date) else getString(
             R.string.valid_until,
-            args.certificateModel.getValidTo()
+            SimpleDateFormat(YEAR_MONTH_DAY, Locale.US).format(validTo)
         )
 
         viewModel.uiEvent.observe(viewLifecycleOwner) { event -> onViewModelUiEvent(event.peekContent()) }
