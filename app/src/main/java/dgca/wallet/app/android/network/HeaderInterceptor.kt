@@ -23,6 +23,7 @@
 package dgca.wallet.app.android.network
 
 import android.os.Build
+import dgca.wallet.app.android.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Request
@@ -34,7 +35,8 @@ import java.security.MessageDigest
 
 class HeaderInterceptor : Interceptor {
 
-    private val userAgent = "DGCA verifier Android ${Build.VERSION.SDK_INT}, ${Build.MODEL};"
+    private val userAgent =
+        "DGCA wallet: ${BuildConfig.VERSION_NAME}, Android: ${Build.VERSION.SDK_INT}, Model: ${Build.MODEL};"
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
