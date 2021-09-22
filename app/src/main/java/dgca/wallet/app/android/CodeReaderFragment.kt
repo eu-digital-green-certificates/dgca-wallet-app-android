@@ -21,7 +21,7 @@ import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.databinding.FragmentCodeReaderBinding
 
-private const val CAMERA_REQUEST_CODE = 1003
+const val CAMERA_REQUEST_CODE = 1003
 
 @AndroidEntryPoint
 class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListener {
