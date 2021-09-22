@@ -70,7 +70,7 @@ class TransmissionConsentFragment : BindingFragment<FragmentTransmissionConsentB
         val validTo = args.certificateModel.getValidTo()
         binding.description.text = if (validTo == null) getString(R.string.no_expiration_date) else getString(
             R.string.valid_until,
-            SimpleDateFormat(YEAR_MONTH_DAY, Locale.US).format(validTo)
+            SimpleDateFormat(YEAR_MONTH_DAY, Locale.US).format(validTo.toLocalDate())
         )
 
         viewModel.uiEvent.observe(viewLifecycleOwner) { event -> onViewModelUiEvent(event.peekContent()) }

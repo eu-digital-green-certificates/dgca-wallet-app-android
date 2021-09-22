@@ -58,7 +58,7 @@ class SelectableCertificateViewHolder(
         binding.description.text =
             if (validUntil == null) binding.root.resources.getString(R.string.no_expiration_date) else binding.root.resources.getString(
                 R.string.valid_until,
-                formatter.format(validUntil)
+                formatter.format(validUntil.toLocalDate())
             )
         binding.radioButton.isChecked = model.selected
     }

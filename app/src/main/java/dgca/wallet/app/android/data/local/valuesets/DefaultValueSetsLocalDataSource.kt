@@ -23,6 +23,7 @@
 package dgca.wallet.app.android.data.local.valuesets
 
 import dgca.verifier.app.engine.data.ValueSet
+import dgca.verifier.app.engine.data.ValueSetIdentifier
 import dgca.verifier.app.engine.data.source.local.valuesets.ValueSetsLocalDataSource
 
 class DefaultValueSetsLocalDataSource(private val dao: ValueSetsDao) : ValueSetsLocalDataSource {
@@ -33,5 +34,16 @@ class DefaultValueSetsLocalDataSource(private val dao: ValueSetsDao) : ValueSets
         }
     }
 
+    override suspend fun addValueSets(valueSetIdentifiers: List<ValueSetIdentifier>, valueSets: List<ValueSet>) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun removeValueSetsBy(setIds: List<String>) {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun getValueSets(): List<ValueSet> = dao.getAll().toValueSets()
+    override suspend fun getValueSetIdentifiers(): List<ValueSetIdentifier> {
+        TODO("Not yet implemented")
+    }
 }
