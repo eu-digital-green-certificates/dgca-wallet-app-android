@@ -83,6 +83,11 @@ class DgcaWalletApplication : Application(), Configuration.Provider {
                         .setRequiredNetworkType(NetworkType.CONNECTED)
                         .build()
                 )
+                .setBackoffCriteria(
+                    BackoffPolicy.LINEAR,
+                    OneTimeWorkRequest.MAX_BACKOFF_MILLIS,
+                    TimeUnit.MILLISECONDS
+                )
                 .build()
         )
 

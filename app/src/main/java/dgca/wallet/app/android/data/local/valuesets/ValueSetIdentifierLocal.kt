@@ -17,32 +17,17 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 7/26/21 12:39 PM
+ *  Created by mykhailo.nester on 21/09/2021, 22:19
  */
 
 package dgca.wallet.app.android.data.local.valuesets
 
-import dgca.verifier.app.engine.data.ValueSet
-import dgca.verifier.app.engine.data.ValueSetIdentifier
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-fun ValueSet.toValueSetLocal(): ValueSetLocal = ValueSetLocal(
-    valueSetId = this.valueSetId,
-    valueSetDate = this.valueSetDate,
-    valueSetValues = this.valueSetValues
-)
-
-fun ValueSetLocal.toValueSet(): ValueSet = ValueSet(
-    valueSetId = this.valueSetId,
-    valueSetDate = this.valueSetDate,
-    valueSetValues = this.valueSetValues
-)
-
-fun ValueSetIdentifier.toValueSetIdentifierLocal(): ValueSetIdentifierLocal = ValueSetIdentifierLocal(
-    valueSetIdentifierId = id,
-    valueSetHash = hash
-)
-
-fun ValueSetIdentifierLocal.toValueSetIdentifier(): ValueSetIdentifier = ValueSetIdentifier(
-    id = valueSetIdentifierId,
-    hash = valueSetHash
+@Entity(tableName = "value_set_identifier")
+class ValueSetIdentifierLocal(
+    @PrimaryKey
+    val valueSetIdentifierId: String,
+    val valueSetHash: String
 )
