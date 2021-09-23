@@ -28,17 +28,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.wallet.app.android.Event
-import dgca.wallet.app.android.data.WalletRepository
 import dgca.wallet.app.android.model.AccessTokenResult
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class TransmissionConsentViewModel @Inject constructor(
-    private val walletRepository: WalletRepository
+    private val validationUseCase: ValidationUseCase
 ) : ViewModel() {
 
     private val _uiEvent = MutableLiveData<Event<TransmissionConsentUiEvent>>()
@@ -47,25 +43,20 @@ class TransmissionConsentViewModel @Inject constructor(
     private val _event = MutableLiveData<Event<TransmissionConsentEvent>>()
     val event: LiveData<Event<TransmissionConsentEvent>> = _event
 
-    fun init() {
-
-    }
-
     fun onPermissionAccepted(qrString: String, accessTokenResult: AccessTokenResult) {
         viewModelScope.launch {
             _uiEvent.value = Event(TransmissionConsentUiEvent.OnShowLoading)
 
-            withContext(Dispatchers.IO) {
-                // TODO: API Calls
-                delay(1500)
-            }
+            _event.value = Event(
+                try {
+                    validationUseCase.run(qrString, accessTokenResult)
+                    TransmissionConsentEvent.OnCertificateTransmitted
+                } catch (exception: Exception) {
+                    TransmissionConsentEvent.OnCertificateTransmissionFailed
+                }
+            )
             _uiEvent.value = Event(TransmissionConsentUiEvent.OnHideLoading)
-            _event.value = Event(TransmissionConsentEvent.OnCertificateTransmitted)
         }
-    }
-
-    fun retry() {
-//        TODO: retry logic
     }
 
     sealed class TransmissionConsentUiEvent {

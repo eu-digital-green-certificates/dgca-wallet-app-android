@@ -17,35 +17,24 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/17/21 9:07 AM
+ *  Created by osarapulov on 9/22/21 5:01 PM
  */
 
 package dgca.wallet.app.android.data.remote.ticketing.access.token
 
-import android.os.Parcelable
 import com.fasterxml.jackson.annotation.JsonProperty
-import kotlinx.parcelize.Parcelize
 
-// TODO divide remote and domain models
-
-@Parcelize
-data class AccessTokenResponse(
-    @JsonProperty("jti")
-    val jti: String?,
-    @JsonProperty("iss")
-    val iss: String,
-    @JsonProperty("iat")
-    val iat: Long,
-    @JsonProperty("sub")
-    val sub: String,
-    @JsonProperty("aud")
-    val validationUrl: String,
-    @JsonProperty("exp")
-    val exp: Long,
-    @JsonProperty("t")
-    val t: Long,
-    @JsonProperty("v")
-    val v: String,
-    @JsonProperty("vc")
-    val certificateData: CertificateData
-): Parcelable
+data class ValidateRequest(
+    @JsonProperty("kid")
+    val kid: String = "9P6CdU/nRyU=",
+    @JsonProperty("dcc")
+    val dcc: String,
+    @JsonProperty("sig")
+    val sig: String,
+    @JsonProperty("encKey")
+    val encKey: String,
+    @JsonProperty("encScheme")
+    val encScheme: String = "RSAOAEPWithSHA256AES",
+    @JsonProperty("sigAlg")
+    val sigAlg: String = "SHA256withECDSA"
+)

@@ -35,6 +35,7 @@ import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.access.t
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.access.token.GetValidationServiceIdentityUseCase
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.certselector.GetFilteredCertificatesUseCase
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.identity.GetIdentityDocumentUseCase
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission.ValidationUseCase
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
@@ -74,4 +75,9 @@ object TicketingModule {
     @Provides
     internal fun provideGetFilteredCertificatesUseCase(walletRepository: WalletRepository): GetFilteredCertificatesUseCase =
         GetFilteredCertificatesUseCase(walletRepository)
+
+    @Singleton
+    @Provides
+    internal fun provideValidationUseCase(ticketingApiService: TicketingApiService): ValidationUseCase =
+        ValidationUseCase(ticketingApiService)
 }

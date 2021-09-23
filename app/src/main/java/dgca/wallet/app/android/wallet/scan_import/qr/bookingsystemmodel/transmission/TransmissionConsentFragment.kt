@@ -57,7 +57,6 @@ class TransmissionConsentFragment : BindingFragment<FragmentTransmissionConsentB
                 onViewModelEvent(it)
             }
         }
-        viewModel.init()
     }
 
     override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentTransmissionConsentBinding =
@@ -82,7 +81,7 @@ class TransmissionConsentFragment : BindingFragment<FragmentTransmissionConsentB
         childFragmentManager.setFragmentResultListener(DefaultDialogFragment.KEY_REQUEST, viewLifecycleOwner) { _, bundle ->
             when (bundle.getInt(DefaultDialogFragment.KEY_RESULT)) {
                 ACTION_POSITIVE -> findNavController().popBackStack(R.id.certificatesFragment, false)
-                ACTION_NEGATIVE -> viewModel.retry()
+                ACTION_NEGATIVE -> viewModel.onPermissionAccepted(args.qrString, args.accessTokenResult)
             }
         }
     }
