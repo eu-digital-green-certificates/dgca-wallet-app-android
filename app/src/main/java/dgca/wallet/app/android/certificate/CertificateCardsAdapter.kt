@@ -85,7 +85,7 @@ class CertificateCardsAdapter(
                     else -> ""
                 }
                 binding.nameView.text = certificatesCard.certificate.getFullName()
-                binding.scannedAtDateView.text = certificatesCard.dateTaken.formatWith(YEAR_MONTH_DAY)
+                binding.scannedAtDateView.text = this.getCertificateDate(certificatesCard)
                 binding.root.setOnClickListener { certificateCardClickListener.onCertificateCardClick(certificatesCard.certificateId) }
             }
         }
@@ -100,6 +100,18 @@ class CertificateCardsAdapter(
                 binding.titleView.text = fileCard.file.name
                 binding.scannedAtDateView.text = fileCard.dateTaken.formatWith(YEAR_MONTH_DAY)
                 binding.root.setOnClickListener { fileCardClickListener.onFileCardClick(fileCard.file) }
+            }
+        }
+        
+        protected fun getCertificateDate(certificateCard: CertificatesCard.CertificateCard): String {
+            return when {
+                certificateCard.certificate.vaccinations?.first() != null ->
+                    certificateCard.certificate.vaccinations.first().dateOfVaccination
+                certificateCard.certificate.recoveryStatements?.first() != null ->
+                    certificateCard.certificate.recoveryStatements.first().certificateValidFrom
+                certificateCard.certificate.tests?.first() != null ->
+                    certificateCard.certificate.tests.first().dateTimeOfCollection.split("T").first()
+                else -> certificateCard.dateTaken.formatWith(dgca.wallet.app.android.YEAR_MONTH_DAY)
             }
         }
     }
