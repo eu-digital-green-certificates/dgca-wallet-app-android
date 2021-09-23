@@ -56,8 +56,7 @@ class BookingPortalEncryptionDataFetcherViewModel @Inject constructor(
         viewModelScope.launch {
             val keyPairGen = KeyPairGenerator.getInstance("EC")
             keyPairGen.initialize(256)
-            val keyPairData = KeyPairData("SHA256withECDSA", keyPairGen.generateKeyPair())
-            val keyPair: KeyPair = keyPairData.keyPair
+            val keyPair: KeyPair = keyPairGen.generateKeyPair()
 
             val accessTokenResponse: AccessTokenResponse? =
                 fetchAccessToken(keyPair, bookingSystemModel, accessTokenService, validationService)
