@@ -22,7 +22,10 @@
 
 package dgca.wallet.app.android.wallet.scan_import.image.take.photo
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
@@ -31,34 +34,39 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.R
+import dgca.wallet.app.android.base.BindingFragment
 import dgca.wallet.app.android.databinding.FragmentTakePhotoBinding
 import dgca.wallet.app.android.wallet.scan_import.ADD_CLAIM_GREEN_CERTIFICATE_MODEL_KEY
 import dgca.wallet.app.android.wallet.scan_import.ADD_REQUEST_KEY
 import dgca.wallet.app.android.wallet.scan_import.BOOKING_SYSTEM_MODEL_KEY
+import dgca.wallet.app.android.wallet.scan_import.qr.CAMERA_REQUEST_CODE
 import dgca.wallet.app.android.wallet.scan_import.qr.certificate.ClaimGreenCertificateModel
 
-
 @AndroidEntryPoint
-class TakePhotoFragment : Fragment() {
-    private val viewModel by viewModels<TakePhotoViewModel>()
-    private var _binding: FragmentTakePhotoBinding? = null
-    private val binding get() = _binding!!
+class TakePhotoFragment : BindingFragment<FragmentTakePhotoBinding>() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = FragmentTakePhotoBinding.inflate(inflater, container, false)
-        return binding.root
+    private val viewModel by viewModels<TakePhotoViewModel>()
+    private lateinit var imageUri: Uri
+    private val takePhoto = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { uri ->
+        viewModel.handleResult()
     }
 
+    override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentTakePhotoBinding =
+        FragmentTakePhotoBinding.inflate(inflater, container, false)
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         viewModel.uriLiveData.observe(viewLifecycleOwner) { uri ->
-            takePhoto.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply { putExtra(MediaStore.EXTRA_OUTPUT, uri) })
+            imageUri = uri
+            requestCameraPermission()
         }
         viewModel.result.observe(viewLifecycleOwner) { res ->
             when (res) {
@@ -89,8 +97,43 @@ class TakePhotoFragment : Fragment() {
         (activity as AppCompatActivity?)!!.supportActionBar!!.show()
     }
 
-    private val takePhoto = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { uri ->
-        viewModel.handleResult()
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            CAMERA_REQUEST_CODE -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    takePhotoByCamera()
+                } else {
+                    findNavController().navigateUp()
+                }
+                return
+            }
+        }
+    }
+
+    private fun requestCameraPermission() {
+        when (PackageManager.PERMISSION_GRANTED) {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) -> {
+                takePhotoByCamera()
+            }
+            else -> {
+                requestPermissions(
+                    arrayOf(Manifest.permission.CAMERA),
+                    CAMERA_REQUEST_CODE
+                )
+            }
+        }
+    }
+
+    private fun takePhotoByCamera() {
+        takePhoto.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
+            putExtra(
+                MediaStore.EXTRA_OUTPUT,
+                imageUri
+            )
+        })
     }
 }
 

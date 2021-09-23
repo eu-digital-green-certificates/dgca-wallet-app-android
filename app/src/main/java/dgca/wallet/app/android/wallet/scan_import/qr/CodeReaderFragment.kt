@@ -47,7 +47,7 @@ import dgca.wallet.app.android.databinding.FragmentCodeReaderBinding
 import dgca.wallet.app.android.model.BookingSystemModel
 import dgca.wallet.app.android.wallet.scan_import.qr.certificate.ClaimGreenCertificateModel
 
-private const val CAMERA_REQUEST_CODE = 1003
+const val CAMERA_REQUEST_CODE = 1003
 
 @AndroidEntryPoint
 class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListener {

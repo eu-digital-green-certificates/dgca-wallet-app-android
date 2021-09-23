@@ -248,7 +248,7 @@ class KeyProvider {
         Security.setProperty("crypto.policy", "unlimited")
         val keyStore: KeyStore = KeyStore.getInstance("JKS")
         val keyFile = File(dgcConfigProperties!!.keyStoreFile)
-        if (!keyFile.isFile()) {
+        if (!keyFile.isFile) {
             throw java.lang.IllegalStateException(
                 "keyfile not found on: " + keyFile
                         + " please adapt the configuration property: issuance.keyStoreFile"
@@ -383,7 +383,7 @@ class CertificateUtils {
      */
     fun getCertKid(x509CertificateHolder: X509CertificateHolder): String? {
         return try {
-            val hashBytes: ByteArray = calculateHashBytes(x509CertificateHolder.getEncoded())
+            val hashBytes: ByteArray = calculateHashBytes(x509CertificateHolder.encoded)
             val kidBytes: ByteArray = Arrays.copyOfRange(hashBytes, 0, KID_BYTE_COUNT.toInt())
             Base64.encodeToString(kidBytes, Base64.NO_WRAP)
         } catch (e: NoSuchAlgorithmException) {
@@ -402,7 +402,7 @@ class CertificateUtils {
     fun getCertThumbprint(x509Certificate: X509Certificate): String? {
         return try {
             calculateHash(x509Certificate.encoded)
-        } catch (e: Exception){
+        } catch (e: Exception) {
             null
         }
     }
@@ -415,7 +415,7 @@ class CertificateUtils {
      */
     fun getCertThumbprint(x509CertificateHolder: X509CertificateHolder): String? {
         return try {
-            calculateHash(x509CertificateHolder.getEncoded())
+            calculateHash(x509CertificateHolder.encoded)
         } catch (e: IOException) {
             null
         } catch (e: NoSuchAlgorithmException) {
@@ -430,7 +430,7 @@ class CertificateUtils {
     fun convertCertificate(inputCertificate: X509CertificateHolder): X509Certificate {
         return try {
             certificateFactory.engineGenerateCertificate(
-                ByteArrayInputStream(inputCertificate.getEncoded())
+                ByteArrayInputStream(inputCertificate.encoded)
             ) as X509Certificate
         } catch (e: IOException) {
             throw IllegalStateException(e.message, e.cause)
