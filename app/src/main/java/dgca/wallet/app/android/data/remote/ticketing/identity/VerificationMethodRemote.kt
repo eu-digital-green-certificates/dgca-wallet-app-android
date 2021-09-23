@@ -36,6 +36,6 @@ class VerificationMethodRemote(
     val type: String,
     @JsonProperty("controller")
     val controller: String,
-    @JsonProperty("publicKeyJWK")
+    @JsonProperty("publicKeyJwk")
     val publicKeyJwkRemote: PublicKeyJwkRemote
-): Parcelable
+) : Parcelable
