@@ -66,7 +66,7 @@ class BookingPortalEncryptionDataFetcherViewModel @Inject constructor(
 
             _accessTokenFetcherResult.value =
                 if (accessTokenResponse == null || validationServiceIdentityResponse == null) BookingPortalEncryptionDataResult.Fail else BookingPortalEncryptionDataResult.Success(
-                    prepareAccessTokenResult(keyPair, accessTokenResponse, validationServiceIdentityResponse)
+                    prepareBookingPortalEncryptionResult(keyPair, accessTokenResponse, validationServiceIdentityResponse)
                 )
         }
     }
@@ -90,7 +90,7 @@ class BookingPortalEncryptionDataFetcherViewModel @Inject constructor(
         null
     }
 
-    private fun prepareAccessTokenResult(
+    private fun prepareBookingPortalEncryptionResult(
         keyPair: KeyPair,
         accessTokenResponse: AccessTokenResponse,
         validationServiceIdentityResponse: ValidationServiceIdentityResponse
