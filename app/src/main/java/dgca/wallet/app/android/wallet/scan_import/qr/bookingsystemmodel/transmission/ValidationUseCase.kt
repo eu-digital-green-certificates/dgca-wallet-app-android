@@ -24,13 +24,13 @@ package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmi
 
 import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
 import dgca.wallet.app.android.data.remote.ticketing.access.token.ValidateRequest
-import dgca.wallet.app.android.model.AccessTokenResult
+import dgca.wallet.app.android.model.BookingPortalEncryptionData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
 
 class ValidationUseCase(private val ticketingApiService: TicketingApiService) {
-    suspend fun run(qrString: String, accessTokenResult: AccessTokenResult) =
+    suspend fun run(qrString: String, bookingPortalEncryptionData: BookingPortalEncryptionData) =
         withContext(Dispatchers.IO) {
             val token = "token goes here"
             val authTokenHeader = "Bearer ${token}"
@@ -39,7 +39,7 @@ class ValidationUseCase(private val ticketingApiService: TicketingApiService) {
             val encKey = "encKey"
             val validationRequest = ValidateRequest(dcc = encodedDcc, sig = sig, encKey = encKey)
             val res = ticketingApiService.validate(
-                accessTokenResult.accessTokenResponse.validationUrl,
+                bookingPortalEncryptionData.accessTokenResponse.validationUrl,
                 authTokenHeader,
                 validationRequest
             )

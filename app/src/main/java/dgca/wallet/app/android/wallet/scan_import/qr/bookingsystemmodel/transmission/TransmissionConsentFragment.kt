@@ -75,13 +75,13 @@ class TransmissionConsentFragment : BindingFragment<FragmentTransmissionConsentB
         viewModel.uiEvent.observe(viewLifecycleOwner) { event -> onViewModelUiEvent(event.peekContent()) }
 
         binding.grantPermission.setOnClickListener {
-            viewModel.onPermissionAccepted(args.qrString, args.accessTokenResult)
+            viewModel.onPermissionAccepted(args.qrString, args.bookingPortalEncryptionData)
         }
 
         childFragmentManager.setFragmentResultListener(DefaultDialogFragment.KEY_REQUEST, viewLifecycleOwner) { _, bundle ->
             when (bundle.getInt(DefaultDialogFragment.KEY_RESULT)) {
                 ACTION_POSITIVE -> findNavController().popBackStack(R.id.certificatesFragment, false)
-                ACTION_NEGATIVE -> viewModel.onPermissionAccepted(args.qrString, args.accessTokenResult)
+                ACTION_NEGATIVE -> viewModel.onPermissionAccepted(args.qrString, args.bookingPortalEncryptionData)
             }
         }
     }

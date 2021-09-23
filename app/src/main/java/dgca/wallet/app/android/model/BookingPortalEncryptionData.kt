@@ -29,7 +29,7 @@ import kotlinx.parcelize.Parcelize
 import java.security.KeyPair
 
 @Parcelize
-data class AccessTokenResult(
+data class BookingPortalEncryptionData(
     val keyPair: KeyPair,
     val accessTokenResponse: AccessTokenResponse,
     val validationServiceIdentityResponse: ValidationServiceIdentityResponse,

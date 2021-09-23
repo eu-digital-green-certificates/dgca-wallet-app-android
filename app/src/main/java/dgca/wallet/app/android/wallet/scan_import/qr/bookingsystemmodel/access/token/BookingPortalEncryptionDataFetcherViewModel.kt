@@ -30,7 +30,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.verifier.app.decoder.model.KeyPairData
 import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenResponse
 import dgca.wallet.app.android.data.remote.ticketing.access.token.ValidationServiceIdentityResponse
-import dgca.wallet.app.android.model.AccessTokenResult
+import dgca.wallet.app.android.model.BookingPortalEncryptionData
 import dgca.wallet.app.android.model.BookingSystemModel
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.Service
 import kotlinx.coroutines.launch
@@ -39,18 +39,18 @@ import java.security.KeyPair
 import java.security.KeyPairGenerator
 import javax.inject.Inject
 
-sealed class AccessTokenFetcherResult {
-    data class Success(val accessTokenResult: AccessTokenResult) : AccessTokenFetcherResult()
-    object Fail : AccessTokenFetcherResult()
+sealed class BookingPortalEncryptionDataResult {
+    data class Success(val bookingPortalEncryptionData: BookingPortalEncryptionData) : BookingPortalEncryptionDataResult()
+    object Fail : BookingPortalEncryptionDataResult()
 }
 
 @HiltViewModel
-class AccessTokenFetcherViewModel @Inject constructor(
+class BookingPortalEncryptionDataFetcherViewModel @Inject constructor(
     private val getAccessTokenUseCase: GetAccessTokenUseCase,
     private val getValidationServiceIdentityUseCase: GetValidationServiceIdentityUseCase
 ) : ViewModel() {
-    private val _accessTokenFetcherResult = MutableLiveData<AccessTokenFetcherResult>()
-    val accessTokenFetcherResult: LiveData<AccessTokenFetcherResult> = _accessTokenFetcherResult
+    private val _accessTokenFetcherResult = MutableLiveData<BookingPortalEncryptionDataResult>()
+    val bookingPortalEncryptionDataResult: LiveData<BookingPortalEncryptionDataResult> = _accessTokenFetcherResult
 
     fun initialize(bookingSystemModel: BookingSystemModel, accessTokenService: Service, validationService: Service) {
         viewModelScope.launch {
@@ -65,7 +65,7 @@ class AccessTokenFetcherViewModel @Inject constructor(
                 fetchValidationServiceIdentity(validationService)
 
             _accessTokenFetcherResult.value =
-                if (accessTokenResponse == null || validationServiceIdentityResponse == null) AccessTokenFetcherResult.Fail else AccessTokenFetcherResult.Success(
+                if (accessTokenResponse == null || validationServiceIdentityResponse == null) BookingPortalEncryptionDataResult.Fail else BookingPortalEncryptionDataResult.Success(
                     prepareAccessTokenResult(keyPair, accessTokenResponse, validationServiceIdentityResponse)
                 )
         }
@@ -94,7 +94,7 @@ class AccessTokenFetcherViewModel @Inject constructor(
         keyPair: KeyPair,
         accessTokenResponse: AccessTokenResponse,
         validationServiceIdentityResponse: ValidationServiceIdentityResponse
-    ): AccessTokenResult {
-        return AccessTokenResult(keyPair, accessTokenResponse, validationServiceIdentityResponse)
+    ): BookingPortalEncryptionData {
+        return BookingPortalEncryptionData(keyPair, accessTokenResponse, validationServiceIdentityResponse)
     }
 }

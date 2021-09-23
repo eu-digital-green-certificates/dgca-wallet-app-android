@@ -343,8 +343,8 @@
             app:exitAnim="@animator/nav_default_exit_anim" />
 
         <action
-            android:id="@+id/action_bookingSystemConsentFragment_to_accessTokenFetcherDialogFragment"
-            app:destination="@id/accessTokenFetcherDialogFragment"
+            android:id="@+id/action_bookingSystemConsentFragment_to_bookingPortalEncryptionDataFetcherDialogFragment"
+            app:destination="@id/bookingPortalEncryptionDataFetcherDialogFragment"
             app:enterAnim="@animator/nav_default_pop_enter_anim"
             app:exitAnim="@animator/nav_default_exit_anim" />
 
@@ -377,8 +377,8 @@
     </dialog>
 
     <dialog
-        android:id="@+id/accessTokenFetcherDialogFragment"
-        android:name="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.access.token.AccessTokenFetcherDialogFragment"
+        android:id="@+id/bookingPortalEncryptionDataFetcherDialogFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.access.token.BookingPortalEncryptionDataFetcherDialogFragment"
         android:label="Access Token Fetcher"
         tools:layout="@layout/dialog_fragment_progress_bar">
 
@@ -410,8 +410,8 @@
             app:argType="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument" />
 
         <action
-            android:id="@+id/action_validationServiceSelectorFragment_to_accessTokenFetcherDialogFragment"
-            app:destination="@id/accessTokenFetcherDialogFragment"
+            android:id="@+id/action_validationServiceSelectorFragment_to_bookingPortalEncryptionDataFetcherDialogFragment"
+            app:destination="@id/bookingPortalEncryptionDataFetcherDialogFragment"
             app:enterAnim="@animator/nav_default_pop_enter_anim"
             app:exitAnim="@animator/nav_default_exit_anim" />
 
@@ -432,8 +432,8 @@
         tools:layout="@layout/fragment_certificate_selector">
 
         <argument
-            android:name="accessTokenResult"
-            app:argType="dgca.wallet.app.android.model.AccessTokenResult" />
+            android:name="bookingPortalEncryptionData"
+            app:argType="dgca.wallet.app.android.model.BookingPortalEncryptionData" />
 
         <action
             android:id="@+id/action_certificateSelectorFragment_to_transmissionConsentFragment"
@@ -452,8 +452,8 @@
         tools:layout="@layout/fragment_transmission_consent">
 
         <argument
-            android:name="accessTokenResult"
-            app:argType="dgca.wallet.app.android.model.AccessTokenResult" />
+            android:name="bookingPortalEncryptionData"
+            app:argType="dgca.wallet.app.android.model.BookingPortalEncryptionData" />
 
         <argument
             android:name="certificateModel"

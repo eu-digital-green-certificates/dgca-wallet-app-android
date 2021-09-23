@@ -28,7 +28,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.wallet.app.android.Event
-import dgca.wallet.app.android.model.AccessTokenResult
+import dgca.wallet.app.android.model.BookingPortalEncryptionData
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -43,13 +43,13 @@ class TransmissionConsentViewModel @Inject constructor(
     private val _event = MutableLiveData<Event<TransmissionConsentEvent>>()
     val event: LiveData<Event<TransmissionConsentEvent>> = _event
 
-    fun onPermissionAccepted(qrString: String, accessTokenResult: AccessTokenResult) {
+    fun onPermissionAccepted(qrString: String, bookingPortalEncryptionData: BookingPortalEncryptionData) {
         viewModelScope.launch {
             _uiEvent.value = Event(TransmissionConsentUiEvent.OnShowLoading)
 
             _event.value = Event(
                 try {
-                    validationUseCase.run(qrString, accessTokenResult)
+                    validationUseCase.run(qrString, bookingPortalEncryptionData)
                     TransmissionConsentEvent.OnCertificateTransmitted
                 } catch (exception: Exception) {
                     TransmissionConsentEvent.OnCertificateTransmissionFailed
