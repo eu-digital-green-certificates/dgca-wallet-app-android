@@ -17,23 +17,24 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/17/21 9:03 PM
+ *  Created by osarapulov on 9/22/21 5:01 PM
  */
 
-package dgca.wallet.app.android.model
+package dgca.wallet.app.android.data.remote.ticketing.access.token
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-import java.security.PrivateKey
-import java.time.ZonedDateTime
+import com.fasterxml.jackson.annotation.JsonProperty
 
-@Parcelize
-data class AccessTokenResult(
-    val firstName: String,
-    val lastName: String,
-    val dateOfBirth: String?,
-    val greenCertificateTypes: List<String>,
-    val validFrom: ZonedDateTime,
-    val validTo: ZonedDateTime,
-    val privateKey: PrivateKey
-) : Parcelable
+data class ValidateRequest(
+    @JsonProperty("kid")
+    val kid: String = "9P6CdU/nRyU=",
+    @JsonProperty("dcc")
+    val dcc: String,
+    @JsonProperty("sig")
+    val sig: String,
+    @JsonProperty("encKey")
+    val encKey: String,
+    @JsonProperty("encScheme")
+    val encScheme: String = "RSAOAEPWithSHA256AES",
+    @JsonProperty("sigAlg")
+    val sigAlg: String = "SHA256withECDSA"
+)

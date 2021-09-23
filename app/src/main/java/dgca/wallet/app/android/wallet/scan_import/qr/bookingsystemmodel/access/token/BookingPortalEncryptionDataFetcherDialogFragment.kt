@@ -37,12 +37,12 @@ import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.base.BindingDialogFragment
 import dgca.wallet.app.android.databinding.DialogFragmentProgressBarBinding
-import dgca.wallet.app.android.model.AccessTokenResult
+import dgca.wallet.app.android.model.BookingPortalEncryptionData
 
 @AndroidEntryPoint
-class AccessTokenFetcherDialogFragment : BindingDialogFragment<DialogFragmentProgressBarBinding>() {
-    private val viewModel by viewModels<AccessTokenFetcherViewModel>()
-    private val args by navArgs<AccessTokenFetcherDialogFragmentArgs>()
+class BookingPortalEncryptionDataFetcherDialogFragment : BindingDialogFragment<DialogFragmentProgressBarBinding>() {
+    private val viewModel by viewModels<BookingPortalEncryptionDataFetcherViewModel>()
+    private val args by navArgs<BookingPortalEncryptionDataFetcherDialogFragmentArgs>()
 
     override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): DialogFragmentProgressBarBinding =
         DialogFragmentProgressBarBinding.inflate(inflater, container, false)
@@ -56,22 +56,22 @@ class AccessTokenFetcherDialogFragment : BindingDialogFragment<DialogFragmentPro
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.accessTokenFetcherResult.observe(viewLifecycleOwner) {
-            val accessTokenResult: AccessTokenResult? = if (it is AccessTokenFetcherResult.Success) {
-                it.accessTokenResult
+        viewModel.bookingPortalEncryptionDataResult.observe(viewLifecycleOwner) {
+            val bookingPortalEncryptionData: BookingPortalEncryptionData? = if (it is BookingPortalEncryptionDataResult.Success) {
+                it.bookingPortalEncryptionData
             } else {
                 null
             }
             setFragmentResult(
-                AccessTokenFetcherRequestKey,
-                bundleOf(AccessTokenFetcherAccessTokenParamKey to accessTokenResult)
+                BookingPortalEncryptionDataRequestKey,
+                bundleOf(BookingPortalEncryptionDataParamKey to bookingPortalEncryptionData)
             )
         }
         viewModel.initialize(args.bookingSystemModel, args.accessTokenService, args.validationService)
     }
 
     companion object {
-        const val AccessTokenFetcherRequestKey = "AccessTokenFetcherRequest"
-        const val AccessTokenFetcherAccessTokenParamKey = "AccessTokenFetcherAccessTokenParam"
+        const val BookingPortalEncryptionDataRequestKey = "BookingPortalEncryptionDataRequest"
+        const val BookingPortalEncryptionDataParamKey = "BookingPortalEncryptionDataParam"
     }
 }

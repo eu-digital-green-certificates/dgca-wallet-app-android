@@ -28,7 +28,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.wallet.app.android.Event
-import dgca.wallet.app.android.model.AccessTokenResult
+import dgca.wallet.app.android.model.BookingPortalEncryptionData
 import dgca.wallet.app.android.wallet.CertificatesCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -58,16 +58,16 @@ class CertificateSelectorViewModel @Inject constructor(
     private lateinit var certificateList: List<CertificatesCard.CertificateCard>
     private var selected: SelectableCertificateModel? = null
 
-    fun init(accessTokenResult: AccessTokenResult) {
-        getCertificates(accessTokenResult)
+    fun init(bookingPortalEncryptionData: BookingPortalEncryptionData) {
+        getCertificates(bookingPortalEncryptionData)
     }
 
-    private fun getCertificates(accessTokenResult: AccessTokenResult) {
+    private fun getCertificates(bookingPortalEncryptionData: BookingPortalEncryptionData) {
         viewModelScope.launch {
             _uiEvent.value = Event(CertificateViewUiEvent.OnShowLoading)
 
             withContext(Dispatchers.IO) {
-                certificateList = getFilteredCertificatesUseCase.run(accessTokenResult)
+                certificateList = getFilteredCertificatesUseCase.run(bookingPortalEncryptionData)
             }
 
             _certificatesContainer.value = CertificatesContainer(null, certificateList.toSelectableCertificateModelList())

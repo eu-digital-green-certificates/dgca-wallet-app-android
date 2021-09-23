@@ -55,7 +55,7 @@ class CertificateSelectorFragment : BindingFragment<FragmentCertificateSelectorB
                 onViewModelEvent(it)
             }
         }
-        viewModel.init(args.accessTokenResult)
+        viewModel.init(args.bookingPortalEncryptionData)
     }
 
     override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentCertificateSelectorBinding =
@@ -95,6 +95,7 @@ class CertificateSelectorFragment : BindingFragment<FragmentCertificateSelectorB
             is CertificateSelectorViewModel.CertificateEvent.OnCertificateAdvisorSelected -> {
                 val action =
                     CertificateSelectorFragmentDirections.actionCertificateSelectorFragmentToTransmissionConsentFragment(
+                        args.bookingPortalEncryptionData,
                         event.certModel.certificateCard.certificate,
                         event.certModel.certificateCard.qrCodeText
                     )

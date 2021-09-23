@@ -23,7 +23,7 @@
 package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.certselector
 
 import dgca.wallet.app.android.data.WalletRepository
-import dgca.wallet.app.android.model.AccessTokenResult
+import dgca.wallet.app.android.model.BookingPortalEncryptionData
 import dgca.wallet.app.android.wallet.CertificatesCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -31,13 +31,13 @@ import java.util.*
 
 
 class GetFilteredCertificatesUseCase(private val walletRepository: WalletRepository) {
-    suspend fun run(accessTokenResult: AccessTokenResult): List<CertificatesCard.CertificateCard> =
+    suspend fun run(bookingPortalEncryptionData: BookingPortalEncryptionData): List<CertificatesCard.CertificateCard> =
         withContext(Dispatchers.IO) {
             val filteredCertificates: MutableList<CertificatesCard.CertificateCard> = mutableListOf()
             walletRepository.getCertificates()?.forEach { certificateCard ->
-                if (isGreenCertificateTypeApplicable(accessTokenResult, certificateCard)
-                    && isUserDataApplicable(accessTokenResult, certificateCard) && areDatesApplicable(
-                        accessTokenResult,
+                if (isGreenCertificateTypeApplicable(bookingPortalEncryptionData, certificateCard)
+                    && isUserDataApplicable(bookingPortalEncryptionData, certificateCard) && areDatesApplicable(
+                        bookingPortalEncryptionData,
                         certificateCard
                     )
                 ) {
@@ -49,34 +49,34 @@ class GetFilteredCertificatesUseCase(private val walletRepository: WalletReposit
         }
 
     private fun isGreenCertificateTypeApplicable(
-        accessTokenResult: AccessTokenResult,
+        bookingPortalEncryptionData: BookingPortalEncryptionData,
         certificateCard: CertificatesCard.CertificateCard
     ): Boolean {
-        if (accessTokenResult.greenCertificateTypes.contains("v") && certificateCard.certificate.vaccinations?.isNotEmpty() == true) return true
-        if (accessTokenResult.greenCertificateTypes.contains("r") && certificateCard.certificate.recoveryStatements?.isNotEmpty() == true) return true
-        if (accessTokenResult.greenCertificateTypes.contains("t") && certificateCard.certificate.tests?.isNotEmpty() == true) return true
+        if (bookingPortalEncryptionData.accessTokenResponse.certificateData.greenCertificateTypes.contains("v") && certificateCard.certificate.vaccinations?.isNotEmpty() == true) return true
+        if (bookingPortalEncryptionData.accessTokenResponse.certificateData.greenCertificateTypes.contains("r") && certificateCard.certificate.recoveryStatements?.isNotEmpty() == true) return true
+        if (bookingPortalEncryptionData.accessTokenResponse.certificateData.greenCertificateTypes.contains("t") && certificateCard.certificate.tests?.isNotEmpty() == true) return true
         return false
     }
 
     private fun isUserDataApplicable(
-        accessTokenResult: AccessTokenResult,
+        bookingPortalEncryptionData: BookingPortalEncryptionData,
         certificateCard: CertificatesCard.CertificateCard
     ): Boolean {
-        if (accessTokenResult.firstName.isNotBlank() && accessTokenResult.firstName != certificateCard.certificate.person.givenName) return false
-        if (accessTokenResult.lastName.isNotBlank() && accessTokenResult.lastName != certificateCard.certificate.person.familyName) return false
-        if (accessTokenResult.dateOfBirth?.isNotBlank() == true && accessTokenResult.dateOfBirth != certificateCard.certificate.dateOfBirth) return false
+        if (bookingPortalEncryptionData.accessTokenResponse.certificateData.firstName.isNotBlank() && bookingPortalEncryptionData.accessTokenResponse.certificateData.firstName != certificateCard.certificate.person.givenName) return false
+        if (bookingPortalEncryptionData.accessTokenResponse.certificateData.lastName.isNotBlank() && bookingPortalEncryptionData.accessTokenResponse.certificateData.lastName != certificateCard.certificate.person.familyName) return false
+        if (bookingPortalEncryptionData.accessTokenResponse.certificateData.dateOfBirth?.isNotBlank() == true && bookingPortalEncryptionData.accessTokenResponse.certificateData.dateOfBirth != certificateCard.certificate.dateOfBirth) return false
         return true
     }
 
     private fun areDatesApplicable(
-        accessTokenResult: AccessTokenResult,
+        bookingPortalEncryptionData: BookingPortalEncryptionData,
         certificateCard: CertificatesCard.CertificateCard
     ): Boolean {
         if (true) return true
         val validFrom = certificateCard.certificate.getValidFrom()
-        if (validFrom == null || validFrom.isBefore(accessTokenResult.validFrom)) return false
+        if (validFrom == null || validFrom.isBefore(bookingPortalEncryptionData.accessTokenResponse.certificateData.validFrom)) return false
         val validTo = certificateCard.certificate.getValidTo()
-        if (validTo == null || validTo.isBefore(accessTokenResult.validTo)) return false
+        if (validTo == null || validTo.isBefore(bookingPortalEncryptionData.accessTokenResponse.certificateData.validTo)) return false
         return true
     }
 }
