@@ -26,15 +26,15 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class ValidateRequest(
     @JsonProperty("kid")
-    val kid: String = "9P6CdU/nRyU=",
+    var kid: String = "9P6CdU/nRyU=",
     @JsonProperty("dcc")
-    val dcc: String,
+    var dcc: String,
     @JsonProperty("sig")
-    val sig: String,
+    var sig: String,
     @JsonProperty("encKey")
-    val encKey: String,
+    var encKey: String,
     @JsonProperty("encScheme")
-    val encScheme: String = "RSAOAEPWithSHA256AES",
+    var encScheme: String = "RSAOAEPWithSHA256AES",
     @JsonProperty("sigAlg")
-    val sigAlg: String = "SHA256withECDSA"
+    var sigAlg: String = "SHA256withECDSA"
 )

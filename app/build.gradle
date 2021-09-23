@@ -22,7 +22,7 @@ android {
         // It's required to provide config json files, and path to it.
         // Examples based on different flavors could be found here: 'app/src/acc/assets/wallet-context.jsonc' or 'app/src/tst/assets/wallet-context.jsonc'
 
-        buildConfigField "String", "CONFIG_FILE_NAME", "\"$CONFIG_FILE_NAME\""
+        buildConfigField "String", "CONFIG_FILE_NAME", "\"wallet-context.jsonc\""
 
         testInstrumentationRunner Config.androidTestInstrumentation
     }
@@ -116,4 +116,8 @@ dependencies {
     androidTestImplementation Deps.test_ext
     androidTestImplementation Deps.test_rules
 
+
+    implementation Deps.bouncy_castle
+////    compile group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.64'
+//    compile group: 'org.bouncycastle', name: 'bcpkix-jdk15on', version: '1.57'
 }
