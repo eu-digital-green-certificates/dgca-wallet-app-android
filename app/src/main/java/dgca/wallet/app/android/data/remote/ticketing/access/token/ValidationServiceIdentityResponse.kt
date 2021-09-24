@@ -24,6 +24,7 @@ package dgca.wallet.app.android.data.remote.ticketing.access.token
 
 import android.os.Parcelable
 import com.fasterxml.jackson.annotation.JsonProperty
+import dgca.wallet.app.android.data.remote.ticketing.identity.PublicKeyJwkRemote
 import dgca.wallet.app.android.data.remote.ticketing.identity.VerificationMethodRemote
 import kotlinx.parcelize.Parcelize
 
@@ -35,4 +36,16 @@ data class ValidationServiceIdentityResponse(
     val id: String,
     @JsonProperty("verificationMethod")
     val verificationMethodsRemote: Set<VerificationMethodRemote>,
-): Parcelable
+) : Parcelable {
+    fun getEncryptionPublicKey(): PublicKeyJwkRemote? {
+        var publicKeyJwkRemote: PublicKeyJwkRemote? = null
+        verificationMethodsRemote.forEach { verificationMethodRemote ->
+            if (verificationMethodRemote.publicKeyJwkRemote.use == "enc") {
+                publicKeyJwkRemote = verificationMethodRemote.publicKeyJwkRemote
+                return@forEach
+            }
+
+        }
+        return publicKeyJwkRemote
+    }
+}

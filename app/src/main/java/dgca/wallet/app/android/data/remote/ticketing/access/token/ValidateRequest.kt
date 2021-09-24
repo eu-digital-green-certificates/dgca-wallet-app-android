@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class ValidateRequest(
     @JsonProperty("kid")
-    var kid: String = "9P6CdU/nRyU=",
+    var kid: String,
     @JsonProperty("dcc")
     var dcc: String,
     @JsonProperty("sig")

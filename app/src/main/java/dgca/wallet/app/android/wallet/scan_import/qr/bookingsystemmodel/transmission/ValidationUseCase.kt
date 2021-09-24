@@ -23,9 +23,13 @@
 package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission
 
 import android.util.Base64
+import com.fasterxml.jackson.annotation.JsonProperty
+import dgca.verifier.app.decoder.base64ToX509Certificate
 import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
 import dgca.wallet.app.android.data.remote.ticketing.access.token.ValidateRequest
+import dgca.wallet.app.android.data.remote.ticketing.identity.PublicKeyJwkRemote
 import dgca.wallet.app.android.model.BookingPortalEncryptionData
+import io.jsonwebtoken.Jwts
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.bouncycastle.cert.X509CertificateHolder
@@ -56,6 +60,7 @@ import kotlin.collections.HashMap
 class ValidationUseCase(var ticketingApiService: TicketingApiService) {
     val dccCryptService = DccCryptService()
     val keyProvider = KeyProvider()
+    val dccSign: DccSign = DccSign()
 
     suspend fun run(qrString: String, bookingPortalEncryptionData: BookingPortalEncryptionData) =
         withContext(Dispatchers.IO) {
@@ -63,10 +68,30 @@ class ValidationUseCase(var ticketingApiService: TicketingApiService) {
             val authTokenHeader = "Bearer ${token}"
             val sig = "sig"
             val encKey = "encKey"
-            val validationRequest = ValidateRequest(dcc = "", sig = sig, encKey = encKey)
+            val validationRequest = ValidateRequest(kid = "", dcc = "", sig = sig, encKey = encKey)
             val iv = byteArrayOf(0, 0, 1, 5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-            val encodedDcc: ByteArray = encodeDcc(qrString, validationRequest, iv)
-            validationRequest.dcc = String(encodedDcc)
+            val publicKeyJwkRemote: PublicKeyJwkRemote =
+                bookingPortalEncryptionData.validationServiceIdentityResponse.getEncryptionPublicKey()!!
+            val publicKey: PublicKey = try {
+                publicKeyJwkRemote.x5c.base64ToX509Certificate()!!.publicKey
+            } catch (exception: Exception) {
+                throw IllegalStateException()
+            }
+            val encodedDcc: ByteArray = encodeDcc(qrString, validationRequest, iv, publicKey)
+            validationRequest.kid = publicKeyJwkRemote.kid
+            validationRequest.sig = dccSign.signDcc(encodedDcc, bookingPortalEncryptionData.keyPair.private)
+
+            val accessTokenPayload: AccessTokenPayload = createAccessTocken()
+            val accessToken: String = accessTokenBuilder.payload(accessTokenPayload).build(parsePrivateKey(EC_PRIVATE_KEY), "kid")
+
+            println("jwt: $accessToken")
+
+            val resultToken: String = validationService.validate(dccValidationRequest, accessTokenPayload)
+
+            val jwtToken = Jwts.parser().setSigningKey(
+                keyProvider.receiveCertificate(keyProvider.getKeyNames(KeyType.ValidationServiceSignKey)[0])!!
+                    .publicKey
+            ).parse(resultToken)
             val res = ticketingApiService.validate(
                 bookingPortalEncryptionData.accessTokenResponse.validationUrl,
                 authTokenHeader,
@@ -75,11 +100,11 @@ class ValidationUseCase(var ticketingApiService: TicketingApiService) {
             if (res.isSuccessful || res.code() != HttpURLConnection.HTTP_OK) throw IllegalStateException()
         }
 
-    private fun encodeDcc(dcc: String, dccValidationRequest: ValidateRequest, iv: ByteArray): ByteArray {
+    private fun encodeDcc(dcc: String, dccValidationRequest: ValidateRequest, iv: ByteArray, publicKey: PublicKey): ByteArray {
         val encryptedData: EncryptedData = dccCryptService.encryptData(
             dcc.toByteArray(StandardCharsets.UTF_8),
-            keyProvider.receiveCertificate(keyProvider.getKeyNames(KeyType.All)[0])!!.publicKey,
-            "RSAOAEPWithSHA256AESCBC", iv
+            publicKey,
+            "RSAOAEPWithSHA256AESGCM", iv
         )
         dccValidationRequest.dcc = Base64.encodeToString(encryptedData.dataEncrypted, Base64.NO_WRAP)
         dccValidationRequest.encKey = Base64.encodeToString(encryptedData.encKey, Base64.NO_WRAP)
@@ -180,15 +205,15 @@ class RsaOaepWithSha256AesGcm : CryptSchema {
 }
 
 class DccCryptService {
-    private var cryptSchemaMap: MutableMap<String, CryptSchema>? = null
+    var cryptSchemaMap: MutableMap<String, CryptSchema>
 
     /**
      * init schemas.
      */
-    fun initSchemas() {
+    init {
         cryptSchemaMap = HashMap()
         val cryptSchema: CryptSchema = RsaOaepWithSha256AesGcm()
-        cryptSchemaMap!![cryptSchema.getEncSchema()] = cryptSchema
+        cryptSchemaMap[cryptSchema.getEncSchema()] = cryptSchema
     }
 
     /**
@@ -200,7 +225,7 @@ class DccCryptService {
      * @return EncryptedData
      */
     fun encryptData(data: ByteArray, publicKey: PublicKey?, encSchema: String, iv: ByteArray?): EncryptedData {
-        val cryptSchema: CryptSchema? = cryptSchemaMap!![encSchema]
+        val cryptSchema: CryptSchema? = cryptSchemaMap[encSchema]
         return if (cryptSchema != null) {
             cryptSchema.encryptData(data, publicKey, iv)!!
         } else {
@@ -217,7 +242,7 @@ class DccCryptService {
      * @return decrypted data
      */
     fun decryptData(encryptedData: EncryptedData?, privateKey: PrivateKey?, encSchema: String, iv: ByteArray?): ByteArray {
-        val cryptSchema: CryptSchema? = cryptSchemaMap!![encSchema]
+        val cryptSchema: CryptSchema? = cryptSchemaMap[encSchema]
         return if (cryptSchema != null) {
             cryptSchema.decryptData(encryptedData, privateKey, iv)!!
         } else {
@@ -227,7 +252,7 @@ class DccCryptService {
 }
 
 class KeyProvider {
-    var dgcConfigProperties: DgcConfigProperties? = null
+    var dgcConfigProperties: DgcConfigProperties = DgcConfigProperties()
     var certificates: MutableMap<String, Certificate> = HashMap()
     var privateKeys: MutableMap<String, PrivateKey> = HashMap()
     var kids: MutableMap<String, String> = HashMap()
@@ -243,11 +268,11 @@ class KeyProvider {
      * @throws UnrecoverableEntryException UnrecoverableEntryException
      */
     fun createKeys() {
-        val keyStorePassword: CharArray = dgcConfigProperties!!.keyStorePassword!!.toCharArray()
+        val keyStorePassword: CharArray = dgcConfigProperties.keyStorePassword!!.toCharArray()
         Security.addProvider(BouncyCastleProvider())
         Security.setProperty("crypto.policy", "unlimited")
         val keyStore: KeyStore = KeyStore.getInstance("JKS")
-        val keyFile = File(dgcConfigProperties!!.keyStoreFile)
+        val keyFile = File(dgcConfigProperties.keyStoreFile)
         if (!keyFile.isFile) {
             throw java.lang.IllegalStateException(
                 "keyfile not found on: " + keyFile
@@ -255,8 +280,8 @@ class KeyProvider {
             )
         }
         val certificateUtils = CertificateUtils()
-        FileInputStream(dgcConfigProperties!!.keyStoreFile!!).use { `is` ->
-            val privateKeyPassword: CharArray = dgcConfigProperties!!.privateKeyPassword!!.toCharArray()
+        FileInputStream(dgcConfigProperties.keyStoreFile!!).use { `is` ->
+            val privateKeyPassword: CharArray = dgcConfigProperties.privateKeyPassword!!.toCharArray()
             keyStore.load(`is`, privateKeyPassword)
             val keyPassword: KeyStore.PasswordProtection = KeyStore.PasswordProtection(keyStorePassword)
             for (alias in getKeyNames(KeyType.All)) {
@@ -295,11 +320,11 @@ class KeyProvider {
 
     fun getKeyNames(type: KeyType): Array<String> {
         if (type == KeyType.ValidationServiceEncKey) {
-            return dgcConfigProperties!!.encAliases!!
+            return dgcConfigProperties.encAliases!!
         }
         return if (type == KeyType.ValidationServiceSignKey) {
-            dgcConfigProperties!!.signAliases!!
-        } else dgcConfigProperties!!.encAliases!! + dgcConfigProperties!!.signAliases!!
+            dgcConfigProperties.signAliases!!
+        } else dgcConfigProperties.encAliases!! + dgcConfigProperties.signAliases!!
     }
 
     fun getKid(keyName: String): String? {
@@ -311,14 +336,14 @@ class KeyProvider {
     }
 
     val activeSignKey: String
-        get() = dgcConfigProperties!!.activeSignKey!!
+        get() = dgcConfigProperties.activeSignKey!!
 
     fun getKeyName(kid: String): String? {
         return kidToName[kid]
     }
 
     fun getKeyUse(keyName: String?): KeyUse {
-        return if (setOf(dgcConfigProperties!!.encAliases).contains(keyName)) {
+        return if (setOf(dgcConfigProperties.encAliases).contains(keyName)) {
             KeyUse.enc
         } else KeyUse.sig
     }
@@ -355,7 +380,7 @@ class DgcConfigProperties {
 }
 
 class CertificateUtils {
-    private val certificateFactory: CertificateFactory = CertificateFactory()
+    var certificateFactory: CertificateFactory = CertificateFactory()
 
     /**
      * Calculates in DGC context used KID of [X509Certificate].
@@ -457,4 +482,137 @@ class CertificateUtils {
     companion object {
         private const val KID_BYTE_COUNT: Byte = 8
     }
+}
+
+class DccSign {
+    /**
+     * sign dcc.
+     * @param data data
+     * @param privateKey privateKey
+     * @return signature as base64
+     */
+    fun signDcc(data: ByteArray?, privateKey: PrivateKey?): String {
+        return try {
+            val signature: Signature = Signature.getInstance(SIG_ALG)
+            signature.initSign(privateKey)
+            signature.update(data)
+            Base64.encodeToString(signature.sign(), Base64.NO_WRAP)
+        } catch (e: Exception) {
+            throw IllegalStateException("can not sign dcc", e)
+        }
+    }
+
+    /**
+     * verify Signature.
+     * @param data data
+     * @param sig sig
+     * @param publicKey publicKey
+     * @return true if ok
+     */
+    fun verifySignature(data: ByteArray?, sig: ByteArray?, publicKey: PublicKey?): Boolean {
+        return try {
+            val signature: Signature = Signature.getInstance(SIG_ALG)
+            signature.initVerify(publicKey)
+            signature.update(data)
+            signature.verify(sig)
+        } catch (e: Exception) {
+            throw IllegalStateException("can not sign dcc", e)
+        }
+    }
+
+    companion object {
+        const val SIG_ALG = "SHA256withECDSA"
+    }
+}
+
+class AccessTokenPayload {
+    var jti: String? = null
+    var iss: String? = null
+    var iat: Long = 0
+    var sub: String? = null
+    var aud: String? = null
+    var exp: Long = 0
+
+    @JsonProperty("t")
+    var type = 0
+
+    @JsonProperty("v")
+    var version: String? = null
+
+    @JsonProperty("vc")
+    var conditions: AccessTokenConditions? = null
+}
+
+class AccessTokenConditions {
+    /**
+     * hash of the dcc.
+     * Not applicable for Type 1,2
+     */
+    var hash: String? = null
+
+    /**
+     * selected language.
+     */
+    var lang: String? = null
+
+    /**
+     * ICOA 930 transliterated surname (Familienname).
+     */
+    var fnt: String? = null
+
+    /**
+     * ICOA 930 transliterated given name.
+     */
+    var gnt: String? = null
+
+    /**
+     * Date of birth.
+     */
+    var dob: String? = null
+
+    /**
+     * Contry of Arrival.
+     */
+    var coa: String? = null
+
+    /**
+     * Country of Departure.
+     */
+    var cod: String? = null
+
+    /**
+     * Region of Arrival ISO 3166-2 without Country.
+     */
+    var roa: String? = null
+
+    /**
+     * Region of Departure ISO 3166-2 without Country.
+     */
+    var rod: String? = null
+
+    /**
+     * Acceptable Type of DCC.
+     */
+    var type: Array<String>? = null
+
+    /**
+     * Optional category which shall be reflected in the validation by additional rules/logic.
+     * if null, Standard Business Rule Check will apply.
+     */
+    var category: Array<String>? = null
+
+    /**
+     * Date where te DCC must be validateable.
+     */
+    var validationClock: String? = null
+
+    /**
+     * DCC must be valid from this date (ISO8601 with offset).
+     */
+    var validFrom: String? = null
+
+    /**
+     * DCC must be valid minimum to this date (ISO8601 with offset).
+     */
+    var validTo: String? = null
 }

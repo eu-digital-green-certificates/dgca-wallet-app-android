@@ -23,8 +23,13 @@
 package dgca.wallet.app.android.data.remote.ticketing.identity
 
 import android.os.Parcelable
+import android.util.Base64
 import com.fasterxml.jackson.annotation.JsonProperty
+import dgca.verifier.app.decoder.base64ToX509Certificate
 import kotlinx.parcelize.Parcelize
+import java.security.KeyFactory
+import java.security.PublicKey
+import java.security.spec.X509EncodedKeySpec
 
 // TODO divide remote and domain models
 
