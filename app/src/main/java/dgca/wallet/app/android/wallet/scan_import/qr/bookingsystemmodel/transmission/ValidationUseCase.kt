@@ -81,17 +81,18 @@ class ValidationUseCase(var ticketingApiService: TicketingApiService) {
             validationRequest.kid = publicKeyJwkRemote.kid
             validationRequest.sig = dccSign.signDcc(encodedDcc, bookingPortalEncryptionData.keyPair.private)
 
-            val accessTokenPayload: AccessTokenPayload = createAccessTocken()
-            val accessToken: String = accessTokenBuilder.payload(accessTokenPayload).build(parsePrivateKey(EC_PRIVATE_KEY), "kid")
+//            val accessTokenPayload: AccessTokenPayload = createAccessTocken()
+//            val accessToken: String = accessTokenBuilder.payload(accessTokenPayload).build(parsePrivateKey(EC_PRIVATE_KEY), "kid")
 
-            println("jwt: $accessToken")
+//            println("jwt: $accessToken")
 
-            val resultToken: String = validationService.validate(dccValidationRequest, accessTokenPayload)
+//            val resultToken: String = validationService.validate(dccValidationRequest, accessTokenPayload)
 
             val jwtToken = Jwts.parser().setSigningKey(
                 keyProvider.receiveCertificate(keyProvider.getKeyNames(KeyType.ValidationServiceSignKey)[0])!!
                     .publicKey
-            ).parse(resultToken)
+            )
+                //.parse(resultToken)
             val res = ticketingApiService.validate(
                 bookingPortalEncryptionData.accessTokenResponse.validationUrl,
                 authTokenHeader,
