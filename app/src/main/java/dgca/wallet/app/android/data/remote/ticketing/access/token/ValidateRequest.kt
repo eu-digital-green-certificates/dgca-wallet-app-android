@@ -34,7 +34,7 @@ data class ValidateRequest(
     @JsonProperty("encKey")
     var encKey: String,
     @JsonProperty("encScheme")
-    var encScheme: String = "RSAOAEPWithSHA256AES",
+    var encScheme: String = "RSAOAEPWithSHA256AESGCM",
     @JsonProperty("sigAlg")
     var sigAlg: String = "SHA256withECDSA"
 )

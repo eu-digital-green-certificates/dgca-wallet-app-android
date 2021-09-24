@@ -27,6 +27,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
 import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenRequest
 import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenResponse
+import dgca.wallet.app.android.model.AccessTokenResponseContainer
 import dgca.wallet.app.android.model.BookingSystemModel
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.JwtTokenParser
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.Service
@@ -46,7 +47,7 @@ class GetAccessTokenUseCase(
         bookingSystemModel: BookingSystemModel,
         accessTokenService: Service,
         validationService: Service
-    ): AccessTokenResponse? =
+    ): AccessTokenResponseContainer? =
         withContext(Dispatchers.IO) {
             val accessTokenRequest =
                 AccessTokenRequest(validationService.id, Base64.getEncoder().encodeToString(keyPair.public.encoded))
@@ -56,8 +57,11 @@ class GetAccessTokenUseCase(
                 accessTokenRequest
             )
             if (response.isSuccessful && response.code() == HttpURLConnection.HTTP_OK) {
-                response.body()?.string()?.let { jwtTokenParser.parse(it) }
-                    ?.let { objectMapper.readValue<AccessTokenResponse>(it.body) }
+                val iv: ByteArray = response.headers().get("x-nonce")!!.toByteArray()
+                val jwtToken: String = response.body()!!.string()
+                val accessTokenResponse: AccessTokenResponse =
+                    jwtTokenParser.parse(jwtToken).let { objectMapper.readValue<AccessTokenResponse>(it.body) }
+                return@withContext AccessTokenResponseContainer(accessTokenResponse, iv, jwtToken)
             } else {
                 null
             }

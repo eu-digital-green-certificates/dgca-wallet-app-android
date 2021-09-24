@@ -29,7 +29,6 @@ import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
 import dgca.wallet.app.android.data.remote.ticketing.access.token.ValidateRequest
 import dgca.wallet.app.android.data.remote.ticketing.identity.PublicKeyJwkRemote
 import dgca.wallet.app.android.model.BookingPortalEncryptionData
-import io.jsonwebtoken.Jwts
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.bouncycastle.cert.X509CertificateHolder
@@ -69,7 +68,6 @@ class ValidationUseCase(var ticketingApiService: TicketingApiService) {
             val sig = "sig"
             val encKey = "encKey"
             val validationRequest = ValidateRequest(kid = "", dcc = "", sig = sig, encKey = encKey)
-            val iv = byteArrayOf(0, 0, 1, 5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
             val publicKeyJwkRemote: PublicKeyJwkRemote =
                 bookingPortalEncryptionData.validationServiceIdentityResponse.getEncryptionPublicKey()!!
             val publicKey: PublicKey = try {
@@ -77,24 +75,13 @@ class ValidationUseCase(var ticketingApiService: TicketingApiService) {
             } catch (exception: Exception) {
                 throw IllegalStateException()
             }
-            val encodedDcc: ByteArray = encodeDcc(qrString, validationRequest, iv, publicKey)
+            val encodedDcc: ByteArray =
+                encodeDcc(qrString, validationRequest, bookingPortalEncryptionData.accessTokenResponseContainer.iv, publicKey)
             validationRequest.kid = publicKeyJwkRemote.kid
             validationRequest.sig = dccSign.signDcc(encodedDcc, bookingPortalEncryptionData.keyPair.private)
 
-//            val accessTokenPayload: AccessTokenPayload = createAccessTocken()
-//            val accessToken: String = accessTokenBuilder.payload(accessTokenPayload).build(parsePrivateKey(EC_PRIVATE_KEY), "kid")
-
-//            println("jwt: $accessToken")
-
-//            val resultToken: String = validationService.validate(dccValidationRequest, accessTokenPayload)
-
-            val jwtToken = Jwts.parser().setSigningKey(
-                keyProvider.receiveCertificate(keyProvider.getKeyNames(KeyType.ValidationServiceSignKey)[0])!!
-                    .publicKey
-            )
-                //.parse(resultToken)
             val res = ticketingApiService.validate(
-                bookingPortalEncryptionData.accessTokenResponse.validationUrl,
+                bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.validationUrl,
                 authTokenHeader,
                 validationRequest
             )
