@@ -27,6 +27,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import dgca.verifier.app.ticketing.DefaultTicketingDgcCryptor
+import dgca.verifier.app.ticketing.TicketingDgcCryptor
+import dgca.verifier.app.ticketing.TicketingDgcSigner
+import dgca.verifier.app.ticketing.TicketingValidationRequestProvider
 import dgca.wallet.app.android.data.WalletRepository
 import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.DefaultJwtTokenParser
@@ -78,6 +82,22 @@ object TicketingModule {
 
     @Singleton
     @Provides
-    internal fun provideValidationUseCase(ticketingApiService: TicketingApiService): ValidationUseCase =
-        ValidationUseCase(ticketingApiService)
+    internal fun provideTicketingDgcCryptor(): TicketingDgcCryptor = DefaultTicketingDgcCryptor()
+
+    @Singleton
+    @Provides
+    internal fun provideTicketingDgcSigner(): TicketingDgcSigner = TicketingDgcSigner()
+
+    @Singleton
+    @Provides
+    internal fun provideTicketingValidationRequestProvider(
+        ticketingDgcCryptor: TicketingDgcCryptor, ticketingDgcSigner: TicketingDgcSigner
+    ): TicketingValidationRequestProvider = TicketingValidationRequestProvider(ticketingDgcCryptor, ticketingDgcSigner)
+
+    @Singleton
+    @Provides
+    internal fun provideValidationUseCase(
+        ticketingValidationRequestProvider: TicketingValidationRequestProvider,
+        ticketingApiService: TicketingApiService
+    ): ValidationUseCase = ValidationUseCase(ticketingValidationRequestProvider, ticketingApiService)
 }
