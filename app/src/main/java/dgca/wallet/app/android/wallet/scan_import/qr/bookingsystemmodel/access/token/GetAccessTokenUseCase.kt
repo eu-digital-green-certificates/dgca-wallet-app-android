@@ -57,10 +57,10 @@ class GetAccessTokenUseCase(
                 accessTokenRequest
             )
             if (response.isSuccessful && response.code() == HttpURLConnection.HTTP_OK) {
-                val iv: ByteArray = response.headers().get("x-nonce")!!.toByteArray()
+                val iv: String = response.headers().get("x-nonce")!!
                 val jwtToken: String = response.body()!!.string()
                 val accessTokenResponse: AccessTokenResponse =
-                    jwtTokenParser.parse(jwtToken).let { objectMapper.readValue<AccessTokenResponse>(it.body) }
+                    jwtTokenParser.parse(jwtToken).let { objectMapper.readValue(it.body) }
                 return@withContext AccessTokenResponseContainer(accessTokenResponse, iv, jwtToken)
             } else {
                 null

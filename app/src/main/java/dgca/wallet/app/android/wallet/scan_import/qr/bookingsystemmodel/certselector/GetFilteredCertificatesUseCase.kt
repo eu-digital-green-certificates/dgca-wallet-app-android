@@ -73,7 +73,7 @@ class GetFilteredCertificatesUseCase(private val walletRepository: WalletReposit
     ): Boolean {
         if (bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.firstName.isNotBlank() && bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.firstName != certificateCard.certificate.person.givenName) return false
         if (bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.lastName.isNotBlank() && bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.lastName != certificateCard.certificate.person.familyName) return false
-        if (bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.dateOfBirth?.isNotBlank() == true && bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.dateOfBirth != certificateCard.certificate.dateOfBirth) return false
+//        if (bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.dateOfBirth?.isNotBlank() == true && bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.dateOfBirth != certificateCard.certificate.dateOfBirth) return false
         return true
     }
 

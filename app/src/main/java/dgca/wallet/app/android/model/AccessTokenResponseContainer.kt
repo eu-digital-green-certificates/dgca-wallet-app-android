@@ -27,5 +27,5 @@ import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenRes
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-class AccessTokenResponseContainer(val accessTokenResponse: AccessTokenResponse, val iv: ByteArray, val jwtToken: String) :
+class AccessTokenResponseContainer(val accessTokenResponse: AccessTokenResponse, val iv: String, val jwtToken: String) :
     Parcelable

@@ -63,20 +63,21 @@ class ValidationUseCase(var ticketingApiService: TicketingApiService) {
 
     suspend fun run(qrString: String, bookingPortalEncryptionData: BookingPortalEncryptionData) =
         withContext(Dispatchers.IO) {
-            val token = "token goes here"
+            val token = bookingPortalEncryptionData.accessTokenResponseContainer.jwtToken
             val authTokenHeader = "Bearer ${token}"
             val sig = "sig"
             val encKey = "encKey"
             val validationRequest = ValidateRequest(kid = "", dcc = "", sig = sig, encKey = encKey)
             val publicKeyJwkRemote: PublicKeyJwkRemote =
                 bookingPortalEncryptionData.validationServiceIdentityResponse.getEncryptionPublicKey()!!
-            val publicKey: PublicKey = try {
-                publicKeyJwkRemote.x5c.base64ToX509Certificate()!!.publicKey
-            } catch (exception: Exception) {
-                throw IllegalStateException()
-            }
+            val publicKey: PublicKey = publicKeyJwkRemote.x5c.base64ToX509Certificate()!!.publicKey
+            val tempIv =  bookingPortalEncryptionData.accessTokenResponseContainer.iv.toByteArray()
+            val iv = Base64.decode(bookingPortalEncryptionData.accessTokenResponseContainer.iv, Base64.NO_WRAP)
+//            for (i in 0..15) {
+//                iv[i] = tempIv[i]
+//            }
             val encodedDcc: ByteArray =
-                encodeDcc(qrString, validationRequest, bookingPortalEncryptionData.accessTokenResponseContainer.iv, publicKey)
+                encodeDcc(qrString, validationRequest, iv, publicKey)
             validationRequest.kid = publicKeyJwkRemote.kid
             validationRequest.sig = dccSign.signDcc(encodedDcc, bookingPortalEncryptionData.keyPair.private)
 
@@ -85,7 +86,7 @@ class ValidationUseCase(var ticketingApiService: TicketingApiService) {
                 authTokenHeader,
                 validationRequest
             )
-            if (res.isSuccessful || res.code() != HttpURLConnection.HTTP_OK) throw IllegalStateException()
+            if (!res.isSuccessful || res.code() != HttpURLConnection.HTTP_OK) throw IllegalStateException()
         }
 
     private fun encodeDcc(dcc: String, dccValidationRequest: ValidateRequest, iv: ByteArray, publicKey: PublicKey): ByteArray {
