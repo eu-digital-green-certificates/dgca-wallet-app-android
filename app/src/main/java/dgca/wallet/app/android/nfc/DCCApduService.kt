@@ -32,7 +32,6 @@ import dgca.wallet.app.android.certificate.view.certificate.ViewCertificateFragm
 import timber.log.Timber
 import java.io.UnsupportedEncodingException
 import java.math.BigInteger
-import java.util.*
 
 @Suppress("PrivatePropertyName")
 class DCCApduService : HostApduService() {
@@ -121,7 +120,7 @@ class DCCApduService : HostApduService() {
 
     private val ndefId = byteArrayOf(0xE1.toByte(), 0x04.toByte())
 
-    private var ndefUri = NdefMessage(createTextRecord(Locale.getDefault().language, "", ndefId))
+    private var ndefUri = NdefMessage(createTextRecord("", ndefId))
     private var ndefUriBytes = ndefUri.toByteArray()
     private var ndefUriLength = fillByteArrayToFixedDimension(
         BigInteger.valueOf(ndefUriBytes.size.toLong()).toByteArray(), 2
@@ -129,8 +128,7 @@ class DCCApduService : HostApduService() {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         if (intent.hasExtra(NFC_NDEF_KEY)) {
-            ndefUri =
-                NdefMessage(createTextRecord(Locale.getDefault().language, intent.getStringExtra(NFC_NDEF_KEY) ?: "", ndefId))
+            ndefUri = NdefMessage(createTextRecord(intent.getStringExtra(NFC_NDEF_KEY) ?: "", ndefId))
             ndefUriBytes = ndefUri.toByteArray()
             ndefUriLength = fillByteArrayToFixedDimension(
                 BigInteger.valueOf(ndefUriBytes.size.toLong()).toByteArray(), 2
@@ -245,29 +243,15 @@ class DCCApduService : HostApduService() {
         sendBroadcast(intent)
     }
 
-    private fun createTextRecord(language: String, text: String, id: ByteArray): NdefRecord {
-        val languageBytes: ByteArray
-        val textBytes: ByteArray
+    private fun createTextRecord(text: String, id: ByteArray): NdefRecord {
+        var textBytes = ByteArray(0)
         try {
-            languageBytes = language.toByteArray(Charsets.US_ASCII)
             textBytes = text.toByteArray(Charsets.UTF_8)
         } catch (e: UnsupportedEncodingException) {
-            throw AssertionError(e)
+            Timber.w(e)
         }
 
-        val recordPayload = ByteArray(1 + (languageBytes.size and 0x03F) + textBytes.size)
-
-        recordPayload[0] = (languageBytes.size and 0x03F).toByte()
-        System.arraycopy(languageBytes, 0, recordPayload, 1, languageBytes.size and 0x03F)
-        System.arraycopy(
-            textBytes,
-            0,
-            recordPayload,
-            1 + (languageBytes.size and 0x03F),
-            textBytes.size
-        )
-
-        return NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, id, recordPayload)
+        return NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, id, textBytes)
     }
 
     private fun fillByteArrayToFixedDimension(array: ByteArray, fixedSize: Int): ByteArray {
