@@ -116,4 +116,5 @@ dependencies {
     androidTestImplementation Deps.test_ext
     androidTestImplementation Deps.test_rules
 
+    implementation Deps.bouncy_castle
 }

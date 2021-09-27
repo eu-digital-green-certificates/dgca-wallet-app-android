@@ -52,9 +52,18 @@ class GetFilteredCertificatesUseCase(private val walletRepository: WalletReposit
         bookingPortalEncryptionData: BookingPortalEncryptionData,
         certificateCard: CertificatesCard.CertificateCard
     ): Boolean {
-        if (bookingPortalEncryptionData.accessTokenResponse.certificateData.greenCertificateTypes.contains("v") && certificateCard.certificate.vaccinations?.isNotEmpty() == true) return true
-        if (bookingPortalEncryptionData.accessTokenResponse.certificateData.greenCertificateTypes.contains("r") && certificateCard.certificate.recoveryStatements?.isNotEmpty() == true) return true
-        if (bookingPortalEncryptionData.accessTokenResponse.certificateData.greenCertificateTypes.contains("t") && certificateCard.certificate.tests?.isNotEmpty() == true) return true
+        if (bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.greenCertificateTypes.contains(
+                "v"
+            ) && certificateCard.certificate.vaccinations?.isNotEmpty() == true
+        ) return true
+        if (bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.greenCertificateTypes.contains(
+                "r"
+            ) && certificateCard.certificate.recoveryStatements?.isNotEmpty() == true
+        ) return true
+        if (bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.greenCertificateTypes.contains(
+                "t"
+            ) && certificateCard.certificate.tests?.isNotEmpty() == true
+        ) return true
         return false
     }
 
@@ -62,9 +71,9 @@ class GetFilteredCertificatesUseCase(private val walletRepository: WalletReposit
         bookingPortalEncryptionData: BookingPortalEncryptionData,
         certificateCard: CertificatesCard.CertificateCard
     ): Boolean {
-        if (bookingPortalEncryptionData.accessTokenResponse.certificateData.firstName.isNotBlank() && bookingPortalEncryptionData.accessTokenResponse.certificateData.firstName != certificateCard.certificate.person.givenName) return false
-        if (bookingPortalEncryptionData.accessTokenResponse.certificateData.lastName.isNotBlank() && bookingPortalEncryptionData.accessTokenResponse.certificateData.lastName != certificateCard.certificate.person.familyName) return false
-        if (bookingPortalEncryptionData.accessTokenResponse.certificateData.dateOfBirth?.isNotBlank() == true && bookingPortalEncryptionData.accessTokenResponse.certificateData.dateOfBirth != certificateCard.certificate.dateOfBirth) return false
+        if (bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.firstName.isNotBlank() && bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.firstName != certificateCard.certificate.person.givenName) return false
+        if (bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.lastName.isNotBlank() && bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.lastName != certificateCard.certificate.person.familyName) return false
+//        if (bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.dateOfBirth?.isNotBlank() == true && bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.dateOfBirth != certificateCard.certificate.dateOfBirth) return false
         return true
     }
 
@@ -74,9 +83,9 @@ class GetFilteredCertificatesUseCase(private val walletRepository: WalletReposit
     ): Boolean {
         if (true) return true
         val validFrom = certificateCard.certificate.getValidFrom()
-        if (validFrom == null || validFrom.isBefore(bookingPortalEncryptionData.accessTokenResponse.certificateData.validFrom)) return false
+        if (validFrom == null || validFrom.isBefore(bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.validFrom)) return false
         val validTo = certificateCard.certificate.getValidTo()
-        if (validTo == null || validTo.isBefore(bookingPortalEncryptionData.accessTokenResponse.certificateData.validTo)) return false
+        if (validTo == null || validTo.isBefore(bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.validTo)) return false
         return true
     }
 }

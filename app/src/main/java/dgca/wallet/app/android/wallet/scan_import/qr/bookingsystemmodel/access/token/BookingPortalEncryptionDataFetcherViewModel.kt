@@ -27,9 +27,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dgca.verifier.app.decoder.model.KeyPairData
-import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenResponse
 import dgca.wallet.app.android.data.remote.ticketing.access.token.ValidationServiceIdentityResponse
+import dgca.wallet.app.android.model.AccessTokenResponseContainer
 import dgca.wallet.app.android.model.BookingPortalEncryptionData
 import dgca.wallet.app.android.model.BookingSystemModel
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.Service
@@ -58,14 +57,14 @@ class BookingPortalEncryptionDataFetcherViewModel @Inject constructor(
             keyPairGen.initialize(256)
             val keyPair: KeyPair = keyPairGen.generateKeyPair()
 
-            val accessTokenResponse: AccessTokenResponse? =
+            val accessTokenResponseContainer: AccessTokenResponseContainer? =
                 fetchAccessToken(keyPair, bookingSystemModel, accessTokenService, validationService)
             val validationServiceIdentityResponse: ValidationServiceIdentityResponse? =
                 fetchValidationServiceIdentity(validationService)
 
             _accessTokenFetcherResult.value =
-                if (accessTokenResponse == null || validationServiceIdentityResponse == null) BookingPortalEncryptionDataResult.Fail else BookingPortalEncryptionDataResult.Success(
-                    prepareBookingPortalEncryptionResult(keyPair, accessTokenResponse, validationServiceIdentityResponse)
+                if (accessTokenResponseContainer == null || validationServiceIdentityResponse == null) BookingPortalEncryptionDataResult.Fail else BookingPortalEncryptionDataResult.Success(
+                    prepareBookingPortalEncryptionResult(keyPair, accessTokenResponseContainer, validationServiceIdentityResponse)
                 )
         }
     }
@@ -75,7 +74,7 @@ class BookingPortalEncryptionDataFetcherViewModel @Inject constructor(
         bookingSystemModel: BookingSystemModel,
         accessTokenService: Service,
         validationService: Service
-    ): AccessTokenResponse? = try {
+    ): AccessTokenResponseContainer? = try {
         getAccessTokenUseCase.run(keyPair, bookingSystemModel, accessTokenService, validationService)
     } catch (exception: Exception) {
         Timber.e(exception, "Error fetching access token")
@@ -91,9 +90,9 @@ class BookingPortalEncryptionDataFetcherViewModel @Inject constructor(
 
     private fun prepareBookingPortalEncryptionResult(
         keyPair: KeyPair,
-        accessTokenResponse: AccessTokenResponse,
+        accessTokenResponseContainer: AccessTokenResponseContainer,
         validationServiceIdentityResponse: ValidationServiceIdentityResponse
     ): BookingPortalEncryptionData {
-        return BookingPortalEncryptionData(keyPair, accessTokenResponse, validationServiceIdentityResponse)
+        return BookingPortalEncryptionData(keyPair, accessTokenResponseContainer, validationServiceIdentityResponse)
     }
 }

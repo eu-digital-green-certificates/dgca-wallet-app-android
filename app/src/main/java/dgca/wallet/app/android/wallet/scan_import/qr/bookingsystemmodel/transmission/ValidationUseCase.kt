@@ -22,27 +22,40 @@
 
 package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission
 
+import dgca.verifier.app.decoder.base64ToX509Certificate
+import dgca.verifier.app.ticketing.TicketingValidationRequestProvider
 import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
-import dgca.wallet.app.android.data.remote.ticketing.access.token.ValidateRequest
+import dgca.wallet.app.android.data.remote.ticketing.identity.PublicKeyJwkRemote
 import dgca.wallet.app.android.model.BookingPortalEncryptionData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
+import java.security.PublicKey
 
-class ValidationUseCase(private val ticketingApiService: TicketingApiService) {
+const val SUPPORTED_ENCRYPTION_SCHEMA = "RSAOAEPWithSHA256AESGCM"
+
+class ValidationUseCase(
+    private val ticketingValidationRequestProvider: TicketingValidationRequestProvider,
+    var ticketingApiService: TicketingApiService
+) {
+
     suspend fun run(qrString: String, bookingPortalEncryptionData: BookingPortalEncryptionData) =
         withContext(Dispatchers.IO) {
-            val token = "token goes here"
-            val authTokenHeader = "Bearer ${token}"
-            val encodedDcc = qrString
-            val sig = "sig"
-            val encKey = "encKey"
-            val validationRequest = ValidateRequest(dcc = encodedDcc, sig = sig, encKey = encKey)
+            val token = bookingPortalEncryptionData.accessTokenResponseContainer.jwtToken
+            val authTokenHeader = "Bearer $token"
+            val publicKeyJwkRemote: PublicKeyJwkRemote =
+                bookingPortalEncryptionData.validationServiceIdentityResponse.getEncryptionPublicKey()!!
+            val publicKey: PublicKey = publicKeyJwkRemote.x5c.base64ToX509Certificate()!!.publicKey
+            val validationRequest = ticketingValidationRequestProvider.provideTicketValidationRequest(
+                qrString, publicKeyJwkRemote.kid, publicKey, bookingPortalEncryptionData.accessTokenResponseContainer.iv,
+                bookingPortalEncryptionData.keyPair.private
+            )
+
             val res = ticketingApiService.validate(
-                bookingPortalEncryptionData.accessTokenResponse.validationUrl,
+                bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.validationUrl,
                 authTokenHeader,
                 validationRequest
             )
-            if (res.isSuccessful || res.code() != HttpURLConnection.HTTP_OK) throw IllegalStateException()
+            if (!res.isSuccessful || res.code() != HttpURLConnection.HTTP_OK) throw IllegalStateException()
         }
 }
