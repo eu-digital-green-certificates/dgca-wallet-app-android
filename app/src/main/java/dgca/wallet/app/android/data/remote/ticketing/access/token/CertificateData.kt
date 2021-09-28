@@ -34,9 +34,9 @@ data class CertificateData(
     @JsonProperty("lang")
     val lang: String,
     @JsonProperty("fnt")
-    val firstName: String,
+    val familyName: String,
     @JsonProperty("gnt")
-    val lastName: String,
+    val givenName: String,
     @JsonProperty("dob")
     val dateOfBirth: String?,
     @JsonProperty("coa")
@@ -57,4 +57,4 @@ data class CertificateData(
     val validFrom: ZonedDateTime,
     @JsonProperty("validTo")
     val validTo: ZonedDateTime
-): Parcelable
+) : Parcelable
