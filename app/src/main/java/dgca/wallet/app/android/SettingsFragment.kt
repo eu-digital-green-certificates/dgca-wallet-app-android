@@ -52,7 +52,7 @@ class SettingsFragment : Fragment() {
 
         binding.privacyInformation.setOnClickListener { launchWebIntent() }
         binding.licenses.setOnClickListener { openLicenses() }
-        binding.version.text = getString(R.string.version, BuildConfig.VERSION_NAME)
+        binding.version.text = getString(R.string.version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
