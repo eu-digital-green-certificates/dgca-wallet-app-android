@@ -74,7 +74,7 @@ class GetFilteredCertificatesUseCase(private val walletRepository: WalletReposit
         certificateCard: CertificatesCard.CertificateCard
     ): Boolean {
         val ticketingFirstName: String =
-            bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.firstName
+            bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.givenName
         val greenCertificateFirstName: String? = certificateCard.certificate.person.givenName
         if (ticketingFirstName.isNotBlank() && (greenCertificateFirstName.isNullOrBlank() || greenCertificateFirstName.compareTo(
                 ticketingFirstName, ignoreCase = true
@@ -82,11 +82,10 @@ class GetFilteredCertificatesUseCase(private val walletRepository: WalletReposit
         ) return false
 
         val ticketingLastName: String =
-            bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.lastName
-        val greenCertificateLastName: String =
-            bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.lastName
+            bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.familyName
+        val greenCertificateLastName: String? = certificateCard.certificate.person.familyName
         if (ticketingLastName.isNotBlank() &&
-            (greenCertificateLastName.isBlank() || greenCertificateLastName.compareTo(
+            (greenCertificateLastName.isNullOrBlank() || greenCertificateLastName.compareTo(
                 ticketingLastName, ignoreCase = true
             ) != 0)
         ) return false
