@@ -24,9 +24,11 @@ package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.certsel
 
 import dgca.wallet.app.android.data.WalletRepository
 import dgca.wallet.app.android.model.BookingPortalEncryptionData
+import dgca.wallet.app.android.toZonedDateTime
 import dgca.wallet.app.android.wallet.CertificatesCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.time.ZonedDateTime
 import java.util.*
 
 
@@ -71,9 +73,29 @@ class GetFilteredCertificatesUseCase(private val walletRepository: WalletReposit
         bookingPortalEncryptionData: BookingPortalEncryptionData,
         certificateCard: CertificatesCard.CertificateCard
     ): Boolean {
-        if (bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.firstName.isNotBlank() && bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.firstName != certificateCard.certificate.person.givenName) return false
-        if (bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.lastName.isNotBlank() && bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.lastName != certificateCard.certificate.person.familyName) return false
-//        if (bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.dateOfBirth?.isNotBlank() == true && bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.dateOfBirth != certificateCard.certificate.dateOfBirth) return false
+        val ticketingFirstName: String =
+            bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.firstName
+        val greenCertificateFirstName: String? = certificateCard.certificate.person.givenName
+        if (ticketingFirstName.isNotBlank() && (greenCertificateFirstName.isNullOrBlank() || greenCertificateFirstName.compareTo(
+                ticketingFirstName, ignoreCase = true
+            ) != 0)
+        ) return false
+
+        val ticketingLastName: String =
+            bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.lastName
+        val greenCertificateLastName: String =
+            bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.lastName
+        if (ticketingLastName.isNotBlank() &&
+            (greenCertificateLastName.isBlank() || greenCertificateLastName.compareTo(
+                ticketingLastName, ignoreCase = true
+            ) != 0)
+        ) return false
+
+        val ticketingDateOfBirth: ZonedDateTime? =
+            bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.dateOfBirth?.toZonedDateTime()
+        val greenCertificateDateOfBirth: ZonedDateTime? = certificateCard.certificate.dateOfBirth.toZonedDateTime()
+        if (ticketingDateOfBirth != null && !ticketingDateOfBirth.equals(greenCertificateDateOfBirth)) return false
+
         return true
     }
 
@@ -81,11 +103,16 @@ class GetFilteredCertificatesUseCase(private val walletRepository: WalletReposit
         bookingPortalEncryptionData: BookingPortalEncryptionData,
         certificateCard: CertificatesCard.CertificateCard
     ): Boolean {
-        if (true) return true
-        val validFrom = certificateCard.certificate.getValidFrom()
-        if (validFrom == null || validFrom.isBefore(bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.validFrom)) return false
-        val validTo = certificateCard.certificate.getValidTo()
-        if (validTo == null || validTo.isBefore(bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.validTo)) return false
+        val ticketingValidFrom: ZonedDateTime =
+            bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.validFrom
+        val greenCertificateValidFrom: ZonedDateTime? = certificateCard.certificate.getValidFrom()
+        if (greenCertificateValidFrom == null || greenCertificateValidFrom.isAfter(ticketingValidFrom)) return false
+
+        val ticketingValidTo: ZonedDateTime =
+            bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.validTo
+        val greenCertificateValidTo: ZonedDateTime? = certificateCard.certificate.getValidTo()
+        if (greenCertificateValidTo != null && greenCertificateValidTo.isBefore(ticketingValidTo)) return false
+
         return true
     }
 }
