@@ -34,9 +34,9 @@ data class CertificateData(
     @JsonProperty("lang")
     val lang: String,
     @JsonProperty("fnt")
-    val familyName: String,
+    val standardizedFamilyName: String,
     @JsonProperty("gnt")
-    val givenName: String,
+    val standardizedGivenName: String,
     @JsonProperty("dob")
     val dateOfBirth: String?,
     @JsonProperty("coa")
@@ -57,4 +57,6 @@ data class CertificateData(
     val validFrom: ZonedDateTime,
     @JsonProperty("validTo")
     val validTo: ZonedDateTime
-) : Parcelable
+) : Parcelable {
+    fun getStandardizedName(): String = "$standardizedGivenName $standardizedFamilyName".trim()
+}
