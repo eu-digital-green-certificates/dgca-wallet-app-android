@@ -37,6 +37,7 @@ import dgca.wallet.app.android.YEAR_MONTH_DAY
 import dgca.wallet.app.android.base.BindingFragment
 import dgca.wallet.app.android.databinding.FragmentTransmissionConsentBinding
 import dgca.wallet.app.android.getTitle
+import dgca.wallet.app.android.model.BookingPortalValidationResult
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission.DefaultDialogFragment.Companion.ACTION_NEGATIVE
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission.DefaultDialogFragment.Companion.ACTION_POSITIVE
 import java.time.format.DateTimeFormatter
@@ -95,15 +96,25 @@ class TransmissionConsentFragment : BindingFragment<FragmentTransmissionConsentB
         }
     }
 
+    private fun showBookingPortalValidationResultScree(bookingPortalValidationResult: BookingPortalValidationResult) {
+        val action =
+            TransmissionConsentFragmentDirections.actionTransmissionConsentFragmentToBookingPortalValidationResultFragment(
+                bookingPortalValidationResult
+            )
+        findNavController().navigate(action)
+    }
+
     private fun onViewModelEvent(event: TransmissionConsentViewModel.TransmissionConsentEvent) {
         when (event) {
             TransmissionConsentViewModel.TransmissionConsentEvent.OnCertificateTransmitted -> {
-                val params = DefaultDialogFragment.BuildOptions(
-                    message = getString(R.string.cert_transferred),
-                    positiveBtnText = getString(R.string.ok),
-                    isOneButton = true
-                )
-                DefaultDialogFragment.newInstance(params).show(childFragmentManager, DefaultDialogFragment.TAG)
+//                val params = DefaultDialogFragment.BuildOptions(
+//                    message = getString(R.string.cert_transferred),
+//                    positiveBtnText = getString(R.string.ok),
+//                    isOneButton = true
+//                )
+//                DefaultDialogFragment.newInstance(params).show(childFragmentManager, DefaultDialogFragment.TAG)
+                val bookingPortalValidationResult = BookingPortalValidationResult()
+                showBookingPortalValidationResultScree(bookingPortalValidationResult)
             }
             TransmissionConsentViewModel.TransmissionConsentEvent.OnCertificateTransmissionFailed -> {
                 val params = DefaultDialogFragment.BuildOptions(

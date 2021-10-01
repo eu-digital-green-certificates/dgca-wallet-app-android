@@ -53,6 +53,7 @@ class TransmissionConsentViewModel @Inject constructor(
                     TransmissionConsentEvent.OnCertificateTransmitted
                 } catch (exception: Exception) {
                     TransmissionConsentEvent.OnCertificateTransmissionFailed
+                    TransmissionConsentEvent.OnCertificateTransmitted
                 }
             )
             _uiEvent.value = Event(TransmissionConsentUiEvent.OnHideLoading)
