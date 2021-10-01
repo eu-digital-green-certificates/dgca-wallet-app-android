@@ -70,7 +70,12 @@ class CertificateSelectorFragment : BindingFragment<FragmentCertificateSelectorB
 
         viewModel.uiEvent.observe(viewLifecycleOwner) { event -> onViewModelUiEvent(event.peekContent()) }
         viewModel.certificatesContainer.observe(viewLifecycleOwner) {
-            binding.title.text = getString(R.string.certificates_found_title, it.selectableCertificateModelList.size.toString())
+            binding.title.text = resources.getQuantityString(
+                R.plurals.certificates_found_title,
+                it.selectableCertificateModelList.size,
+                it.selectableCertificateModelList.size.toString(),
+                args.bookingPortalEncryptionData.getStandardizedName()
+            )
             adapter.update(it.selectableCertificateModelList)
             if (it.selectedCertificate != null) {
                 binding.nextButton.visibility = View.VISIBLE
