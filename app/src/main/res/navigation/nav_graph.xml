@@ -480,7 +480,7 @@
 
         <argument
             android:name="bookingPortalValidationResult"
-            app:argType="dgca.wallet.app.android.model.BookingPortalValidationResult" />
+            app:argType="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.validationresult.BookingPortalValidationResult" />
 
     </fragment>
 </navigation>

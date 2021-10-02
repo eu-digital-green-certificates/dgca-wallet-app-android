@@ -36,6 +36,42 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <LinearLayout
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/default_margin">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/title"
+                style="@style/TextAppearance.Dgca.GeneralTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/icon_large_invalid"
+                tools:tint="@color/red" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/message"
+                style="@style/TextAppearance.Dgca.CertificateValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="web" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rulesList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/default_margin"
+                android:overScrollMode="never" />
+
+        </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
     <androidx.appcompat.widget.AppCompatImageView

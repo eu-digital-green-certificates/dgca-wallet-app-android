@@ -26,7 +26,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
+import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.MainActivity
 import dgca.wallet.app.android.R
@@ -36,14 +39,59 @@ import dgca.wallet.app.android.databinding.FragmentBookingPortalValidationResult
 
 @AndroidEntryPoint
 class BookingPortalValidationResultFragment : BindingFragment<FragmentBookingPortalValidationResultBinding>() {
+    private val args by navArgs<BookingPortalValidationResultFragmentArgs>()
+
     override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBookingPortalValidationResultBinding =
         FragmentBookingPortalValidationResultBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         (activity as MainActivity).disableBackButton()
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { close() }
 
-        binding.actionButton.setOnClickListener {
-            findNavController().popBackStack(R.id.certificatesFragment, false)
+        binding.actionButton.setOnClickListener { close() }
+
+        val title = getString(
+            when (args.bookingPortalValidationResult) {
+                BookingPortalValidationResult.Valid -> R.string.valid_certificate_title
+                BookingPortalValidationResult.Invalid -> R.string.invalid_certificate_title
+                BookingPortalValidationResult.LimitedValidity -> R.string.certificate_has_limitation_title
+            }
+        )
+        binding.title.text = title
+
+        val text = getString(
+            when (args.bookingPortalValidationResult) {
+                BookingPortalValidationResult.Valid -> R.string.valid_certificate_message
+                BookingPortalValidationResult.Invalid -> R.string.invalid_certificate_message
+                BookingPortalValidationResult.LimitedValidity -> R.string.certificate_has_limitation_message
+            }
+        )
+        binding.message.text = text
+
+        val icon = when (args.bookingPortalValidationResult) {
+            BookingPortalValidationResult.Valid -> R.drawable.icon_large_valid
+            BookingPortalValidationResult.Invalid -> R.drawable.icon_large_invalid
+            BookingPortalValidationResult.LimitedValidity -> R.drawable.icon_large_warning
         }
+        binding.icon.setImageResource(icon)
+
+        when (args.bookingPortalValidationResult) {
+            BookingPortalValidationResult.Valid -> binding.icon.backgroundTintList =
+                ResourcesCompat.getColorStateList(resources, R.color.green, null)
+            BookingPortalValidationResult.Invalid -> binding.icon.imageTintList =
+                ResourcesCompat.getColorStateList(resources, R.color.red, null)
+            BookingPortalValidationResult.LimitedValidity -> {
+            }
+        }
+//        if (isCertificateValid) {
+//            binding.icon.backgroundTintList = ResourcesCompat.getColorStateList(resources, R.color.green, null)
+//        } else {
+//            binding.rulesList.adapter =
+//                RuleValidationResultsAdapter(layoutInflater, ruleValidationResultCards)
+//        }
+    }
+
+    private fun close() {
+        findNavController().popBackStack(R.id.certificatesFragment, false)
     }
 }

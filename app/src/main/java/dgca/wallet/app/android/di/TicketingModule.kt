@@ -98,6 +98,10 @@ object TicketingModule {
     @Provides
     internal fun provideValidationUseCase(
         ticketingValidationRequestProvider: TicketingValidationRequestProvider,
-        ticketingApiService: TicketingApiService
-    ): ValidationUseCase = ValidationUseCase(ticketingValidationRequestProvider, ticketingApiService)
+        ticketingApiService: TicketingApiService,
+        jwtTokenParser: JwtTokenParser,
+        objectMapper: ObjectMapper
+    ): ValidationUseCase = ValidationUseCase(
+        ticketingValidationRequestProvider, ticketingApiService, jwtTokenParser, objectMapper
+    )
 }

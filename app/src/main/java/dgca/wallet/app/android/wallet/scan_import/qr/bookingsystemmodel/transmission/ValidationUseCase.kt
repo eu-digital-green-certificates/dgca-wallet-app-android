@@ -22,11 +22,18 @@
 
 package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import dgca.verifier.app.decoder.base64ToX509Certificate
 import dgca.verifier.app.ticketing.TicketingValidationRequestProvider
 import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
 import dgca.wallet.app.android.data.remote.ticketing.identity.PublicKeyJwkRemote
+import dgca.wallet.app.android.data.remote.ticketing.validate.BookingPortalValidationResponse
+import dgca.wallet.app.android.data.remote.ticketing.validate.BookingPortalValidationResponseResult
 import dgca.wallet.app.android.model.BookingPortalEncryptionData
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.JwtObject
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.JwtTokenParser
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.validationresult.BookingPortalValidationResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
@@ -36,10 +43,15 @@ const val SUPPORTED_ENCRYPTION_SCHEMA = "RSAOAEPWithSHA256AESGCM"
 
 class ValidationUseCase(
     private val ticketingValidationRequestProvider: TicketingValidationRequestProvider,
-    var ticketingApiService: TicketingApiService
+    private var ticketingApiService: TicketingApiService,
+    private val jwtTokenParser: JwtTokenParser,
+    private val objectMapper: ObjectMapper
 ) {
 
-    suspend fun run(qrString: String, bookingPortalEncryptionData: BookingPortalEncryptionData) =
+    suspend fun run(
+        qrString: String,
+        bookingPortalEncryptionData: BookingPortalEncryptionData
+    ): BookingPortalValidationResult =
         withContext(Dispatchers.IO) {
             val token = bookingPortalEncryptionData.accessTokenResponseContainer.jwtToken
             val authTokenHeader = "Bearer $token"
@@ -56,6 +68,22 @@ class ValidationUseCase(
                 authTokenHeader,
                 validationRequest
             )
-            if (!res.isSuccessful || res.code() != HttpURLConnection.HTTP_OK) throw IllegalStateException()
+
+            return@withContext if (res.isSuccessful && res.code() == HttpURLConnection.HTTP_OK) {
+                val resultToken: String = res.body()!!
+                val jwtToken: JwtObject = jwtTokenParser.parse(resultToken)
+                val bookingPortalValidationResponse: BookingPortalValidationResponse = objectMapper.readValue(jwtToken.body)
+                bookingPortalValidationResponse.toValidationResult()
+            } else {
+                throw IllegalStateException()
+            }
         }
+}
+
+fun BookingPortalValidationResponse.toValidationResult(): BookingPortalValidationResult {
+    return when (this.result) {
+        BookingPortalValidationResponseResult.OK -> BookingPortalValidationResult.Valid
+        BookingPortalValidationResponseResult.NOK -> BookingPortalValidationResult.Invalid
+        BookingPortalValidationResponseResult.CHK -> BookingPortalValidationResult.LimitedValidity
+    }
 }

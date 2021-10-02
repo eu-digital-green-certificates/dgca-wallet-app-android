@@ -17,13 +17,21 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 10/1/21 1:20 PM
+ *  Created by osarapulov on 10/2/21 3:08 PM
  */
 
-package dgca.wallet.app.android.model
+package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.validationresult
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
-@Parcelize
-class BookingPortalValidationResult : Parcelable
+sealed class BookingPortalValidationResult : Parcelable {
+    @Parcelize
+    object Valid : BookingPortalValidationResult()
+
+    @Parcelize
+    object Invalid : BookingPortalValidationResult()
+
+    @Parcelize
+    object LimitedValidity : BookingPortalValidationResult()
+}

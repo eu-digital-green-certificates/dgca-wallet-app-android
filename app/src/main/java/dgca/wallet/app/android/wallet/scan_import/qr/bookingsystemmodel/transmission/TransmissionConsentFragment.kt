@@ -37,9 +37,9 @@ import dgca.wallet.app.android.YEAR_MONTH_DAY
 import dgca.wallet.app.android.base.BindingFragment
 import dgca.wallet.app.android.databinding.FragmentTransmissionConsentBinding
 import dgca.wallet.app.android.getTitle
-import dgca.wallet.app.android.model.BookingPortalValidationResult
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission.DefaultDialogFragment.Companion.ACTION_NEGATIVE
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission.DefaultDialogFragment.Companion.ACTION_POSITIVE
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.validationresult.BookingPortalValidationResult
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -106,15 +106,8 @@ class TransmissionConsentFragment : BindingFragment<FragmentTransmissionConsentB
 
     private fun onViewModelEvent(event: TransmissionConsentViewModel.TransmissionConsentEvent) {
         when (event) {
-            TransmissionConsentViewModel.TransmissionConsentEvent.OnCertificateTransmitted -> {
-//                val params = DefaultDialogFragment.BuildOptions(
-//                    message = getString(R.string.cert_transferred),
-//                    positiveBtnText = getString(R.string.ok),
-//                    isOneButton = true
-//                )
-//                DefaultDialogFragment.newInstance(params).show(childFragmentManager, DefaultDialogFragment.TAG)
-                val bookingPortalValidationResult = BookingPortalValidationResult()
-                showBookingPortalValidationResultScree(bookingPortalValidationResult)
+            is TransmissionConsentViewModel.TransmissionConsentEvent.OnCertificateTransmitted -> {
+                showBookingPortalValidationResultScree(event.bookingPortalValidationResult)
             }
             TransmissionConsentViewModel.TransmissionConsentEvent.OnCertificateTransmissionFailed -> {
                 val params = DefaultDialogFragment.BuildOptions(
