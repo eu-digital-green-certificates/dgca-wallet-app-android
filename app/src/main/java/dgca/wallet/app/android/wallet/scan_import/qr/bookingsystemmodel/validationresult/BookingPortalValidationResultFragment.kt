@@ -54,7 +54,7 @@ class BookingPortalValidationResultFragment : BindingFragment<FragmentBookingPor
             when (args.bookingPortalValidationResult) {
                 BookingPortalValidationResult.Valid -> R.string.valid_certificate_title
                 BookingPortalValidationResult.Invalid -> R.string.invalid_certificate_title
-                BookingPortalValidationResult.LimitedValidity -> R.string.certificate_has_limitation_title
+                is BookingPortalValidationResult.LimitedValidity -> R.string.certificate_has_limitation_title
             }
         )
         binding.title.text = title
@@ -63,7 +63,7 @@ class BookingPortalValidationResultFragment : BindingFragment<FragmentBookingPor
             when (args.bookingPortalValidationResult) {
                 BookingPortalValidationResult.Valid -> R.string.valid_certificate_message
                 BookingPortalValidationResult.Invalid -> R.string.invalid_certificate_message
-                BookingPortalValidationResult.LimitedValidity -> R.string.certificate_has_limitation_message
+                is BookingPortalValidationResult.LimitedValidity -> R.string.certificate_has_limitation_message
             }
         )
         binding.message.text = text
@@ -71,7 +71,7 @@ class BookingPortalValidationResultFragment : BindingFragment<FragmentBookingPor
         val icon = when (args.bookingPortalValidationResult) {
             BookingPortalValidationResult.Valid -> R.drawable.icon_large_valid
             BookingPortalValidationResult.Invalid -> R.drawable.icon_large_invalid
-            BookingPortalValidationResult.LimitedValidity -> R.drawable.icon_large_warning
+            is BookingPortalValidationResult.LimitedValidity -> R.drawable.icon_large_warning
         }
         binding.icon.setImageResource(icon)
 
@@ -80,7 +80,7 @@ class BookingPortalValidationResultFragment : BindingFragment<FragmentBookingPor
                 ResourcesCompat.getColorStateList(resources, R.color.green, null)
             BookingPortalValidationResult.Invalid -> binding.icon.imageTintList =
                 ResourcesCompat.getColorStateList(resources, R.color.red, null)
-            BookingPortalValidationResult.LimitedValidity -> {
+            is BookingPortalValidationResult.LimitedValidity -> {
             }
         }
 //        if (isCertificateValid) {

@@ -79,11 +79,3 @@ class ValidationUseCase(
             }
         }
 }
-
-fun BookingPortalValidationResponse.toValidationResult(): BookingPortalValidationResult {
-    return when (this.result) {
-        BookingPortalValidationResponseResult.OK -> BookingPortalValidationResult.Valid
-        BookingPortalValidationResponseResult.NOK -> BookingPortalValidationResult.Invalid
-        BookingPortalValidationResponseResult.CHK -> BookingPortalValidationResult.LimitedValidity
-    }
-}
