@@ -39,8 +39,12 @@ sealed class BookingPortalValidationResult : Parcelable {
 
 @Parcelize
 data class BookingPortalLimitedValidityResultItem(
-    val result: String,
+    val result: BookingPortalLimitedValidityResult,
     val identifier: String,
     val details: String,
     val type: String
 ) : Parcelable
+
+enum class BookingPortalLimitedValidityResult {
+    OK, NOK, CHK
+}

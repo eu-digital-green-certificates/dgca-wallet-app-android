@@ -30,6 +30,7 @@ import androidx.activity.addCallback
 import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.MainActivity
 import dgca.wallet.app.android.R
@@ -81,14 +82,14 @@ class BookingPortalValidationResultFragment : BindingFragment<FragmentBookingPor
             BookingPortalValidationResult.Invalid -> binding.icon.imageTintList =
                 ResourcesCompat.getColorStateList(resources, R.color.red, null)
             is BookingPortalValidationResult.LimitedValidity -> {
+                binding.rulesList.layoutManager = LinearLayoutManager(requireContext())
+                binding.rulesList.adapter =
+                    BookingPortalLimitedValidityResultItemsAdapter(
+                        layoutInflater,
+                        (args.bookingPortalValidationResult as BookingPortalValidationResult.LimitedValidity).bookingPortalLimitedValidityResultItems
+                    )
             }
         }
-//        if (isCertificateValid) {
-//            binding.icon.backgroundTintList = ResourcesCompat.getColorStateList(resources, R.color.green, null)
-//        } else {
-//            binding.rulesList.adapter =
-//                RuleValidationResultsAdapter(layoutInflater, ruleValidationResultCards)
-//        }
     }
 
     private fun close() {

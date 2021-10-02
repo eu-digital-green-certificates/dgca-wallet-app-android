@@ -24,13 +24,13 @@ data class BookingPortalValidationResponse(
     val iat: Int,
 
     @field:JsonProperty("results")
-    val results: List<ResultsItem>
+    val resultValidations: List<BookingPortalValidationResponseResultItem>
 )
 
-data class ResultsItem(
+data class BookingPortalValidationResponseResultItem(
 
     @field:JsonProperty("result")
-    val result: String,
+    val result: BookingPortalValidationResponseResult,
 
     @field:JsonProperty("identifier")
     val identifier: String,

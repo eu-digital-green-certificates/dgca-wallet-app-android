@@ -24,7 +24,8 @@ package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmi
 
 import dgca.wallet.app.android.data.remote.ticketing.validate.BookingPortalValidationResponse
 import dgca.wallet.app.android.data.remote.ticketing.validate.BookingPortalValidationResponseResult
-import dgca.wallet.app.android.data.remote.ticketing.validate.ResultsItem
+import dgca.wallet.app.android.data.remote.ticketing.validate.BookingPortalValidationResponseResultItem
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.validationresult.BookingPortalLimitedValidityResult
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.validationresult.BookingPortalLimitedValidityResultItem
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.validationresult.BookingPortalValidationResult
 
@@ -32,17 +33,26 @@ fun BookingPortalValidationResponse.toValidationResult(): BookingPortalValidatio
     return when (this.result) {
         BookingPortalValidationResponseResult.OK -> BookingPortalValidationResult.Valid
         BookingPortalValidationResponseResult.NOK -> BookingPortalValidationResult.Invalid
-        BookingPortalValidationResponseResult.CHK -> BookingPortalValidationResult.LimitedValidity(this.results.toLimitedValidityResultItems())
+        BookingPortalValidationResponseResult.CHK -> BookingPortalValidationResult.LimitedValidity(this.resultValidations.toLimitedValidityResultItems())
     }
 }
 
-fun ResultsItem.toLimitedValidityResultItems(): BookingPortalLimitedValidityResultItem = BookingPortalLimitedValidityResultItem(
-    result = result,
-    identifier = identifier,
-    details = details,
-    type = type
-)
+fun BookingPortalValidationResponseResultItem.toLimitedValidityResultItems(): BookingPortalLimitedValidityResultItem =
+    BookingPortalLimitedValidityResultItem(
+        result = result.toBookingPortalValidationResponseResult(),
+        identifier = identifier,
+        details = details,
+        type = type
+    )
 
-fun List<ResultsItem>.toLimitedValidityResultItems(): List<BookingPortalLimitedValidityResultItem> = map {
-    it.toLimitedValidityResultItems()
-}
+fun List<BookingPortalValidationResponseResultItem>.toLimitedValidityResultItems(): List<BookingPortalLimitedValidityResultItem> =
+    map {
+        it.toLimitedValidityResultItems()
+    }
+
+fun BookingPortalValidationResponseResult.toBookingPortalValidationResponseResult(): BookingPortalLimitedValidityResult =
+    when (this) {
+        BookingPortalValidationResponseResult.OK -> BookingPortalLimitedValidityResult.OK
+        BookingPortalValidationResponseResult.NOK -> BookingPortalLimitedValidityResult.NOK
+        BookingPortalValidationResponseResult.CHK -> BookingPortalLimitedValidityResult.CHK
+    }
