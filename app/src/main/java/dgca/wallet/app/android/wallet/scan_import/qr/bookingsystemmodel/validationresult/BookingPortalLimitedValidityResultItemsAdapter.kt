@@ -60,8 +60,8 @@ class BookingPortalLimitedValidityResultItemsAdapter(
                     itemView.resources,
                     when (bookingPortalLimitedValidityResultItem.result) {
                         BookingPortalLimitedValidityResult.OK -> R.color.green
-                        BookingPortalLimitedValidityResult.NOK -> R.color.grey_50
-                        BookingPortalLimitedValidityResult.CHK -> R.color.red
+                        BookingPortalLimitedValidityResult.CHK -> R.color.grey_50
+                        BookingPortalLimitedValidityResult.NOK -> R.color.red
                     },
                     null
                 )
