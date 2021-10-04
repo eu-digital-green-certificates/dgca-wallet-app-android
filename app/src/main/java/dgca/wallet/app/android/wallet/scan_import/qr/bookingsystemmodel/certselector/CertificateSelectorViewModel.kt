@@ -29,15 +29,13 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.wallet.app.android.Event
 import dgca.wallet.app.android.model.BookingPortalEncryptionData
-import dgca.wallet.app.android.wallet.CertificatesCard
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 data class CertificatesContainer(
-    val selectedCertificate: CertificatesCard? = null,
+    val selectedCertificate: FilteredCertificateCard? = null,
     val selectableCertificateModelList: List<SelectableCertificateModel>
 )
 
@@ -55,7 +53,7 @@ class CertificateSelectorViewModel @Inject constructor(
     private val _event = MutableLiveData<Event<CertificateEvent>>()
     val event: LiveData<Event<CertificateEvent>> = _event
 
-    private lateinit var certificateList: List<CertificatesCard.CertificateCard>
+    private lateinit var certificateList: List<FilteredCertificateCard>
     private var selected: SelectableCertificateModel? = null
 
     fun init(bookingPortalEncryptionData: BookingPortalEncryptionData) {
@@ -79,7 +77,7 @@ class CertificateSelectorViewModel @Inject constructor(
         val certificatesContainer: CertificatesContainer = _certificatesContainer.value!!
         val list: MutableList<SelectableCertificateModel> =
             certificatesContainer.selectableCertificateModelList.toMutableList()
-        val selectedCertificateCard: CertificatesCard.CertificateCard = certificateList[position]
+        val selectedCertificateCard: FilteredCertificateCard = certificateList[position]
         selected?.let { model ->
             val index = list.indexOfFirst { model == it }
             if (index != -1) {
@@ -95,27 +93,18 @@ class CertificateSelectorViewModel @Inject constructor(
     }
 
     fun onNextClick() {
-        viewModelScope.launch {
-            _uiEvent.value = Event(CertificateViewUiEvent.OnShowLoading)
-
-            withContext(Dispatchers.IO) {
-                // TODO: API Calls
-                delay(1500)
-            }
-            _uiEvent.value = Event(CertificateViewUiEvent.OnHideLoading)
-            selected?.let {
-                _event.value = Event(CertificateEvent.OnCertificateAdvisorSelected(it))
-            }
+        selected?.let {
+            _event.value = Event(CertificateEvent.OnCertificateAdvisorSelected(it))
         }
     }
 
-    private fun List<CertificatesCard.CertificateCard>.toSelectableCertificateModelList(): List<SelectableCertificateModel> {
+    private fun List<FilteredCertificateCard>.toSelectableCertificateModelList(): List<SelectableCertificateModel> {
         val selectableCertificateModelList = mutableListOf<SelectableCertificateModel>()
-        forEach { certificateCard ->
+        forEach { filteredCertificateCard ->
             selectableCertificateModelList.add(
                 SelectableCertificateModel(
-                    certificateCard.certificateId.toString(),
-                    certificateCard,
+                    filteredCertificateCard.certificateCard.certificateId.toString(),
+                    filteredCertificateCard,
                     false
                 )
             )

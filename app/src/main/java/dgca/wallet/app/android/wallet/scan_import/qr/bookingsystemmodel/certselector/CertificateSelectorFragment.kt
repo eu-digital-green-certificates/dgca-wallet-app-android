@@ -101,8 +101,9 @@ class CertificateSelectorFragment : BindingFragment<FragmentCertificateSelectorB
                 val action =
                     CertificateSelectorFragmentDirections.actionCertificateSelectorFragmentToTransmissionConsentFragment(
                         args.bookingPortalEncryptionData,
-                        event.certModel.certificateCard.certificate,
-                        event.certModel.certificateCard.qrCodeText
+                        event.certModel.filteredCertificateCard.certificateCard.certificate,
+                        event.certModel.filteredCertificateCard.validTo,
+                        event.certModel.filteredCertificateCard.certificateCard.qrCodeText
                     )
                 findNavController().navigate(action)
             }

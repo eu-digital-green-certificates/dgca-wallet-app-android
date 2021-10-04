@@ -26,24 +26,40 @@ import dgca.wallet.app.android.data.WalletRepository
 import dgca.wallet.app.android.model.BookingPortalEncryptionData
 import dgca.wallet.app.android.toZonedDateTime
 import dgca.wallet.app.android.wallet.CertificatesCard
+import dgca.wallet.app.android.wallet.scan_import.GreenCertificateFetcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.ZonedDateTime
 import java.util.*
 
+data class FilteredCertificateCard(
+    val validFrom: ZonedDateTime?,
+    val validTo: ZonedDateTime?,
+    val certificateCard: CertificatesCard.CertificateCard
+)
 
-class GetFilteredCertificatesUseCase(private val walletRepository: WalletRepository) {
-    suspend fun run(bookingPortalEncryptionData: BookingPortalEncryptionData): List<CertificatesCard.CertificateCard> =
+class GetFilteredCertificatesUseCase(
+    private val walletRepository: WalletRepository,
+    private val greenCertificateFetcher: GreenCertificateFetcher
+) {
+    suspend fun run(bookingPortalEncryptionData: BookingPortalEncryptionData): List<FilteredCertificateCard> =
         withContext(Dispatchers.IO) {
-            val filteredCertificates: MutableList<CertificatesCard.CertificateCard> = mutableListOf()
+            val filteredCertificates: MutableList<FilteredCertificateCard> = mutableListOf()
             walletRepository.getCertificates()?.forEach { certificateCard ->
                 if (isGreenCertificateTypeApplicable(bookingPortalEncryptionData, certificateCard)
-                    && isUserDataApplicable(bookingPortalEncryptionData, certificateCard) && areDatesApplicable(
-                        bookingPortalEncryptionData,
-                        certificateCard
-                    )
+                    && isUserDataApplicable(bookingPortalEncryptionData, certificateCard)
                 ) {
-                    filteredCertificates.add(certificateCard)
+                    val greenCertificateData =
+                        greenCertificateFetcher.fetchGreenCertificateDataFromQrString(certificateCard.qrCodeText)
+                    val validFrom: ZonedDateTime? = greenCertificateData?.issuedAt
+                    val validTo: ZonedDateTime? = greenCertificateData?.expirationTime
+                    if (areDatesApplicable(
+                            bookingPortalEncryptionData,
+                            validFrom, validTo
+                        )
+                    ) {
+                        filteredCertificates.add(FilteredCertificateCard(validFrom, validTo, certificateCard))
+                    }
                 }
             }
 
@@ -83,7 +99,7 @@ class GetFilteredCertificatesUseCase(private val walletRepository: WalletReposit
 
         val ticketingStandardizedFamilyLastName: String =
             bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.standardizedFamilyName
-        val greenCertificateStandardizedFamilyName: String? = certificateCard.certificate.person.standardisedFamilyName
+        val greenCertificateStandardizedFamilyName: String = certificateCard.certificate.person.standardisedFamilyName
         if (ticketingStandardizedFamilyLastName.isNotBlank() &&
             (greenCertificateStandardizedFamilyName.isNullOrBlank() || greenCertificateStandardizedFamilyName.compareTo(
                 ticketingStandardizedFamilyLastName, ignoreCase = true
@@ -100,17 +116,15 @@ class GetFilteredCertificatesUseCase(private val walletRepository: WalletReposit
 
     private fun areDatesApplicable(
         bookingPortalEncryptionData: BookingPortalEncryptionData,
-        certificateCard: CertificatesCard.CertificateCard
+        validFrom: ZonedDateTime?, validTo: ZonedDateTime?
     ): Boolean {
         val ticketingValidFrom: ZonedDateTime =
             bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.validFrom
-        val greenCertificateValidFrom: ZonedDateTime? = certificateCard.certificate.getValidFrom()
-        if (greenCertificateValidFrom == null || greenCertificateValidFrom.isAfter(ticketingValidFrom)) return false
+        if (validFrom == null || validFrom.isAfter(ticketingValidFrom)) return false
 
         val ticketingValidTo: ZonedDateTime =
             bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.validTo
-        val greenCertificateValidTo: ZonedDateTime? = certificateCard.certificate.getValidTo()
-        if (greenCertificateValidTo != null && greenCertificateValidTo.isBefore(ticketingValidTo)) return false
+        if (validTo != null && validTo.isBefore(ticketingValidTo)) return false
 
         return true
     }

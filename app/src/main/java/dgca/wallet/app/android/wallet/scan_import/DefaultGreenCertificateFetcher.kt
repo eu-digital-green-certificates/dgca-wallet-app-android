@@ -24,8 +24,10 @@ package dgca.wallet.app.android.wallet.scan_import
 
 import dgca.verifier.app.decoder.base45.Base45Service
 import dgca.verifier.app.decoder.cbor.CborService
+import dgca.verifier.app.decoder.cbor.GreenCertificateData
 import dgca.verifier.app.decoder.compression.CompressorService
 import dgca.verifier.app.decoder.cose.CoseService
+import dgca.verifier.app.decoder.model.CoseData
 import dgca.verifier.app.decoder.model.GreenCertificate
 import dgca.verifier.app.decoder.model.VerificationResult
 import dgca.verifier.app.decoder.prefixvalidation.PrefixValidationService
@@ -40,6 +42,16 @@ class DefaultGreenCertificateFetcher(
     private val schemaValidator: SchemaValidator,
     private val cborService: CborService,
 ) : GreenCertificateFetcher {
+    override fun fetchGreenCertificateDataFromQrString(qrString: String): GreenCertificateData? {
+        val verificationResult = VerificationResult()
+        val plainInput = prefixValidationService.decode(qrString, verificationResult)
+        val compressedCose = base45Service.decode(plainInput, verificationResult)
+        val cose: ByteArray? = compressorService.decode(compressedCose, verificationResult)
+
+        val coseData: CoseData? = cose?.let { coseService.decode(cose, verificationResult) }
+        return coseData?.let { cborService.decodeData(it.cbor, verificationResult) }
+    }
+
     override fun fetchDataFromQrString(qrString: String): Pair<ByteArray?, GreenCertificate?> {
         val verificationResult = VerificationResult()
         val plainInput = prefixValidationService.decode(qrString, verificationResult)

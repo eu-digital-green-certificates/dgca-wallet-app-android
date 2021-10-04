@@ -53,8 +53,9 @@ class SelectableCertificateViewHolder(
     }
 
     fun bind(model: SelectableCertificateModel) {
-        val certificateModel: CertificateModel = model.certificateCard.certificate
-        val validUntil: ZonedDateTime? = certificateModel.getValidTo()
+        val filteredCertificateCard: FilteredCertificateCard = model.filteredCertificateCard
+        val certificateModel: CertificateModel = filteredCertificateCard.certificateCard.certificate
+        val validUntil: ZonedDateTime? = filteredCertificateCard.validTo
         binding.title.text = certificateModel.getTitle(binding.itemView.resources)
         binding.description.text =
             if (validUntil == null) binding.root.resources.getString(R.string.no_expiration_date) else binding.root.resources.getString(

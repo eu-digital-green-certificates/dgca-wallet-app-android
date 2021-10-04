@@ -33,6 +33,7 @@ import dgca.verifier.app.ticketing.TicketingDgcSigner
 import dgca.verifier.app.ticketing.TicketingValidationRequestProvider
 import dgca.wallet.app.android.data.WalletRepository
 import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
+import dgca.wallet.app.android.wallet.scan_import.GreenCertificateFetcher
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.DefaultJwtTokenParser
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.JwtTokenParser
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.access.token.GetAccessTokenUseCase
@@ -77,8 +78,10 @@ object TicketingModule {
 
     @Singleton
     @Provides
-    internal fun provideGetFilteredCertificatesUseCase(walletRepository: WalletRepository): GetFilteredCertificatesUseCase =
-        GetFilteredCertificatesUseCase(walletRepository)
+    internal fun provideGetFilteredCertificatesUseCase(
+        walletRepository: WalletRepository,
+        greenCertificateFetcher: GreenCertificateFetcher
+    ): GetFilteredCertificatesUseCase = GetFilteredCertificatesUseCase(walletRepository, greenCertificateFetcher)
 
     @Singleton
     @Provides

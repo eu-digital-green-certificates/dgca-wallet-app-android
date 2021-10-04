@@ -460,6 +460,11 @@
             app:argType="dgca.wallet.app.android.data.CertificateModel" />
 
         <argument
+            android:name="validTo"
+            app:argType="java.time.ZonedDateTime"
+            app:nullable="true" />
+
+        <argument
             android:name="qrString"
             app:argType="string" />
 

@@ -27,6 +27,6 @@ import dgca.wallet.app.android.wallet.CertificatesCard
 
 data class SelectableCertificateModel(
     override val id: String,
-    val certificateCard: CertificatesCard.CertificateCard,
+    val filteredCertificateCard: FilteredCertificateCard,
     val selected: Boolean = false
 ) : IdentifiableData

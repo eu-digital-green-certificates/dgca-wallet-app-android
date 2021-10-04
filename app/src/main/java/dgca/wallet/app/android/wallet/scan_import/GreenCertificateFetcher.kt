@@ -22,9 +22,12 @@
 
 package dgca.wallet.app.android.wallet.scan_import
 
+import dgca.verifier.app.decoder.cbor.GreenCertificateData
 import dgca.verifier.app.decoder.model.GreenCertificate
 
 interface GreenCertificateFetcher {
+    fun fetchGreenCertificateDataFromQrString(qrString: String): GreenCertificateData?
+
     fun fetchDataFromQrString(qrString: String): Pair<ByteArray?, GreenCertificate?>
 
     fun fetchGreenCertificateFromQrString(qrString: String): GreenCertificate?

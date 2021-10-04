@@ -67,7 +67,7 @@ class TransmissionConsentFragment : BindingFragment<FragmentTransmissionConsentB
         super.onViewCreated(view, savedInstanceState)
 
         binding.title.text = args.certificateModel.getTitle(resources)
-        val validTo = args.certificateModel.getValidTo()
+        val validTo = args.validTo
         binding.description.text = if (validTo == null) getString(R.string.no_expiration_date) else getString(
             R.string.valid_until,
             DateTimeFormatter.ofPattern(YEAR_MONTH_DAY, Locale.US).format(validTo.toLocalDate())
