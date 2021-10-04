@@ -112,7 +112,11 @@
     <string name="deny">Deny</string>
     <string name="allow">Allow</string>
     <string name="valid_until">Valid until %1$s</string>
-    <string name="certificates_found_title">%1$s certificates found</string>
+    <string name="certificates_found_title">%1$s certificates found for %2$s</string>
+    <plurals name="certificates_found_title">
+        <item quantity="one">%1$s certificate found for %2$s</item>
+        <item quantity="other">%1$s certificates found for %2$s</item>
+    </plurals>
     <string name="validation_services_found_title">%1$s validation services found</string>
     <string name="cancel">Cancel</string>
     <string name="grand_permission">Grand Permission</string>

@@ -73,20 +73,20 @@ class GetFilteredCertificatesUseCase(private val walletRepository: WalletReposit
         bookingPortalEncryptionData: BookingPortalEncryptionData,
         certificateCard: CertificatesCard.CertificateCard
     ): Boolean {
-        val ticketingFirstName: String =
-            bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.givenName
-        val greenCertificateFirstName: String? = certificateCard.certificate.person.givenName
-        if (ticketingFirstName.isNotBlank() && (greenCertificateFirstName.isNullOrBlank() || greenCertificateFirstName.compareTo(
-                ticketingFirstName, ignoreCase = true
+        val ticketingStandardizedGivenName: String =
+            bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.standardizedGivenName
+        val greenCertificateStandardizedGivenName: String? = certificateCard.certificate.person.standardisedGivenName
+        if (ticketingStandardizedGivenName.isNotBlank() && (greenCertificateStandardizedGivenName.isNullOrBlank() || greenCertificateStandardizedGivenName.compareTo(
+                ticketingStandardizedGivenName, ignoreCase = true
             ) != 0)
         ) return false
 
-        val ticketingLastName: String =
-            bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.familyName
-        val greenCertificateLastName: String? = certificateCard.certificate.person.familyName
-        if (ticketingLastName.isNotBlank() &&
-            (greenCertificateLastName.isNullOrBlank() || greenCertificateLastName.compareTo(
-                ticketingLastName, ignoreCase = true
+        val ticketingStandardizedFamilyLastName: String =
+            bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.standardizedFamilyName
+        val greenCertificateStandardizedFamilyName: String? = certificateCard.certificate.person.standardisedFamilyName
+        if (ticketingStandardizedFamilyLastName.isNotBlank() &&
+            (greenCertificateStandardizedFamilyName.isNullOrBlank() || greenCertificateStandardizedFamilyName.compareTo(
+                ticketingStandardizedFamilyLastName, ignoreCase = true
             ) != 0)
         ) return false
 

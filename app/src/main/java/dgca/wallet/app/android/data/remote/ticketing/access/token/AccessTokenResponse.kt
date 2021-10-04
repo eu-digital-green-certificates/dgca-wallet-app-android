@@ -48,4 +48,4 @@ data class AccessTokenResponse(
     val v: String,
     @JsonProperty("vc")
     val certificateData: CertificateData
-): Parcelable
+) : Parcelable
