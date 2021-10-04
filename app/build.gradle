@@ -101,6 +101,7 @@ dependencies {
     kapt Deps.androidx_hilt_compiler
 
     implementation Deps.retrofit2
+    implementation Deps.retrofit2_converter_scalars
     implementation Deps.log_interceptor
     implementation Deps.gson_converter
     implementation Deps.jackson_kotlin

@@ -1,0 +1,21 @@
+{
+  "sub": "88361042-d2e3-4463-8063-aa6f6e21c5d3",
+  "iss": "https://dgca-validation-service-eu-acc.cfapps.eu10.hana.ondemand.com",
+  "iat": 1633102652,
+  "confirmation": "eyJraWQiOiJSQU0yU3R3N0VrRT0iLCJhbGciOiJFUzI1NiJ9.eyJqdGkiOiIzNDY2NjU1ZS02ZGE3LTQyM2QtODMzNS01YTRjZWU0MzYxNTgiLCJzdWIiOiI4ODM2MTA0Mi1kMmUzLTQ0NjMtODA2My1hYTZmNmUyMWM1ZDMiLCJpYXQiOjE2MzMxMDI2NTIsInJlc3VsdCI6Ik5PSyJ9.KK_KeFD7wlVlnjEED5oImmXFuCBoHcKLY0oUG-L8f0rnaJw7oAf1qYvr0UZF2d8M5QspVEq3h5QBMXQroC8Anw",
+  "results": [
+    {
+      "identifier": "NOTYETVALIDONDATE",
+      "result": "NOK",
+      "type": "TechnicalVerification",
+      "details": "Dcc exp date before validTo"
+    },
+    {
+      "identifier": "EXPIREDONDATE",
+      "result": "NOK",
+      "type": "TechnicalVerification",
+      "details": "Test collection date after condition validFrom"
+    }
+  ],
+  "result": "NOK"
+}

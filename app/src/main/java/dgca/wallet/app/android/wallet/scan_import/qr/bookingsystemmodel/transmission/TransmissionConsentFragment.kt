@@ -39,6 +39,7 @@ import dgca.wallet.app.android.databinding.FragmentTransmissionConsentBinding
 import dgca.wallet.app.android.getTitle
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission.DefaultDialogFragment.Companion.ACTION_NEGATIVE
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission.DefaultDialogFragment.Companion.ACTION_POSITIVE
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.validationresult.BookingPortalValidationResult
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -95,15 +96,18 @@ class TransmissionConsentFragment : BindingFragment<FragmentTransmissionConsentB
         }
     }
 
+    private fun showBookingPortalValidationResultScree(bookingPortalValidationResult: BookingPortalValidationResult) {
+        val action =
+            TransmissionConsentFragmentDirections.actionTransmissionConsentFragmentToBookingPortalValidationResultFragment(
+                bookingPortalValidationResult
+            )
+        findNavController().navigate(action)
+    }
+
     private fun onViewModelEvent(event: TransmissionConsentViewModel.TransmissionConsentEvent) {
         when (event) {
-            TransmissionConsentViewModel.TransmissionConsentEvent.OnCertificateTransmitted -> {
-                val params = DefaultDialogFragment.BuildOptions(
-                    message = getString(R.string.cert_transferred),
-                    positiveBtnText = getString(R.string.ok),
-                    isOneButton = true
-                )
-                DefaultDialogFragment.newInstance(params).show(childFragmentManager, DefaultDialogFragment.TAG)
+            is TransmissionConsentViewModel.TransmissionConsentEvent.OnCertificateTransmitted -> {
+                showBookingPortalValidationResultScree(event.bookingPortalValidationResult)
             }
             TransmissionConsentViewModel.TransmissionConsentEvent.OnCertificateTransmissionFailed -> {
                 val params = DefaultDialogFragment.BuildOptions(

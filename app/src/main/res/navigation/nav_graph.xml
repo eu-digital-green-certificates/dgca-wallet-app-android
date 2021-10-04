@@ -463,5 +463,24 @@
             android:name="qrString"
             app:argType="string" />
 
+        <action
+            android:id="@+id/action_transmissionConsentFragment_to_bookingPortalValidationResultFragment"
+            app:destination="@id/bookingPortalValidationResultFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/bookingPortalValidationResultFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.validationresult.BookingPortalValidationResultFragment"
+        android:label="@string/validation_result"
+        tools:layout="@layout/fragment_transmission_consent">
+
+        <argument
+            android:name="bookingPortalValidationResult"
+            app:argType="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.validationresult.BookingPortalValidationResult" />
+
     </fragment>
 </navigation>

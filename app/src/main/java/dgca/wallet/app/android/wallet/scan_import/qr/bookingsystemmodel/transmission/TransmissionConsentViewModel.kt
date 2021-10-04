@@ -29,6 +29,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.wallet.app.android.Event
 import dgca.wallet.app.android.model.BookingPortalEncryptionData
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.validationresult.BookingPortalValidationResult
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -49,8 +50,9 @@ class TransmissionConsentViewModel @Inject constructor(
 
             _event.value = Event(
                 try {
-                    validationUseCase.run(qrString, bookingPortalEncryptionData)
-                    TransmissionConsentEvent.OnCertificateTransmitted
+                    val bookingPortalValidationResult: BookingPortalValidationResult =
+                        validationUseCase.run(qrString, bookingPortalEncryptionData)
+                    TransmissionConsentEvent.OnCertificateTransmitted(bookingPortalValidationResult)
                 } catch (exception: Exception) {
                     TransmissionConsentEvent.OnCertificateTransmissionFailed
                 }
@@ -66,7 +68,9 @@ class TransmissionConsentViewModel @Inject constructor(
     }
 
     sealed class TransmissionConsentEvent {
-        object OnCertificateTransmitted : TransmissionConsentEvent()
+        class OnCertificateTransmitted(val bookingPortalValidationResult: BookingPortalValidationResult) :
+            TransmissionConsentEvent()
+
         object OnCertificateTransmissionFailed : TransmissionConsentEvent()
     }
 }

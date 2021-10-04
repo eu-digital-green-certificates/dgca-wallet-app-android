@@ -43,6 +43,7 @@ object Deps {
     const val androidx_navigation = "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.androidx_navigation}"
     const val androidx_hilt_compiler = "androidx.hilt:hilt-compiler:${Versions.androidx_hilt_compiler}"
     const val retrofit2 = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
+    const val retrofit2_converter_scalars = "com.squareup.retrofit2:converter-scalars:${Versions.retrofit}"
     const val log_interceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.logging_interceptor}"
     const val biometric = "androidx.biometric:biometric-ktx:${Versions.biometric}"
 

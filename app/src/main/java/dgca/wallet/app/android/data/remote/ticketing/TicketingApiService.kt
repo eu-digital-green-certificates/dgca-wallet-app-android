@@ -43,7 +43,7 @@ interface TicketingApiService {
         @Url url: String,
         @Header("Authorization") authHeader: String,
         @Body body: AccessTokenRequest
-    ): Response<ResponseBody>
+    ): Response<String>
 
     @GET
     suspend fun getValidationServiceIdentity(@Url url: String): Response<ValidationServiceIdentityResponse>
@@ -58,5 +58,5 @@ interface TicketingApiService {
         @Url url: String,
         @Header("Authorization") authHeader: String,
         @Body body: ValidateRequest
-    ): Response<ResponseBody>
+    ): Response<String>
 }
