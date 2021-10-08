@@ -1,10 +1,10 @@
 {
-  "id": "https://dgca-validation-service-eu-test.cfapps.eu10.hana.ondemand.com/identity",
+  "id": "https://issuance-dgca-test.cfapps.eu10.hana.ondemand.com/identity",
   "verificationMethod": [
     {
-      "id": "https://dgca-validation-service-eu-test.cfapps.eu10.hana.ondemand.com/identity/verificationMethod/JsonWebKey2020#ValidationServiceEncKey-1",
+      "id": "https://issuance-dgca-test.cfapps.eu10.hana.ondemand.com/identity/verificationMethod/JsonWebKey2020#ValidationServiceEncKey-1",
       "type": "JsonWebKey2020",
-      "controller": "https://dgca-validation-service-eu-test.cfapps.eu10.hana.ondemand.com/identity",
+      "controller": "https://issuance-dgca-test.cfapps.eu10.hana.ondemand.com/identity",
       "publicKeyJwk": {
         "x5c": "MIIDwDCCAiigAwIBAgIEYSdvPDANBgkqhkiG9w0BAQsFADAiMSAwHgYDVQQDDBdWYWxpZGF0aW9uU2VydmljZUVuY0tleTAeFw0yMTA4MjYxMDM4NTJaFw0yMjA4MjYxMDM4NTJaMCIxIDAeBgNVBAMMF1ZhbGlkYXRpb25TZXJ2aWNlRW5jS2V5MIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEA46E7KT/egBv6lGJjA0ARXrBxGjdaw/L2Br1IyCXoeVjyqs00UgSuz5jbfOntcbvQbn+QFTePUSUFEUOmm/ngYfdJRseYydN5lk3EjaA9icZYun3fwskoJ9kqFRA7brauhH9M75sPeEjroZAGB+HJ+bho3MGZZWNbR/9EK+8Ob1piBK4eOFlACJCYHK8d/1XeGCzZ3Iiia79eRAc80sDB1rOyf3BWFBlvdbkf3u4613pAd6YimpUBLmj69iQpcBRF3aMFjLxxIyexx0Bb9mKKSo1u5jK+ILseAn44hRmhxQRUkrleWrvns64qfBA+yMvjUkzSRpx8/X5e8nTlgN2BcWJ6pSnrXSWeH3Vx5Vn5sPpcn70wdDJ5+xH5mkWLFTgKdVShCEIZTPq8j7D7TlpqwQG8aEKyXfKXQlbTzbHqvqBHlsFkkN4rw0uzIXS+SneFknCZZuNoTKpi+Tg6Bx8tpN/C2J6QRHn3ub6a8WjtylymDFnQDiYMXOQHhW0ZS/I9AgMBAAEwDQYJKoZIhvcNAQELBQADggGBANgBAOxgi0abqn9EDCwFELEHv6cat5Mwnw6Z97yeMyPNk4QVKPz5LmP+73XsOGHjoFLasje6BC7IErynvFo3d29LG7+OLsMOGEEvPh8G0svylJlbEpLQ8/CGupWnxH0TRhBJygn1ANpn71ENmUVg2IGtyoZYp/6/5ZeVDoFR22sKrLma8JeWcRU33WimulKo26Gl5Kvm7YglIwuQtCPI62DWFRgcwyg9UZfoutGmkuyGPGfCLQxYCDznIjHemvFX8u+jeroRpIpbdBTi9jPAv/SPGGtOFE3G7AOtcScJL2vbVDT9lUp7qy4p9MbTE+tU9eM2+nUEmkc9VhMyBTTu/GzUX8oInarhWOeTOgs12iesFWt0/kZYFwoqBXGjkvLN3a31Q+cHDYw9EBqtjKPDGnv+FQwQxLsRU12/ItPMpF+8qCkq3hfnf1tsaW4R0QdScSH9Lgv0P1tmJkSqnvGgcXN3dfgMUUYhqzsF7RQhWAPcpvfKoNL1YatEOx++hcuIqQ==",
         "kid": "9P6CdU/nRyU=",
@@ -13,9 +13,9 @@
       }
     },
     {
-      "id": "https://dgca-validation-service-eu-test.cfapps.eu10.hana.ondemand.com/identity/verificationMethod/JsonWebKey2020#ValidationServiceSignKey-1",
+      "id": "https://issuance-dgca-test.cfapps.eu10.hana.ondemand.com/identity/verificationMethod/JsonWebKey2020#ValidationServiceSignKey-1",
       "type": "JsonWebKey2020",
-      "controller": "https://dgca-validation-service-eu-test.cfapps.eu10.hana.ondemand.com/identity",
+      "controller": "https://issuance-dgca-test.cfapps.eu10.hana.ondemand.com/identity",
       "publicKeyJwk": {
         "x5c": "MIIBNDCB3KADAgECAgRhJeHLMAoGCCqGSM49BAMCMCMxITAfBgNVBAMMGFZhbGlkYXRpb25TZXJ2aWNlU2lnbktleTAeFw0yMTA4MjUwNjIzMDdaFw0yMjA4MjUwNjIzMDdaMCMxITAfBgNVBAMMGFZhbGlkYXRpb25TZXJ2aWNlU2lnbktleTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABIMdlvwpEPWmbrhAZLOZm6NGyCQofFbpE1EfYK9i+kLpmwDgAtc99zoZg9d2oZtpC9zNLs71cncpJSkqpST1HKEwCgYIKoZIzj0EAwIDRwAwRAIgct73rVroQYuxpZS/Y/awVrceBjAOvFqmxDr07Y8BBqsCIBjH9085RqVzFfZsdO9Y9YazZ1q0+oqmwl7ypT2xWEoU",
         "kid": "RAM2Stw7EkE=",
@@ -24,19 +24,19 @@
       }
     },
     {
-      "id": "https://dgca-validation-service-eu-test.cfapps.eu10.hana.ondemand.com/identity/verificationMethod/DccEncryptionScheme2021#ValidationServiceEncScheme-RSAOAEPWithSHA256AESCBC",
+      "id": "https://issuance-dgca-test.cfapps.eu10.hana.ondemand.com/identity/verificationMethod/DccEncryptionScheme2021#ValidationServiceEncScheme-RSAOAEPWithSHA256AESCBC",
       "type": "DccEncryptionScheme2021",
-      "controller": "https://dgca-validation-service-eu-test.cfapps.eu10.hana.ondemand.com/identity",
+      "controller": "https://issuance-dgca-test.cfapps.eu10.hana.ondemand.com/identity",
       "verificationMethods": [
-        "https://dgca-validation-service-eu-test.cfapps.eu10.hana.ondemand.com/identity/verificationMethod/JsonWebKey2020#ValidationServiceEncKey-1"
+        "https://issuance-dgca-test.cfapps.eu10.hana.ondemand.com/identity/verificationMethod/JsonWebKey2020#ValidationServiceEncKey-1"
       ]
     },
     {
-      "id": "https://dgca-validation-service-eu-test.cfapps.eu10.hana.ondemand.com/identity/verificationMethod/DccEncryptionScheme2021#ValidationServiceEncScheme-RSAOAEPWithSHA256AESGCM",
+      "id": "https://issuance-dgca-test.cfapps.eu10.hana.ondemand.com/identity/verificationMethod/DccEncryptionScheme2021#ValidationServiceEncScheme-RSAOAEPWithSHA256AESGCM",
       "type": "DccEncryptionScheme2021",
-      "controller": "https://dgca-validation-service-eu-test.cfapps.eu10.hana.ondemand.com/identity",
+      "controller": "https://issuance-dgca-test.cfapps.eu10.hana.ondemand.com/identity",
       "verificationMethods": [
-        "https://dgca-validation-service-eu-test.cfapps.eu10.hana.ondemand.com/identity/verificationMethod/JsonWebKey2020#ValidationServiceEncKey-1"
+        "https://issuance-dgca-test.cfapps.eu10.hana.ondemand.com/identity/verificationMethod/JsonWebKey2020#ValidationServiceEncKey-1"
       ]
     }
   ]
