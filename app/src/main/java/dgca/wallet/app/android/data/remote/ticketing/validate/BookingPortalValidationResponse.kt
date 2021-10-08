@@ -1,11 +1,13 @@
 package dgca.wallet.app.android.data.remote.ticketing.validate
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
 enum class BookingPortalValidationResponseResult {
     OK, NOK, CHK
 }
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class BookingPortalValidationResponse(
 
     @field:JsonProperty("result")
@@ -16,6 +18,12 @@ data class BookingPortalValidationResponse(
 
     @field:JsonProperty("iss")
     val iss: String,
+
+    @field:JsonProperty("exp")
+    val exp: String?,
+
+    @field:JsonProperty("category")
+    val category: List<String>?,
 
     @field:JsonProperty("confirmation")
     val confirmation: String,

@@ -1,7 +1,7 @@
 {
   "protocol": "DCCVALIDATION",
   "protocolVersion": "1.0.0",
-  "serviceIdentity": "https://dgca-booking-demo-eu-test.cfapps.eu10.hana.ondemand.com/identity",
+  "serviceIdentity": "https://issuance-dgca-test.cfapps.eu10.hana.ondemand.com/identity",
   "privacyUrl": "https://validation-decorator.example",
   "token": "eyJ0eXAiOiJKV1QiLCJraWQiOiJiUzhEMi9XejV0WT0iLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJWYWxpZGF0aW9uIERlY29yYXRvciBTZXJ2aWNlIiwiZXhwIjoxNjMyMjk2NjYwLCJzdWIiOiIwYjA3ZmFiZC1hZDRiLTRiZWItYWE0Mi04MGM0NGY4ZmYzZWYifQ.5HY8VaD-Y1DfPDBT6xTKIiXzw2BWU6Xe_NovmWX1PFTwtxbnGQKLWoRZGvmh8tG1Zk4Ry1wnuAM74Z0EukbmAg",
   "consent": "Please confirm to start the DCC Exchange flow. If you not confirm, the flow is aborted.",

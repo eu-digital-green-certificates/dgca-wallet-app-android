@@ -2,7 +2,7 @@
   "iss": "Validation Decorator Service",
   "exp": 1632303,
   "sub": "28ff55d2-2a7a-40c7-8001-244087e2e668",
-  "aud": "https://dgca-validation-service-eu-test.cfapps.eu10.hana.ondemand.com/validate",
+  "aud": "https://issuance-dgca-test.cfapps.eu10.hana.ondemand.com/validate",
   "t": 2,
   "v": "1.0",
   "iat": 1632299458,

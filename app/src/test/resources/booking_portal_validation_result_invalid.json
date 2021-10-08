@@ -1,20 +1,30 @@
 {
-  "sub": "88361042-d2e3-4463-8063-aa6f6e21c5d3",
-  "iss": "https://dgca-validation-service-eu-acc.cfapps.eu10.hana.ondemand.com",
-  "iat": 1633102652,
-  "confirmation": "eyJraWQiOiJSQU0yU3R3N0VrRT0iLCJhbGciOiJFUzI1NiJ9.eyJqdGkiOiIzNDY2NjU1ZS02ZGE3LTQyM2QtODMzNS01YTRjZWU0MzYxNTgiLCJzdWIiOiI4ODM2MTA0Mi1kMmUzLTQ0NjMtODA2My1hYTZmNmUyMWM1ZDMiLCJpYXQiOjE2MzMxMDI2NTIsInJlc3VsdCI6Ik5PSyJ9.KK_KeFD7wlVlnjEED5oImmXFuCBoHcKLY0oUG-L8f0rnaJw7oAf1qYvr0UZF2d8M5QspVEq3h5QBMXQroC8Anw",
+  "sub": "dbe249c8-cb28-4910-a8fa-9ddf96d8e035",
+  "iss": "https://issuance-dgca-test.cfapps.eu10.hana.ondemand.com",
+  "iat": 1633680291,
+  "exp": 1633766691,
+  "category": [
+    "Standard"
+  ],
+  "confirmation": "eyJraWQiOiJSQU0yU3R3N0VrRT0iLCJhbGciOiJFUzI1NiJ9.eyJqdGkiOiI3NzExZWQzNC1iY2NmLTQyNGQtYmNhOS1kNjkwZjMzZjdkNTkiLCJzdWIiOiJkYmUyNDljOC1jYjI4LTQ5MTAtYThmYS05ZGRmOTZkOGUwMzUiLCJpc3MiOiJodHRwczovL2RnY2EtdmFsaWRhdGlvbi1zZXJ2aWNlLWV1LXRlc3QuY2ZhcHBzLmV1MTAuaGFuYS5vbmRlbWFuZC5jb20iLCJpYXQiOjE2MzM2ODAyOTEsImV4cCI6MTYzMzc2NjY5MSwicmVzdWx0IjoiTk9LIiwiY2F0ZWdvcnkiOlsiU3RhbmRhcmQiXX0.adrT9xUynyIJrMesIs8fRIOy8KXjtq2XRnIGr_4T-6TODRTeSlTlKvytalhtb8vEblKG-NQZ9fPjTLW7ZNJj9g",
   "results": [
-    {
-      "identifier": "NOTYETVALIDONDATE",
-      "result": "NOK",
-      "type": "TechnicalVerification",
-      "details": "Dcc exp date before validTo"
-    },
     {
       "identifier": "EXPIREDONDATE",
       "result": "NOK",
       "type": "TechnicalVerification",
-      "details": "Test collection date after condition validFrom"
+      "details": "Dcc exp date after validTo"
+    },
+    {
+      "identifier": "NOTYETVALIDONDATE",
+      "result": "NOK",
+      "type": "TechnicalVerification",
+      "details": "Test collection date before condition validFrom"
+    },
+    {
+      "identifier": "KID",
+      "result": "NOK",
+      "type": "TechnicalVerification",
+      "details": "\"unknown dcc signing kid\""
     }
   ],
   "result": "NOK"
