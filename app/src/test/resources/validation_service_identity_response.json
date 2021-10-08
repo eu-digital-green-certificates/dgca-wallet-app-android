@@ -2,7 +2,7 @@
   "id": "https://dgca-validation-service-eu-test.cfapps.eu10.hana.ondemand.com/identity",
   "verificationMethod": [
     {
-      "id": "https://dgca-validation-service-eu-test.cfapps.eu10.hana.ondemand.com/identity/verificationMethod/JsonWebKey2020#validationserviceenckey",
+      "id": "https://dgca-validation-service-eu-test.cfapps.eu10.hana.ondemand.com/identity/verificationMethod/JsonWebKey2020#ValidationServiceEncKey-1",
       "type": "JsonWebKey2020",
       "controller": "https://dgca-validation-service-eu-test.cfapps.eu10.hana.ondemand.com/identity",
       "publicKeyJwk": {
@@ -13,7 +13,7 @@
       }
     },
     {
-      "id": "https://dgca-validation-service-eu-test.cfapps.eu10.hana.ondemand.com/identity/verificationMethod/JsonWebKey2020#validationservicesignkey",
+      "id": "https://dgca-validation-service-eu-test.cfapps.eu10.hana.ondemand.com/identity/verificationMethod/JsonWebKey2020#ValidationServiceSignKey-1",
       "type": "JsonWebKey2020",
       "controller": "https://dgca-validation-service-eu-test.cfapps.eu10.hana.ondemand.com/identity",
       "publicKeyJwk": {
@@ -22,6 +22,22 @@
         "alg": "ES256",
         "use": "sig"
       }
+    },
+    {
+      "id": "https://dgca-validation-service-eu-test.cfapps.eu10.hana.ondemand.com/identity/verificationMethod/DccEncryptionScheme2021#ValidationServiceEncScheme-RSAOAEPWithSHA256AESCBC",
+      "type": "DccEncryptionScheme2021",
+      "controller": "https://dgca-validation-service-eu-test.cfapps.eu10.hana.ondemand.com/identity",
+      "verificationMethods": [
+        "https://dgca-validation-service-eu-test.cfapps.eu10.hana.ondemand.com/identity/verificationMethod/JsonWebKey2020#ValidationServiceEncKey-1"
+      ]
+    },
+    {
+      "id": "https://dgca-validation-service-eu-test.cfapps.eu10.hana.ondemand.com/identity/verificationMethod/DccEncryptionScheme2021#ValidationServiceEncScheme-RSAOAEPWithSHA256AESGCM",
+      "type": "DccEncryptionScheme2021",
+      "controller": "https://dgca-validation-service-eu-test.cfapps.eu10.hana.ondemand.com/identity",
+      "verificationMethods": [
+        "https://dgca-validation-service-eu-test.cfapps.eu10.hana.ondemand.com/identity/verificationMethod/JsonWebKey2020#ValidationServiceEncKey-1"
+      ]
     }
   ]
 }

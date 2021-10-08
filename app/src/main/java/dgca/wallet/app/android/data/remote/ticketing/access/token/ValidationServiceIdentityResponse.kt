@@ -40,7 +40,7 @@ data class ValidationServiceIdentityResponse(
     fun getEncryptionPublicKey(): PublicKeyJwkRemote? {
         var publicKeyJwkRemote: PublicKeyJwkRemote? = null
         verificationMethodsRemote.forEach { verificationMethodRemote ->
-            if (verificationMethodRemote.publicKeyJwkRemote.use == "enc") {
+            if (verificationMethodRemote.publicKeyJwkRemote?.use == "enc") {
                 publicKeyJwkRemote = verificationMethodRemote.publicKeyJwkRemote
                 return@forEach
             }
