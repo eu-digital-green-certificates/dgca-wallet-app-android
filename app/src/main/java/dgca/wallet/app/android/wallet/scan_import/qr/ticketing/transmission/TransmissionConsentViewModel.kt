@@ -59,7 +59,7 @@ class TransmissionConsentViewModel @Inject constructor(
                             bookingPortalEncryptionData.keyPair,
                             bookingPortalEncryptionData.accessTokenContainer.toRemote(),
                             bookingPortalEncryptionData.ticketingValidationServiceIdentity.toRemote()
-                        )
+                        ).toValidationResult()
                     TransmissionConsentEvent.OnCertificateTransmitted(bookingPortalValidationResult)
                 } catch (exception: Exception) {
                     TransmissionConsentEvent.OnCertificateTransmissionFailed

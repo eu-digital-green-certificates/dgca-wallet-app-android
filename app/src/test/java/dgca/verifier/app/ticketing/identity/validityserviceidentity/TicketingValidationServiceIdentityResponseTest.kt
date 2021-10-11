@@ -17,15 +17,14 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/20/21 10:59 AM
+ *  Created by osarapulov on 10/11/21 8:45 PM
  */
 
-package dgca.wallet.app.android.model
+package dgca.verifier.app.ticketing.identity.validityserviceidentity
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import dgca.verifier.app.ticketing.data.accesstoken.TicketingAccessTokenResponse
 import org.apache.commons.io.IOUtils
-import org.junit.Assert.assertNotNull
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
@@ -33,20 +32,21 @@ import java.io.InputStream
 import java.nio.charset.Charset
 
 @RunWith(MockitoJUnitRunner::class)
-class TicketingAccessTokenResponseTest {
+class TicketingValidationServiceIdentityResponseTest {
     private val objectMapper = ObjectMapper().apply { findAndRegisterModules() }
 
     @Test
-    fun shouldConvertAccessTokenResponseModel() {
-        val accessTokenResponseModelIs: InputStream =
-            javaClass.classLoader!!.getResourceAsStream(ACCESS_TOKEN_RESPONSE_MODEL_FILE_NAME)
-        val accessTokenResponseModelString: String = IOUtils.toString(accessTokenResponseModelIs, Charset.defaultCharset())
-        val ticketingAccessTokenResponseModel: TicketingAccessTokenResponse =
-            objectMapper.readValue(accessTokenResponseModelString, TicketingAccessTokenResponse::class.java)
-        assertNotNull(ticketingAccessTokenResponseModel)
+    fun shouldConvertValidationServiceIdentityResponseModel() {
+        val validationServiceIdentityResponseIs: InputStream =
+            javaClass.classLoader!!.getResourceAsStream(TICKETING_VALIDATION_SERVICE_IDENTITY_RESPONSE_FILE_NAME)
+        val validationServiceIdentityResponseString: String =
+            IOUtils.toString(validationServiceIdentityResponseIs, Charset.defaultCharset())
+        val ticketingValidationServiceIdentityResponse: TicketingValidationServiceIdentityResponse =
+            objectMapper.readValue(validationServiceIdentityResponseString, TicketingValidationServiceIdentityResponse::class.java)
+        Assert.assertNotNull(ticketingValidationServiceIdentityResponse)
     }
 
     companion object {
-        const val ACCESS_TOKEN_RESPONSE_MODEL_FILE_NAME = "access_token_response_model.json"
+        const val TICKETING_VALIDATION_SERVICE_IDENTITY_RESPONSE_FILE_NAME = "ticketing_validation_service_identity_response.json"
     }
 }

@@ -27,25 +27,19 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import dgca.verifier.app.decoder.base64ToX509Certificate
 import dgca.verifier.app.ticketing.JwtObject
 import dgca.verifier.app.ticketing.JwtTokenParser
+import dgca.verifier.app.ticketing.data.identity.TicketingPublicKeyJwkRemote
 import dgca.verifier.app.ticketing.identity.accesstoken.TicketingAccessTokenResponseContainer
 import dgca.verifier.app.ticketing.identity.validityserviceidentity.TicketingValidationServiceIdentityResponse
-import dgca.verifier.app.ticketing.data.identity.TicketingPublicKeyJwkRemote
 import dgca.verifier.app.ticketing.validation.encoding.TicketingValidationRequestProvider
-import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
 import dgca.wallet.app.android.data.remote.ticketing.validate.BookingPortalValidationResponse
-import dgca.wallet.app.android.wallet.scan_import.qr.ticketing.transmission.toValidationResult
-import dgca.wallet.app.android.wallet.scan_import.qr.ticketing.validationresult.BookingPortalValidationResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.net.HttpURLConnection
 import java.security.KeyPair
 import java.security.PublicKey
 
-const val SUPPORTED_ENCRYPTION_SCHEMA = "RSAOAEPWithSHA256AESGCM"
-
 class TicketingValidationUseCase(
     private val ticketingValidationRequestProvider: TicketingValidationRequestProvider,
-    private var ticketingApiService: TicketingApiService,
+    private var validationResultFetcher: TicketingValidationResultFetcher,
     private val jwtTokenParser: JwtTokenParser,
     private val objectMapper: ObjectMapper
 ) {
@@ -55,7 +49,7 @@ class TicketingValidationUseCase(
         keyPair: KeyPair,
         accessTokenResponseContainer: TicketingAccessTokenResponseContainer,
         validationServiceIdentityResponse: TicketingValidationServiceIdentityResponse
-    ): BookingPortalValidationResult =
+    ): BookingPortalValidationResponse =
         withContext(Dispatchers.IO) {
             val token = accessTokenResponseContainer.ticketingAccessTokenDataRemote.jwtToken
             val authTokenHeader = "Bearer $token"
@@ -70,19 +64,13 @@ class TicketingValidationUseCase(
                 keyPair.private
             )
 
-            val res = ticketingApiService.validate(
+            val resToken = validationResultFetcher.fetchValidationResult(
                 accessTokenResponseContainer.accessToken.validationUrl,
                 authTokenHeader,
                 validationRequest
             )
 
-            return@withContext if (res.isSuccessful && res.code() == HttpURLConnection.HTTP_OK) {
-                val resultToken: String = res.body()!!
-                val jwtToken: JwtObject = jwtTokenParser.parse(resultToken)
-                val bookingPortalValidationResponse: BookingPortalValidationResponse = objectMapper.readValue(jwtToken.body)
-                bookingPortalValidationResponse.toValidationResult()
-            } else {
-                throw IllegalStateException()
-            }
+            val jwtToken: JwtObject = jwtTokenParser.parse(resToken)
+            return@withContext objectMapper.readValue(jwtToken.body)
         }
 }

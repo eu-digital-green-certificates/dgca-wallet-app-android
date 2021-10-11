@@ -17,15 +17,14 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/10/21 11:48 AM
+ *  Created by osarapulov on 10/11/21 8:41 PM
  */
 
-package dgca.wallet.app.android.model
+package dgca.verifier.app.ticketing.data.accesstoken
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import dgca.verifier.app.ticketing.data.checkin.TicketingCheckInRemote
 import org.apache.commons.io.IOUtils
-import org.junit.Assert.assertNotNull
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
@@ -33,20 +32,20 @@ import java.io.InputStream
 import java.nio.charset.Charset
 
 @RunWith(MockitoJUnitRunner::class)
-class TicketingCheckInParcelableTest {
+class TicketingAccessTokenResponseTest {
     private val objectMapper = ObjectMapper().apply { findAndRegisterModules() }
 
     @Test
-    fun shouldConvertBookingSystemModel() {
-        val bookingSystemModelIs: InputStream =
-            javaClass.classLoader!!.getResourceAsStream(BOOKING_SYSTEM_MODEL_FILE_NAME)
-        val bookingSystemModelString: String = IOUtils.toString(bookingSystemModelIs, Charset.defaultCharset())
-        val ticketingCheckInRemoteModel: TicketingCheckInRemote =
-            objectMapper.readValue(bookingSystemModelString, TicketingCheckInRemote::class.java)
-        assertNotNull(ticketingCheckInRemoteModel)
+    fun shouldConvertAccessTokenResponseModel() {
+        val accessTokenResponseModelIs: InputStream =
+            javaClass.classLoader!!.getResourceAsStream(TICKETING_ACCESS_TOKEN_RESPONSE_FILE_NAME)
+        val accessTokenResponseModelString: String = IOUtils.toString(accessTokenResponseModelIs, Charset.defaultCharset())
+        val ticketingAccessTokenResponseModel: TicketingAccessTokenResponse =
+            objectMapper.readValue(accessTokenResponseModelString, TicketingAccessTokenResponse::class.java)
+        Assert.assertNotNull(ticketingAccessTokenResponseModel)
     }
 
     companion object {
-        const val BOOKING_SYSTEM_MODEL_FILE_NAME = "ticketing_check_in_remote_model.json"
+        const val TICKETING_ACCESS_TOKEN_RESPONSE_FILE_NAME = "ticketing_access_token_response.json"
     }
 }

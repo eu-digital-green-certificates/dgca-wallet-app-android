@@ -17,18 +17,17 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 10/11/21 6:44 PM
+ *  Created by osarapulov on 10/11/21 8:52 PM
  */
 
-package dgca.verifier.app.ticketing.data.identity
+package dgca.verifier.app.ticketing.validation
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import dgca.verifier.app.ticketing.data.validate.TicketingValidateRequest
 
-class TicketingIdentityDocumentResponse(
-    @JsonProperty("id")
-    val id: String,
-    @JsonProperty("verificationMethod")
-    val verificationMethods: Set<TicketingVerificationMethodRemote>,
-    @JsonProperty("service")
-    val servicesRemoteTicketing: Set<TicketingServiceRemote>
-)
+interface TicketingValidationResultFetcher {
+    suspend fun fetchValidationResult(
+        url: String,
+        authHeader: String,
+        validateRequest: TicketingValidateRequest
+    ): String
+}

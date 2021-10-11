@@ -17,13 +17,12 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/22/21 2:32 PM
+ *  Created by osarapulov on 10/11/21 8:47 PM
  */
 
-package dgca.wallet.app.android.model
+package dgca.verifier.app.ticketing.data.identity
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import dgca.verifier.app.ticketing.identity.validityserviceidentity.TicketingValidationServiceIdentityResponse
 import org.apache.commons.io.IOUtils
 import org.junit.Assert
 import org.junit.Test
@@ -33,21 +32,20 @@ import java.io.InputStream
 import java.nio.charset.Charset
 
 @RunWith(MockitoJUnitRunner::class)
-class ValidationTicketingServiceParcelableIdentityTest {
+class TicketingIdentityDocumentRemoteResponseTest {
     private val objectMapper = ObjectMapper().apply { findAndRegisterModules() }
 
     @Test
-    fun shouldConvertValidationServiceIdentityResponseModel() {
-        val validationServiceIdentityResponseIs: InputStream =
-            javaClass.classLoader!!.getResourceAsStream(VALIDATION_SERVICE_IDENTITY_RESPONSE_FILE_NAME)
-        val validationServiceIdentityResponseString: String =
-            IOUtils.toString(validationServiceIdentityResponseIs, Charset.defaultCharset())
-        val ticketingValidationServiceIdentityResponse: TicketingValidationServiceIdentityResponse =
-            objectMapper.readValue(validationServiceIdentityResponseString, TicketingValidationServiceIdentityResponse::class.java)
-        Assert.assertNotNull(ticketingValidationServiceIdentityResponse)
+    fun shouldConvertBookingSystemModel() {
+        val identityResponseIs: InputStream =
+            javaClass.classLoader!!.getResourceAsStream(TICKETING_IDENTITY_DOCUMENT_RESPONSE_FILE_NAME)
+        val identityResponseString: String = IOUtils.toString(identityResponseIs, Charset.defaultCharset())
+        val ticketingIdentityDocumentResponse: TicketingIdentityDocumentResponse =
+            objectMapper.readValue(identityResponseString, TicketingIdentityDocumentResponse::class.java)
+        Assert.assertNotNull(ticketingIdentityDocumentResponse)
     }
 
     companion object {
-        const val VALIDATION_SERVICE_IDENTITY_RESPONSE_FILE_NAME = "validation_service_identity_response.json"
+        const val TICKETING_IDENTITY_DOCUMENT_RESPONSE_FILE_NAME = "ticketing_identity_document_response.json"
     }
 }

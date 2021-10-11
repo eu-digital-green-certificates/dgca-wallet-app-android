@@ -27,13 +27,17 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dgca.verifier.app.ticketing.identity.accesstoken.GetTicketingAccessTokenUseCase
-import dgca.verifier.app.ticketing.identity.validityserviceidentity.GetTicketingValidationServiceIdentityUseCase
-import dgca.verifier.app.ticketing.identity.accesstoken.TicketingAccessTokenFetcher
-import dgca.verifier.app.ticketing.identity.validityserviceidentity.TicketingValidationServiceIdentityFetcher
+import dgca.verifier.app.ticketing.DefaultJwtTokenParser
+import dgca.verifier.app.ticketing.JwtTokenParser
 import dgca.verifier.app.ticketing.checkin.TicketingCheckInModelFetcher
 import dgca.verifier.app.ticketing.identity.GetTicketingIdentityDocumentUseCase
 import dgca.verifier.app.ticketing.identity.TicketingIdentityDocumentFetcher
+import dgca.verifier.app.ticketing.identity.accesstoken.GetTicketingAccessTokenUseCase
+import dgca.verifier.app.ticketing.identity.accesstoken.TicketingAccessTokenFetcher
+import dgca.verifier.app.ticketing.identity.validityserviceidentity.GetTicketingValidationServiceIdentityUseCase
+import dgca.verifier.app.ticketing.identity.validityserviceidentity.TicketingValidationServiceIdentityFetcher
+import dgca.verifier.app.ticketing.validation.TicketingValidationResultFetcher
+import dgca.verifier.app.ticketing.validation.TicketingValidationUseCase
 import dgca.verifier.app.ticketing.validation.encoding.DefaultTicketingDgcCryptor
 import dgca.verifier.app.ticketing.validation.encoding.TicketingDgcCryptor
 import dgca.verifier.app.ticketing.validation.encoding.TicketingDgcSigner
@@ -43,10 +47,8 @@ import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
 import dgca.wallet.app.android.data.remote.ticketing.accesstoken.DefaultTicketingAccessTokenFetcher
 import dgca.wallet.app.android.data.remote.ticketing.accesstoken.DefaultTicketingValidationServiceIdentityFetcher
 import dgca.wallet.app.android.data.remote.ticketing.identity.DefaultTicketingIdentityDocumentFetcher
+import dgca.wallet.app.android.data.remote.ticketing.validate.DefaultTicketingValidationResultFetcher
 import dgca.wallet.app.android.wallet.scan_import.GreenCertificateFetcher
-import dgca.verifier.app.ticketing.DefaultJwtTokenParser
-import dgca.verifier.app.ticketing.JwtTokenParser
-import dgca.verifier.app.ticketing.validation.TicketingValidationUseCase
 import dgca.wallet.app.android.wallet.scan_import.qr.ticketing.certselector.GetFilteredCertificatesUseCase
 import retrofit2.Retrofit
 import javax.inject.Singleton
@@ -79,6 +81,13 @@ object TicketingModule {
     @Provides
     internal fun provideTicketingValidationServiceIdentityFetcher(validationServiceIdentityFetcher: TicketingValidationServiceIdentityFetcher): TicketingValidationServiceIdentityFetcher =
         DefaultTicketingValidationServiceIdentityFetcher(validationServiceIdentityFetcher)
+
+
+    @Singleton
+    @Provides
+    internal fun provideTicketingValidationResultFetcher(ticketingApiService: TicketingApiService): TicketingValidationResultFetcher =
+        DefaultTicketingValidationResultFetcher(ticketingApiService)
+
 
     @Singleton
     @Provides
@@ -128,10 +137,10 @@ object TicketingModule {
     @Provides
     internal fun provideTicketingValidationUseCase(
         ticketingValidationRequestProvider: TicketingValidationRequestProvider,
-        ticketingApiService: TicketingApiService,
+        validationResultFetcher: TicketingValidationResultFetcher,
         jwtTokenParser: JwtTokenParser,
         objectMapper: ObjectMapper
     ): TicketingValidationUseCase = TicketingValidationUseCase(
-        ticketingValidationRequestProvider, ticketingApiService, jwtTokenParser, objectMapper
+        ticketingValidationRequestProvider, validationResultFetcher, jwtTokenParser, objectMapper
     )
 }

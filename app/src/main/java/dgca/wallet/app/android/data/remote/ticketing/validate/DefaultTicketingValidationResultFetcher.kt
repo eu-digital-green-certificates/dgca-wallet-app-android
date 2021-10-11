@@ -20,23 +20,21 @@
  *  Created by osarapulov on 10/11/21 7:14 PM
  */
 
-package dgca.wallet.app.android.data.remote.ticketing.accesstoken
+package dgca.wallet.app.android.data.remote.ticketing.validate
 
-import dgca.verifier.app.ticketing.data.accesstoken.TicketingAccessTokenRequest
-import dgca.verifier.app.ticketing.identity.accesstoken.TicketingAccessTokenDataRemote
-import dgca.verifier.app.ticketing.identity.accesstoken.TicketingAccessTokenFetcher
+import dgca.verifier.app.ticketing.data.validate.TicketingValidateRequest
+import dgca.verifier.app.ticketing.validation.TicketingValidationResultFetcher
 import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
 
-class DefaultTicketingAccessTokenFetcher(private val ticketingApiService: TicketingApiService) : TicketingAccessTokenFetcher {
+class DefaultTicketingValidationResultFetcher(private val ticketingApiService: TicketingApiService) :
+    TicketingValidationResultFetcher {
 
-    override suspend fun fetchAccessToken(
+    override suspend fun fetchValidationResult(
         url: String,
-        header: String,
-        ticketingAccessTokenRequest: TicketingAccessTokenRequest
-    ): TicketingAccessTokenDataRemote {
-        val response = ticketingApiService.getAccessToken(url, header, ticketingAccessTokenRequest)
-        val jwtToken: String = response.body()!!
-        val iv = response.headers()["x-nonce"]!!
-        return TicketingAccessTokenDataRemote(jwtToken, iv)
+        authHeader: String,
+        validateRequest: TicketingValidateRequest
+    ): String {
+        val response = ticketingApiService.validate(url, authHeader, validateRequest)
+        return response.body()!!
     }
 }
