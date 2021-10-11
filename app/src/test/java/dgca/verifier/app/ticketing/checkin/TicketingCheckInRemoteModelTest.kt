@@ -17,37 +17,36 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/16/21 3:09 PM
+ *  Created by osarapulov on 10/11/21 4:01 PM
  */
 
-package dgca.wallet.app.android.data.remote.ticketing
+package dgca.verifier.app.ticketing.checkin
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import dgca.wallet.app.android.data.remote.ticketing.identity.IdentityResponse
+import dgca.verifier.app.ticketing.data.checkin.TicketingCheckInRemote
 import org.apache.commons.io.IOUtils
-import org.junit.Assert.assertNotNull
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
 import java.io.InputStream
 import java.nio.charset.Charset
 
-
 @RunWith(MockitoJUnitRunner::class)
-class IdentityResponseTest {
+class TicketingCheckInRemoteModelTest {
     private val objectMapper = ObjectMapper().apply { findAndRegisterModules() }
 
     @Test
     fun shouldConvertBookingSystemModel() {
-        val identityResponseIs: InputStream =
-            javaClass.classLoader!!.getResourceAsStream(IDENTITY_RESPONSE_FILE_NAME)
-        val identityResponseString: String = IOUtils.toString(identityResponseIs, Charset.defaultCharset())
-        val identityResponse: IdentityResponse =
-            objectMapper.readValue(identityResponseString, IdentityResponse::class.java)
-        assertNotNull(identityResponse)
+        val bookingSystemModelIs: InputStream =
+            javaClass.classLoader!!.getResourceAsStream(TICKETING_CHECK_IN_REMOTE_MODEL_NAME)
+        val bookingSystemModelString: String = IOUtils.toString(bookingSystemModelIs, Charset.defaultCharset())
+        val ticketingCheckInRemoteModel: TicketingCheckInRemote =
+            objectMapper.readValue(bookingSystemModelString, TicketingCheckInRemote::class.java)
+        Assert.assertNotNull(ticketingCheckInRemoteModel)
     }
 
     companion object {
-        const val IDENTITY_RESPONSE_FILE_NAME = "identity_response.json"
+        const val TICKETING_CHECK_IN_REMOTE_MODEL_NAME = "ticketing_check_in_remote_model.json"
     }
 }

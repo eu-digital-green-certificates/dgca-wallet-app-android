@@ -17,46 +17,49 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/17/21 8:09 PM
+ *  Created by osarapulov on 10/11/21 7:33 PM
  */
 
-package dgca.wallet.app.android.data.remote.ticketing.access.token
+package dgca.wallet.app.android.data.remote.ticketing.accesstoken
 
 import android.os.Parcelable
-import com.fasterxml.jackson.annotation.JsonProperty
+import dgca.wallet.app.android.data.remote.ticketing.access.token.TicketingCertificateDataRemote
 import kotlinx.parcelize.Parcelize
 import java.time.ZonedDateTime
 
 @Parcelize
-data class CertificateData(
-    @JsonProperty("hash")
+data class TicketingCertificateDataParcelable(
     val hash: String?,
-    @JsonProperty("lang")
     val lang: String,
-    @JsonProperty("fnt")
     val standardizedFamilyName: String,
-    @JsonProperty("gnt")
     val standardizedGivenName: String,
-    @JsonProperty("dob")
     val dateOfBirth: String?,
-    @JsonProperty("coa")
     val coa: String,
-    @JsonProperty("cod")
     val cod: String,
-    @JsonProperty("roa")
     val roa: String,
-    @JsonProperty("rod")
     val rod: String,
-    @JsonProperty("type")
     val greenCertificateTypes: List<String>,
-    @JsonProperty("category")
     val category: List<String>,
-    @JsonProperty("validationClock")
     val validationClock: ZonedDateTime,
-    @JsonProperty("validFrom")
     val validFrom: ZonedDateTime,
-    @JsonProperty("validTo")
     val validTo: ZonedDateTime
 ) : Parcelable {
     fun getStandardizedName(): String = "$standardizedGivenName $standardizedFamilyName".trim()
 }
+
+fun TicketingCertificateDataRemote.fromRemote(): TicketingCertificateDataParcelable = TicketingCertificateDataParcelable(
+    hash = hash,
+    lang = lang,
+    standardizedFamilyName = standardizedFamilyName,
+    standardizedGivenName = standardizedGivenName,
+    dateOfBirth = dateOfBirth,
+    coa = coa,
+    cod = cod,
+    roa = roa,
+    greenCertificateTypes = greenCertificateTypes,
+    rod = rod,
+    category = category,
+    validationClock = validationClock,
+    validFrom = validFrom,
+    validTo = validTo
+)

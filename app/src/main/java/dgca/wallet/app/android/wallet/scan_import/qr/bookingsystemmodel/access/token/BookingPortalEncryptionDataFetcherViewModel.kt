@@ -27,11 +27,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dgca.wallet.app.android.data.remote.ticketing.access.token.ValidationServiceIdentityResponse
-import dgca.wallet.app.android.model.AccessTokenResponseContainer
-import dgca.wallet.app.android.model.BookingPortalEncryptionData
-import dgca.wallet.app.android.model.BookingSystemModel
-import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.Service
+import dgca.verifier.app.ticketing.accesstoken.GetTicketingAccessTokenUseCase
+import dgca.verifier.app.ticketing.accesstoken.GetTicketingValidationServiceIdentityUseCase
+import dgca.verifier.app.ticketing.accesstoken.TicketingValidationServiceIdentityResponse
+import dgca.wallet.app.android.model.*
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.TicketingServiceParcelable
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.toRemote
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.security.KeyPair
@@ -45,54 +46,73 @@ sealed class BookingPortalEncryptionDataResult {
 
 @HiltViewModel
 class BookingPortalEncryptionDataFetcherViewModel @Inject constructor(
-    private val getAccessTokenUseCase: GetAccessTokenUseCase,
-    private val getValidationServiceIdentityUseCase: GetValidationServiceIdentityUseCase
+    private val getTicketingAccessTokenUseCase: GetTicketingAccessTokenUseCase,
+    private val getTicketingValidationServiceIdentityUseCase: GetTicketingValidationServiceIdentityUseCase
 ) : ViewModel() {
     private val _accessTokenFetcherResult = MutableLiveData<BookingPortalEncryptionDataResult>()
     val bookingPortalEncryptionDataResult: LiveData<BookingPortalEncryptionDataResult> = _accessTokenFetcherResult
 
-    fun initialize(bookingSystemModel: BookingSystemModel, accessTokenService: Service, validationService: Service) {
+    fun initialize(
+        ticketingCheckInParcelable: TicketingCheckInParcelable,
+        accessTokenTicketingServiceParcelable: TicketingServiceParcelable,
+        validationTicketingServiceParcelable: TicketingServiceParcelable
+    ) {
         viewModelScope.launch {
             val keyPairGen = KeyPairGenerator.getInstance("EC")
             keyPairGen.initialize(256)
             val keyPair: KeyPair = keyPairGen.generateKeyPair()
 
             val accessTokenResponseContainer: AccessTokenResponseContainer? =
-                fetchAccessToken(keyPair, bookingSystemModel, accessTokenService, validationService)
-            val validationServiceIdentityResponse: ValidationServiceIdentityResponse? =
-                fetchValidationServiceIdentity(validationService)
+                fetchAccessToken(
+                    keyPair,
+                    ticketingCheckInParcelable,
+                    accessTokenTicketingServiceParcelable,
+                    validationTicketingServiceParcelable
+                )
+            val ticketingValidationServiceIdentityResponse: TicketingValidationServiceIdentityResponse? =
+                fetchValidationServiceIdentity(validationTicketingServiceParcelable)
 
             _accessTokenFetcherResult.value =
-                if (accessTokenResponseContainer == null || validationServiceIdentityResponse == null) BookingPortalEncryptionDataResult.Fail else BookingPortalEncryptionDataResult.Success(
-                    prepareBookingPortalEncryptionResult(keyPair, accessTokenResponseContainer, validationServiceIdentityResponse)
+                if (accessTokenResponseContainer == null || ticketingValidationServiceIdentityResponse == null) BookingPortalEncryptionDataResult.Fail else BookingPortalEncryptionDataResult.Success(
+                    prepareBookingPortalEncryptionResult(
+                        keyPair,
+                        accessTokenResponseContainer,
+                        ticketingValidationServiceIdentityResponse.fromRemote()
+                    )
                 )
         }
     }
 
     private suspend fun fetchAccessToken(
         keyPair: KeyPair,
-        bookingSystemModel: BookingSystemModel,
-        accessTokenService: Service,
-        validationService: Service
+        ticketingCheckInParcelable: TicketingCheckInParcelable,
+        accessTokenTicketingServiceParcelable: TicketingServiceParcelable,
+        validationTicketingServiceParcelable: TicketingServiceParcelable
     ): AccessTokenResponseContainer? = try {
-        getAccessTokenUseCase.run(keyPair, bookingSystemModel, accessTokenService, validationService)
+        getTicketingAccessTokenUseCase.run(
+            keyPair,
+            ticketingCheckInParcelable,
+            accessTokenTicketingServiceParcelable,
+            validationTicketingServiceParcelable
+        )
     } catch (exception: Exception) {
         Timber.e(exception, "Error fetching access token")
         null
     }
 
-    private suspend fun fetchValidationServiceIdentity(validationService: Service): ValidationServiceIdentityResponse? = try {
-        getValidationServiceIdentityUseCase.run(validationService)
-    } catch (exception: Exception) {
-        Timber.e(exception, "Error fetching validation service idendity")
-        null
-    }
+    private suspend fun fetchValidationServiceIdentity(validationTicketingServiceParcelable: TicketingServiceParcelable): TicketingValidationServiceIdentityResponse? =
+        try {
+            getTicketingValidationServiceIdentityUseCase.run(validationTicketingServiceParcelable.toRemote())
+        } catch (exception: Exception) {
+            Timber.e(exception, "Error fetching validation service idendity")
+            null
+        }
 
     private fun prepareBookingPortalEncryptionResult(
         keyPair: KeyPair,
         accessTokenResponseContainer: AccessTokenResponseContainer,
-        validationServiceIdentityResponse: ValidationServiceIdentityResponse
+        validationServiceIdentity: ValidationServiceIdentityParcelable
     ): BookingPortalEncryptionData {
-        return BookingPortalEncryptionData(keyPair, accessTokenResponseContainer, validationServiceIdentityResponse)
+        return BookingPortalEncryptionData(keyPair, accessTokenResponseContainer, validationServiceIdentity)
     }
 }

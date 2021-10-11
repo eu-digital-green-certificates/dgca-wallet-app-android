@@ -76,7 +76,7 @@ class ModelFetcherDialogFragment : BindingDialogFragment<DialogFragmentModelFetc
                 )
                 is ModelFetcherResult.BookingSystemModelRecognised -> setFragmentResult(
                     FETCH_MODEL_REQUEST_KEY,
-                    bundleOf(BOOKING_SYSTEM_MODEL_RESULT_KEY to modelFetcherResult.bookingSystemModel)
+                    bundleOf(BOOKING_SYSTEM_MODEL_RESULT_KEY to modelFetcherResult.ticketingCheckInParcelable)
                 )
                 else -> setFragmentResult(FETCH_MODEL_REQUEST_KEY, bundleOf())
             }

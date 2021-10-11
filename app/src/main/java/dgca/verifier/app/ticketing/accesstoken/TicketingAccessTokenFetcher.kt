@@ -17,26 +17,17 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/16/21 2:55 PM
+ *  Created by osarapulov on 10/11/21 6:06 PM
  */
 
-package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data
+package dgca.verifier.app.ticketing.accesstoken
 
-import android.os.Parcelable
-import dgca.wallet.app.android.data.remote.ticketing.identity.ServiceRemote
-import kotlinx.parcelize.Parcelize
+import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenRequest
 
-@Parcelize
-data class Service(
-    val id: String,
-    val type: String,
-    val serviceEndpoint: String,
-    val name: String
-) : Parcelable
-
-fun ServiceRemote.toService(): Service = Service(
-    id = id,
-    type = type,
-    serviceEndpoint = serviceEndpoint,
-    name = name
-)
+interface TicketingAccessTokenFetcher {
+    suspend fun fetchAccessToken(
+        url: String,
+        header: String,
+        accessTokenRequest: AccessTokenRequest
+    ): TicketingAccessTokenData
+}

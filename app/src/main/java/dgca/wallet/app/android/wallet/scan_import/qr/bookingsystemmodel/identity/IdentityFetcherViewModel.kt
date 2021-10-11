@@ -27,35 +27,36 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dgca.wallet.app.android.model.BookingSystemModel
-import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
-import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.identity.GetIdentityDocumentUseCase
+import dgca.verifier.app.ticketing.identity.GetTicketingIdentityDocumentUseCase
+import dgca.wallet.app.android.model.TicketingCheckInParcelable
+import dgca.wallet.app.android.model.toRemote
+import dgca.verifier.app.ticketing.data.identity.TicketingIdentityDocumentRemote
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
 sealed class IdentityFetcherResult {
-    data class Success(val identityDocument: IdentityDocument) : IdentityFetcherResult()
+    data class Success(val ticketingIdentityDocumentRemote: TicketingIdentityDocumentRemote) : IdentityFetcherResult()
     object Fail : IdentityFetcherResult()
 }
 
 @HiltViewModel
 class IdentityFetcherViewModel @Inject constructor(
-    private val getIdentityDocumentUseCase: GetIdentityDocumentUseCase
+    private val getTicketingIdentityDocumentUseCase: GetTicketingIdentityDocumentUseCase
 ) : ViewModel() {
     private val _identityFetcherResult = MutableLiveData<IdentityFetcherResult>()
     val identityFetcherResult: LiveData<IdentityFetcherResult> = _identityFetcherResult
 
-    fun initialize(bookingSystemModel: BookingSystemModel) {
+    fun initialize(ticketingCheckInParcelable: TicketingCheckInParcelable) {
         viewModelScope.launch {
-            val identityDocument: IdentityDocument? = try {
-                getIdentityDocumentUseCase.run(bookingSystemModel)
+            val ticketingIdentityDocumentRemote: TicketingIdentityDocumentRemote? = try {
+                getTicketingIdentityDocumentUseCase.run(ticketingCheckInParcelable.toRemote())
             } catch (exception: Exception) {
                 Timber.e("Error fetching identity document")
                 null
             }
 
-            _identityFetcherResult.value = if (identityDocument != null) IdentityFetcherResult.Success(identityDocument) else null
+            _identityFetcherResult.value = if (ticketingIdentityDocumentRemote != null) IdentityFetcherResult.Success(ticketingIdentityDocumentRemote) else null
         }
     }
 }

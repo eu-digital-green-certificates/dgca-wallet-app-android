@@ -17,30 +17,19 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/17/21 9:07 AM
+ *  Created by osarapulov on 10/11/21 7:13 PM
  */
 
-package dgca.wallet.app.android.data.remote.ticketing.access.token
+package dgca.verifier.app.ticketing.accesstoken
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import dgca.verifier.app.ticketing.data.identity.TicketingServiceRemote
+import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-data class AccessTokenResponse(
-    @JsonProperty("jti")
-    val jti: String?,
-    @JsonProperty("iss")
-    val iss: String,
-    @JsonProperty("iat")
-    val iat: Long,
-    @JsonProperty("sub")
-    val sub: String,
-    @JsonProperty("aud")
-    val validationUrl: String,
-    @JsonProperty("exp")
-    val exp: Long,
-    @JsonProperty("t")
-    val t: Long,
-    @JsonProperty("v")
-    val v: String,
-    @JsonProperty("vc")
-    val certificateData: TicketingCertificateDataRemote
-)
+class GetTicketingValidationServiceIdentityUseCase(private val ticketingApiService: TicketingApiService) {
+    suspend fun run(service: TicketingServiceRemote): TicketingValidationServiceIdentityResponse? =
+        withContext(Dispatchers.IO) {
+            ticketingApiService.getValidationServiceIdentity(service.serviceEndpoint).body()
+        }
+}

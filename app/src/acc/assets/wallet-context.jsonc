@@ -4,7 +4,7 @@
     "default": {
       "privacyUrl": "https://publications.europa.eu/en/web/about-us/legal-notices/eu-mobile-apps",
       "context": {
-        "url": "https://dgca-issuance-web-eu-acc.cfapps.eu10.hana.ondemand.com/dgca-issuance-service/context",
+        "url": "https://google.com",
         "pubKeys": [
           "lKdU1EbQubxyDDm2q3N8KclZ2C94Num3xXjG0pk+3eI=",
           "r/mIkG3eEpVdm+u/ko/cwxzOMo1bk4TyHIlByibiA5E="
@@ -12,28 +12,28 @@
       },
       "endpoints": {
         "claim": {
-          "url": "https://dgca-issuance-web-eu-acc.cfapps.eu10.hana.ondemand.com/dgca-issuance-service/dgci/wallet/claim",
+          "url": "https://dgca-issuance-web-eu-acc2.cfapps.eu10.hana.ondemand.com/dgca-issuance-service/dgci/wallet/claim",
           "pubKeys": [
             "lKdU1EbQubxyDDm2q3N8KclZ2C94Num3xXjG0pk+3eI=",
             "r/mIkG3eEpVdm+u/ko/cwxzOMo1bk4TyHIlByibiA5E="
           ]
         },
         "countryList": {
-          "url": "https://dgca-issuance-web-eu-acc.cfapps.eu10.hana.ondemand.com/dgca-businessrule-service/countrylist",
+          "url": "https://dgca-businessrule-service-eu-acc2.cfapps.eu10.hana.ondemand.com/countrylist",
           "pubKeys": [
             "lKdU1EbQubxyDDm2q3N8KclZ2C94Num3xXjG0pk+3eI=",
             "r/mIkG3eEpVdm+u/ko/cwxzOMo1bk4TyHIlByibiA5E="
           ]
         },
         "rules": {
-          "url": "https://dgca-issuance-web-eu-acc.cfapps.eu10.hana.ondemand.com/dgca-businessrule-service/rules",
+          "url": "https://dgca-businessrule-service-eu-acc2.cfapps.eu10.hana.ondemand.com/rules",
           "pubKeys": [
             "lKdU1EbQubxyDDm2q3N8KclZ2C94Num3xXjG0pk+3eI=",
             "r/mIkG3eEpVdm+u/ko/cwxzOMo1bk4TyHIlByibiA5E="
           ]
         },
         "valuesets": {
-          "url": "https://dgca-issuance-web-eu-acc.cfapps.eu10.hana.ondemand.com/dgca-businessrule-service/valuesets",
+          "url": "https://dgca-businessrule-service-eu-acc2.cfapps.eu10.hana.ondemand.com/valuesets",
           "pubKeys": [
             "lKdU1EbQubxyDDm2q3N8KclZ2C94Num3xXjG0pk+3eI=",
             "r/mIkG3eEpVdm+u/ko/cwxzOMo1bk4TyHIlByibiA5E="

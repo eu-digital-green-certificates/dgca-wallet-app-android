@@ -17,25 +17,33 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/16/21 3:02 PM
+ *  Created by osarapulov on 9/16/21 2:55 PM
  */
 
-package dgca.wallet.app.android.data.remote.ticketing.identity
+package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data
 
 import android.os.Parcelable
-import com.fasterxml.jackson.annotation.JsonProperty
+import dgca.verifier.app.ticketing.data.identity.TicketingServiceRemote
 import kotlinx.parcelize.Parcelize
 
-// TODO divide remote and domain models
-
 @Parcelize
-class PublicKeyJwkRemote(
-    @JsonProperty("x5c")
-    val x5c: String,
-    @JsonProperty("kid")
-    val kid: String,
-    @JsonProperty("alg")
-    val alg: String,
-    @JsonProperty("use")
-    val use: String
+data class TicketingServiceParcelable(
+    val id: String,
+    val type: String,
+    val serviceEndpoint: String,
+    val name: String
 ) : Parcelable
+
+fun TicketingServiceRemote.fromRemote(): TicketingServiceParcelable = TicketingServiceParcelable(
+    id = id,
+    type = type,
+    serviceEndpoint = serviceEndpoint,
+    name = name
+)
+
+fun TicketingServiceParcelable.toRemote(): TicketingServiceRemote = TicketingServiceRemote(
+    id = id,
+    type = type,
+    serviceEndpoint = serviceEndpoint,
+    name = name
+)

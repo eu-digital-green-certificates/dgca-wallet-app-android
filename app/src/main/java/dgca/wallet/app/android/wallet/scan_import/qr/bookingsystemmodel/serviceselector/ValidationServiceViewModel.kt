@@ -26,11 +26,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.Service
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.TicketingServiceParcelable
 import javax.inject.Inject
 
 data class ValidationServicesContainer(
-    val selectedService: Service? = null,
+    val selectedTicketingServiceParcelable: TicketingServiceParcelable? = null,
     val selectableValidationServiceModelList: List<SelectableValidationServiceModel>
 )
 
@@ -39,14 +39,14 @@ class ValidationServiceViewModel @Inject constructor() : ViewModel() {
     private val _validationServicesContainer = MutableLiveData<ValidationServicesContainer>()
     val validationServicesContainer: LiveData<ValidationServicesContainer> = _validationServicesContainer
 
-    private lateinit var validationServices: List<Service>
+    private lateinit var validationTicketingServiceParcelables: List<TicketingServiceParcelable>
     private var selected: SelectableValidationServiceModel? = null
 
-    fun init(validationServices: List<Service>) {
-        if (!this::validationServices.isInitialized) {
-            this.validationServices = validationServices
+    fun init(validationTicketingServiceParcelables: List<TicketingServiceParcelable>) {
+        if (!this::validationTicketingServiceParcelables.isInitialized) {
+            this.validationTicketingServiceParcelables = validationTicketingServiceParcelables
             val selectableValidationServiceModelList = mutableListOf<SelectableValidationServiceModel>()
-            this.validationServices.forEachIndexed { index, service ->
+            this.validationTicketingServiceParcelables.forEachIndexed { index, service ->
                 selectableValidationServiceModelList.add(
                     SelectableValidationServiceModel(
                         index.toString(),
@@ -63,7 +63,7 @@ class ValidationServiceViewModel @Inject constructor() : ViewModel() {
         val validationServicesContainer: ValidationServicesContainer = validationServicesContainer.value!!
         val list: MutableList<SelectableValidationServiceModel> =
             validationServicesContainer.selectableValidationServiceModelList.toMutableList()
-        val selectedService: Service = validationServices[position]
+        val selectedTicketingServiceParcelable: TicketingServiceParcelable = validationTicketingServiceParcelables[position]
         selected?.let { model ->
             val index = list.indexOfFirst { model == it }
             if (index != -1) {
@@ -75,6 +75,6 @@ class ValidationServiceViewModel @Inject constructor() : ViewModel() {
         selected = copy
         list[position] = copy
 
-        _validationServicesContainer.value = ValidationServicesContainer(selectedService, list.toList())
+        _validationServicesContainer.value = ValidationServicesContainer(selectedTicketingServiceParcelable, list.toList())
     }
 }

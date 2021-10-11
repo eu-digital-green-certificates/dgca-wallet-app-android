@@ -17,13 +17,13 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/16/21 2:56 PM
+ *  Created by osarapulov on 10/11/21 7:18 PM
  */
 
-package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data
+package dgca.verifier.app.ticketing.accesstoken
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class IdentityDocument(val accessTokenService: Service, val validationServices: List<Service>) : Parcelable
+data class TicketingAccessTokenData(val jwtToken: String, val iv: String) : Parcelable

@@ -17,20 +17,19 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/17/21 9:07 AM
+ *  Created by osarapulov on 9/22/21 2:35 PM
  */
 
-package dgca.wallet.app.android.data.remote.ticketing.identity
+package dgca.verifier.app.ticketing.accesstoken
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import dgca.verifier.app.ticketing.data.identity.TicketingPublicKeyJwkRemote
+import dgca.verifier.app.ticketing.data.identity.TicketingVerificationMethodRemote
 
-class ServiceRemote(
+data class TicketingValidationServiceIdentityResponse(
     @JsonProperty("id")
     val id: String,
-    @JsonProperty("type")
-    val type: String,
-    @JsonProperty("serviceEndpoint")
-    val serviceEndpoint: String,
-    @JsonProperty("name")
-    val name: String
-)
+    @JsonProperty("verificationMethod")
+    val ticketingVerificationMethodsRemote: Set<TicketingVerificationMethodRemote>,
+) {
+}

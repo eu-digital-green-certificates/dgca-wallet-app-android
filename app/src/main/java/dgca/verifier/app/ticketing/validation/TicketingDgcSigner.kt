@@ -17,27 +17,30 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/17/21 9:07 AM
+ *  Created by osarapulov on 10/11/21 2:04 PM
  */
 
-package dgca.wallet.app.android.data.remote.ticketing.identity
+package dgca.verifier.app.ticketing.validation
 
-import android.os.Parcelable
-import com.fasterxml.jackson.annotation.JsonProperty
-import kotlinx.parcelize.Parcelize
+import android.util.Base64
+import java.security.PrivateKey
+import java.security.Signature
 
-// TODO divide remote and domain models
+class TicketingDgcSigner {
+    /**
+     * sign dcc.
+     * @param data data
+     * @param privateKey privateKey
+     * @return signature as base64
+     */
+    fun signDcc(data: ByteArray, privateKey: PrivateKey): String {
+        val signature: Signature = Signature.getInstance(SIG_ALG)
+        signature.initSign(privateKey)
+        signature.update(data)
+        return Base64.encodeToString(signature.sign(), Base64.NO_WRAP)
+    }
 
-@Parcelize
-class VerificationMethodRemote(
-    @JsonProperty("id")
-    val id: String,
-    @JsonProperty("type")
-    val type: String,
-    @JsonProperty("controller")
-    val controller: String,
-    @JsonProperty("publicKeyJwk")
-    val publicKeyJwkRemote: PublicKeyJwkRemote?,
-    @JsonProperty("verificationMethods")
-    val verificationMethods: List<String>?
-) : Parcelable
+    companion object {
+        const val SIG_ALG = "SHA256withECDSA"
+    }
+}

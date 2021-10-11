@@ -44,7 +44,7 @@ import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.R
 import dgca.wallet.app.android.databinding.FragmentCodeReaderBinding
-import dgca.wallet.app.android.model.BookingSystemModel
+import dgca.wallet.app.android.model.TicketingCheckInParcelable
 import dgca.wallet.app.android.wallet.scan_import.qr.certificate.ClaimGreenCertificateModel
 
 const val CAMERA_REQUEST_CODE = 1003
@@ -98,9 +98,9 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
             if (claimGreenCertificateModel != null) {
                 navigateToClaimCertificatePage(claimGreenCertificateModel)
             } else {
-                val bookingSystemModel: BookingSystemModel? = bundle.getParcelable(BOOKING_SYSTEM_MODEL_RESULT_KEY)
-                if (bookingSystemModel != null) {
-                    navigateToBookingSystemConsentPage(bookingSystemModel)
+                val ticketingCheckInParcelable: TicketingCheckInParcelable? = bundle.getParcelable(BOOKING_SYSTEM_MODEL_RESULT_KEY)
+                if (ticketingCheckInParcelable != null) {
+                    navigateToBookingSystemConsentPage(ticketingCheckInParcelable)
                 }
             }
         }
@@ -136,10 +136,10 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
         findNavController().navigate(action)
     }
 
-    private fun navigateToBookingSystemConsentPage(bookingSystemModel: BookingSystemModel) {
+    private fun navigateToBookingSystemConsentPage(ticketingCheckInParcelable: TicketingCheckInParcelable) {
         binding.barcodeScanner.pause()
         val action =
-            CodeReaderFragmentDirections.actionCodeReaderFragmentToBookingSystemConsentFragment(bookingSystemModel)
+            CodeReaderFragmentDirections.actionCodeReaderFragmentToBookingSystemConsentFragment(ticketingCheckInParcelable)
         findNavController().navigate(action)
     }
 

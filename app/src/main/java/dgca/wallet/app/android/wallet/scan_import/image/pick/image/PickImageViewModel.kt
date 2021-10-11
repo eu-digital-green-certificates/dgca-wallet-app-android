@@ -27,12 +27,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fasterxml.jackson.databind.ObjectMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.verifier.app.decoder.model.GreenCertificate
+import dgca.verifier.app.ticketing.checkin.TicketingCheckInModelFetcher
 import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.local.toCertificateModel
-import dgca.wallet.app.android.model.BookingSystemModel
+import dgca.wallet.app.android.model.TicketingCheckInParcelable
+import dgca.wallet.app.android.model.fromRemote
 import dgca.wallet.app.android.wallet.scan_import.BitmapFetcher
 import dgca.wallet.app.android.wallet.scan_import.FileSaver
 import dgca.wallet.app.android.wallet.scan_import.GreenCertificateFetcher
@@ -53,7 +54,7 @@ sealed class PickImageResult {
     ) : PickImageResult()
 
     class BookingSystemModelRecognised(
-        val bookingSystemModel: BookingSystemModel
+        val ticketingCheckInParcelable: TicketingCheckInParcelable
     ) : PickImageResult()
 }
 
@@ -63,7 +64,7 @@ class PickImageViewModel @Inject constructor(
     private val bitmapFetcher: BitmapFetcher,
     private val fileSaver: FileSaver,
     private val greenCertificateFetcher: GreenCertificateFetcher,
-    private val objectMapper: ObjectMapper
+    private val ticketingCheckInModelFetcher: TicketingCheckInModelFetcher
 ) : ViewModel() {
     private val _result = MutableLiveData<PickImageResult>()
     val result: LiveData<PickImageResult> = _result
@@ -96,8 +97,8 @@ class PickImageViewModel @Inject constructor(
             )
         } else {
             runCatching {
-                objectMapper.readValue(qrCodeString, BookingSystemModel::class.java)
-                    .let { PickImageResult.BookingSystemModelRecognised(it) }
+                ticketingCheckInModelFetcher.fetchTicketingCheckInModel(qrCodeString ?: "")
+                    .let { PickImageResult.BookingSystemModelRecognised(it.fromRemote()) }
             }.getOrElse {
                 val file = try {
                     fileSaver.saveFileFromUri(this, "images", "${System.currentTimeMillis()}.jpeg")

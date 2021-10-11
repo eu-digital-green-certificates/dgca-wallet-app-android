@@ -70,15 +70,15 @@ class GetFilteredCertificatesUseCase(
         bookingPortalEncryptionData: BookingPortalEncryptionData,
         certificateCard: CertificatesCard.CertificateCard
     ): Boolean {
-        if (bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.greenCertificateTypes.contains(
+        if (bookingPortalEncryptionData.accessTokenResponseContainer.accessToken.certificateData.greenCertificateTypes.contains(
                 "v"
             ) && certificateCard.certificate.vaccinations?.isNotEmpty() == true
         ) return true
-        if (bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.greenCertificateTypes.contains(
+        if (bookingPortalEncryptionData.accessTokenResponseContainer.accessToken.certificateData.greenCertificateTypes.contains(
                 "r"
             ) && certificateCard.certificate.recoveryStatements?.isNotEmpty() == true
         ) return true
-        if (bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.greenCertificateTypes.contains(
+        if (bookingPortalEncryptionData.accessTokenResponseContainer.accessToken.certificateData.greenCertificateTypes.contains(
                 "t"
             ) && certificateCard.certificate.tests?.isNotEmpty() == true
         ) return true
@@ -90,7 +90,7 @@ class GetFilteredCertificatesUseCase(
         certificateCard: CertificatesCard.CertificateCard
     ): Boolean {
         val ticketingStandardizedGivenName: String =
-            bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.standardizedGivenName
+            bookingPortalEncryptionData.accessTokenResponseContainer.accessToken.certificateData.standardizedGivenName
         val greenCertificateStandardizedGivenName: String? = certificateCard.certificate.person.standardisedGivenName
         if (ticketingStandardizedGivenName.isNotBlank() && (greenCertificateStandardizedGivenName.isNullOrBlank() || greenCertificateStandardizedGivenName.compareTo(
                 ticketingStandardizedGivenName, ignoreCase = true
@@ -98,16 +98,16 @@ class GetFilteredCertificatesUseCase(
         ) return false
 
         val ticketingStandardizedFamilyLastName: String =
-            bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.standardizedFamilyName
+            bookingPortalEncryptionData.accessTokenResponseContainer.accessToken.certificateData.standardizedFamilyName
         val greenCertificateStandardizedFamilyName: String = certificateCard.certificate.person.standardisedFamilyName
         if (ticketingStandardizedFamilyLastName.isNotBlank() &&
-            (greenCertificateStandardizedFamilyName.isNullOrBlank() || greenCertificateStandardizedFamilyName.compareTo(
+            (greenCertificateStandardizedFamilyName.isBlank() || greenCertificateStandardizedFamilyName.compareTo(
                 ticketingStandardizedFamilyLastName, ignoreCase = true
             ) != 0)
         ) return false
 
         val ticketingDateOfBirth: ZonedDateTime? =
-            bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.dateOfBirth?.toZonedDateTime()
+            bookingPortalEncryptionData.accessTokenResponseContainer.accessToken.certificateData.dateOfBirth?.toZonedDateTime()
         val greenCertificateDateOfBirth: ZonedDateTime? = certificateCard.certificate.dateOfBirth.toZonedDateTime()
         if (ticketingDateOfBirth != null && !ticketingDateOfBirth.equals(greenCertificateDateOfBirth)) return false
 
@@ -119,11 +119,11 @@ class GetFilteredCertificatesUseCase(
         validFrom: ZonedDateTime?, validTo: ZonedDateTime?
     ): Boolean {
         val ticketingValidFrom: ZonedDateTime =
-            bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.validFrom
+            bookingPortalEncryptionData.accessTokenResponseContainer.accessToken.certificateData.validFrom
         if (validFrom == null || validFrom.isAfter(ticketingValidFrom)) return false
 
         val ticketingValidTo: ZonedDateTime =
-            bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.certificateData.validTo
+            bookingPortalEncryptionData.accessTokenResponseContainer.accessToken.certificateData.validTo
         if (validTo != null && validTo.isBefore(ticketingValidTo)) return false
 
         return true

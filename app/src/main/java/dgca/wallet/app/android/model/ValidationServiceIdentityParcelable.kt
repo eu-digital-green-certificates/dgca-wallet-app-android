@@ -20,32 +20,31 @@
  *  Created by osarapulov on 9/22/21 2:35 PM
  */
 
-package dgca.wallet.app.android.data.remote.ticketing.access.token
+package dgca.wallet.app.android.model
 
 import android.os.Parcelable
-import com.fasterxml.jackson.annotation.JsonProperty
-import dgca.wallet.app.android.data.remote.ticketing.identity.PublicKeyJwkRemote
-import dgca.wallet.app.android.data.remote.ticketing.identity.VerificationMethodRemote
+import dgca.verifier.app.ticketing.accesstoken.TicketingValidationServiceIdentityResponse
 import kotlinx.parcelize.Parcelize
 
-// TODO divide remote and domain models
-
 @Parcelize
-data class ValidationServiceIdentityResponse(
-    @JsonProperty("id")
+data class ValidationServiceIdentityParcelable(
     val id: String,
-    @JsonProperty("verificationMethod")
-    val verificationMethodsRemote: Set<VerificationMethodRemote>,
+    val ticketingVerificationMethodsRemote: Set<TicketingVerificationMethodParcelable>,
 ) : Parcelable {
-    fun getEncryptionPublicKey(): PublicKeyJwkRemote? {
-        var publicKeyJwkRemote: PublicKeyJwkRemote? = null
-        verificationMethodsRemote.forEach { verificationMethodRemote ->
-            if (verificationMethodRemote.publicKeyJwkRemote?.use == "enc") {
-                publicKeyJwkRemote = verificationMethodRemote.publicKeyJwkRemote
+    fun getEncryptionPublicKey(): TicketingPublicKeyJwkParcelable? {
+        var publicKeyJwk: TicketingPublicKeyJwkParcelable? = null
+        ticketingVerificationMethodsRemote.forEach { verificationMethodRemote ->
+            if (verificationMethodRemote.publicKeyJwk?.use == "enc") {
+                publicKeyJwk = verificationMethodRemote.publicKeyJwk
                 return@forEach
             }
 
         }
-        return publicKeyJwkRemote
+        return publicKeyJwk
     }
 }
+
+fun TicketingValidationServiceIdentityResponse.fromRemote(): ValidationServiceIdentityParcelable = ValidationServiceIdentityParcelable(
+    id = id,
+    ticketingVerificationMethodsRemote = ticketingVerificationMethodsRemote.map { it.fromRemote() }.toSet(),
+)

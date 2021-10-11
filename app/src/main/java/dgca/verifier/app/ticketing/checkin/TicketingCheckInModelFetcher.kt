@@ -17,30 +17,15 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/17/21 9:07 AM
+ *  Created by osarapulov on 10/11/21 3:38 PM
  */
 
-package dgca.wallet.app.android.data.remote.ticketing.access.token
+package dgca.verifier.app.ticketing.checkin
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.ObjectMapper
+import dgca.verifier.app.ticketing.data.checkin.TicketingCheckInRemote
 
-data class AccessTokenResponse(
-    @JsonProperty("jti")
-    val jti: String?,
-    @JsonProperty("iss")
-    val iss: String,
-    @JsonProperty("iat")
-    val iat: Long,
-    @JsonProperty("sub")
-    val sub: String,
-    @JsonProperty("aud")
-    val validationUrl: String,
-    @JsonProperty("exp")
-    val exp: Long,
-    @JsonProperty("t")
-    val t: Long,
-    @JsonProperty("v")
-    val v: String,
-    @JsonProperty("vc")
-    val certificateData: TicketingCertificateDataRemote
-)
+class TicketingCheckInModelFetcher(private val objectMapper: ObjectMapper) {
+    fun fetchTicketingCheckInModel(jsonString: String): TicketingCheckInRemote =
+        objectMapper.readValue(jsonString, TicketingCheckInRemote::class.java)
+}

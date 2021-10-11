@@ -17,30 +17,30 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/17/21 9:07 AM
+ *  Created by osarapulov on 10/11/21 3:20 PM
  */
 
-package dgca.wallet.app.android.data.remote.ticketing.access.token
+package dgca.verifier.app.ticketing.data.checkin
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class AccessTokenResponse(
-    @JsonProperty("jti")
-    val jti: String?,
-    @JsonProperty("iss")
-    val iss: String,
-    @JsonProperty("iat")
-    val iat: Long,
-    @JsonProperty("sub")
-    val sub: String,
-    @JsonProperty("aud")
-    val validationUrl: String,
-    @JsonProperty("exp")
-    val exp: Long,
-    @JsonProperty("t")
-    val t: Long,
-    @JsonProperty("v")
-    val v: String,
-    @JsonProperty("vc")
-    val certificateData: TicketingCertificateDataRemote
+@JsonIgnoreProperties(ignoreUnknown = true)
+class TicketingCheckInRemote(
+    @JsonProperty("protocol")
+    val protocol: String,
+    @JsonProperty("protocolVersion")
+    val protocolVersion: String,
+    @JsonProperty("serviceIdentity")
+    val serviceIdentity: String,
+    @JsonProperty("privacyUrl")
+    val privacyUrl: String,
+    @JsonProperty("token")
+    val token: String,
+    @JsonProperty("consent")
+    val consent: String,
+    @JsonProperty("subject")
+    val subject: String,
+    @JsonProperty("serviceProvider")
+    val serviceProvider: String
 )

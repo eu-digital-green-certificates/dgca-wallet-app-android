@@ -17,30 +17,36 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/17/21 9:07 AM
+ *  Created by osarapulov on 10/11/21 7:29 PM
  */
 
-package dgca.wallet.app.android.data.remote.ticketing.access.token
+package dgca.wallet.app.android.data.remote.ticketing.accesstoken
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import android.os.Parcelable
+import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenResponse
+import kotlinx.parcelize.Parcelize
 
-data class AccessTokenResponse(
-    @JsonProperty("jti")
+@Parcelize
+data class TicketingAccessTokenParcelable(
     val jti: String?,
-    @JsonProperty("iss")
     val iss: String,
-    @JsonProperty("iat")
     val iat: Long,
-    @JsonProperty("sub")
     val sub: String,
-    @JsonProperty("aud")
     val validationUrl: String,
-    @JsonProperty("exp")
     val exp: Long,
-    @JsonProperty("t")
     val t: Long,
-    @JsonProperty("v")
     val v: String,
-    @JsonProperty("vc")
-    val certificateData: TicketingCertificateDataRemote
+    val certificateData: TicketingCertificateDataParcelable
+) : Parcelable
+
+fun AccessTokenResponse.fromRemote(): TicketingAccessTokenParcelable = TicketingAccessTokenParcelable(
+    jti = jti,
+    iss = iss,
+    iat = iat,
+    sub = sub,
+    validationUrl = validationUrl,
+    exp = exp,
+    t = t,
+    certificateData = certificateData.fromRemote(),
+    v = v
 )

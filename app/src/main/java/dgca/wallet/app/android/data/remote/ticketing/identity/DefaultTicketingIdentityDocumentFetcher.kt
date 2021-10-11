@@ -17,20 +17,16 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/22/21 3:34 PM
+ *  Created by osarapulov on 10/11/21 7:14 PM
  */
 
-package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.access.token
+package dgca.wallet.app.android.data.remote.ticketing.identity
 
+import dgca.verifier.app.ticketing.identity.TicketingIdentityDocumentFetcher
+import dgca.verifier.app.ticketing.data.identity.TicketingIdentityDocumentResponse
 import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
-import dgca.wallet.app.android.data.remote.ticketing.access.token.ValidationServiceIdentityResponse
-import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.Service
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
-class GetValidationServiceIdentityUseCase(private val ticketingApiService: TicketingApiService) {
-    suspend fun run(validationService: Service): ValidationServiceIdentityResponse? =
-        withContext(Dispatchers.IO) {
-            ticketingApiService.getValidationServiceIdentity(validationService.serviceEndpoint).body()
-        }
+class DefaultTicketingIdentityDocumentFetcher(private val ticketingApiService: TicketingApiService) : TicketingIdentityDocumentFetcher {
+    override suspend fun fetchIdentityDocument(url: String): TicketingIdentityDocumentResponse =
+        ticketingApiService.getIdentity(url).body()!!
 }

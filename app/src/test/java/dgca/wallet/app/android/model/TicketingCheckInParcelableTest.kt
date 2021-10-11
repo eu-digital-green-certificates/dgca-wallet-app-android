@@ -17,15 +17,15 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/22/21 2:32 PM
+ *  Created by osarapulov on 9/10/21 11:48 AM
  */
 
 package dgca.wallet.app.android.model
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import dgca.wallet.app.android.data.remote.ticketing.access.token.ValidationServiceIdentityResponse
+import dgca.verifier.app.ticketing.data.checkin.TicketingCheckInRemote
 import org.apache.commons.io.IOUtils
-import org.junit.Assert
+import org.junit.Assert.assertNotNull
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
@@ -33,21 +33,20 @@ import java.io.InputStream
 import java.nio.charset.Charset
 
 @RunWith(MockitoJUnitRunner::class)
-class ValidationServiceIdentityTest {
+class TicketingCheckInParcelableTest {
     private val objectMapper = ObjectMapper().apply { findAndRegisterModules() }
 
     @Test
-    fun shouldConvertValidationServiceIdentityResponseModel() {
-        val validationServiceIdentityResponseIs: InputStream =
-            javaClass.classLoader!!.getResourceAsStream(VALIDATION_SERVICE_IDENTITY_RESPONSE_FILE_NAME)
-        val validationServiceIdentityResponseString: String =
-            IOUtils.toString(validationServiceIdentityResponseIs, Charset.defaultCharset())
-        val validationServiceIdentityResponse: ValidationServiceIdentityResponse =
-            objectMapper.readValue(validationServiceIdentityResponseString, ValidationServiceIdentityResponse::class.java)
-        Assert.assertNotNull(validationServiceIdentityResponse)
+    fun shouldConvertBookingSystemModel() {
+        val bookingSystemModelIs: InputStream =
+            javaClass.classLoader!!.getResourceAsStream(BOOKING_SYSTEM_MODEL_FILE_NAME)
+        val bookingSystemModelString: String = IOUtils.toString(bookingSystemModelIs, Charset.defaultCharset())
+        val ticketingCheckInRemoteModel: TicketingCheckInRemote =
+            objectMapper.readValue(bookingSystemModelString, TicketingCheckInRemote::class.java)
+        assertNotNull(ticketingCheckInRemoteModel)
     }
 
     companion object {
-        const val VALIDATION_SERVICE_IDENTITY_RESPONSE_FILE_NAME = "validation_service_identity_response.json"
+        const val BOOKING_SYSTEM_MODEL_FILE_NAME = "ticketing_check_in_remote_model.json"
     }
 }

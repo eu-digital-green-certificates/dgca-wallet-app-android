@@ -23,7 +23,6 @@
 package dgca.wallet.app.android.model
 
 import android.os.Parcelable
-import dgca.wallet.app.android.data.remote.ticketing.access.token.ValidationServiceIdentityResponse
 import kotlinx.parcelize.Parcelize
 import java.security.KeyPair
 
@@ -31,8 +30,8 @@ import java.security.KeyPair
 data class BookingPortalEncryptionData(
     val keyPair: KeyPair,
     val accessTokenResponseContainer: AccessTokenResponseContainer,
-    val validationServiceIdentityResponse: ValidationServiceIdentityResponse,
+    val validationServiceIdentity: ValidationServiceIdentityParcelable,
 ) : Parcelable {
-    fun getStandardizedName(): String = accessTokenResponseContainer.accessTokenResponse.certificateData.getStandardizedName()
+    fun getStandardizedName(): String = accessTokenResponseContainer.accessToken.certificateData.getStandardizedName()
 
 }

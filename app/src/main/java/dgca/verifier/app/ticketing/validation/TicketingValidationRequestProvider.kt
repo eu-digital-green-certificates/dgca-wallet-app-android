@@ -17,10 +17,10 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/27/21 9:15 AM
+ *  Created by osarapulov on 10/11/21 2:04 PM
  */
 
-package dgca.verifier.app.ticketing
+package dgca.verifier.app.ticketing.validation
 
 import android.util.Base64
 import dgca.wallet.app.android.data.remote.ticketing.access.token.ValidateRequest

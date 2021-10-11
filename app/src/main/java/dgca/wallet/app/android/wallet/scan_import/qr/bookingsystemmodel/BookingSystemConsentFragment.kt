@@ -33,10 +33,10 @@ import dgca.wallet.app.android.R
 import dgca.wallet.app.android.base.BindingFragment
 import dgca.wallet.app.android.databinding.FragmentBookingSystemConsentBinding
 import dgca.wallet.app.android.model.BookingPortalEncryptionData
-import dgca.wallet.app.android.model.BookingSystemModel
+import dgca.wallet.app.android.model.TicketingCheckInParcelable
+import dgca.wallet.app.android.model.TicketingIdentityDocumentParcelable
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.access.token.BookingPortalEncryptionDataFetcherDialogFragment
-import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
-import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.Service
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.TicketingServiceParcelable
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.identity.IdentityFetcherDialogFragment
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission.DefaultDialogFragment
 
@@ -51,33 +51,33 @@ class BookingSystemConsentFragment : BindingFragment<FragmentBookingSystemConsen
             findNavController().navigateUp()
         }
 
-        populateView(args.bookingSystemModel)
+        populateView(args.ticketingCheckInParcelable)
 
         binding.allow.setOnClickListener {
             val action =
-                BookingSystemConsentFragmentDirections.actionBookingSystemConsentFragmentToIdentityFetcherDialogFragment(args.bookingSystemModel)
+                BookingSystemConsentFragmentDirections.actionBookingSystemConsentFragmentToIdentityFetcherDialogFragment(args.ticketingCheckInParcelable)
             findNavController().navigate(action)
         }
 
         setFragmentResultListener(IdentityFetcherDialogFragment.IdentityFetcherRequestKey) { key, bundle ->
             findNavController().navigateUp()
-            val identityDocument: IdentityDocument? =
+            val ticketingIdentityDocumentParcelable: TicketingIdentityDocumentParcelable? =
                 bundle.getParcelable(IdentityFetcherDialogFragment.IdentityFetcherIdentityDocumentParam)
-            if (identityDocument == null || identityDocument.validationServices.isEmpty()) {
+            if (ticketingIdentityDocumentParcelable == null || ticketingIdentityDocumentParcelable.validationServices.isEmpty()) {
                 val params = DefaultDialogFragment.BuildOptions(
                     message = getString(R.string.something_went_wrong),
                     positiveBtnText = getString(R.string.ok),
                     isOneButton = true
                 )
                 DefaultDialogFragment.newInstance(params).show(childFragmentManager, DefaultDialogFragment.TAG)
-            } else if (identityDocument.validationServices.size == 1) {
+            } else if (ticketingIdentityDocumentParcelable.validationServices.size == 1) {
                 showAccessTokenFetcher(
-                    args.bookingSystemModel,
-                    identityDocument.accessTokenService,
-                    identityDocument.validationServices.first()
+                    args.ticketingCheckInParcelable,
+                    ticketingIdentityDocumentParcelable.accessTokenService,
+                    ticketingIdentityDocumentParcelable.validationServices.first()
                 )
             } else {
-                showValidationServiceSelector(args.bookingSystemModel, identityDocument)
+                showValidationServiceSelector(args.ticketingCheckInParcelable, ticketingIdentityDocumentParcelable)
             }
         }
 
@@ -98,22 +98,25 @@ class BookingSystemConsentFragment : BindingFragment<FragmentBookingSystemConsen
         }
     }
 
-    private fun showValidationServiceSelector(bookingSystemModel: BookingSystemModel, identityDocument: IdentityDocument) {
+    private fun showValidationServiceSelector(
+        ticketingCheckInParcelable: TicketingCheckInParcelable,
+        ticketingIdentityDocumentParcelable: TicketingIdentityDocumentParcelable
+    ) {
         val action =
             BookingSystemConsentFragmentDirections.actionBookingSystemConsentFragmentToValidationServiceSelectorFragment(
-                bookingSystemModel, identityDocument
+                ticketingCheckInParcelable, ticketingIdentityDocumentParcelable
             )
         findNavController().navigate(action)
     }
 
     private fun showAccessTokenFetcher(
-        bookingSystemModel: BookingSystemModel,
-        accessTokenService: Service,
-        validationService: Service
+        ticketingCheckInParcelable: TicketingCheckInParcelable,
+        accessTokenTicketingServiceParcelable: TicketingServiceParcelable,
+        validationTicketingServiceParcelable: TicketingServiceParcelable
     ) {
         val action =
             BookingSystemConsentFragmentDirections.actionBookingSystemConsentFragmentToBookingPortalEncryptionDataFetcherDialogFragment(
-                bookingSystemModel, accessTokenService, validationService
+                ticketingCheckInParcelable, accessTokenTicketingServiceParcelable, validationTicketingServiceParcelable
             )
         findNavController().navigate(action)
     }
@@ -126,10 +129,10 @@ class BookingSystemConsentFragment : BindingFragment<FragmentBookingSystemConsen
         findNavController().navigate(action)
     }
 
-    private fun populateView(bookingSystemModel: BookingSystemModel) {
-        binding.headerTitle.text = getString(R.string.qr_code_from, bookingSystemModel.serviceIdentity)
-        binding.subjectValue.text = bookingSystemModel.subject
-        binding.serviceProviderValue.text = bookingSystemModel.serviceProvider
-        binding.consentValue.text = bookingSystemModel.consent
+    private fun populateView(ticketingCheckInParcelable: TicketingCheckInParcelable) {
+        binding.headerTitle.text = getString(R.string.qr_code_from, ticketingCheckInParcelable.serviceIdentity)
+        binding.subjectValue.text = ticketingCheckInParcelable.subject
+        binding.serviceProviderValue.text = ticketingCheckInParcelable.serviceProvider
+        binding.consentValue.text = ticketingCheckInParcelable.consent
     }
 }

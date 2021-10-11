@@ -36,9 +36,9 @@ import dgca.wallet.app.android.R
 import dgca.wallet.app.android.base.BindingFragment
 import dgca.wallet.app.android.databinding.FragmentValidationServiceSelectorBinding
 import dgca.wallet.app.android.model.BookingPortalEncryptionData
-import dgca.wallet.app.android.model.BookingSystemModel
+import dgca.wallet.app.android.model.TicketingCheckInParcelable
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.access.token.BookingPortalEncryptionDataFetcherDialogFragment
-import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.Service
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.TicketingServiceParcelable
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission.DefaultDialogFragment
 
 @AndroidEntryPoint
@@ -81,35 +81,36 @@ class ValidationServiceSelectorFragment : BindingFragment<FragmentValidationServ
                     validationServicesContainer.selectableValidationServiceModelList.size.toString()
                 )
             adapter.update(validationServicesContainer.selectableValidationServiceModelList)
-            binding.nextButton.visibility = if (validationServicesContainer.selectedService != null) View.VISIBLE else View.GONE
+            binding.nextButton.visibility =
+                if (validationServicesContainer.selectedTicketingServiceParcelable != null) View.VISIBLE else View.GONE
             binding.nextButton.setOnClickListener {
                 showAccessTokenFetcher(
-                    args.bookingSystemModel,
-                    args.identityDocument.accessTokenService,
-                    validationServicesContainer.selectedService!!
+                    args.ticketingCheckInParcelable,
+                    args.ticketingIdentityDocumentParcelable.accessTokenService,
+                    validationServicesContainer.selectedTicketingServiceParcelable!!
                 )
             }
         }
 
-        viewModel.init(args.identityDocument.validationServices)
+        viewModel.init(args.ticketingIdentityDocumentParcelable.validationServices)
 
         binding.nextButton.setOnClickListener {
             showAccessTokenFetcher(
-                args.bookingSystemModel,
-                args.identityDocument.accessTokenService,
-                args.identityDocument.validationServices.first()
+                args.ticketingCheckInParcelable,
+                args.ticketingIdentityDocumentParcelable.accessTokenService,
+                args.ticketingIdentityDocumentParcelable.validationServices.first()
             )
         }
     }
 
     private fun showAccessTokenFetcher(
-        bookingSystemModel: BookingSystemModel,
-        accessTokenService: Service,
-        validationService: Service
+        ticketingCheckInParcelable: TicketingCheckInParcelable,
+        accessTokenTicketingServiceParcelable: TicketingServiceParcelable,
+        validationTicketingServiceParcelable: TicketingServiceParcelable
     ) {
         val action =
             ValidationServiceSelectorFragmentDirections.actionValidationServiceSelectorFragmentToBookingPortalEncryptionDataFetcherDialogFragment(
-                bookingSystemModel, accessTokenService, validationService
+                ticketingCheckInParcelable, accessTokenTicketingServiceParcelable, validationTicketingServiceParcelable
             )
         findNavController().navigate(action)
     }

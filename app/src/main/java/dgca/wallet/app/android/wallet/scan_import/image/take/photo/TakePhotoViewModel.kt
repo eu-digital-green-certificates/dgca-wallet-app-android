@@ -27,12 +27,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fasterxml.jackson.databind.ObjectMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.verifier.app.decoder.model.GreenCertificate
+import dgca.verifier.app.ticketing.checkin.TicketingCheckInModelFetcher
 import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.local.toCertificateModel
-import dgca.wallet.app.android.model.BookingSystemModel
+import dgca.wallet.app.android.model.TicketingCheckInParcelable
+import dgca.wallet.app.android.model.fromRemote
 import dgca.wallet.app.android.wallet.scan_import.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -50,7 +51,7 @@ sealed class TakePhotoResult {
     ) : TakePhotoResult()
 
     class BookingSystemModelRecognised(
-        val bookingSystemModel: BookingSystemModel
+        val ticketingCheckInParcelable: TicketingCheckInParcelable
     ) : TakePhotoResult()
 }
 
@@ -61,7 +62,7 @@ class TakePhotoViewModel @Inject constructor(
     private val uriProvider: UriProvider,
     private val fileSaver: FileSaver,
     private val greenCertificateFetcher: GreenCertificateFetcher,
-    private val objectMapper: ObjectMapper
+    private val ticketingCheckInModelFetcher: TicketingCheckInModelFetcher
 ) : ViewModel() {
     val uriLiveData: LiveData<Uri> = MutableLiveData(uriProvider.getUriFor("temp", "temp.jpeg"))
     private val _result = MutableLiveData<TakePhotoResult>()
@@ -100,8 +101,8 @@ class TakePhotoViewModel @Inject constructor(
             }
             else -> {
                 runCatching {
-                    objectMapper.readValue(qrCodeString, BookingSystemModel::class.java)
-                        .let { TakePhotoResult.BookingSystemModelRecognised(it) }
+                    ticketingCheckInModelFetcher.fetchTicketingCheckInModel(qrCodeString ?: "")
+                        .let { TakePhotoResult.BookingSystemModelRecognised(it.fromRemote()) }
                 }.getOrElse {
                     val file = try {
                         fileSaver.saveFileFromUri(this, "images", "${System.currentTimeMillis()}.jpeg")

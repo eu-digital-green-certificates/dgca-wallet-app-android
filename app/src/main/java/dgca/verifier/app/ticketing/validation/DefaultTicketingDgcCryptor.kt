@@ -17,10 +17,10 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/27/21 9:09 AM
+ *  Created by osarapulov on 10/11/21 2:04 PM
  */
 
-package dgca.verifier.app.ticketing
+package dgca.verifier.app.ticketing.validation
 
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission.SUPPORTED_ENCRYPTION_SCHEMA
 import java.nio.charset.StandardCharsets

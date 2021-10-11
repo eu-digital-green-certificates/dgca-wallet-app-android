@@ -37,9 +37,10 @@ import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.base.BindingDialogFragment
 import dgca.wallet.app.android.databinding.DialogFragmentProgressBarBinding
+import dgca.wallet.app.android.model.TicketingIdentityDocumentParcelable
+import dgca.wallet.app.android.model.fromRemote
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.IdentityFetcherResult
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.IdentityFetcherViewModel
-import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument
 
 @AndroidEntryPoint
 class IdentityFetcherDialogFragment : BindingDialogFragment<DialogFragmentProgressBarBinding>() {
@@ -59,17 +60,18 @@ class IdentityFetcherDialogFragment : BindingDialogFragment<DialogFragmentProgre
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.identityFetcherResult.observe(viewLifecycleOwner) {
-            val identityDocument: IdentityDocument? = if (it is IdentityFetcherResult.Success) {
-                it.identityDocument
-            } else {
-                null
-            }
+            val ticketingIdentityDocumentParcelable: TicketingIdentityDocumentParcelable? =
+                if (it is IdentityFetcherResult.Success) {
+                    it.ticketingIdentityDocumentRemote.fromRemote()
+                } else {
+                    null
+                }
             setFragmentResult(
                 IdentityFetcherRequestKey,
-                bundleOf(IdentityFetcherIdentityDocumentParam to identityDocument)
+                bundleOf(IdentityFetcherIdentityDocumentParam to ticketingIdentityDocumentParcelable)
             )
         }
-        viewModel.initialize(args.bookingSystemModel)
+        viewModel.initialize(args.ticketingCheckInParcelable)
     }
 
     companion object {

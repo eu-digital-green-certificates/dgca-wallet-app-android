@@ -67,7 +67,11 @@ class BookingPortalEncryptionDataFetcherDialogFragment : BindingDialogFragment<D
                 bundleOf(BookingPortalEncryptionDataParamKey to bookingPortalEncryptionData)
             )
         }
-        viewModel.initialize(args.bookingSystemModel, args.accessTokenService, args.validationService)
+        viewModel.initialize(
+            args.ticketingCheckInParcelable,
+            args.ticketingAccessTokenServiceParcelable,
+            args.ticketingValidationServiceParcelable
+        )
     }
 
     companion object {

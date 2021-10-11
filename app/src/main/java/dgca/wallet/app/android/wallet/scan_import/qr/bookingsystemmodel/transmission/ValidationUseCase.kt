@@ -25,12 +25,11 @@ package dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmi
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import dgca.verifier.app.decoder.base64ToX509Certificate
-import dgca.verifier.app.ticketing.TicketingValidationRequestProvider
+import dgca.verifier.app.ticketing.validation.TicketingValidationRequestProvider
 import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
-import dgca.wallet.app.android.data.remote.ticketing.identity.PublicKeyJwkRemote
 import dgca.wallet.app.android.data.remote.ticketing.validate.BookingPortalValidationResponse
-import dgca.wallet.app.android.data.remote.ticketing.validate.BookingPortalValidationResponseResult
 import dgca.wallet.app.android.model.BookingPortalEncryptionData
+import dgca.wallet.app.android.model.TicketingPublicKeyJwkParcelable
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.JwtObject
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.JwtTokenParser
 import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.validationresult.BookingPortalValidationResult
@@ -53,18 +52,21 @@ class ValidationUseCase(
         bookingPortalEncryptionData: BookingPortalEncryptionData
     ): BookingPortalValidationResult =
         withContext(Dispatchers.IO) {
-            val token = bookingPortalEncryptionData.accessTokenResponseContainer.jwtToken
+            val token = bookingPortalEncryptionData.accessTokenResponseContainer.ticketingAccessTokenData.jwtToken
             val authTokenHeader = "Bearer $token"
-            val publicKeyJwkRemote: PublicKeyJwkRemote =
-                bookingPortalEncryptionData.validationServiceIdentityResponse.getEncryptionPublicKey()!!
-            val publicKey: PublicKey = publicKeyJwkRemote.x5c.base64ToX509Certificate()!!.publicKey
+            val publicKeyJwk: TicketingPublicKeyJwkParcelable =
+                bookingPortalEncryptionData.validationServiceIdentity.getEncryptionPublicKey()!!
+            val publicKey: PublicKey = publicKeyJwk.x5c.base64ToX509Certificate()!!.publicKey
             val validationRequest = ticketingValidationRequestProvider.provideTicketValidationRequest(
-                qrString, publicKeyJwkRemote.kid, publicKey, bookingPortalEncryptionData.accessTokenResponseContainer.iv,
+                qrString,
+                publicKeyJwk.kid,
+                publicKey,
+                bookingPortalEncryptionData.accessTokenResponseContainer.ticketingAccessTokenData.iv,
                 bookingPortalEncryptionData.keyPair.private
             )
 
             val res = ticketingApiService.validate(
-                bookingPortalEncryptionData.accessTokenResponseContainer.accessTokenResponse.validationUrl,
+                bookingPortalEncryptionData.accessTokenResponseContainer.accessToken.validationUrl,
                 authTokenHeader,
                 validationRequest
             )

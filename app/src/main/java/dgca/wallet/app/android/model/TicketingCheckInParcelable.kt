@@ -23,25 +23,39 @@
 package dgca.wallet.app.android.model
 
 import android.os.Parcelable
-import com.fasterxml.jackson.annotation.JsonProperty
+import dgca.verifier.app.ticketing.data.checkin.TicketingCheckInRemote
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class BookingSystemModel(
-    @JsonProperty("protocol")
+data class TicketingCheckInParcelable(
     val protocol: String,
-    @JsonProperty("protocolVersion")
     val protocolVersion: String,
-    @JsonProperty("serviceIdentity")
     val serviceIdentity: String,
-    @JsonProperty("privacyUrl")
     val privacyUrl: String,
-    @JsonProperty("token")
     val token: String,
-    @JsonProperty("consent")
     val consent: String,
-    @JsonProperty("subject")
     val subject: String,
-    @JsonProperty("serviceProvider")
     val serviceProvider: String
 ) : Parcelable
+
+fun TicketingCheckInRemote.fromRemote(): TicketingCheckInParcelable = TicketingCheckInParcelable(
+    protocol = protocol,
+    protocolVersion = protocolVersion,
+    serviceIdentity = serviceIdentity,
+    privacyUrl = privacyUrl,
+    token = token,
+    consent = consent,
+    subject = subject,
+    serviceProvider = serviceProvider
+)
+
+fun TicketingCheckInParcelable.toRemote(): TicketingCheckInRemote = TicketingCheckInRemote(
+    protocol = protocol,
+    protocolVersion = protocolVersion,
+    serviceIdentity = serviceIdentity,
+    privacyUrl = privacyUrl,
+    token = token,
+    consent = consent,
+    subject = subject,
+    serviceProvider = serviceProvider
+)

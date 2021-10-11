@@ -17,30 +17,17 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/27/21 9:13 AM
+ *  Created by osarapulov on 10/11/21 7:14 PM
  */
 
-package dgca.verifier.app.ticketing
+package dgca.wallet.app.android.data.remote.ticketing.accesstoken
 
-import android.util.Base64
-import java.security.PrivateKey
-import java.security.Signature
+import dgca.verifier.app.ticketing.accesstoken.TicketingValidationServiceIdentityFetcher
+import dgca.verifier.app.ticketing.accesstoken.TicketingValidationServiceIdentityResponse
 
-class TicketingDgcSigner {
-    /**
-     * sign dcc.
-     * @param data data
-     * @param privateKey privateKey
-     * @return signature as base64
-     */
-    fun signDcc(data: ByteArray, privateKey: PrivateKey): String {
-        val signature: Signature = Signature.getInstance(SIG_ALG)
-        signature.initSign(privateKey)
-        signature.update(data)
-        return Base64.encodeToString(signature.sign(), Base64.NO_WRAP)
-    }
+class DefaultTicketingValidationServiceIdentityFetcher(private val validationServiceIdentityFetcher: TicketingValidationServiceIdentityFetcher) :
+    TicketingValidationServiceIdentityFetcher {
 
-    companion object {
-        const val SIG_ALG = "SHA256withECDSA"
-    }
+    override suspend fun fetchValidationServiceIdentity(url: String): TicketingValidationServiceIdentityResponse =
+        validationServiceIdentityFetcher.fetchValidationServiceIdentity(url)
 }

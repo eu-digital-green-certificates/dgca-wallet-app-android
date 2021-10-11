@@ -17,16 +17,22 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/24/21 12:50 PM
+ *  Created by osarapulov on 10/11/21 6:24 PM
  */
 
 package dgca.wallet.app.android.model
 
 import android.os.Parcelable
-import dgca.verifier.app.ticketing.accesstoken.TicketingAccessTokenData
-import dgca.wallet.app.android.data.remote.ticketing.accesstoken.TicketingAccessTokenParcelable
+import dgca.verifier.app.ticketing.data.identity.TicketingIdentityDocumentRemote
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.TicketingServiceParcelable
+import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.fromRemote
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-class AccessTokenResponseContainer(val accessToken: TicketingAccessTokenParcelable, val ticketingAccessTokenData: TicketingAccessTokenData) :
+data class TicketingIdentityDocumentParcelable(val accessTokenService: TicketingServiceParcelable, val validationServices: List<TicketingServiceParcelable>) :
     Parcelable
+
+fun TicketingIdentityDocumentRemote.fromRemote(): TicketingIdentityDocumentParcelable = TicketingIdentityDocumentParcelable(
+    accessTokenService = accessTokenService.fromRemote(),
+    validationServices = validationServices.map { it.fromRemote() }
+)

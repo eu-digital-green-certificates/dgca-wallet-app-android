@@ -17,14 +17,15 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/10/21 11:48 AM
+ *  Created by osarapulov on 9/22/21 2:32 PM
  */
 
 package dgca.wallet.app.android.model
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import dgca.verifier.app.ticketing.accesstoken.TicketingValidationServiceIdentityResponse
 import org.apache.commons.io.IOUtils
-import org.junit.Assert.assertNotNull
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
@@ -32,20 +33,21 @@ import java.io.InputStream
 import java.nio.charset.Charset
 
 @RunWith(MockitoJUnitRunner::class)
-class BookingSystemModelTest {
+class ValidationTicketingServiceParcelableIdentityTest {
     private val objectMapper = ObjectMapper().apply { findAndRegisterModules() }
 
     @Test
-    fun shouldConvertBookingSystemModel() {
-        val bookingSystemModelIs: InputStream =
-            javaClass.classLoader!!.getResourceAsStream(BOOKING_SYSTEM_MODEL_FILE_NAME)
-        val bookingSystemModelString: String = IOUtils.toString(bookingSystemModelIs, Charset.defaultCharset())
-        val bookingSystemModel: BookingSystemModel =
-            objectMapper.readValue(bookingSystemModelString, BookingSystemModel::class.java)
-        assertNotNull(bookingSystemModel)
+    fun shouldConvertValidationServiceIdentityResponseModel() {
+        val validationServiceIdentityResponseIs: InputStream =
+            javaClass.classLoader!!.getResourceAsStream(VALIDATION_SERVICE_IDENTITY_RESPONSE_FILE_NAME)
+        val validationServiceIdentityResponseString: String =
+            IOUtils.toString(validationServiceIdentityResponseIs, Charset.defaultCharset())
+        val ticketingValidationServiceIdentityResponse: TicketingValidationServiceIdentityResponse =
+            objectMapper.readValue(validationServiceIdentityResponseString, TicketingValidationServiceIdentityResponse::class.java)
+        Assert.assertNotNull(ticketingValidationServiceIdentityResponse)
     }
 
     companion object {
-        const val BOOKING_SYSTEM_MODEL_FILE_NAME = "booking_system_model.json"
+        const val VALIDATION_SERVICE_IDENTITY_RESPONSE_FILE_NAME = "validation_service_identity_response.json"
     }
 }
