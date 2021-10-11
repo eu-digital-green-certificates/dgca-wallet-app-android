@@ -17,33 +17,18 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 10/11/21 6:45 PM
+ *  Created by osarapulov on 10/11/21 7:59 PM
  */
 
-package dgca.wallet.app.android.model
+package dgca.verifier.app.ticketing.validation.encoding
 
-import android.os.Parcelable
-import dgca.verifier.app.ticketing.data.identity.TicketingPublicKeyJwkRemote
-import kotlinx.parcelize.Parcelize
+import java.security.PublicKey
 
-@Parcelize
-class TicketingPublicKeyJwkParcelable(
-    val x5c: String,
-    val kid: String,
-    val alg: String,
-    val use: String
-) : Parcelable
-
-fun TicketingPublicKeyJwkRemote.fromRemote(): TicketingPublicKeyJwkParcelable = TicketingPublicKeyJwkParcelable(
-    x5c = x5c,
-    kid = kid,
-    alg = alg,
-    use = use
+data class TicketingEncryptedDgcData(
+    val dataEncrypted: ByteArray,
+    val encKey: ByteArray
 )
 
-fun TicketingPublicKeyJwkParcelable.toRemote(): TicketingPublicKeyJwkRemote = TicketingPublicKeyJwkRemote(
-    x5c = x5c,
-    kid = kid,
-    alg = alg,
-    use = use
-)
+interface TicketingDgcCryptor {
+    fun encodeDcc(dcc: String, iv: ByteArray, publicKey: PublicKey): TicketingEncryptedDgcData
+}

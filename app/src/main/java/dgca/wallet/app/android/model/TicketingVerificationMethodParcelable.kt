@@ -42,3 +42,11 @@ fun TicketingVerificationMethodRemote.fromRemote(): TicketingVerificationMethodP
     publicKeyJwk = publicKeyJwk?.fromRemote(),
     verificationMethods = verificationMethods
 )
+
+fun TicketingVerificationMethodParcelable.toRemote(): TicketingVerificationMethodRemote = TicketingVerificationMethodRemote(
+    id = id,
+    type = type,
+    controller = controller,
+    publicKeyJwk = publicKeyJwk?.toRemote(),
+    verificationMethods = verificationMethods
+)

@@ -17,33 +17,24 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 10/11/21 6:45 PM
+ *  Created by osarapulov on 10/11/21 7:18 PM
  */
 
-package dgca.wallet.app.android.model
+package dgca.wallet.app.android.wallet.scan_import.qr.ticketing.accesstoken
 
 import android.os.Parcelable
-import dgca.verifier.app.ticketing.data.identity.TicketingPublicKeyJwkRemote
+import dgca.verifier.app.ticketing.identity.accesstoken.TicketingAccessTokenDataRemote
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-class TicketingPublicKeyJwkParcelable(
-    val x5c: String,
-    val kid: String,
-    val alg: String,
-    val use: String
-) : Parcelable
+data class TicketingAccessTokenDataParcelable(val jwtToken: String, val iv: String) : Parcelable
 
-fun TicketingPublicKeyJwkRemote.fromRemote(): TicketingPublicKeyJwkParcelable = TicketingPublicKeyJwkParcelable(
-    x5c = x5c,
-    kid = kid,
-    alg = alg,
-    use = use
+fun TicketingAccessTokenDataRemote.fromRemote(): TicketingAccessTokenDataParcelable = TicketingAccessTokenDataParcelable(
+    jwtToken = jwtToken,
+    iv = iv
 )
 
-fun TicketingPublicKeyJwkParcelable.toRemote(): TicketingPublicKeyJwkRemote = TicketingPublicKeyJwkRemote(
-    x5c = x5c,
-    kid = kid,
-    alg = alg,
-    use = use
+fun TicketingAccessTokenDataParcelable.toRemote(): TicketingAccessTokenDataRemote = TicketingAccessTokenDataRemote(
+    jwtToken = jwtToken,
+    iv = iv
 )

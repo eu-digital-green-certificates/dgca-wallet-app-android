@@ -22,9 +22,9 @@
 
 package dgca.wallet.app.android.data.remote.ticketing
 
-import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenRequest
-import dgca.wallet.app.android.data.remote.ticketing.access.token.ValidateRequest
-import dgca.verifier.app.ticketing.accesstoken.TicketingValidationServiceIdentityResponse
+import dgca.verifier.app.ticketing.data.accesstoken.TicketingAccessTokenRequest
+import dgca.verifier.app.ticketing.data.validate.TicketingValidateRequest
+import dgca.verifier.app.ticketing.identity.validityserviceidentity.TicketingValidationServiceIdentityResponse
 import dgca.verifier.app.ticketing.data.identity.TicketingIdentityDocumentResponse
 import retrofit2.Response
 import retrofit2.http.*
@@ -41,7 +41,7 @@ interface TicketingApiService {
     suspend fun getAccessToken(
         @Url url: String,
         @Header("Authorization") authHeader: String,
-        @Body body: AccessTokenRequest
+        @Body body: TicketingAccessTokenRequest
     ): Response<String>
 
     @GET
@@ -56,6 +56,6 @@ interface TicketingApiService {
     suspend fun validate(
         @Url url: String,
         @Header("Authorization") authHeader: String,
-        @Body body: ValidateRequest
+        @Body body: TicketingValidateRequest
     ): Response<String>
 }

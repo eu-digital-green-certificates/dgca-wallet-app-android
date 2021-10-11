@@ -17,33 +17,18 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 10/11/21 6:45 PM
+ *  Created by osarapulov on 10/11/21 7:54 PM
  */
 
-package dgca.wallet.app.android.model
+package dgca.verifier.app.ticketing
 
-import android.os.Parcelable
-import dgca.verifier.app.ticketing.data.identity.TicketingPublicKeyJwkRemote
-import kotlinx.parcelize.Parcelize
+import dgca.verifier.app.decoder.fromBase64
 
-@Parcelize
-class TicketingPublicKeyJwkParcelable(
-    val x5c: String,
-    val kid: String,
-    val alg: String,
-    val use: String
-) : Parcelable
-
-fun TicketingPublicKeyJwkRemote.fromRemote(): TicketingPublicKeyJwkParcelable = TicketingPublicKeyJwkParcelable(
-    x5c = x5c,
-    kid = kid,
-    alg = alg,
-    use = use
-)
-
-fun TicketingPublicKeyJwkParcelable.toRemote(): TicketingPublicKeyJwkRemote = TicketingPublicKeyJwkRemote(
-    x5c = x5c,
-    kid = kid,
-    alg = alg,
-    use = use
-)
+class DefaultJwtTokenParser: JwtTokenParser {
+    override fun parse(jwtToken: String): JwtObject {
+        val tokens = jwtToken.split('.')
+        val header = String(tokens[0].fromBase64())
+        val body = String(tokens[1].fromBase64())
+        return JwtObject(header, body)
+    }
+}

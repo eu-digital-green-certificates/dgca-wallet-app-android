@@ -24,12 +24,15 @@ package dgca.wallet.app.android.model
 
 import android.os.Parcelable
 import dgca.verifier.app.ticketing.data.identity.TicketingIdentityDocumentRemote
-import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.TicketingServiceParcelable
-import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.fromRemote
+import dgca.wallet.app.android.wallet.scan_import.qr.ticketing.TicketingServiceParcelable
+import dgca.wallet.app.android.wallet.scan_import.qr.ticketing.fromRemote
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class TicketingIdentityDocumentParcelable(val accessTokenService: TicketingServiceParcelable, val validationServices: List<TicketingServiceParcelable>) :
+data class TicketingIdentityDocumentParcelable(
+    val accessTokenService: TicketingServiceParcelable,
+    val validationServices: List<TicketingServiceParcelable>
+) :
     Parcelable
 
 fun TicketingIdentityDocumentRemote.fromRemote(): TicketingIdentityDocumentParcelable = TicketingIdentityDocumentParcelable(

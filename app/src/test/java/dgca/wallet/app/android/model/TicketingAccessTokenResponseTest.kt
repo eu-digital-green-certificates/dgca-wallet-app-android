@@ -17,15 +17,15 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/22/21 2:32 PM
+ *  Created by osarapulov on 9/20/21 10:59 AM
  */
 
 package dgca.wallet.app.android.model
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import dgca.verifier.app.ticketing.identity.validityserviceidentity.TicketingValidationServiceIdentityResponse
+import dgca.verifier.app.ticketing.data.accesstoken.TicketingAccessTokenResponse
 import org.apache.commons.io.IOUtils
-import org.junit.Assert
+import org.junit.Assert.assertNotNull
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
@@ -33,21 +33,20 @@ import java.io.InputStream
 import java.nio.charset.Charset
 
 @RunWith(MockitoJUnitRunner::class)
-class ValidationTicketingServiceParcelableIdentityTest {
+class TicketingAccessTokenResponseTest {
     private val objectMapper = ObjectMapper().apply { findAndRegisterModules() }
 
     @Test
-    fun shouldConvertValidationServiceIdentityResponseModel() {
-        val validationServiceIdentityResponseIs: InputStream =
-            javaClass.classLoader!!.getResourceAsStream(VALIDATION_SERVICE_IDENTITY_RESPONSE_FILE_NAME)
-        val validationServiceIdentityResponseString: String =
-            IOUtils.toString(validationServiceIdentityResponseIs, Charset.defaultCharset())
-        val ticketingValidationServiceIdentityResponse: TicketingValidationServiceIdentityResponse =
-            objectMapper.readValue(validationServiceIdentityResponseString, TicketingValidationServiceIdentityResponse::class.java)
-        Assert.assertNotNull(ticketingValidationServiceIdentityResponse)
+    fun shouldConvertAccessTokenResponseModel() {
+        val accessTokenResponseModelIs: InputStream =
+            javaClass.classLoader!!.getResourceAsStream(ACCESS_TOKEN_RESPONSE_MODEL_FILE_NAME)
+        val accessTokenResponseModelString: String = IOUtils.toString(accessTokenResponseModelIs, Charset.defaultCharset())
+        val ticketingAccessTokenResponseModel: TicketingAccessTokenResponse =
+            objectMapper.readValue(accessTokenResponseModelString, TicketingAccessTokenResponse::class.java)
+        assertNotNull(ticketingAccessTokenResponseModel)
     }
 
     companion object {
-        const val VALIDATION_SERVICE_IDENTITY_RESPONSE_FILE_NAME = "validation_service_identity_response.json"
+        const val ACCESS_TOKEN_RESPONSE_MODEL_FILE_NAME = "access_token_response_model.json"
     }
 }

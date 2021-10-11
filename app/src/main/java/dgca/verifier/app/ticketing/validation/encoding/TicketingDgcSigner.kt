@@ -17,33 +17,30 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 10/11/21 6:45 PM
+ *  Created by osarapulov on 10/11/21 7:59 PM
  */
 
-package dgca.wallet.app.android.model
+package dgca.verifier.app.ticketing.validation.encoding
 
-import android.os.Parcelable
-import dgca.verifier.app.ticketing.data.identity.TicketingPublicKeyJwkRemote
-import kotlinx.parcelize.Parcelize
+import android.util.Base64
+import java.security.PrivateKey
+import java.security.Signature
 
-@Parcelize
-class TicketingPublicKeyJwkParcelable(
-    val x5c: String,
-    val kid: String,
-    val alg: String,
-    val use: String
-) : Parcelable
+class TicketingDgcSigner {
+    /**
+     * sign dcc.
+     * @param data data
+     * @param privateKey privateKey
+     * @return signature as base64
+     */
+    fun signDcc(data: ByteArray, privateKey: PrivateKey): String {
+        val signature: Signature = Signature.getInstance(SIG_ALG)
+        signature.initSign(privateKey)
+        signature.update(data)
+        return Base64.encodeToString(signature.sign(), Base64.NO_WRAP)
+    }
 
-fun TicketingPublicKeyJwkRemote.fromRemote(): TicketingPublicKeyJwkParcelable = TicketingPublicKeyJwkParcelable(
-    x5c = x5c,
-    kid = kid,
-    alg = alg,
-    use = use
-)
-
-fun TicketingPublicKeyJwkParcelable.toRemote(): TicketingPublicKeyJwkRemote = TicketingPublicKeyJwkRemote(
-    x5c = x5c,
-    kid = kid,
-    alg = alg,
-    use = use
-)
+    companion object {
+        const val SIG_ALG = "SHA256withECDSA"
+    }
+}

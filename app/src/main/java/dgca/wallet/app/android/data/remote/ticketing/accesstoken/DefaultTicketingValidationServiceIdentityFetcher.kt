@@ -22,8 +22,8 @@
 
 package dgca.wallet.app.android.data.remote.ticketing.accesstoken
 
-import dgca.verifier.app.ticketing.accesstoken.TicketingValidationServiceIdentityFetcher
-import dgca.verifier.app.ticketing.accesstoken.TicketingValidationServiceIdentityResponse
+import dgca.verifier.app.ticketing.identity.validityserviceidentity.TicketingValidationServiceIdentityFetcher
+import dgca.verifier.app.ticketing.identity.validityserviceidentity.TicketingValidationServiceIdentityResponse
 
 class DefaultTicketingValidationServiceIdentityFetcher(private val validationServiceIdentityFetcher: TicketingValidationServiceIdentityFetcher) :
     TicketingValidationServiceIdentityFetcher {

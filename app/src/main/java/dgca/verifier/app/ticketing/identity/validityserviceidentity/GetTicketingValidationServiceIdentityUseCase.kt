@@ -17,33 +17,19 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 10/11/21 6:45 PM
+ *  Created by osarapulov on 10/11/21 8:36 PM
  */
 
-package dgca.wallet.app.android.model
+package dgca.verifier.app.ticketing.identity.validityserviceidentity
 
-import android.os.Parcelable
-import dgca.verifier.app.ticketing.data.identity.TicketingPublicKeyJwkRemote
-import kotlinx.parcelize.Parcelize
+import dgca.verifier.app.ticketing.data.identity.TicketingServiceRemote
+import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-@Parcelize
-class TicketingPublicKeyJwkParcelable(
-    val x5c: String,
-    val kid: String,
-    val alg: String,
-    val use: String
-) : Parcelable
-
-fun TicketingPublicKeyJwkRemote.fromRemote(): TicketingPublicKeyJwkParcelable = TicketingPublicKeyJwkParcelable(
-    x5c = x5c,
-    kid = kid,
-    alg = alg,
-    use = use
-)
-
-fun TicketingPublicKeyJwkParcelable.toRemote(): TicketingPublicKeyJwkRemote = TicketingPublicKeyJwkRemote(
-    x5c = x5c,
-    kid = kid,
-    alg = alg,
-    use = use
-)
+class GetTicketingValidationServiceIdentityUseCase(private val ticketingApiService: TicketingApiService) {
+    suspend fun run(service: TicketingServiceRemote): TicketingValidationServiceIdentityResponse? =
+        withContext(Dispatchers.IO) {
+            ticketingApiService.getValidationServiceIdentity(service.serviceEndpoint).body()
+        }
+}

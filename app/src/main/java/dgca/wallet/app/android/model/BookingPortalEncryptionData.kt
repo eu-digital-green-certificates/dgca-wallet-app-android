@@ -23,15 +23,15 @@
 package dgca.wallet.app.android.model
 
 import android.os.Parcelable
+import dgca.wallet.app.android.wallet.scan_import.qr.ticketing.accesstoken.TicketingAccessTokenParcelableContainer
 import kotlinx.parcelize.Parcelize
 import java.security.KeyPair
 
 @Parcelize
 data class BookingPortalEncryptionData(
     val keyPair: KeyPair,
-    val accessTokenResponseContainer: AccessTokenResponseContainer,
-    val validationServiceIdentity: ValidationServiceIdentityParcelable,
+    val accessTokenContainer: TicketingAccessTokenParcelableContainer,
+    val ticketingValidationServiceIdentity: TicketingValidationServiceIdentityParcelable,
 ) : Parcelable {
-    fun getStandardizedName(): String = accessTokenResponseContainer.accessToken.certificateData.getStandardizedName()
-
+    fun getStandardizedName(): String = accessTokenContainer.accessToken.certificateData.getStandardizedName()
 }

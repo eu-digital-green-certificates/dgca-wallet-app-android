@@ -17,33 +17,30 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 10/11/21 6:45 PM
+ *  Created by osarapulov on 10/11/21 7:56 PM
  */
 
-package dgca.wallet.app.android.model
+package dgca.verifier.app.ticketing.data.accesstoken
 
-import android.os.Parcelable
-import dgca.verifier.app.ticketing.data.identity.TicketingPublicKeyJwkRemote
-import kotlinx.parcelize.Parcelize
+import com.fasterxml.jackson.annotation.JsonProperty
 
-@Parcelize
-class TicketingPublicKeyJwkParcelable(
-    val x5c: String,
-    val kid: String,
-    val alg: String,
-    val use: String
-) : Parcelable
-
-fun TicketingPublicKeyJwkRemote.fromRemote(): TicketingPublicKeyJwkParcelable = TicketingPublicKeyJwkParcelable(
-    x5c = x5c,
-    kid = kid,
-    alg = alg,
-    use = use
-)
-
-fun TicketingPublicKeyJwkParcelable.toRemote(): TicketingPublicKeyJwkRemote = TicketingPublicKeyJwkRemote(
-    x5c = x5c,
-    kid = kid,
-    alg = alg,
-    use = use
+data class TicketingAccessTokenResponse(
+    @JsonProperty("jti")
+    val jti: String?,
+    @JsonProperty("iss")
+    val iss: String,
+    @JsonProperty("iat")
+    val iat: Long,
+    @JsonProperty("sub")
+    val sub: String,
+    @JsonProperty("aud")
+    val validationUrl: String,
+    @JsonProperty("exp")
+    val exp: Long,
+    @JsonProperty("t")
+    val t: Long,
+    @JsonProperty("v")
+    val v: String,
+    @JsonProperty("vc")
+    val certificateData: TicketingCertificateDataRemote
 )

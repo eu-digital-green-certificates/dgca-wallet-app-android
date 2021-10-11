@@ -17,33 +17,17 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 10/11/21 6:45 PM
+ *  Created by osarapulov on 10/11/21 8:35 PM
  */
 
-package dgca.wallet.app.android.model
+package dgca.verifier.app.ticketing.identity.accesstoken
 
-import android.os.Parcelable
-import dgca.verifier.app.ticketing.data.identity.TicketingPublicKeyJwkRemote
-import kotlinx.parcelize.Parcelize
+import dgca.verifier.app.ticketing.data.accesstoken.TicketingAccessTokenRequest
 
-@Parcelize
-class TicketingPublicKeyJwkParcelable(
-    val x5c: String,
-    val kid: String,
-    val alg: String,
-    val use: String
-) : Parcelable
-
-fun TicketingPublicKeyJwkRemote.fromRemote(): TicketingPublicKeyJwkParcelable = TicketingPublicKeyJwkParcelable(
-    x5c = x5c,
-    kid = kid,
-    alg = alg,
-    use = use
-)
-
-fun TicketingPublicKeyJwkParcelable.toRemote(): TicketingPublicKeyJwkRemote = TicketingPublicKeyJwkRemote(
-    x5c = x5c,
-    kid = kid,
-    alg = alg,
-    use = use
-)
+interface TicketingAccessTokenFetcher {
+    suspend fun fetchAccessToken(
+        url: String,
+        header: String,
+        ticketingAccessTokenRequest: TicketingAccessTokenRequest
+    ): TicketingAccessTokenDataRemote
+}

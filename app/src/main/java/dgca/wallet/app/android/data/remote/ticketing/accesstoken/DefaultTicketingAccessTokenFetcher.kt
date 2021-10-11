@@ -22,20 +22,20 @@
 
 package dgca.wallet.app.android.data.remote.ticketing.accesstoken
 
-import dgca.verifier.app.ticketing.accesstoken.TicketingAccessTokenData
-import dgca.verifier.app.ticketing.accesstoken.TicketingAccessTokenFetcher
+import dgca.verifier.app.ticketing.identity.accesstoken.TicketingAccessTokenDataRemote
+import dgca.verifier.app.ticketing.identity.accesstoken.TicketingAccessTokenFetcher
 import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
-import dgca.wallet.app.android.data.remote.ticketing.access.token.AccessTokenRequest
+import dgca.verifier.app.ticketing.data.accesstoken.TicketingAccessTokenRequest
 
 class DefaultTicketingAccessTokenFetcher(private val ticketingApiService: TicketingApiService) : TicketingAccessTokenFetcher {
     override suspend fun fetchAccessToken(
         url: String,
         header: String,
-        accessTokenRequest: AccessTokenRequest
-    ): TicketingAccessTokenData {
-        val response = ticketingApiService.getAccessToken(url, header, accessTokenRequest)
+        ticketingAccessTokenRequest: TicketingAccessTokenRequest
+    ): TicketingAccessTokenDataRemote {
+        val response = ticketingApiService.getAccessToken(url, header, ticketingAccessTokenRequest)
         val jwtToken: String = response.body()!!
         val iv = response.headers()["x-nonce"]!!
-        return TicketingAccessTokenData(jwtToken, iv)
+        return TicketingAccessTokenDataRemote(jwtToken, iv)
     }
 }

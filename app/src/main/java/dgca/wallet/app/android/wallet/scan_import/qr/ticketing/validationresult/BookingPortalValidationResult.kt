@@ -17,33 +17,34 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 10/11/21 6:45 PM
+ *  Created by osarapulov on 10/2/21 3:08 PM
  */
 
-package dgca.wallet.app.android.model
+package dgca.wallet.app.android.wallet.scan_import.qr.ticketing.validationresult
 
 import android.os.Parcelable
-import dgca.verifier.app.ticketing.data.identity.TicketingPublicKeyJwkRemote
 import kotlinx.parcelize.Parcelize
 
+sealed class BookingPortalValidationResult : Parcelable {
+    @Parcelize
+    object Valid : BookingPortalValidationResult()
+
+    @Parcelize
+    object Invalid : BookingPortalValidationResult()
+
+    @Parcelize
+    class LimitedValidity(val bookingPortalLimitedValidityResultItems: List<BookingPortalLimitedValidityResultItem>) :
+        BookingPortalValidationResult()
+}
+
 @Parcelize
-class TicketingPublicKeyJwkParcelable(
-    val x5c: String,
-    val kid: String,
-    val alg: String,
-    val use: String
+data class BookingPortalLimitedValidityResultItem(
+    val result: BookingPortalLimitedValidityResult,
+    val identifier: String,
+    val details: String,
+    val type: String
 ) : Parcelable
 
-fun TicketingPublicKeyJwkRemote.fromRemote(): TicketingPublicKeyJwkParcelable = TicketingPublicKeyJwkParcelable(
-    x5c = x5c,
-    kid = kid,
-    alg = alg,
-    use = use
-)
-
-fun TicketingPublicKeyJwkParcelable.toRemote(): TicketingPublicKeyJwkRemote = TicketingPublicKeyJwkRemote(
-    x5c = x5c,
-    kid = kid,
-    alg = alg,
-    use = use
-)
+enum class BookingPortalLimitedValidityResult {
+    OK, NOK, CHK
+}
