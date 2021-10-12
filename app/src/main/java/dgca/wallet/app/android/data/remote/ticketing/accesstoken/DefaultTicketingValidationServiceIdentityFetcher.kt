@@ -24,10 +24,11 @@ package dgca.wallet.app.android.data.remote.ticketing.accesstoken
 
 import dgca.verifier.app.ticketing.identity.validityserviceidentity.TicketingValidationServiceIdentityFetcher
 import dgca.verifier.app.ticketing.identity.validityserviceidentity.TicketingValidationServiceIdentityResponse
+import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
 
-class DefaultTicketingValidationServiceIdentityFetcher(private val validationServiceIdentityFetcher: TicketingValidationServiceIdentityFetcher) :
+class DefaultTicketingValidationServiceIdentityFetcher(private val ticketingApiService: TicketingApiService) :
     TicketingValidationServiceIdentityFetcher {
 
     override suspend fun fetchValidationServiceIdentity(url: String): TicketingValidationServiceIdentityResponse =
-        validationServiceIdentityFetcher.fetchValidationServiceIdentity(url)
+        ticketingApiService.getValidationServiceIdentity(url).body()!!
 }

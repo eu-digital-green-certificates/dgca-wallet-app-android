@@ -23,13 +23,12 @@
 package dgca.verifier.app.ticketing.identity.validityserviceidentity
 
 import dgca.verifier.app.ticketing.data.identity.TicketingServiceRemote
-import dgca.wallet.app.android.data.remote.ticketing.TicketingApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class GetTicketingValidationServiceIdentityUseCase(private val ticketingApiService: TicketingApiService) {
-    suspend fun run(service: TicketingServiceRemote): TicketingValidationServiceIdentityResponse? =
+class GetTicketingValidationServiceIdentityUseCase(private val validationServiceIdentityFetcher: TicketingValidationServiceIdentityFetcher) {
+    suspend fun run(service: TicketingServiceRemote): TicketingValidationServiceIdentityResponse =
         withContext(Dispatchers.IO) {
-            ticketingApiService.getValidationServiceIdentity(service.serviceEndpoint).body()
+            validationServiceIdentityFetcher.fetchValidationServiceIdentity(service.serviceEndpoint)
         }
 }

@@ -79,15 +79,14 @@ object TicketingModule {
 
     @Singleton
     @Provides
-    internal fun provideTicketingValidationServiceIdentityFetcher(validationServiceIdentityFetcher: TicketingValidationServiceIdentityFetcher): TicketingValidationServiceIdentityFetcher =
-        DefaultTicketingValidationServiceIdentityFetcher(validationServiceIdentityFetcher)
+    internal fun provideTicketingValidationServiceIdentityFetcher(ticketingApiService: TicketingApiService): TicketingValidationServiceIdentityFetcher =
+        DefaultTicketingValidationServiceIdentityFetcher(ticketingApiService)
 
 
     @Singleton
     @Provides
     internal fun provideTicketingValidationResultFetcher(ticketingApiService: TicketingApiService): TicketingValidationResultFetcher =
         DefaultTicketingValidationResultFetcher(ticketingApiService)
-
 
     @Singleton
     @Provides
@@ -108,8 +107,8 @@ object TicketingModule {
 
     @Singleton
     @Provides
-    internal fun provideGetValidationServiceIdentityUseCase(ticketingApiService: TicketingApiService): GetTicketingValidationServiceIdentityUseCase =
-        GetTicketingValidationServiceIdentityUseCase(ticketingApiService)
+    internal fun provideGetValidationServiceIdentityUseCase(validationServiceIdentityFetcher: TicketingValidationServiceIdentityFetcher): GetTicketingValidationServiceIdentityUseCase =
+        GetTicketingValidationServiceIdentityUseCase(validationServiceIdentityFetcher)
 
 
     @Singleton
