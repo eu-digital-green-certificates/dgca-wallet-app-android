@@ -324,7 +324,7 @@
 
     <fragment
         android:id="@+id/bookingSystemConsentFragment"
-        android:name="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.BookingSystemConsentFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.qr.ticketing.BookingSystemConsentFragment"
         android:label="@string/step_1"
         app:enterAnim="@animator/nav_default_pop_enter_anim"
         app:exitAnim="@animator/nav_default_exit_anim"
@@ -333,8 +333,8 @@
         tools:layout="@layout/fragment_certificate_claim">
 
         <argument
-            android:name="bookingSystemModel"
-            app:argType="dgca.wallet.app.android.model.BookingSystemModel" />
+            android:name="ticketingCheckInParcelable"
+            app:argType="dgca.wallet.app.android.model.TicketingCheckInParcelable" />
 
         <action
             android:id="@+id/action_bookingSystemConsentFragment_to_identityFetcherDialogFragment"
@@ -367,47 +367,47 @@
 
     <dialog
         android:id="@+id/identityFetcherDialogFragment"
-        android:name="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.identity.IdentityFetcherDialogFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.qr.ticketing.identity.IdentityFetcherDialogFragment"
         android:label="Identity Fetcher"
         tools:layout="@layout/dialog_fragment_progress_bar">
 
         <argument
-            android:name="bookingSystemModel"
-            app:argType="dgca.wallet.app.android.model.BookingSystemModel" />
+            android:name="ticketingCheckInParcelable"
+            app:argType="dgca.wallet.app.android.model.TicketingCheckInParcelable" />
     </dialog>
 
     <dialog
         android:id="@+id/bookingPortalEncryptionDataFetcherDialogFragment"
-        android:name="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.access.token.BookingPortalEncryptionDataFetcherDialogFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.qr.ticketing.accesstoken.BookingPortalEncryptionDataFetcherDialogFragment"
         android:label="Access Token Fetcher"
         tools:layout="@layout/dialog_fragment_progress_bar">
 
         <argument
-            android:name="bookingSystemModel"
-            app:argType="dgca.wallet.app.android.model.BookingSystemModel" />
+            android:name="ticketingCheckInParcelable"
+            app:argType="dgca.wallet.app.android.model.TicketingCheckInParcelable" />
 
         <argument
-            android:name="accessTokenService"
-            app:argType="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.Service" />
+            android:name="ticketingAccessTokenServiceParcelable"
+            app:argType="dgca.wallet.app.android.wallet.scan_import.qr.ticketing.TicketingServiceParcelable" />
 
         <argument
-            android:name="validationService"
-            app:argType="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.Service" />
+            android:name="ticketingValidationServiceParcelable"
+            app:argType="dgca.wallet.app.android.wallet.scan_import.qr.ticketing.TicketingServiceParcelable" />
     </dialog>
 
     <fragment
         android:id="@+id/validationServiceSelectorFragment"
-        android:name="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.serviceselector.ValidationServiceSelectorFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.qr.ticketing.serviceselector.ValidationServiceSelectorFragment"
         android:label="@string/step_2"
         tools:layout="@layout/fragment_validation_service_selector">
 
         <argument
-            android:name="bookingSystemModel"
-            app:argType="dgca.wallet.app.android.model.BookingSystemModel" />
+            android:name="ticketingCheckInParcelable"
+            app:argType="dgca.wallet.app.android.model.TicketingCheckInParcelable" />
 
         <argument
-            android:name="identityDocument"
-            app:argType="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.data.IdentityDocument" />
+            android:name="ticketingIdentityDocumentParcelable"
+            app:argType="dgca.wallet.app.android.model.TicketingIdentityDocumentParcelable" />
 
         <action
             android:id="@+id/action_validationServiceSelectorFragment_to_bookingPortalEncryptionDataFetcherDialogFragment"
@@ -427,7 +427,7 @@
 
     <fragment
         android:id="@+id/certificateSelectorFragment"
-        android:name="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.certselector.CertificateSelectorFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.qr.ticketing.certselector.CertificateSelectorFragment"
         android:label="@string/step_2"
         tools:layout="@layout/fragment_certificate_selector">
 
@@ -447,7 +447,7 @@
 
     <fragment
         android:id="@+id/transmissionConsentFragment"
-        android:name="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission.TransmissionConsentFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.qr.ticketing.transmission.TransmissionConsentFragment"
         android:label="@string/step_3"
         tools:layout="@layout/fragment_transmission_consent">
 
@@ -479,13 +479,13 @@
 
     <fragment
         android:id="@+id/bookingPortalValidationResultFragment"
-        android:name="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.validationresult.BookingPortalValidationResultFragment"
+        android:name="dgca.wallet.app.android.wallet.scan_import.qr.ticketing.validationresult.BookingPortalValidationResultFragment"
         android:label="@string/validation_result"
         tools:layout="@layout/fragment_transmission_consent">
 
         <argument
             android:name="bookingPortalValidationResult"
-            app:argType="dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.validationresult.BookingPortalValidationResult" />
+            app:argType="dgca.wallet.app.android.wallet.scan_import.qr.ticketing.validationresult.BookingPortalValidationResult" />
 
     </fragment>
 </navigation>

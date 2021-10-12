@@ -78,7 +78,7 @@ class TakePhotoFragment : BindingFragment<FragmentTakePhotoBinding>() {
                 )
                 is TakePhotoResult.BookingSystemModelRecognised -> setFragmentResult(
                     ADD_REQUEST_KEY,
-                    bundleOf(BOOKING_SYSTEM_MODEL_KEY to res.bookingSystemModel)
+                    bundleOf(BOOKING_SYSTEM_MODEL_KEY to res.ticketingCheckInParcelable)
                 )
                 else -> {
                 }

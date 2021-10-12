@@ -24,11 +24,10 @@ package dgca.wallet.app.android.data.remote.ticketing
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import dgca.wallet.app.android.data.remote.ticketing.validate.BookingPortalValidationResponse
-import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.transmission.toValidationResult
-import dgca.wallet.app.android.wallet.scan_import.qr.bookingsystemmodel.validationresult.BookingPortalValidationResult
+import dgca.wallet.app.android.wallet.scan_import.qr.ticketing.transmission.toValidationResult
+import dgca.wallet.app.android.wallet.scan_import.qr.ticketing.validationresult.BookingPortalValidationResult
 import junit.framework.Assert.*
 import org.apache.commons.io.IOUtils
-import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner

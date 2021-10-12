@@ -36,7 +36,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.MainActivity
 import dgca.wallet.app.android.base.BindingFragment
 import dgca.wallet.app.android.databinding.FragmentCertificatesBinding
-import dgca.wallet.app.android.model.BookingSystemModel
+import dgca.wallet.app.android.model.TicketingCheckInParcelable
 import dgca.wallet.app.android.wallet.scan_import.ADD_CLAIM_GREEN_CERTIFICATE_MODEL_KEY
 import dgca.wallet.app.android.wallet.scan_import.ADD_REQUEST_KEY
 import dgca.wallet.app.android.wallet.scan_import.BOOKING_SYSTEM_MODEL_KEY
@@ -95,9 +95,9 @@ class CertificatesFragment : BindingFragment<FragmentCertificatesBinding>(),
             if (claimGreenCertificateModel != null) {
                 showImportDcc(claimGreenCertificateModel)
             } else {
-                val bookingSystemModel: BookingSystemModel? = bundle.getParcelable(BOOKING_SYSTEM_MODEL_KEY)
-                if (bookingSystemModel != null) {
-                    showBookingSystemConsentPage(bookingSystemModel)
+                val ticketingCheckInParcelable: TicketingCheckInParcelable? = bundle.getParcelable(BOOKING_SYSTEM_MODEL_KEY)
+                if (ticketingCheckInParcelable != null) {
+                    showBookingSystemConsentPage(ticketingCheckInParcelable)
                 }
             }
         }
@@ -109,9 +109,9 @@ class CertificatesFragment : BindingFragment<FragmentCertificatesBinding>(),
         findNavController().navigate(action)
     }
 
-    private fun showBookingSystemConsentPage(bookingSystemModel: BookingSystemModel) {
+    private fun showBookingSystemConsentPage(ticketingCheckInParcelable: TicketingCheckInParcelable) {
         val action =
-            CertificatesFragmentDirections.actionCertificatesFragmentToBookingSystemConsentFragment(bookingSystemModel)
+            CertificatesFragmentDirections.actionCertificatesFragmentToBookingSystemConsentFragment(ticketingCheckInParcelable)
         findNavController().navigate(action)
     }
 

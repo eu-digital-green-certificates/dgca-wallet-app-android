@@ -72,7 +72,7 @@ class ImportPdfFragment : Fragment() {
                 )
                 is ImportPdfResult.BookingSystemModelRecognised -> setFragmentResult(
                     ADD_REQUEST_KEY,
-                    bundleOf(BOOKING_SYSTEM_MODEL_KEY to res.bookingSystemModel)
+                    bundleOf(BOOKING_SYSTEM_MODEL_KEY to res.ticketingCheckInParcelable)
                 )
                 else -> {
                 }

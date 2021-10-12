@@ -26,12 +26,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fasterxml.jackson.databind.ObjectMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.verifier.app.decoder.model.GreenCertificate
+import dgca.verifier.app.ticketing.data.checkin.TicketingCheckInRemote
+import dgca.verifier.app.ticketing.checkin.TicketingCheckInModelFetcher
 import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.local.toCertificateModel
-import dgca.wallet.app.android.model.BookingSystemModel
+import dgca.wallet.app.android.model.TicketingCheckInParcelable
+import dgca.wallet.app.android.model.fromRemote
 import dgca.wallet.app.android.wallet.scan_import.GreenCertificateFetcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,7 +49,7 @@ sealed class ModelFetcherResult {
         val certificateModel: CertificateModel
     ) : ModelFetcherResult()
 
-    class BookingSystemModelRecognised(val bookingSystemModel: BookingSystemModel) : ModelFetcherResult()
+    class BookingSystemModelRecognised(val ticketingCheckInParcelable: TicketingCheckInParcelable) : ModelFetcherResult()
 
     object NotApplicable : ModelFetcherResult()
 }
@@ -55,7 +57,7 @@ sealed class ModelFetcherResult {
 @HiltViewModel
 class ModelFetcherViewModel @Inject constructor(
     private val greenCertificateFetcher: GreenCertificateFetcher,
-    private val objectMapper: ObjectMapper
+    private val ticketingCheckInModelFetcher: TicketingCheckInModelFetcher
 ) : ViewModel() {
     private val _modelFetcherResult = MutableLiveData<ModelFetcherResult>()
     val modelFetcherResult: LiveData<ModelFetcherResult> = _modelFetcherResult
@@ -66,14 +68,14 @@ class ModelFetcherViewModel @Inject constructor(
                 val greenCertificateRecognised: ModelFetcherResult.GreenCertificateRecognised? =
                     tryToFetchGreenCertificate(qrCodeText)
                 if (greenCertificateRecognised != null) return@withContext greenCertificateRecognised
-                val bookingSystemModel: BookingSystemModel? = runCatching {
-                    objectMapper.readValue(qrCodeText, BookingSystemModel::class.java)
+                val ticketingCheckInRemoteModel: TicketingCheckInRemote? = runCatching {
+                    ticketingCheckInModelFetcher.fetchTicketingCheckInModel(qrCodeText)
                 }.getOrElse {
                     Timber.e(it)
                     null
                 }
-                if (bookingSystemModel != null) return@withContext ModelFetcherResult.BookingSystemModelRecognised(
-                    bookingSystemModel
+                if (ticketingCheckInRemoteModel != null) return@withContext ModelFetcherResult.BookingSystemModelRecognised(
+                    ticketingCheckInRemoteModel.fromRemote()
                 )
                 return@withContext ModelFetcherResult.NotApplicable
             }.apply {
