@@ -22,7 +22,7 @@
 
 package dgca.wallet.app.android.data.local
 
-import dgca.wallet.app.android.configs.Config
+import dgca.wallet.app.android.data.Config
 import dgca.wallet.app.android.data.ConfigDataSource
 
 interface MutableConfigDataSource : ConfigDataSource {

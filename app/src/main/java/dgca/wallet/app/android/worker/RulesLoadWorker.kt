@@ -20,7 +20,7 @@
  *  Created by osarapulov on 4/30/21 5:01 PM
  */
 
-package dgca.verifier.app.android.worker
+package dgca.wallet.app.android.worker
 
 import android.content.Context
 import androidx.hilt.work.HiltWorker

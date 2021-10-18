@@ -41,13 +41,6 @@ import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
-data class CertificateViewCard(val certificatesCard: CertificatesCard.CertificateCard, val qrCode: Bitmap)
-
-sealed class FilePreparationResult {
-    class FileResult(val file: File) : FilePreparationResult()
-    class ErrorResult(val error: Exception?) : FilePreparationResult()
-}
-
 @HiltViewModel
 class ViewCertificateViewModel @Inject constructor(
     private val qrCodeConverter: QrCodeConverter,
@@ -100,6 +93,7 @@ class ViewCertificateViewModel @Inject constructor(
             _inProgress.value = true
             var fileForSharing: File? = null
             var error: Exception? = null
+
             withContext(Dispatchers.IO) {
                 try {
                     fileForSharing = certificate.value!!.qrCode.toFile(
@@ -114,6 +108,7 @@ class ViewCertificateViewModel @Inject constructor(
                     Timber.e(exception, "Was not able to prepare image for sharing")
                 }
             }
+
             _inProgress.value = false
             _shareImageFile.postValue(
                 Event(
@@ -132,6 +127,7 @@ class ViewCertificateViewModel @Inject constructor(
             _inProgress.value = true
             var fileForSharing: File? = null
             var error: Exception? = null
+
             withContext(Dispatchers.IO) {
                 try {
                     fileForSharing = certificate.value!!.qrCode.toPdfDocument().toFile(
@@ -146,6 +142,7 @@ class ViewCertificateViewModel @Inject constructor(
                     Timber.e(exception, "Was not able to prepare pdf for sharing")
                 }
             }
+
             _inProgress.value = false
             _sharePdfFile.postValue(
                 Event(
@@ -159,11 +156,14 @@ class ViewCertificateViewModel @Inject constructor(
         }
     }
 
-    fun onCertificateShared() {
-//        TODO: store state to DB if needed. Or show dialog with delete option.
-    }
-
     sealed class ViewCertEvent {
         data class OnCertDeleted(val isDeleted: Boolean) : ViewCertEvent()
     }
+}
+
+data class CertificateViewCard(val certificatesCard: CertificatesCard.CertificateCard, val qrCode: Bitmap)
+
+sealed class FilePreparationResult {
+    class FileResult(val file: File) : FilePreparationResult()
+    class ErrorResult(val error: Exception?) : FilePreparationResult()
 }

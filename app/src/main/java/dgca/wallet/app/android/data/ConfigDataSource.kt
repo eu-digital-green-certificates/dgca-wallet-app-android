@@ -22,8 +22,6 @@
 
 package dgca.wallet.app.android.data
 
-import dgca.wallet.app.android.configs.Config
-
 interface ConfigDataSource {
     fun getConfig(): Config
 }

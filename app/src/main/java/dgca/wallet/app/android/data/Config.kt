@@ -20,7 +20,7 @@
  *  Created by osarapulov on 5/17/21 8:17 AM
  */
 
-package dgca.wallet.app.android.configs
+package dgca.wallet.app.android.data
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

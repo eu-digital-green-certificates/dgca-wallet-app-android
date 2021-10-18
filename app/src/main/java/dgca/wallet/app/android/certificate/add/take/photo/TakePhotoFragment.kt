@@ -50,9 +50,9 @@ import dgca.wallet.app.android.databinding.FragmentTakePhotoBinding
 @AndroidEntryPoint
 class TakePhotoFragment : BindingFragment<FragmentTakePhotoBinding>() {
 
-    private val viewModel by viewModels<TakePhotoViewModel>()
     private lateinit var imageUri: Uri
-    private val takePhoto = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { uri ->
+    private val viewModel by viewModels<TakePhotoViewModel>()
+    private val takePhoto = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         viewModel.handleResult()
     }
 
@@ -61,7 +61,6 @@ class TakePhotoFragment : BindingFragment<FragmentTakePhotoBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         viewModel.uriLiveData.observe(viewLifecycleOwner) { uri ->
             imageUri = uri
             requestCameraPermission()

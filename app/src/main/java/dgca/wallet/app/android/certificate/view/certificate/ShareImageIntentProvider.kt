@@ -26,5 +26,6 @@ import android.content.Intent
 import java.io.File
 
 interface ShareImageIntentProvider {
+
     fun getShareImageIntent(file: File): Intent
 }
