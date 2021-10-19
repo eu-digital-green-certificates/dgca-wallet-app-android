@@ -41,9 +41,9 @@ class RulesLoadWorker @AssistedInject constructor(
     private val rulesRepository: RulesRepository
 ) : CoroutineWorker(context, workParams) {
 
-    override suspend fun doWork(): Result {
-        Timber.d("rules loading start")
-        return try {
+    override suspend fun doWork(): Result =
+        try {
+            Timber.d("rules loading start")
             val config = configRepository.local().getConfig()
             val versionName = BuildConfig.VERSION_NAME
             rulesRepository.loadRules(config.getRulesUrl(versionName))
@@ -53,5 +53,4 @@ class RulesLoadWorker @AssistedInject constructor(
             Timber.d("rules loading retry")
             Result.retry()
         }
-    }
 }

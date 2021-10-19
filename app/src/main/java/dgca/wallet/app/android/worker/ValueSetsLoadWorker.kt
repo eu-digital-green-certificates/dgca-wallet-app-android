@@ -41,9 +41,9 @@ class ValueSetsLoadWorker @AssistedInject constructor(
     private val valueSetsRepository: ValueSetsRepository
 ) : CoroutineWorker(context, workParams) {
 
-    override suspend fun doWork(): Result {
-        Timber.d("value sets loading start")
-        return try {
+    override suspend fun doWork(): Result =
+        try {
+            Timber.d("value sets loading start")
             val config = configRepository.local().getConfig()
             val versionName = BuildConfig.VERSION_NAME
             valueSetsRepository.preLoad(
@@ -55,5 +55,4 @@ class ValueSetsLoadWorker @AssistedInject constructor(
             Timber.d("value sets loading retry")
             Result.retry()
         }
-    }
 }

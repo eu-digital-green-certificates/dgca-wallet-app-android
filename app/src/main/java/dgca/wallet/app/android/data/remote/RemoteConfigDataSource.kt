@@ -25,5 +25,6 @@ package dgca.wallet.app.android.data.remote
 import dgca.wallet.app.android.data.Config
 
 interface RemoteConfigDataSource {
+
     fun getConfig(url: String): Config
 }

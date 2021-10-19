@@ -26,7 +26,8 @@ import androidx.room.Embedded
 import androidx.room.Relation
 
 data class RuleWithDescriptionsLocal(
-    @Embedded val rule: RuleLocal,
+    @Embedded
+    val rule: RuleLocal,
     @Relation(
         parentColumn = "ruleId",
         entityColumn = "ruleContainerId"

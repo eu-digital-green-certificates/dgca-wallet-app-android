@@ -40,6 +40,7 @@ import javax.inject.Inject
 
 @HiltAndroidApp
 class DgcaWalletApplication : Application(), Configuration.Provider {
+
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
 

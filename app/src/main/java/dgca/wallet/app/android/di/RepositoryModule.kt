@@ -44,7 +44,6 @@ abstract class RepositoryModule {
     @Binds
     abstract fun bindWalletRepository(repository: WalletRepositoryImpl): WalletRepository
 
-
     @Singleton
     @Binds
     abstract fun bindLocalConfigDataSource(configDataSource: LocalConfigDataSource): MutableConfigDataSource
