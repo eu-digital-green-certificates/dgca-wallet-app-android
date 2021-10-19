@@ -145,90 +145,95 @@ class DCCApduService : HostApduService() {
     }
 
     override fun processCommandApdu(commandApdu: ByteArray, extras: Bundle?): ByteArray {
-        // The following flow is based on Appendix E "Example of Mapping Version 2.0 Command Flow"
-        // in the NFC Forum specification
-        Timber.i("processCommandApdu() | incoming commandApdu: ${commandApdu.toHex()}")
+        try {
+            // The following flow is based on Appendix E "Example of Mapping Version 2.0 Command Flow"
+            // in the NFC Forum specification
+            Timber.i("processCommandApdu() | incoming commandApdu: ${commandApdu.toHex()}")
 
-        // First command: NDEF Tag Application select (Section 5.5.2 in NFC Forum spec)
-        if (APDU_SELECT.contentEquals(commandApdu)) {
-            Timber.i("APDU_SELECT triggered. Our Response: ${A_OKAY.toHex()}")
-            return A_OKAY
-        }
-
-        // Second command: Capability Container select (Section 5.5.3 in NFC Forum spec)
-        if (CAPABILITY_CONTAINER_OK.contentEquals(commandApdu)) {
-            Timber.i("CAPABILITY_CONTAINER_OK triggered. Our Response: ${A_OKAY.toHex()}")
-            return A_OKAY
-        }
-
-        // Third command: ReadBinary data from CC file (Section 5.5.4 in NFC Forum spec)
-        if (READ_CAPABILITY_CONTAINER.contentEquals(commandApdu) && !READ_CAPABILITY_CONTAINER_CHECK) {
-            Timber.i("READ_CAPABILITY_CONTAINER triggered. Our Response: ${READ_CAPABILITY_CONTAINER_RESPONSE.toHex()}")
-            READ_CAPABILITY_CONTAINER_CHECK = true
-            return READ_CAPABILITY_CONTAINER_RESPONSE
-        }
-
-        // Fourth command: NDEF Select command (Section 5.5.5 in NFC Forum spec)
-        if (NDEF_SELECT_OK.contentEquals(commandApdu)) {
-            Timber.i("NDEF_SELECT_OK triggered. Our Response: ${A_OKAY.toHex()}")
-            return A_OKAY
-        }
-
-        if (NDEF_READ_BINARY_NLEN.contentEquals(commandApdu)) {
-            // Build our response
-            val response = ByteArray(ndefUriLength.size + A_OKAY.size)
-            System.arraycopy(ndefUriLength, 0, response, 0, ndefUriLength.size)
-            System.arraycopy(A_OKAY, 0, response, ndefUriLength.size, A_OKAY.size)
-
-            Timber.i("NDEF_READ_BINARY_NLEN triggered. Our Response: ${response.toHex()}")
-
-            READ_CAPABILITY_CONTAINER_CHECK = false
-            return response
-        }
-
-        if (commandApdu.sliceArray(0..1).contentEquals(NDEF_READ_BINARY)) {
-            val offset = commandApdu.sliceArray(2..3).toHex().toInt(16)
-            val length = commandApdu.sliceArray(4..4).toHex().toInt(16)
-
-            val fullResponse = ByteArray(ndefUriLength.size + ndefUriBytes.size)
-            System.arraycopy(ndefUriLength, 0, fullResponse, 0, ndefUriLength.size)
-            System.arraycopy(
-                ndefUriBytes,
-                0,
-                fullResponse,
-                ndefUriLength.size,
-                ndefUriBytes.size
-            )
-
-            Timber.i("NDEF_READ_BINARY triggered. Full data: ${fullResponse.toHex()}")
-            Timber.i("READ_BINARY - OFFSET: $offset - LEN: $length")
-
-            val slicedResponse = fullResponse.sliceArray(offset until fullResponse.size)
-
-            // Build our response
-            val realLength = if (slicedResponse.size <= length) {
-                slicedResponse.size
-            } else {
-                length
+            // First command: NDEF Tag Application select (Section 5.5.2 in NFC Forum spec)
+            if (APDU_SELECT.contentEquals(commandApdu)) {
+                Timber.i("APDU_SELECT triggered. Our Response: ${A_OKAY.toHex()}")
+                return A_OKAY
             }
-            val response = ByteArray(realLength + A_OKAY.size)
 
-            System.arraycopy(slicedResponse, 0, response, 0, realLength)
-            System.arraycopy(A_OKAY, 0, response, realLength, A_OKAY.size)
+            // Second command: Capability Container select (Section 5.5.3 in NFC Forum spec)
+            if (CAPABILITY_CONTAINER_OK.contentEquals(commandApdu)) {
+                Timber.i("CAPABILITY_CONTAINER_OK triggered. Our Response: ${A_OKAY.toHex()}")
+                return A_OKAY
+            }
 
-            val responseHex = response.toHex()
-            val okHex = A_OKAY.toHex()
-            if (responseHex.contains(okHex)) {
-                val recordWithOkMessage = ndefUri.records[0].payload.toHex() + okHex
-                if (recordWithOkMessage.contains(responseHex)) {
-                    onDccShared()
-                    Timber.i("NDEF_READ_BINARY triggered. Full DCC sent")
+            // Third command: ReadBinary data from CC file (Section 5.5.4 in NFC Forum spec)
+            if (READ_CAPABILITY_CONTAINER.contentEquals(commandApdu) && !READ_CAPABILITY_CONTAINER_CHECK) {
+                Timber.i("READ_CAPABILITY_CONTAINER triggered. Our Response: ${READ_CAPABILITY_CONTAINER_RESPONSE.toHex()}")
+                READ_CAPABILITY_CONTAINER_CHECK = true
+                return READ_CAPABILITY_CONTAINER_RESPONSE
+            }
+
+            // Fourth command: NDEF Select command (Section 5.5.5 in NFC Forum spec)
+            if (NDEF_SELECT_OK.contentEquals(commandApdu)) {
+                Timber.i("NDEF_SELECT_OK triggered. Our Response: ${A_OKAY.toHex()}")
+                return A_OKAY
+            }
+
+            if (NDEF_READ_BINARY_NLEN.contentEquals(commandApdu)) {
+                // Build our response
+                val response = ByteArray(ndefUriLength.size + A_OKAY.size)
+                System.arraycopy(ndefUriLength, 0, response, 0, ndefUriLength.size)
+                System.arraycopy(A_OKAY, 0, response, ndefUriLength.size, A_OKAY.size)
+
+                Timber.i("NDEF_READ_BINARY_NLEN triggered. Our Response: ${response.toHex()}")
+
+                READ_CAPABILITY_CONTAINER_CHECK = false
+                return response
+            }
+
+            if (commandApdu.sliceArray(0..1).contentEquals(NDEF_READ_BINARY)) {
+                val offset = commandApdu.sliceArray(2..3).toHex().toInt(16)
+                val length = commandApdu.sliceArray(4..4).toHex().toInt(16)
+
+                val fullResponse = ByteArray(ndefUriLength.size + ndefUriBytes.size)
+                System.arraycopy(ndefUriLength, 0, fullResponse, 0, ndefUriLength.size)
+                System.arraycopy(
+                    ndefUriBytes,
+                    0,
+                    fullResponse,
+                    ndefUriLength.size,
+                    ndefUriBytes.size
+                )
+
+                Timber.i("NDEF_READ_BINARY triggered. Full data: ${fullResponse.toHex()}")
+                Timber.i("READ_BINARY - OFFSET: $offset - LEN: $length")
+
+                val slicedResponse = fullResponse.sliceArray(offset until fullResponse.size)
+
+                // Build our response
+                val realLength = if (slicedResponse.size <= length) {
+                    slicedResponse.size
+                } else {
+                    length
                 }
-            }
-            Timber.i("NDEF_READ_BINARY triggered. Our Response: $responseHex")
+                val response = ByteArray(realLength + A_OKAY.size)
 
-            READ_CAPABILITY_CONTAINER_CHECK = false
-            return response
+                System.arraycopy(slicedResponse, 0, response, 0, realLength)
+                System.arraycopy(A_OKAY, 0, response, realLength, A_OKAY.size)
+
+                val responseHex = response.toHex()
+                val okHex = A_OKAY.toHex()
+                if (responseHex.contains(okHex)) {
+                    val recordWithOkMessage = ndefUri.records[0].payload.toHex() + okHex
+                    if (recordWithOkMessage.contains(responseHex)) {
+                        onDccShared()
+                        Timber.i("NDEF_READ_BINARY triggered. Full DCC sent")
+                    }
+                }
+                Timber.i("NDEF_READ_BINARY triggered. Our Response: $responseHex")
+
+                READ_CAPABILITY_CONTAINER_CHECK = false
+
+                return response
+            }
+        } catch (ex: Exception) {
+            return A_ERROR
         }
 
         // We're doing something outside our scope
