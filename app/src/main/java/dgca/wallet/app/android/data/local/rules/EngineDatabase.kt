@@ -44,6 +44,7 @@ import dgca.wallet.app.android.data.local.valuesets.ValueSetsDao
 )
 @TypeConverters(Converters::class)
 abstract class EngineDatabase : RoomDatabase() {
+
     abstract fun rulesDao(): RulesDao
 
     abstract fun countriesDao(): CountriesDao

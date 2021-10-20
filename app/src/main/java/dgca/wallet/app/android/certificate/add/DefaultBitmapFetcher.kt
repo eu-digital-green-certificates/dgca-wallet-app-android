@@ -31,6 +31,7 @@ import android.os.Build
 import android.provider.MediaStore
 
 class DefaultBitmapFetcher(context: Context) : BitmapFetcher {
+
     private val appContext = context.applicationContext
 
     override fun loadBitmapByImageUri(uri: Uri): Bitmap {

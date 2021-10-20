@@ -33,16 +33,58 @@ import dgca.wallet.app.android.databinding.CertificateCardViewBinding
 import dgca.wallet.app.android.formatWith
 import java.io.File
 
-enum class ViewType {
-    HEADER_TYPE, CERTIFICATE_TYPE, FILE_TYPE
-}
-
 class CertificateCardsAdapter(
     private val certificatesCards: List<CertificatesCard>,
     private val certificateCardClickListener: CertificateCardClickListener,
     private val fileCardClickListener: FileCardClickListener
-) :
-    RecyclerView.Adapter<CertificateCardsAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<CertificateCardsAdapter.ViewHolder>() {
+
+    override fun getItemViewType(position: Int): Int {
+        return when (certificatesCards[position]) {
+            is CertificatesCard.CertificatesHeader, is CertificatesCard.ImagesHeader, is CertificatesCard.PdfsHeader -> ViewType.HEADER_TYPE.ordinal
+            is CertificatesCard.CertificateCard -> ViewType.CERTIFICATE_TYPE.ordinal
+            is CertificatesCard.FileCard -> ViewType.FILE_TYPE.ordinal
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return when (viewType) {
+            ViewType.HEADER_TYPE.ordinal -> ViewHolder.HeaderViewHolder(
+                LayoutInflater.from(parent.context).inflate(R.layout.certificate_card_header, parent, false)
+            )
+            ViewType.CERTIFICATE_TYPE.ordinal -> ViewHolder.CertificateViewHolder(
+                LayoutInflater.from(parent.context).inflate(R.layout.certificate_card_view, parent, false)
+            )
+            ViewType.FILE_TYPE.ordinal -> ViewHolder.FileViewHolder(
+                LayoutInflater.from(parent.context).inflate(R.layout.certificate_card_file, parent, false)
+            )
+            else -> throw IllegalArgumentException()
+        }
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        when (holder) {
+            is ViewHolder.HeaderViewHolder -> holder.bind(certificatesCards[position])
+            is ViewHolder.CertificateViewHolder -> holder.bind(
+                certificatesCards[position] as CertificatesCard.CertificateCard,
+                certificateCardClickListener
+            )
+            is ViewHolder.FileViewHolder -> holder.bind(
+                certificatesCards[position] as CertificatesCard.FileCard,
+                fileCardClickListener
+            )
+        }
+    }
+
+    override fun getItemCount(): Int = certificatesCards.size
+
+    interface CertificateCardClickListener {
+        fun onCertificateCardClick(certificateId: Int)
+    }
+
+    interface FileCardClickListener {
+        fun onFileCardClick(file: File)
+    }
 
     sealed class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -103,54 +145,8 @@ class CertificateCardsAdapter(
             }
         }
     }
+}
 
-    override fun getItemViewType(position: Int): Int {
-        return when (certificatesCards[position]) {
-            is CertificatesCard.CertificatesHeader, is CertificatesCard.ImagesHeader, is CertificatesCard.PdfsHeader -> ViewType.HEADER_TYPE.ordinal
-            is CertificatesCard.CertificateCard -> ViewType.CERTIFICATE_TYPE.ordinal
-            is CertificatesCard.FileCard -> ViewType.FILE_TYPE.ordinal
-        }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return when (viewType) {
-            ViewType.HEADER_TYPE.ordinal -> ViewHolder.HeaderViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.certificate_card_header, parent, false)
-            )
-            ViewType.CERTIFICATE_TYPE.ordinal -> ViewHolder.CertificateViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.certificate_card_view, parent, false)
-            )
-            ViewType.FILE_TYPE.ordinal -> ViewHolder.FileViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.certificate_card_file, parent, false)
-            )
-            else -> throw IllegalArgumentException()
-        }
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        when (holder) {
-            is ViewHolder.HeaderViewHolder -> holder.bind(certificatesCards[position])
-            is ViewHolder.CertificateViewHolder -> holder.bind(
-                certificatesCards[position] as CertificatesCard.CertificateCard,
-                certificateCardClickListener
-            )
-            is ViewHolder.FileViewHolder -> holder.bind(
-                certificatesCards[position] as CertificatesCard.FileCard,
-                fileCardClickListener
-            )
-        }
-
-    }
-
-    override fun getItemCount(): Int {
-        return certificatesCards.size
-    }
-
-    interface CertificateCardClickListener {
-        fun onCertificateCardClick(certificateId: Int)
-    }
-
-    interface FileCardClickListener {
-        fun onFileCardClick(file: File)
-    }
+enum class ViewType {
+    HEADER_TYPE, CERTIFICATE_TYPE, FILE_TYPE
 }

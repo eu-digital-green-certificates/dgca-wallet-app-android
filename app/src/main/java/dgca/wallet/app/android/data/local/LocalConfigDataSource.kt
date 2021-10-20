@@ -26,21 +26,17 @@ import android.content.Context
 import com.fasterxml.jackson.databind.ObjectMapper
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dgca.wallet.app.android.BuildConfig
-import dgca.wallet.app.android.configs.Config
+import dgca.wallet.app.android.data.Config
 import timber.log.Timber
 import java.io.*
 import javax.inject.Inject
-
 
 class LocalConfigDataSource @Inject constructor(
     @ApplicationContext private val context: Context,
     private val objectMapper: ObjectMapper
 ) : MutableConfigDataSource {
-    private lateinit var config: Config
 
-    companion object {
-        const val CONFIG_FILE = "config.json"
-    }
+    private lateinit var config: Config
 
     override fun setConfig(config: Config): Config {
         this.config = config
@@ -79,4 +75,8 @@ class LocalConfigDataSource @Inject constructor(
         context.assets.open(BuildConfig.CONFIG_FILE_NAME).bufferedReader().use {
             objectMapper.readValue(it.readText(), Config::class.java)
         }
+
+    companion object {
+        const val CONFIG_FILE = "config.json"
+    }
 }

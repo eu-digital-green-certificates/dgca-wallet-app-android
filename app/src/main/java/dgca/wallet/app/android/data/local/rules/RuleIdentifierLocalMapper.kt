@@ -25,15 +25,15 @@ package dgca.wallet.app.android.data.local.rules
 import dgca.verifier.app.engine.data.RuleIdentifier
 
 fun RuleIdentifier.toRuleIdentifierLocal() = RuleIdentifierLocal(
-    identifier = this.identifier,
-    version = this.version,
-    country = this.country,
-    hash = this.hash
+    identifier = identifier,
+    version = version,
+    country = country,
+    hash = hash
 )
 
 fun RuleIdentifierLocal.toRuleIdentifier() = RuleIdentifier(
-    identifier = this.identifier,
-    version = this.version,
-    country = this.country,
-    hash = this.hash
+    identifier = identifier,
+    version = version,
+    country = country,
+    hash = hash
 )

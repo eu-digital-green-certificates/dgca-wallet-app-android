@@ -23,7 +23,6 @@
 package dgca.wallet.app.android.data
 
 import dgca.wallet.app.android.BuildConfig
-import dgca.wallet.app.android.configs.Config
 import dgca.wallet.app.android.data.local.MutableConfigDataSource
 import dgca.wallet.app.android.data.remote.RemoteConfigDataSource
 import javax.inject.Inject
@@ -32,13 +31,11 @@ class ConfigRepositoryImpl @Inject constructor(
     private val localConfigDataSource: MutableConfigDataSource,
     private val remoteConfigDataSource: RemoteConfigDataSource
 ) : ConfigRepository {
-    override fun local(): ConfigDataSource {
-        return localConfigDataSource
-    }
 
-    override fun getConfig(): Config {
-        return remoteConfigDataSource.getConfig(localConfigDataSource.getConfig().getContextUrl(BuildConfig.VERSION_NAME)).apply {
+    override fun local(): ConfigDataSource = localConfigDataSource
+
+    override fun getConfig(): Config =
+        remoteConfigDataSource.getConfig(localConfigDataSource.getConfig().getContextUrl(BuildConfig.VERSION_NAME)).apply {
             localConfigDataSource.setConfig(this)
         }
-    }
 }

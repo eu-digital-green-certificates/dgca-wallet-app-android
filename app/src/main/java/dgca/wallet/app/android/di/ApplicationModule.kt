@@ -52,11 +52,9 @@ class ApplicationModule {
 
     @Singleton
     @Provides
-    fun provideFileSaver(@ApplicationContext context: Context): FileSaver =
-        DefaultFileSaver(context)
+    fun provideFileSaver(@ApplicationContext context: Context): FileSaver = DefaultFileSaver(context)
 
     @Singleton
     @Provides
-    fun provideUriProvider(@ApplicationContext context: Context): UriProvider =
-        DefaultUriProvider(context)
+    fun provideUriProvider(@ApplicationContext context: Context): UriProvider = DefaultUriProvider(context)
 }

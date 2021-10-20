@@ -25,6 +25,7 @@ package dgca.wallet.app.android.certificate.add
 import android.net.Uri
 
 interface UriProvider {
+
     fun getUriFor(targetDirectoryName: String, fileName: String): Uri
 
     fun deleteFileByUri(uri: Uri): Boolean

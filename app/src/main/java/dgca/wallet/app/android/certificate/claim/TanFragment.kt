@@ -26,25 +26,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.R
+import dgca.wallet.app.android.base.BindingFragment
 import dgca.wallet.app.android.databinding.FragmentCertificateTanBinding
 
 @AndroidEntryPoint
-class TanFragment : Fragment() {
-    companion object {
-        const val TAN_KEY = "TAN"
-    }
+class TanFragment : BindingFragment<FragmentCertificateTanBinding>() {
 
-    private var _binding: FragmentCertificateTanBinding? = null
-    private val binding get() = _binding!!
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = FragmentCertificateTanBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentCertificateTanBinding =
+        FragmentCertificateTanBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,15 +46,14 @@ class TanFragment : Fragment() {
                 binding.tanTextField.error = getString(R.string.tan_empty_error)
             } else {
                 findNavController().apply {
-                    this.previousBackStackEntry?.savedStateHandle?.set(TAN_KEY, tan)
-                    this.navigateUp()
+                    previousBackStackEntry?.savedStateHandle?.set(TAN_KEY, tan)
+                    navigateUp()
                 }
             }
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    companion object {
+        const val TAN_KEY = "TAN"
     }
 }

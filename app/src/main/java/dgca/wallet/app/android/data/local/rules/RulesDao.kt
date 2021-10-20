@@ -32,6 +32,7 @@ import java.time.ZonedDateTime
 
 @Dao
 abstract class RulesDao {
+
     @Query("SELECT * from rules")
     abstract fun getAll(): List<RuleLocal>
 
@@ -66,23 +67,6 @@ abstract class RulesDao {
     @Insert
     abstract fun insertRuleIdentifiers(ruleIdentifiers: Collection<RuleIdentifierLocal>)
 
-    fun insertAll(rulesWithDescription: Collection<RuleWithDescriptionsLocal>) {
-        rulesWithDescription.forEach { ruleWithDescriptionsLocal ->
-            val rule = ruleWithDescriptionsLocal.rule
-            val descriptions = ruleWithDescriptionsLocal.descriptions
-            val ruleId = insertRule(rule)
-            val descriptionsToBeInserted = mutableListOf<DescriptionLocal>()
-            descriptions.forEach { descriptionLocal ->
-                descriptionsToBeInserted.add(
-                    descriptionLocal.copy(
-                        ruleContainerId = ruleId
-                    )
-                )
-            }
-            insertDescriptions(*descriptionsToBeInserted.toTypedArray())
-        }
-    }
-
     @Query("DELETE FROM rules WHERE identifier NOT IN (:identifiers)")
     abstract fun deleteAllExcept(identifiers: Array<String>)
 
@@ -106,4 +90,21 @@ abstract class RulesDao {
 
     @Query("SELECT * from rule_identifiers")
     abstract fun getRuleIdentifiers(): List<RuleIdentifierLocal>
+
+    private fun insertAll(rulesWithDescription: Collection<RuleWithDescriptionsLocal>) {
+        rulesWithDescription.forEach { ruleWithDescriptionsLocal ->
+            val rule = ruleWithDescriptionsLocal.rule
+            val descriptions = ruleWithDescriptionsLocal.descriptions
+            val ruleId = insertRule(rule)
+            val descriptionsToBeInserted = mutableListOf<DescriptionLocal>()
+            descriptions.forEach { descriptionLocal ->
+                descriptionsToBeInserted.add(
+                    descriptionLocal.copy(
+                        ruleContainerId = ruleId
+                    )
+                )
+            }
+            insertDescriptions(*descriptionsToBeInserted.toTypedArray())
+        }
+    }
 }

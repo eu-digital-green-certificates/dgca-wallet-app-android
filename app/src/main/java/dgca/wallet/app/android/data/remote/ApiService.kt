@@ -22,7 +22,7 @@
 
 package dgca.wallet.app.android.data.remote
 
-import dgca.wallet.app.android.configs.Config
+import dgca.wallet.app.android.data.Config
 import dgca.wallet.app.android.model.ClaimRequest
 import retrofit2.Call
 import retrofit2.Response

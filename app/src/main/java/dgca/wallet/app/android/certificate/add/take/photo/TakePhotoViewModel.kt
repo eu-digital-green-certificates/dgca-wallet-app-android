@@ -39,12 +39,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-sealed class TakePhotoResult {
-    object Failed : TakePhotoResult()
-    object Success : TakePhotoResult()
-    class QrRecognised(val qr: String) : TakePhotoResult()
-}
-
 @HiltViewModel
 class TakePhotoViewModel @Inject constructor(
     private val qrCodeFetcher: QrCodeFetcher,
@@ -53,7 +47,9 @@ class TakePhotoViewModel @Inject constructor(
     private val fileSaver: FileSaver,
     private val greenCertificateFetcher: GreenCertificateFetcher
 ) : ViewModel() {
+
     val uriLiveData: LiveData<Uri> = MutableLiveData(uriProvider.getUriFor("temp", "temp.jpeg"))
+
     private val _result = MutableLiveData<TakePhotoResult>()
     val result: LiveData<TakePhotoResult> = _result
 
@@ -77,9 +73,7 @@ class TakePhotoViewModel @Inject constructor(
             qrCodeString?.let { qrString -> greenCertificateFetcher.fetchGreenCertificateFromQrString(qrString) }
 
         return when {
-            greenCertificate != null && uriProvider.deleteFileByUri(
-                this
-            ) -> {
+            greenCertificate != null && uriProvider.deleteFileByUri(this) -> {
                 TakePhotoResult.QrRecognised(qrCodeString)
             }
             else -> {
@@ -92,4 +86,10 @@ class TakePhotoViewModel @Inject constructor(
             }
         }
     }
+}
+
+sealed class TakePhotoResult {
+    object Failed : TakePhotoResult()
+    object Success : TakePhotoResult()
+    class QrRecognised(val qr: String) : TakePhotoResult()
 }

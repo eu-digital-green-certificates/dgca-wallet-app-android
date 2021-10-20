@@ -23,5 +23,6 @@
 package dgca.wallet.app.android.nfc
 
 interface ParsedNdefRecord {
+
     fun str(): String
 }

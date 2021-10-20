@@ -32,12 +32,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dgca.wallet.app.android.databinding.DialogFragmentImportImageBinding
 
 class ImportImageDialogFragment : BottomSheetDialogFragment() {
-    companion object {
-        const val REQUEST_KEY = "TakeImageDialogFragment_REQUEST_KEY"
-        const val RESULT_KEY = "TakeImageDialogFragment_RESULT_KEY"
-        const val RESULT_TAKE_PHOTO = 0
-        const val RESULT_PICK_FROM_GALLERY = 1
-    }
 
     private var _binding: DialogFragmentImportImageBinding? = null
     private val binding get() = _binding!!
@@ -55,5 +49,17 @@ class ImportImageDialogFragment : BottomSheetDialogFragment() {
                 bundleOf(RESULT_KEY to RESULT_PICK_FROM_GALLERY)
             )
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    companion object {
+        const val REQUEST_KEY = "TakeImageDialogFragment_REQUEST_KEY"
+        const val RESULT_KEY = "TakeImageDialogFragment_RESULT_KEY"
+        const val RESULT_TAKE_PHOTO = 0
+        const val RESULT_PICK_FROM_GALLERY = 1
     }
 }

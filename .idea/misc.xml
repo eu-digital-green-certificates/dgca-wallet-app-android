@@ -13,12 +13,20 @@
         <entry key="app/src/main/res/layout/fragment_certificate_claim.xml" value="0.49907407407407406" />
         <entry key="app/src/main/res/layout/fragment_certificate_view.xml" value="0.33055555555555555" />
         <entry key="app/src/main/res/layout/fragment_certificates.xml" value="0.33055555555555555" />
+        <entry key="app/src/main/res/layout/fragment_rules_validatation.xml" value="0.36666666666666664" />
+        <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.29907407407407405" />
         <entry key="app/src/main/res/layout/item_rule_validation_result.xml" value="0.3921875" />
         <entry key="app/src/main/res/xml/nfc_application_ids.xml" value="0.44722222222222224" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="EntryPointsManager">
+    <list size="2">
+      <item index="0" class="java.lang.String" itemvalue="dagger.Binds" />
+      <item index="1" class="java.lang.String" itemvalue="dagger.Provides" />
+    </list>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

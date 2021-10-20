@@ -40,12 +40,6 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
-sealed class ImportPdfResult {
-    object Failed : ImportPdfResult()
-    object Success : ImportPdfResult()
-    class QrRecognised(val qr: String) : ImportPdfResult()
-}
-
 @HiltViewModel
 class ImportPdfViewModel @Inject constructor(
     private val bitmapFetcher: BitmapFetcher,
@@ -53,6 +47,7 @@ class ImportPdfViewModel @Inject constructor(
     private val fileSaver: FileSaver,
     private val greenCertificateFetcher: GreenCertificateFetcher
 ) : ViewModel() {
+
     private val _result = MutableLiveData<ImportPdfResult>()
     val result: LiveData<ImportPdfResult> = _result
 
@@ -102,4 +97,10 @@ class ImportPdfViewModel @Inject constructor(
             if (file?.exists() == true && file.isFile) ImportPdfResult.Success else ImportPdfResult.Failed
         }
     }
+}
+
+sealed class ImportPdfResult {
+    object Failed : ImportPdfResult()
+    object Success : ImportPdfResult()
+    class QrRecognised(val qr: String) : ImportPdfResult()
 }
