@@ -20,7 +20,7 @@
  *  Created by osarapulov on 4/30/21 5:01 PM
  */
 
-package dgca.verifier.app.android.worker
+package dgca.wallet.app.android.worker
 
 import android.content.Context
 import androidx.hilt.work.HiltWorker
@@ -41,9 +41,9 @@ class RulesLoadWorker @AssistedInject constructor(
     private val rulesRepository: RulesRepository
 ) : CoroutineWorker(context, workParams) {
 
-    override suspend fun doWork(): Result {
-        Timber.d("rules loading start")
-        return try {
+    override suspend fun doWork(): Result =
+        try {
+            Timber.d("rules loading start")
             val config = configRepository.local().getConfig()
             val versionName = BuildConfig.VERSION_NAME
             rulesRepository.loadRules(config.getRulesUrl(versionName))
@@ -53,5 +53,4 @@ class RulesLoadWorker @AssistedInject constructor(
             Timber.d("rules loading retry")
             Result.retry()
         }
-    }
 }

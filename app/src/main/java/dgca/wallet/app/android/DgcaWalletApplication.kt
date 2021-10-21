@@ -26,10 +26,10 @@ import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.*
 import dagger.hilt.android.HiltAndroidApp
-import dgca.verifier.app.android.worker.RulesLoadWorker
 import dgca.wallet.app.android.data.ConfigRepository
 import dgca.wallet.app.android.worker.ConfigsLoadingWorker
 import dgca.wallet.app.android.worker.CountriesLoadWorker
+import dgca.wallet.app.android.worker.RulesLoadWorker
 import dgca.wallet.app.android.worker.ValueSetsLoadWorker
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -40,6 +40,7 @@ import javax.inject.Inject
 
 @HiltAndroidApp
 class DgcaWalletApplication : Application(), Configuration.Provider {
+
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
 

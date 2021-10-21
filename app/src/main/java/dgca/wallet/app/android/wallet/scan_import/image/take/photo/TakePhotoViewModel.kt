@@ -64,7 +64,9 @@ class TakePhotoViewModel @Inject constructor(
     private val greenCertificateFetcher: GreenCertificateFetcher,
     private val ticketingCheckInModelFetcher: TicketingCheckInModelFetcher
 ) : ViewModel() {
+
     val uriLiveData: LiveData<Uri> = MutableLiveData(uriProvider.getUriFor("temp", "temp.jpeg"))
+
     private val _result = MutableLiveData<TakePhotoResult>()
     val result: LiveData<TakePhotoResult> = _result
 

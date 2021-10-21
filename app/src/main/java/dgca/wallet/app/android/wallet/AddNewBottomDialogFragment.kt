@@ -32,13 +32,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dgca.wallet.app.android.databinding.DialogFragmentAddNewBinding
 
 class AddNewBottomDialogFragment : BottomSheetDialogFragment() {
-    companion object {
-        const val REQUEST_KEY = "AddNewBottomDialogFragment_REQUEST_KEY"
-        const val RESULT_KEY = "AddNewBottomDialogFragment_RESULT_KEY"
-        const val RESULT_SCAN_CODE = 0
-        const val RESULT_IMPORT_IMAGE = 1
-        const val RESULT_IMPORT_PDF = 2
-    }
 
     private var _binding: DialogFragmentAddNewBinding? = null
     private val binding get() = _binding!!
@@ -52,5 +45,18 @@ class AddNewBottomDialogFragment : BottomSheetDialogFragment() {
         binding.scanCertificate.setOnClickListener { setFragmentResult(REQUEST_KEY, bundleOf(RESULT_KEY to RESULT_SCAN_CODE)) }
         binding.importImage.setOnClickListener { setFragmentResult(REQUEST_KEY, bundleOf(RESULT_KEY to RESULT_IMPORT_IMAGE)) }
         binding.importPdf.setOnClickListener { setFragmentResult(REQUEST_KEY, bundleOf(RESULT_KEY to RESULT_IMPORT_PDF)) }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    companion object {
+        const val REQUEST_KEY = "AddNewBottomDialogFragment_REQUEST_KEY"
+        const val RESULT_KEY = "AddNewBottomDialogFragment_RESULT_KEY"
+        const val RESULT_SCAN_CODE = 0
+        const val RESULT_IMPORT_IMAGE = 1
+        const val RESULT_IMPORT_PDF = 2
     }
 }

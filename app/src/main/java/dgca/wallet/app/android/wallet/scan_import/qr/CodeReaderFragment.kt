@@ -30,7 +30,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -43,6 +42,7 @@ import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.R
+import dgca.wallet.app.android.base.BindingFragment
 import dgca.wallet.app.android.databinding.FragmentCodeReaderBinding
 import dgca.wallet.app.android.model.TicketingCheckInParcelable
 import dgca.wallet.app.android.wallet.scan_import.qr.certificate.ClaimGreenCertificateModel
@@ -50,10 +50,7 @@ import dgca.wallet.app.android.wallet.scan_import.qr.certificate.ClaimGreenCerti
 const val CAMERA_REQUEST_CODE = 1003
 
 @AndroidEntryPoint
-class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListener {
-
-    private var _binding: FragmentCodeReaderBinding? = null
-    private val binding get() = _binding!!
+class CodeReaderFragment : BindingFragment<FragmentCodeReaderBinding>(), NavController.OnDestinationChangedListener {
 
     private lateinit var beepManager: BeepManager
     private var lastText: String? = null
@@ -75,13 +72,8 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
         override fun possibleResultPoints(resultPoints: List<ResultPoint>) {}
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentCodeReaderBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentCodeReaderBinding =
+        FragmentCodeReaderBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -104,11 +96,6 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
                 }
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     override fun onResume() {

@@ -28,12 +28,16 @@ import java.time.LocalDate
 import java.time.ZoneId
 
 class Converters {
-    @TypeConverter
-    fun fromTimestamp(value: Long?): LocalDate =
-        if (value != null) Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDate() else LocalDate.now()
 
     @TypeConverter
-    fun dateToTimestamp(date: LocalDate?): Long {
-        return date?.atStartOfDay()?.atZone(ZoneId.systemDefault())?.toInstant()?.toEpochMilli() ?: System.currentTimeMillis()
-    }
+    fun fromTimestamp(value: Long?): LocalDate =
+        if (value != null) {
+            Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDate()
+        } else {
+            LocalDate.now()
+        }
+
+    @TypeConverter
+    fun dateToTimestamp(date: LocalDate?): Long =
+        date?.atStartOfDay()?.atZone(ZoneId.systemDefault())?.toInstant()?.toEpochMilli() ?: System.currentTimeMillis()
 }

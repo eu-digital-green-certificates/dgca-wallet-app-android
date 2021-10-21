@@ -36,6 +36,7 @@ class DefaultQrCodeFetcher : QrCodeFetcher {
         val bitmap = BinaryBitmap(HybridBinarizer(source))
         val reader: Reader = MultiFormatReader()
         val result: Result = reader.decode(bitmap)
+
         return result.text
     }
 }

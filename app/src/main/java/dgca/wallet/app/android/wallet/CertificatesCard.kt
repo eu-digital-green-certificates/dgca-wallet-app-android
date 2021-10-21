@@ -30,6 +30,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 
 sealed class CertificatesCard {
+
     object CertificatesHeader : CertificatesCard()
 
     data class CertificateCard(
@@ -39,6 +40,7 @@ sealed class CertificatesCard {
         val tan: String,
         val dateTaken: LocalDate
     ) : CertificatesCard() {
+
         constructor(certificateEntity: CertificateEntity, certificateModel: CertificateModel) : this(
             certificateEntity.id,
             certificateEntity.qrCodeText,
@@ -53,6 +55,7 @@ sealed class CertificatesCard {
     object PdfsHeader : CertificatesCard()
 
     class FileCard(val file: File, val dateTaken: LocalDate) : CertificatesCard() {
+
         constructor(file: File) : this(
             file,
             Instant.ofEpochMilli(file.name.split('.').first().toLong()).atZone(ZoneId.systemDefault()).toLocalDate()

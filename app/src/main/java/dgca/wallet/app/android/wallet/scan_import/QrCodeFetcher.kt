@@ -25,5 +25,6 @@ package dgca.wallet.app.android.wallet.scan_import
 import android.graphics.Bitmap
 
 interface QrCodeFetcher {
+
     fun fetchQrCodeString(sourceBitmap: Bitmap): String
 }

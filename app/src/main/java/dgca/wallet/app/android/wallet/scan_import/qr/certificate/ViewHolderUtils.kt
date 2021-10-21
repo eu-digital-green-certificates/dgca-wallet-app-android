@@ -26,7 +26,6 @@ import android.view.View
 import android.widget.TextView
 import java.util.*
 
-
 fun String.bindCountryWith(countryTitleView: View, countryValueView: TextView) {
     val issuerCountry =
         if (this.isNotBlank()) Locale("", this).displayCountry else ""

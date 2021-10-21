@@ -42,6 +42,7 @@ class DefaultGreenCertificateFetcher(
     private val schemaValidator: SchemaValidator,
     private val cborService: CborService,
 ) : GreenCertificateFetcher {
+
     override fun fetchGreenCertificateDataFromQrString(qrString: String): GreenCertificateData? {
         val verificationResult = VerificationResult()
         val plainInput = prefixValidationService.decode(qrString, verificationResult)
@@ -62,8 +63,8 @@ class DefaultGreenCertificateFetcher(
             Timber.d("Verification failed: Too many bytes read")
             return Pair(null, null)
         }
-        val cose: ByteArray = coseResult
 
+        val cose: ByteArray = coseResult
         val coseData = coseService.decode(cose, verificationResult)
         if (coseData == null) {
             Timber.d("Verification failed: COSE not decoded")

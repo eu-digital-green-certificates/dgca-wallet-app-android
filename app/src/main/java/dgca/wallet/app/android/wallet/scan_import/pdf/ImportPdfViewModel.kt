@@ -68,6 +68,7 @@ class ImportPdfViewModel @Inject constructor(
     private val greenCertificateFetcher: GreenCertificateFetcher,
     private val ticketingCheckInModelFetcher: TicketingCheckInModelFetcher
 ) : ViewModel() {
+
     private val _result = MutableLiveData<ImportPdfResult>()
     val result: LiveData<ImportPdfResult> = _result
 

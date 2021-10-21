@@ -41,12 +41,15 @@ data class CertificateModel(
         val givenName: String? = person.givenName?.trim()
         val familyName: String? = person.familyName?.trim()
         val stringBuilder = StringBuilder()
+
         if (givenName?.isNotEmpty() == true) {
             stringBuilder.append(givenName)
         }
+
         if (familyName?.isNotEmpty() == true) {
             stringBuilder.append(" ").append(familyName)
         }
+
         if (stringBuilder.isEmpty()) {
             val standardisedGivenName = person.standardisedGivenName
             if (standardisedGivenName?.isNotEmpty() == true) {
@@ -57,6 +60,7 @@ data class CertificateModel(
                 stringBuilder.append(" ").append(standardisedFamilyName)
             }
         }
+
         return stringBuilder.trim().toString()
     }
 
@@ -140,28 +144,28 @@ enum class TypeOfTest(val value: String) {
 }
 
 enum class VaccinePropylaxisType(val value: String) {
-    SARS_CoV_2_antigen_vaccine("SARS-CoV-2 antigen vaccine"),
-    SARS_CoV_2_mRNA_vaccine("SARS-CoV-2 mRNA vaccine"),
-    covid_19_vaccines("covid-19 vaccines"),
+    SARS_COV_2_ANTIGEN_VACCINE("SARS-CoV-2 antigen vaccine"),
+    SARS_COV_2_MRNA_VACCINE("SARS-CoV-2 mRNA vaccine"),
+    COVID_19_VACCINES("covid-19 vaccines"),
     UNDEFINED("")
 }
 
 enum class ManufacturerType(val value: String) {
-    AstraZenecaAB("AstraZenecaAB"),
-    BiontechManufacturingGmbH("BiontechManufacturingGmbH"),
-    Janssen_CilagInternational("Janssen-CilagInternational"),
-    ModernaBiotechSpainS_L("ModernaBiotechSpainS.L."),
-    CurevacAG("CurevacAG"),
-    CanSinoBiologics("CanSinoBiologics"),
-    ChinaSinopharmInternationalCorp_Beijinglocation("ChinaSinopharmInternationalCorp.-Beijinglocation"),
-    SinopharmWeiqidaEuropePharmaceuticals_r_o_Praguelocation("SinopharmWeiqidaEuropePharmaceuticals.r.o.-Praguelocation"),
-    SinopharmZhijun_Shenzhen_PharmaceuticalCo_Ltd_Shenzhenlocation("SinopharmZhijun(Shenzhen)PharmaceuticalCo.Ltd.-Shenzhenlocation"),
-    NovavaxCZAS("NovavaxCZAS"),
-    GamaleyaResearchInstitute("GamaleyaResearchInstitute"),
-    VectorInstitute("VectorInstitute"),
-    SinovacBiotech("SinovacBiotech"),
-    BharatBiotech("BharatBiotech"),
-    SerumInstituteOfIndiaPrivateLimited("SerumInstituteOfIndiaPrivateLimited"),
+    ASTRA_ZENECA_AB("AstraZenecaAB"),
+    BIONTECH_MANUFACTURING_GMBH("BiontechManufacturingGmbH"),
+    JANSSEN_CILAG_INTERNATIONAL("Janssen-CilagInternational"),
+    MODERNA_BIOTECH_SPAINS_L("ModernaBiotechSpainS.L."),
+    CUREVAC_AG("CurevacAG"),
+    CAN_SIGNO_BIOLOGICS("CanSinoBiologics"),
+    CHINA_SINOPHARM_INTERNATIONAL_CORP_BEIJING_LOCATION("ChinaSinopharmInternationalCorp.-Beijinglocation"),
+    SINOPHARM_WEIGIDA_EUROPE_PHARMACEUTICALS_R_O_PRAGUE_LOCATION("SinopharmWeiqidaEuropePharmaceuticals.r.o.-Praguelocation"),
+    SINOPHARM_ZHIJUN_SHENZHEN_PHARMACEUTICAL_CO_LTD_SHENZHEN_LOCATION("SinopharmZhijun(Shenzhen)PharmaceuticalCo.Ltd.-Shenzhenlocation"),
+    NOVAVAX_CZAS("NovavaxCZAS"),
+    GAMALEYA_RESEARCH_INSTITUTE("GamaleyaResearchInstitute"),
+    VECTOR_INSTITUTE("VectorInstitute"),
+    SINOVAC_BIOTECH("SinovacBiotech"),
+    BHARAT_BIOTECH("BharatBiotech"),
+    SERUM_INSTITUTE_OF_INDIA_PRIVATE_LIMITED("SerumInstituteOfIndiaPrivateLimited"),
     UNDEFINED("UNDEFINED")
 }
 

@@ -30,9 +30,11 @@ import java.io.File
 import javax.inject.Inject
 
 class DefaultShareImageIntentProvider @Inject constructor(private val context: Context) : ShareImageIntentProvider {
-    override fun getShareImageIntent(file: File): Intent = Intent(Intent.ACTION_SEND).apply {
-        type = "image/jpeg"
-        val uri: Uri = FileProvider.getUriForFile(context, context.applicationContext.packageName + ".provider", file)
-        putExtra(Intent.EXTRA_STREAM, uri)
-    }
+
+    override fun getShareImageIntent(file: File): Intent =
+        Intent(Intent.ACTION_SEND).apply {
+            type = "image/jpeg"
+            val uri: Uri = FileProvider.getUriForFile(context, context.applicationContext.packageName + ".provider", file)
+            putExtra(Intent.EXTRA_STREAM, uri)
+        }
 }

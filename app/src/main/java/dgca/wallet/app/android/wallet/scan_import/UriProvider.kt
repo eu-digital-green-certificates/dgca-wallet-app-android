@@ -25,6 +25,7 @@ package dgca.wallet.app.android.wallet.scan_import
 import android.net.Uri
 
 interface UriProvider {
+
     fun getUriFor(targetDirectoryName: String, fileName: String): Uri
 
     fun deleteFileByUri(uri: Uri): Boolean

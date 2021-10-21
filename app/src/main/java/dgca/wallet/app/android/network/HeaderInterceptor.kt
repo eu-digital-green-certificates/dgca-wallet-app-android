@@ -35,8 +35,7 @@ import java.security.MessageDigest
 
 class HeaderInterceptor : Interceptor {
 
-    private val userAgent =
-        "DGCA wallet: ${BuildConfig.VERSION_NAME}, Android: ${Build.VERSION.SDK_INT}, Model: ${Build.MODEL};"
+    private val userAgent = "DGCA wallet: ${BuildConfig.VERSION_NAME}, Android: ${Build.VERSION.SDK_INT}, Model: ${Build.MODEL};"
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {

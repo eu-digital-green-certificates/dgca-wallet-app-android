@@ -31,12 +31,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.R
+import dgca.wallet.app.android.base.BindingFragment
 import dgca.wallet.app.android.databinding.FragmentImportPdfBinding
 import dgca.wallet.app.android.wallet.scan_import.ADD_CLAIM_GREEN_CERTIFICATE_MODEL_KEY
 import dgca.wallet.app.android.wallet.scan_import.ADD_REQUEST_KEY
@@ -44,10 +44,9 @@ import dgca.wallet.app.android.wallet.scan_import.BOOKING_SYSTEM_MODEL_KEY
 import dgca.wallet.app.android.wallet.scan_import.qr.certificate.ClaimGreenCertificateModel
 
 @AndroidEntryPoint
-class ImportPdfFragment : Fragment() {
+class ImportPdfFragment : BindingFragment<FragmentImportPdfBinding>() {
+
     private val viewModel by viewModels<ImportPdfViewModel>()
-    private var _binding: FragmentImportPdfBinding? = null
-    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,12 +55,11 @@ class ImportPdfFragment : Fragment() {
         })
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = FragmentImportPdfBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentImportPdfBinding =
+        FragmentImportPdfBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel.result.observe(viewLifecycleOwner) { res ->
             when (res) {
                 is ImportPdfResult.Failed -> Toast.makeText(requireContext(), R.string.error_importing_file, Toast.LENGTH_SHORT)

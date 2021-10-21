@@ -26,22 +26,21 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.*
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.R
-import dgca.wallet.app.android.wallet.view.certificate.ShareImageIntentProvider
+import dgca.wallet.app.android.base.BindingFragment
 import dgca.wallet.app.android.databinding.FragmentFileViewBinding
+import dgca.wallet.app.android.wallet.view.certificate.ShareImageIntentProvider
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ViewFileFragment : Fragment() {
+class ViewFileFragment : BindingFragment<FragmentFileViewBinding>() {
+
     private val args by navArgs<ViewFileFragmentArgs>()
     private val viewModel by viewModels<ViewFileViewModel>()
-    private var _binding: FragmentFileViewBinding? = null
-    private val binding get() = _binding!!
 
     @Inject
     lateinit var shareImageIntentProvider: ShareImageIntentProvider
@@ -55,10 +54,8 @@ class ViewFileFragment : Fragment() {
         viewModel.init(args.file, minEdge)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = FragmentFileViewBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFileViewBinding =
+        FragmentFileViewBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.event.observe(viewLifecycleOwner) { event ->

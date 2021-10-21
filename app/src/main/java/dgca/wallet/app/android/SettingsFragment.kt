@@ -29,23 +29,15 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import dagger.hilt.android.AndroidEntryPoint
+import dgca.wallet.app.android.base.BindingFragment
 import dgca.wallet.app.android.databinding.FragmentSettingsBinding
 
 @AndroidEntryPoint
-class SettingsFragment : Fragment() {
-    private var _binding: FragmentSettingsBinding? = null
-    private val binding get() = _binding!!
+class SettingsFragment : BindingFragment<FragmentSettingsBinding>() {
 
-    companion object {
-        const val PRIVACY_POLICY = "https://op.europa.eu/en/web/about-us/legal-notices/eu-mobile-apps"
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = FragmentSettingsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSettingsBinding =
+        FragmentSettingsBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -75,5 +67,9 @@ class SettingsFragment : Fragment() {
         requireContext().apply {
             startActivity(intent)
         }
+    }
+
+    companion object {
+        const val PRIVACY_POLICY = "https://op.europa.eu/en/web/about-us/legal-notices/eu-mobile-apps"
     }
 }

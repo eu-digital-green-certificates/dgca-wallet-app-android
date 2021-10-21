@@ -17,10 +17,10 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/10/21 1:01 PM
+ *  Created by osarapulov on 10/21/21 9:25 AM
  */
 
-package dgca.wallet.app.android.wallet.scan_import.image.pick.image
+package dgca.wallet.app.android.certificate.add.pick.image
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
@@ -66,6 +66,7 @@ class PickImageViewModel @Inject constructor(
     private val greenCertificateFetcher: GreenCertificateFetcher,
     private val ticketingCheckInModelFetcher: TicketingCheckInModelFetcher
 ) : ViewModel() {
+
     private val _result = MutableLiveData<PickImageResult>()
     val result: LiveData<PickImageResult> = _result
 

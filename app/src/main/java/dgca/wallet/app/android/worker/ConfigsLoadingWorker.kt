@@ -15,14 +15,14 @@ class ConfigsLoadingWorker @AssistedInject constructor(
     @Assisted workParams: WorkerParameters,
     private val configRepository: ConfigRepository
 ) : Worker(context, workParams) {
-    override fun doWork(): Result {
+
+    override fun doWork(): Result =
         try {
             val config = configRepository.getConfig()
             Timber.d("Config: $config")
+            Result.success()
         } catch (error: Throwable) {
             Timber.d(error, "Config Loading Error: $error")
-            return Result.retry()
+            Result.retry()
         }
-        return Result.success()
-    }
 }

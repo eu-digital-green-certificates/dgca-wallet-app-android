@@ -25,18 +25,17 @@ package dgca.wallet.app.android.data.local
 import dgca.verifier.app.decoder.model.*
 import dgca.wallet.app.android.data.*
 
-fun GreenCertificate.toCertificateModel(): CertificateModel {
-    return CertificateModel(
+fun GreenCertificate.toCertificateModel(): CertificateModel =
+    CertificateModel(
         person.toPersonModel(),
         dateOfBirth,
         vaccinations?.map { it.toVaccinationModel() },
         tests?.map { it.toTestModel() },
         recoveryStatements?.map { it.toRecoveryModel() }
     )
-}
 
-fun RecoveryStatement.toRecoveryModel(): RecoveryModel {
-    return RecoveryModel(
+fun RecoveryStatement.toRecoveryModel(): RecoveryModel =
+    RecoveryModel(
         disease.toDiseaseCode().toDiseaseType(),
         dateOfFirstPositiveTest,
         countryOfVaccination,
@@ -45,10 +44,9 @@ fun RecoveryStatement.toRecoveryModel(): RecoveryModel {
         certificateValidUntil,
         certificateIdentifier
     )
-}
 
-fun Test.toTestModel(): TestModel {
-    return TestModel(
+fun Test.toTestModel(): TestModel =
+    TestModel(
         disease.toDiseaseCode().toDiseaseType(),
         typeOfTest.toTypeOfTestCode().toTypeOfTest(),
         testName,
@@ -62,54 +60,56 @@ fun Test.toTestModel(): TestModel {
         certificateIdentifier,
         getTestResultType().toTestResult()
     )
-}
 
-fun Test.TestResult.toTestResult(): TestResult {
-    return when (this) {
+fun Test.TestResult.toTestResult(): TestResult =
+    when (this) {
         Test.TestResult.DETECTED -> TestResult.DETECTED
         Test.TestResult.NOT_DETECTED -> TestResult.NOT_DETECTED
     }
-}
 
-fun DiseaseCode.toDiseaseType(): DiseaseType = when (this) {
-    DiseaseCode.COVID_19 -> DiseaseType.COVID_19
-    else -> DiseaseType.UNDEFINED
-}
+fun DiseaseCode.toDiseaseType(): DiseaseType =
+    when (this) {
+        DiseaseCode.COVID_19 -> DiseaseType.COVID_19
+        else -> DiseaseType.UNDEFINED
+    }
 
-fun TypeOfTestCode.toTypeOfTest(): TypeOfTest = when (this) {
-    TypeOfTestCode.NUCLEIC_ACID_AMPLIFICATION_WITH_PROBE_DETECTION -> TypeOfTest.NUCLEIC_ACID_AMPLIFICATION_WITH_PROBE_DETECTION
-    TypeOfTestCode.RAPID_IMMUNOASSAY -> TypeOfTest.RAPID_IMMUNOASSAY
-    else -> TypeOfTest.UNDEFINED
-}
+fun TypeOfTestCode.toTypeOfTest(): TypeOfTest =
+    when (this) {
+        TypeOfTestCode.NUCLEIC_ACID_AMPLIFICATION_WITH_PROBE_DETECTION -> TypeOfTest.NUCLEIC_ACID_AMPLIFICATION_WITH_PROBE_DETECTION
+        TypeOfTestCode.RAPID_IMMUNOASSAY -> TypeOfTest.RAPID_IMMUNOASSAY
+        else -> TypeOfTest.UNDEFINED
+    }
 
-fun VaccinePropylaxisCode.toVaccineProphylaxisType(): VaccinePropylaxisType = when (this) {
-    VaccinePropylaxisCode.SARS_CoV_2_antigen_vaccine -> VaccinePropylaxisType.SARS_CoV_2_antigen_vaccine
-    VaccinePropylaxisCode.SARS_CoV_2_mRNA_vaccine -> VaccinePropylaxisType.SARS_CoV_2_mRNA_vaccine
-    VaccinePropylaxisCode.covid_19_vaccines -> VaccinePropylaxisType.covid_19_vaccines
-    else -> VaccinePropylaxisType.UNDEFINED
-}
+fun VaccinePropylaxisCode.toVaccineProphylaxisType(): VaccinePropylaxisType =
+    when (this) {
+        VaccinePropylaxisCode.SARS_COV_2_ANTIGEN_VACCINE -> VaccinePropylaxisType.SARS_COV_2_ANTIGEN_VACCINE
+        VaccinePropylaxisCode.SARS_COV_2_MRNA_VACCINE -> VaccinePropylaxisType.SARS_COV_2_MRNA_VACCINE
+        VaccinePropylaxisCode.COVID_19_VACCINES -> VaccinePropylaxisType.COVID_19_VACCINES
+        else -> VaccinePropylaxisType.UNDEFINED
+    }
 
-fun ManufacturerCode.toManufacturerType(): ManufacturerType = when (this) {
-    ManufacturerCode.AstraZenecaAB -> ManufacturerType.AstraZenecaAB
-    ManufacturerCode.BiontechManufacturingGmbH -> ManufacturerType.BiontechManufacturingGmbH
-    ManufacturerCode.Janssen_CilagInternational -> ManufacturerType.Janssen_CilagInternational
-    ManufacturerCode.ModernaBiotechSpainS_L -> ManufacturerType.ModernaBiotechSpainS_L
-    ManufacturerCode.CurevacAG -> ManufacturerType.CurevacAG
-    ManufacturerCode.CanSinoBiologics -> ManufacturerType.CanSinoBiologics
-    ManufacturerCode.ChinaSinopharmInternationalCorp_Beijinglocation -> ManufacturerType.ChinaSinopharmInternationalCorp_Beijinglocation
-    ManufacturerCode.SinopharmWeiqidaEuropePharmaceuticals_r_o_Praguelocation -> ManufacturerType.SinopharmWeiqidaEuropePharmaceuticals_r_o_Praguelocation
-    ManufacturerCode.SinopharmZhijun_Shenzhen_PharmaceuticalCo_Ltd_Shenzhenlocation -> ManufacturerType.SinopharmZhijun_Shenzhen_PharmaceuticalCo_Ltd_Shenzhenlocation
-    ManufacturerCode.NovavaxCZAS -> ManufacturerType.NovavaxCZAS
-    ManufacturerCode.GamaleyaResearchInstitute -> ManufacturerType.GamaleyaResearchInstitute
-    ManufacturerCode.VectorInstitute -> ManufacturerType.VectorInstitute
-    ManufacturerCode.SinovacBiotech -> ManufacturerType.SinovacBiotech
-    ManufacturerCode.BharatBiotech -> ManufacturerType.BharatBiotech
-    ManufacturerCode.SerumInstituteOfIndiaPrivateLimited -> ManufacturerType.SerumInstituteOfIndiaPrivateLimited
-    else -> ManufacturerType.UNDEFINED
-}
+fun ManufacturerCode.toManufacturerType(): ManufacturerType =
+    when (this) {
+        ManufacturerCode.ASTRA_ZENECA_AB -> ManufacturerType.ASTRA_ZENECA_AB
+        ManufacturerCode.BIONTECH_MANUFACTURING_GMBH -> ManufacturerType.BIONTECH_MANUFACTURING_GMBH
+        ManufacturerCode.JANSSEN_CILAG_INTERNATIONAL -> ManufacturerType.JANSSEN_CILAG_INTERNATIONAL
+        ManufacturerCode.MODERNA_BIOTECH_SPAINS_L -> ManufacturerType.MODERNA_BIOTECH_SPAINS_L
+        ManufacturerCode.CUREVAC_AG -> ManufacturerType.CUREVAC_AG
+        ManufacturerCode.CAN_SIGNO_BIOLOGICS -> ManufacturerType.CAN_SIGNO_BIOLOGICS
+        ManufacturerCode.CHINA_SINOPHARM_INTERNATIONAL_CORP_BEIJING_LOCATION -> ManufacturerType.CHINA_SINOPHARM_INTERNATIONAL_CORP_BEIJING_LOCATION
+        ManufacturerCode.SINOPHARM_WEIGIDA_EUROPE_PHARMACEUTICALS_R_O_PRAGUE_LOCATION -> ManufacturerType.SINOPHARM_WEIGIDA_EUROPE_PHARMACEUTICALS_R_O_PRAGUE_LOCATION
+        ManufacturerCode.SINOPHARM_ZHIJUN_SHENZHEN_PHARMACEUTICAL_CO_LTD_SHENZHEN_LOCATION -> ManufacturerType.SINOPHARM_ZHIJUN_SHENZHEN_PHARMACEUTICAL_CO_LTD_SHENZHEN_LOCATION
+        ManufacturerCode.NOVAVAX_CZAS -> ManufacturerType.NOVAVAX_CZAS
+        ManufacturerCode.GAMALEYA_RESEARCH_INSTITUTE -> ManufacturerType.GAMALEYA_RESEARCH_INSTITUTE
+        ManufacturerCode.VECTOR_INSTITUTE -> ManufacturerType.VECTOR_INSTITUTE
+        ManufacturerCode.SINOVAC_BIOTECH -> ManufacturerType.SINOVAC_BIOTECH
+        ManufacturerCode.BHARAT_BIOTECH -> ManufacturerType.BHARAT_BIOTECH
+        ManufacturerCode.SERUM_INSTITUTE_OF_INDIA_PRIVATE_LIMITED -> ManufacturerType.SERUM_INSTITUTE_OF_INDIA_PRIVATE_LIMITED
+        else -> ManufacturerType.UNDEFINED
+    }
 
-fun Vaccination.toVaccinationModel(): VaccinationModel {
-    return VaccinationModel(
+fun Vaccination.toVaccinationModel(): VaccinationModel =
+    VaccinationModel(
         disease.toDiseaseCode().toDiseaseType(),
         vaccine.toVaccineProphylaxisCode().toVaccineProphylaxisType(),
         medicinalProduct,
@@ -121,27 +121,27 @@ fun Vaccination.toVaccinationModel(): VaccinationModel {
         certificateIssuer,
         certificateIdentifier
     )
-}
 
-fun Person.toPersonModel(): PersonModel {
-    return PersonModel(
+fun Person.toPersonModel(): PersonModel =
+    PersonModel(
         standardisedFamilyName,
         familyName,
         standardisedGivenName,
         givenName
     )
-}
 
-fun String.toDiseaseCode(): DiseaseCode = when (this) {
-    DiseaseCode.COVID_19.value -> DiseaseCode.COVID_19
-    else -> DiseaseCode.UNDEFINED
-}
+fun String.toDiseaseCode(): DiseaseCode =
+    when (this) {
+        DiseaseCode.COVID_19.value -> DiseaseCode.COVID_19
+        else -> DiseaseCode.UNDEFINED
+    }
 
-fun String.toTypeOfTestCode(): TypeOfTestCode = when (this) {
-    TypeOfTestCode.NUCLEIC_ACID_AMPLIFICATION_WITH_PROBE_DETECTION.value -> TypeOfTestCode.NUCLEIC_ACID_AMPLIFICATION_WITH_PROBE_DETECTION
-    TypeOfTestCode.RAPID_IMMUNOASSAY.value -> TypeOfTestCode.RAPID_IMMUNOASSAY
-    else -> TypeOfTestCode.UNDEFINED
-}
+fun String.toTypeOfTestCode(): TypeOfTestCode =
+    when (this) {
+        TypeOfTestCode.NUCLEIC_ACID_AMPLIFICATION_WITH_PROBE_DETECTION.value -> TypeOfTestCode.NUCLEIC_ACID_AMPLIFICATION_WITH_PROBE_DETECTION
+        TypeOfTestCode.RAPID_IMMUNOASSAY.value -> TypeOfTestCode.RAPID_IMMUNOASSAY
+        else -> TypeOfTestCode.UNDEFINED
+    }
 
 fun String.toVaccineProphylaxisCode(): VaccinePropylaxisCode {
     VaccinePropylaxisCode.values().forEach {
@@ -167,28 +167,28 @@ enum class DiseaseCode(val value: String) {
 }
 
 enum class VaccinePropylaxisCode(val value: String) {
-    SARS_CoV_2_antigen_vaccine("1119305005"),
-    SARS_CoV_2_mRNA_vaccine("1119349007"),
-    covid_19_vaccines("J07BX03"),
+    SARS_COV_2_ANTIGEN_VACCINE("1119305005"),
+    SARS_COV_2_MRNA_VACCINE("1119349007"),
+    COVID_19_VACCINES("J07BX03"),
     UNDEFINED("")
 }
 
 enum class ManufacturerCode(val value: String) {
-    AstraZenecaAB("ORG-100001699"),
-    BiontechManufacturingGmbH("ORG-100030215"),
-    Janssen_CilagInternational("ORG-100001417"),
-    ModernaBiotechSpainS_L("ORG-100031184"),
-    CurevacAG("ORG-100006270"),
-    CanSinoBiologics("ORG-100013793"),
-    ChinaSinopharmInternationalCorp_Beijinglocation("ORG-100020693"),
-    SinopharmWeiqidaEuropePharmaceuticals_r_o_Praguelocation("ORG-100010771"),
-    SinopharmZhijun_Shenzhen_PharmaceuticalCo_Ltd_Shenzhenlocation("ORG-100024420"),
-    NovavaxCZAS("ORG-100032020"),
-    GamaleyaResearchInstitute("Gamaleya-Research-Institute"),
-    VectorInstitute("Vector-Institute"),
-    SinovacBiotech("Sinovac-Biotech"),
-    BharatBiotech("Bharat-Biotech"),
-    SerumInstituteOfIndiaPrivateLimited("ORG-100001981"),
+    ASTRA_ZENECA_AB("ORG-100001699"),
+    BIONTECH_MANUFACTURING_GMBH("ORG-100030215"),
+    JANSSEN_CILAG_INTERNATIONAL("ORG-100001417"),
+    MODERNA_BIOTECH_SPAINS_L("ORG-100031184"),
+    CUREVAC_AG("ORG-100006270"),
+    CAN_SIGNO_BIOLOGICS("ORG-100013793"),
+    CHINA_SINOPHARM_INTERNATIONAL_CORP_BEIJING_LOCATION("ORG-100020693"),
+    SINOPHARM_WEIGIDA_EUROPE_PHARMACEUTICALS_R_O_PRAGUE_LOCATION("ORG-100010771"),
+    SINOPHARM_ZHIJUN_SHENZHEN_PHARMACEUTICAL_CO_LTD_SHENZHEN_LOCATION("ORG-100024420"),
+    NOVAVAX_CZAS("ORG-100032020"),
+    GAMALEYA_RESEARCH_INSTITUTE("Gamaleya-Research-Institute"),
+    VECTOR_INSTITUTE("Vector-Institute"),
+    SINOVAC_BIOTECH("Sinovac-Biotech"),
+    BHARAT_BIOTECH("Bharat-Biotech"),
+    SERUM_INSTITUTE_OF_INDIA_PRIVATE_LIMITED("ORG-100001981"),
     UNDEFINED("")
 }
 

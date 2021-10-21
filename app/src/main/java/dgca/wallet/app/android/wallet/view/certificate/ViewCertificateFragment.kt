@@ -218,7 +218,6 @@ class ViewCertificateFragment : BindingFragment<FragmentCertificateViewBinding>(
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.hasExtra(NFC_EXTRA_DCC_SENT)) {
                 if (intent.getBooleanExtra(NFC_EXTRA_DCC_SENT, false)) {
-                    viewModel.onCertificateShared()
                     Toast.makeText(requireContext(), "DCC was sent successfully", Toast.LENGTH_SHORT).show()
                 }
             }

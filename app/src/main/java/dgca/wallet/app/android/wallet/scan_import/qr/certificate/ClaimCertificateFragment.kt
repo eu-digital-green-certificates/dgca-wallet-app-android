@@ -94,26 +94,13 @@ class ClaimCertificateFragment : BindingFragment<FragmentCertificateClaimBinding
     private fun showUserData(certificate: CertificateModel) {
         certificate.getType().bindText(binding.certificateTypeTitle, binding.certificateTypeValue)
         certificate.getFullName().bindText(binding.nameTitle, binding.personFullName)
-
-//        val dateOfBirth = certificate.dateOfBirth.parseFromTo(YEAR_MONTH_DAY, FORMATTED_YEAR_MONTH_DAY)
-//        if (dateOfBirth.isNotBlank()) {
-//            binding.dateOfBirth.text = dateOfBirth
-//            View.VISIBLE
-//        } else {
-//            View.GONE
-//        }.apply {
-//            binding.dateOfBirthTitle.visibility = this
-//            binding.dateOfBirth.visibility = this
-//        }
-
-        adapter.update(certificate.getCertificateListData())
     }
 
     private fun onViewModelEvent(event: ClaimCertificateViewModel.ClaimCertEvent) {
         when (event) {
             is ClaimCertificateViewModel.ClaimCertEvent.OnCertClaimed -> {
                 if (event.isClaimed) {
-                    Toast.makeText(requireContext(), "Certificate claimed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.certificate_claimed), Toast.LENGTH_SHORT).show()
                     val action = ClaimCertificateFragmentDirections.actionClaimCertificateFragmentToCertificatesFragment()
                     findNavController().navigate(action)
                 }
