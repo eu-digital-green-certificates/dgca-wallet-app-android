@@ -75,6 +75,10 @@ class TransmissionConsentFragment : BindingFragment<FragmentTransmissionConsentB
 
         viewModel.uiEvent.observe(viewLifecycleOwner) { event -> onViewModelUiEvent(event.peekContent()) }
 
+        binding.cancel.setOnClickListener {
+            close()
+        }
+
         binding.grantPermission.setOnClickListener {
             viewModel.onPermissionAccepted(args.qrString, args.bookingPortalEncryptionData)
         }
@@ -118,5 +122,9 @@ class TransmissionConsentFragment : BindingFragment<FragmentTransmissionConsentB
                 DefaultDialogFragment.newInstance(params).show(childFragmentManager, DefaultDialogFragment.TAG)
             }
         }
+    }
+
+    private fun close() {
+        findNavController().popBackStack(R.id.certificatesFragment, false)
     }
 }
