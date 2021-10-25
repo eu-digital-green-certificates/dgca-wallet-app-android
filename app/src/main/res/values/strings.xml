@@ -119,7 +119,7 @@
     </plurals>
     <string name="validation_services_found_title">%1$s validation services found</string>
     <string name="cancel">Cancel</string>
-    <string name="grand_permission">Grand Permission</string>
+    <string name="grand_permission">Grant Permission</string>
     <string name="ok">Ok</string>
     <string name="cert_transfer_failed">Failed to transfer certificate</string>
     <string name="something_went_wrong">Something went wrong</string>
