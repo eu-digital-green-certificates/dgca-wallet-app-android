@@ -45,21 +45,15 @@ class ClaimCertificateFragment : BindingFragment<FragmentCertificateClaimBinding
     private val args by navArgs<ClaimCertificateFragmentArgs>()
     private val viewModel by viewModels<ClaimCertificateViewModel>()
 
-    private lateinit var adapter: CertListAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        adapter = CertListAdapter(layoutInflater)
-    }
-
     override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentCertificateClaimBinding =
         FragmentCertificateClaimBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerView.layoutManager = layoutManager
-        binding.recyclerView.adapter = adapter
+        binding.recyclerView.setHasFixedSize(true)
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.adapter =
+            CertListAdapter(layoutInflater, args.claimCertificateModel.certificateModel.getCertificateListData())
 
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>(TanFragment.TAN_KEY)
             ?.observe(viewLifecycleOwner) { tan ->

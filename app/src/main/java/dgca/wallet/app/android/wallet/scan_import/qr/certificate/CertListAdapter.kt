@@ -33,10 +33,8 @@ import dgca.wallet.app.android.data.TestModel
 import dgca.wallet.app.android.data.VaccinationModel
 
 class CertListAdapter(
-    private val inflater: LayoutInflater
+    private val inflater: LayoutInflater, private var items: List<CertificateData> = emptyList()
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    private var items = emptyList<CertificateData>()
 
     override fun getItemCount(): Int = items.size
 
