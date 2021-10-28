@@ -31,12 +31,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
-import dgca.wallet.app.android.MainActivity
-import dgca.wallet.app.android.R
-import dgca.wallet.app.android.YEAR_MONTH_DAY
+import dgca.wallet.app.android.*
 import dgca.wallet.app.android.base.BindingFragment
 import dgca.wallet.app.android.databinding.FragmentTransmissionConsentBinding
-import dgca.wallet.app.android.getTitle
 import dgca.wallet.app.android.wallet.scan_import.qr.ticketing.transmission.DefaultDialogFragment.Companion.ACTION_NEGATIVE
 import dgca.wallet.app.android.wallet.scan_import.qr.ticketing.transmission.DefaultDialogFragment.Companion.ACTION_POSITIVE
 import dgca.wallet.app.android.wallet.scan_import.qr.ticketing.validationresult.BookingPortalValidationResult
@@ -72,6 +69,8 @@ class TransmissionConsentFragment : BindingFragment<FragmentTransmissionConsentB
             R.string.valid_until,
             DateTimeFormatter.ofPattern(YEAR_MONTH_DAY, Locale.US).format(validTo.toLocalDate())
         )
+        binding.consentValue.text =
+            getString(R.string.do_you_agree_to_share_certificate, args.certificateModel.getMessage(resources))
 
         viewModel.uiEvent.observe(viewLifecycleOwner) { event -> onViewModelUiEvent(event.peekContent()) }
 

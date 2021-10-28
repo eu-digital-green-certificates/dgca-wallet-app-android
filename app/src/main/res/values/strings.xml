@@ -14,8 +14,11 @@
     <string name="check_validity">Check Validity</string>
     <string name="i_agree_check_validity">I agree, check validity</string>
     <string name="vaccination">Vaccination %1$s of %2$s</string>
+    <string name="vaccination_certificate">vaccination certificate %1$s of %2$s</string>
     <string name="recovery">Recovery</string>
+    <string name="recovery_certificate">recovery certificate</string>
     <string name="test">Test</string>
+    <string name="test_certificate">test certificate</string>
     <string name="your_certificate">Your Certificate</string>
     <string name="name">Name</string>
     <string name="country_rules_validation">Country rules validation</string>
@@ -118,8 +121,9 @@
         <item quantity="other">%1$s certificates found for %2$s</item>
     </plurals>
     <string name="validation_services_found_title">%1$s validation services found</string>
+    <string name="do_you_agree_to_share_certificate">Do you agree to share the %1$s with Airline.com?</string>
     <string name="cancel">Cancel</string>
-    <string name="grand_permission">Grant Permission</string>
+    <string name="grant_permission">Grant Permission</string>
     <string name="ok">Ok</string>
     <string name="cert_transfer_failed">Failed to transfer certificate</string>
     <string name="something_went_wrong">Something went wrong</string>

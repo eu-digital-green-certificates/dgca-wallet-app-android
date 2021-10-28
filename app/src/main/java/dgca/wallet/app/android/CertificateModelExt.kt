@@ -37,3 +37,16 @@ fun CertificateModel.getTitle(res: Resources): String = when {
     tests?.isNotEmpty() == true -> res.getString(R.string.test)
     else -> ""
 }
+
+fun CertificateModel.getMessage(res: Resources): String = when {
+    vaccinations?.first() != null -> res.getString(
+        R.string.vaccination_certificate,
+        vaccinations.first().doseNumber.toString(),
+        vaccinations.first().totalSeriesOfDoses.toString()
+    )
+    recoveryStatements?.isNotEmpty() == true -> res.getString(
+        R.string.recovery_certificate
+    )
+    tests?.isNotEmpty() == true -> res.getString(R.string.test_certificate)
+    else -> ""
+}
