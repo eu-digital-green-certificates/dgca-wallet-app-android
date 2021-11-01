@@ -41,9 +41,9 @@ class CountriesLoadWorker @AssistedInject constructor(
     private val countriesRepository: CountriesRepository
 ) : CoroutineWorker(context, workParams) {
 
-    override suspend fun doWork(): Result {
-        Timber.d("countries loading start")
-        return try {
+    override suspend fun doWork(): Result =
+        try {
+            Timber.d("countries loading start")
             val config = configRepository.local().getConfig()
             val versionName = BuildConfig.VERSION_NAME
             countriesRepository.preLoadCountries(
@@ -55,5 +55,4 @@ class CountriesLoadWorker @AssistedInject constructor(
             Timber.d("countries loading retry")
             Result.retry()
         }
-    }
 }

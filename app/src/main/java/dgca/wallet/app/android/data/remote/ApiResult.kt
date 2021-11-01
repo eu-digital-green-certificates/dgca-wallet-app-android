@@ -39,8 +39,7 @@ class ApiResult<T>(response: Response<T>? = null) {
             errorDescription: String = "Unknown exception."
         ): ApiResult<T> {
             val result = ApiResult<T>()
-            result.error =
-                CommonError(problem = error, details = errorDescription)
+            result.error = CommonError(problem = error, details = errorDescription)
             return result
         }
     }

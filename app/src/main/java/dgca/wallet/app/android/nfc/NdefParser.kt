@@ -27,7 +27,6 @@ import android.nfc.NdefRecord
 import timber.log.Timber
 import java.io.UnsupportedEncodingException
 import java.util.*
-import kotlin.experimental.and
 
 object NdefParser {
 
@@ -45,37 +44,13 @@ object NdefParser {
 
 fun NdefRecord.parse(): ParsedNdefRecord? {
     return if (tnf == NdefRecord.TNF_WELL_KNOWN && Arrays.equals(type, NdefRecord.RTD_TEXT)) {
-        try {
+        return try {
             val recordPayload = payload
-
-            /*
-             * payload[0] contains the "Status Byte Encodings" field, per the
-             * NFC Forum "Text Record Type Definition" section 3.2.1.
-             *
-             * bit7 is the Text Encoding Field.
-             *
-             * if (Bit_7 == 0): The text is encoded in UTF-8 if (Bit_7 == 1):
-             * The text is encoded in UTF16
-             *
-             * Bit_6 is reserved for future use and must be set to zero.
-             *
-             * Bits 5 to 0 are the length of the IANA language code.
-             */
-            val textEncoding = if (recordPayload[0] and 128.toByte() == 0.toByte()) {
-                Charsets.UTF_8
-            } else {
-                Charsets.UTF_16
-            }
-
-            val languageCodeLength: Int = (recordPayload[0] and 63.toByte()).toInt()
-            val text = String(
-                recordPayload, languageCodeLength + 1,
-                recordPayload.size - languageCodeLength - 1, textEncoding
-            )
-            return TextRecord(text)
+            val text = String(recordPayload)
+            TextRecord(text)
         } catch (e: UnsupportedEncodingException) {
             Timber.w("We got a malformed tag.")
-            return null
+            null
         }
     } else {
         null

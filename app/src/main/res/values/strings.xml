@@ -99,4 +99,5 @@
     <string name="nfc_on">NFC on</string>
     <string name="nfc_off">NFC off</string>
     <string name="complete_action_using">Complete action using</string>
+    <string name="certificate_claimed">Certificate claimed</string>
 </resources>

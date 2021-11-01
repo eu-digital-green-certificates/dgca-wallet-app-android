@@ -38,12 +38,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-sealed class PickImageResult {
-    object Failed : PickImageResult()
-    object Success : PickImageResult()
-    class QrRecognised(val qr: String) : PickImageResult()
-}
-
 @HiltViewModel
 class PickImageViewModel @Inject constructor(
     private val qrCodeFetcher: QrCodeFetcher,
@@ -51,6 +45,7 @@ class PickImageViewModel @Inject constructor(
     private val fileSaver: FileSaver,
     private val greenCertificateFetcher: GreenCertificateFetcher
 ) : ViewModel() {
+
     private val _result = MutableLiveData<PickImageResult>()
     val result: LiveData<PickImageResult> = _result
 
@@ -83,4 +78,10 @@ class PickImageViewModel @Inject constructor(
             if (file?.exists() == true && file.isFile) PickImageResult.Success else PickImageResult.Failed
         }
     }
+}
+
+sealed class PickImageResult {
+    object Failed : PickImageResult()
+    object Success : PickImageResult()
+    class QrRecognised(val qr: String) : PickImageResult()
 }

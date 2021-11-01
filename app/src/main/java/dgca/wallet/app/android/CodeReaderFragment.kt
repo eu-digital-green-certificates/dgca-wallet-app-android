@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.findNavController
@@ -19,15 +18,13 @@ import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import dagger.hilt.android.AndroidEntryPoint
+import dgca.wallet.app.android.base.BindingFragment
 import dgca.wallet.app.android.databinding.FragmentCodeReaderBinding
 
 const val CAMERA_REQUEST_CODE = 1003
 
 @AndroidEntryPoint
-class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListener {
-
-    private var _binding: FragmentCodeReaderBinding? = null
-    private val binding get() = _binding!!
+class CodeReaderFragment : BindingFragment<FragmentCodeReaderBinding>(), NavController.OnDestinationChangedListener {
 
     private lateinit var beepManager: BeepManager
     private var lastText: String? = null
@@ -49,13 +46,8 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
         override fun possibleResultPoints(resultPoints: List<ResultPoint>) {}
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentCodeReaderBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentCodeReaderBinding =
+        FragmentCodeReaderBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -65,11 +57,6 @@ class CodeReaderFragment : Fragment(), NavController.OnDestinationChangedListene
         binding.barcodeScanner.decoderFactory = DefaultDecoderFactory(formats)
         binding.barcodeScanner.decodeContinuous(callback)
         beepManager = BeepManager(requireActivity())
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     override fun onResume() {

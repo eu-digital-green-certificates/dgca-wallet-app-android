@@ -29,15 +29,18 @@ import androidx.documentfile.provider.DocumentFile
 import java.io.File
 
 class DefaultUriProvider(context: Context) : UriProvider {
+
     private val appContext = context.applicationContext
 
-    override fun getUriFor(targetDirectoryName: String, fileName: String): Uri = FileProvider.getUriForFile(
-        appContext, appContext.packageName + ".provider",
-        File(
-            File(appContext.filesDir, targetDirectoryName).apply { if (!isDirectory || !exists()) mkdirs() },
-            fileName
+    override fun getUriFor(targetDirectoryName: String, fileName: String): Uri =
+        FileProvider.getUriForFile(
+            appContext,
+            appContext.packageName + ".provider",
+            File(
+                File(appContext.filesDir, targetDirectoryName).apply { if (!isDirectory || !exists()) mkdirs() },
+                fileName
+            )
         )
-    )
 
     override fun deleteFileByUri(uri: Uri): Boolean = DocumentFile.fromSingleUri(appContext, uri)!!.delete()
 }

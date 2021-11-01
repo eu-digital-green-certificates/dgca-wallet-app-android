@@ -45,9 +45,7 @@ object LocalDataSourceModule {
         Room.databaseBuilder(context, AppDatabase::class.java, "certificate-db").build()
 
     @Provides
-    fun provideContactsDao(database: AppDatabase): CertificateDao {
-        return database.certificateDao()
-    }
+    fun provideContactsDao(database: AppDatabase): CertificateDao = database.certificateDao()
 
     @Singleton
     @Provides
