@@ -45,6 +45,11 @@ class DefaultGreenCertificateFetcher(
         val verificationResult = VerificationResult()
         val plainInput = prefixValidationService.decode(qrString, verificationResult)
         val compressedCose = base45Service.decode(plainInput, verificationResult)
+        if (verificationResult.base45Decoded.not()) {
+            Timber.d("Verification failed: base45 not decoded")
+            return Pair(null, null)
+        }
+
         val coseResult: ByteArray? = compressorService.decode(compressedCose, verificationResult)
 
         if (coseResult == null) {
