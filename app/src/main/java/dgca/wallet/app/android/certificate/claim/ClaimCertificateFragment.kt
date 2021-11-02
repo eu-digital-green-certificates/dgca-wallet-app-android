@@ -80,6 +80,8 @@ class ClaimCertificateFragment : BindingFragment<FragmentCertificateClaimBinding
             if (certificate != null) {
                 showUserData(certificate)
                 adapter.update(certificate.getCertificateListData())
+            } else {
+                findNavController().popBackStack()
             }
         })
         viewModel.init(args.qrCodeText)
