@@ -38,7 +38,7 @@ data class TicketingAccessTokenResponse(
     @JsonProperty("exp")
     val exp: Long,
     @JsonProperty("t")
-    val t: Long,
+    val type: Long,
     @JsonProperty("v")
     val v: String,
     @JsonProperty("vc")

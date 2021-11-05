@@ -76,7 +76,7 @@ class ClaimCertificateFragment : BindingFragment<FragmentCertificateClaimBinding
 
     private fun CertificateModel.getType() = when {
         vaccinations?.isNotEmpty() == true -> getString(
-            R.string.vaccination,
+            R.string.vaccination_of,
             this.vaccinations.first().doseNumber.toString(),
             this.vaccinations.first().totalSeriesOfDoses.toString()
         )

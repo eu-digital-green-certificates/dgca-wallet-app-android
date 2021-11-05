@@ -26,6 +26,10 @@ import android.os.Parcelable
 import dgca.verifier.app.ticketing.data.accesstoken.TicketingAccessTokenResponse
 import kotlinx.parcelize.Parcelize
 
+const val TYPE_NOTHING = 0L
+const val TYPE_PARTIAL = 1L
+const val TYPE_FULL = 2L
+
 @Parcelize
 data class TicketingAccessTokenParcelable(
     val jti: String?,
@@ -34,7 +38,7 @@ data class TicketingAccessTokenParcelable(
     val sub: String,
     val validationUrl: String,
     val exp: Long,
-    val t: Long,
+    val type: Long,
     val v: String,
     val certificateData: TicketingCertificateDataParcelable
 ) : Parcelable
@@ -46,7 +50,7 @@ fun TicketingAccessTokenResponse.fromRemote(): TicketingAccessTokenParcelable = 
     sub = sub,
     validationUrl = validationUrl,
     exp = exp,
-    t = t,
+    type = type,
     certificateData = certificateData.fromRemote(),
     v = v
 )
@@ -58,7 +62,7 @@ fun TicketingAccessTokenParcelable.toRemote(): TicketingAccessTokenResponse = Ti
     sub = sub,
     validationUrl = validationUrl,
     exp = exp,
-    t = t,
+    type = type,
     certificateData = certificateData.toRemote(),
     v = v
 )

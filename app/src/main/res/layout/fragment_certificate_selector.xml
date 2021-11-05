@@ -9,32 +9,266 @@
     android:orientation="vertical"
     tools:background="@color/white">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/default_margin"
-        android:letterSpacing="-0.01"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="1 certificate found" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/default_margin"
-        app:layout_constrainedHeight="true"
-        app:layout_constraintBottom_toTopOf="@+id/next_button"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/listContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        app:layout_constraintVertical_bias="0"
-        app:layout_constraintVertical_chainStyle="packed"
-        tools:itemCount="20"
-        tools:listitem="@layout/item_selectable_certificate" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_margin"
+                android:letterSpacing="-0.01"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="1 certificate found"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/standardizedNameTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_margin"
+                android:text="@string/name_with_semi_colons"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@id/standardizedNameValue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/standardizedNameValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_margin"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/standardizedNameTitle"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                tools:text="ALEX SARAPULOV"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/dateOfBirthTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_margin"
+                android:text="@string/date_of_birth"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@id/dateOfBirthValue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/standardizedNameTitle"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/dateOfBirthValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_margin"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/dateOfBirthTitle"
+                app:layout_constraintTop_toBottomOf="@id/standardizedNameTitle"
+                tools:text="1990-01-01"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/departureTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_margin"
+                android:text="@string/departure"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@id/departureValue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dateOfBirthValue"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/departureValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_margin"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/departureTitle"
+                app:layout_constraintTop_toBottomOf="@id/dateOfBirthValue"
+                tools:text="PY, PY"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/arrivalTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_margin"
+                android:text="@string/arrival"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@id/arrivalValue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/departureValue"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/arrivalValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_margin"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/arrivalTitle"
+                app:layout_constraintTop_toBottomOf="@id/departureValue"
+                tools:text="VN, VN"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/acceptedCertificateTypeTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_margin"
+                android:text="@string/accepted_certificate_type"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@id/acceptedCertificateTypeValue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/arrivalValue"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/acceptedCertificateTypeValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_margin"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/acceptedCertificateTypeTitle"
+                app:layout_constraintTop_toBottomOf="@id/arrivalValue"
+                tools:text="Vaccination, Test, Recovery"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/categoryTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_margin"
+                android:text="@string/category"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@id/categoryValue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/acceptedCertificateTypeValue"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/categoryValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_margin"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/categoryTitle"
+                app:layout_constraintTop_toBottomOf="@id/acceptedCertificateTypeValue"
+                tools:text="Standard"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/validationTimeTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_margin"
+                android:text="@string/validation_time"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@id/validationTimeValue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/categoryValue"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/validationTimeValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_margin"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/validationTimeTitle"
+                app:layout_constraintTop_toBottomOf="@id/categoryValue"
+                tools:text="1990-01-01"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/validFromTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_margin"
+                android:text="@string/valid_from"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@id/validFromValue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/validationTimeValue"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/validFromValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_margin"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/validFromTitle"
+                app:layout_constraintTop_toBottomOf="@id/validationTimeValue"
+                tools:text="1990-01-01"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/validToTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_margin"
+                android:text="@string/valid_to"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@id/validToValue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/validFromValue"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/validToValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_margin"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/validToTitle"
+                app:layout_constraintTop_toBottomOf="@id/validFromValue"
+                tools:text="1990-01-01"
+                tools:visibility="visible" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin"
+                android:overScrollMode="never"
+                app:layout_constrainedHeight="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/validToValue"
+                app:layout_constraintVertical_bias="0"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:itemCount="20"
+                tools:listitem="@layout/item_selectable_certificate" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/next_button"
@@ -51,8 +285,6 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recycler_view"
-        app:layout_constraintVertical_bias="0"
         tools:visibility="visible" />
 
     <FrameLayout
