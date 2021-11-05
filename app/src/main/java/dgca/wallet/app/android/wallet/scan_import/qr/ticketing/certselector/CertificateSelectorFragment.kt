@@ -26,6 +26,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -34,8 +35,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.MainActivity
 import dgca.wallet.app.android.R
+import dgca.wallet.app.android.YEAR_MONTH_DAY
 import dgca.wallet.app.android.base.BindingFragment
 import dgca.wallet.app.android.databinding.FragmentCertificateSelectorBinding
+import dgca.wallet.app.android.wallet.scan_import.qr.ticketing.accesstoken.TYPE_FULL
+import dgca.wallet.app.android.wallet.scan_import.qr.ticketing.accesstoken.TYPE_NOTHING
+import dgca.wallet.app.android.wallet.scan_import.qr.ticketing.accesstoken.TYPE_PARTIAL
+import dgca.wallet.app.android.wallet.scan_import.qr.ticketing.accesstoken.TicketingAccessTokenParcelable
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 @AndroidEntryPoint
 class CertificateSelectorFragment : BindingFragment<FragmentCertificateSelectorBinding>() {
@@ -76,6 +84,7 @@ class CertificateSelectorFragment : BindingFragment<FragmentCertificateSelectorB
                 it.selectableCertificateModelList.size.toString(),
                 args.bookingPortalEncryptionData.getStandardizedName()
             )
+            binding.title.visibility = View.VISIBLE
             adapter.update(it.selectableCertificateModelList)
             if (it.selectedCertificate != null) {
                 binding.nextButton.visibility = View.VISIBLE
@@ -84,6 +93,8 @@ class CertificateSelectorFragment : BindingFragment<FragmentCertificateSelectorB
         binding.nextButton.setOnClickListener {
             viewModel.onNextClick()
         }
+
+        setUp(args.bookingPortalEncryptionData.accessTokenContainer.accessToken)
     }
 
     private fun onViewModelUiEvent(event: CertificateSelectorViewModel.CertificateViewUiEvent) {
@@ -107,6 +118,88 @@ class CertificateSelectorFragment : BindingFragment<FragmentCertificateSelectorB
                     )
                 findNavController().navigate(action)
             }
+        }
+    }
+
+    private val certificateCodeType: Map<String, Int> =
+        mapOf("r" to R.string.recovery, "v" to R.string.vaccination, "t" to R.string.test)
+
+    private fun setUp(ticketingAccessTokenDataParcelable: TicketingAccessTokenParcelable) {
+        val certificateData = ticketingAccessTokenDataParcelable.certificateData
+        val name: String?
+        val dateOfBirth: String?
+        val departure: String?
+        val arrival: String?
+        val acceptedCertificateType: String?
+        val category: String?
+        val validationTime: String?
+        val validFrom: String?
+        val validTo: String?
+        when (ticketingAccessTokenDataParcelable.type) {
+            TYPE_FULL -> {
+                name =
+                    "${certificateData.standardizedGivenName} ${certificateData.standardizedFamilyName}".trim()
+                dateOfBirth = certificateData.dateOfBirth
+                departure = "${certificateData.cod}, ${certificateData.rod}"
+                arrival = "${certificateData.coa}, ${certificateData.roa}"
+                acceptedCertificateType = certificateData.greenCertificateTypes
+                    .map {
+                        val id = certificateCodeType[it]
+                        return@map if (id != null && id > 0) getString(id) else it
+                    }
+                    .joinToString(separator = ", ")
+                category = certificateData.category.joinToString(separator = ", ")
+                validationTime =
+                    DateTimeFormatter.ofPattern(YEAR_MONTH_DAY, Locale.US).format(certificateData.validationClock.toLocalDate())
+                validFrom = DateTimeFormatter.ofPattern(YEAR_MONTH_DAY, Locale.US).format(certificateData.validFrom.toLocalDate())
+                validTo = DateTimeFormatter.ofPattern(YEAR_MONTH_DAY, Locale.US).format(certificateData.validTo.toLocalDate())
+            }
+            TYPE_PARTIAL -> {
+                name =
+                    "${certificateData.standardizedGivenName} ${certificateData.standardizedFamilyName}".trim()
+                dateOfBirth = certificateData.dateOfBirth
+                departure = null
+                arrival = null
+                acceptedCertificateType = null
+                category = null
+                validationTime = null
+                validFrom = null
+                validTo = null
+            }
+            TYPE_NOTHING -> {
+                name = null
+                dateOfBirth = null
+                departure = null
+                arrival = null
+                acceptedCertificateType = null
+                category = null
+                validationTime = null
+                validFrom = null
+                validTo = null
+            }
+            else -> throw IllegalArgumentException("Type may be from 0 to 2")
+        }
+
+        setValue(binding.standardizedNameTitle, binding.standardizedNameValue, name)
+        setValue(binding.dateOfBirthTitle, binding.dateOfBirthValue, dateOfBirth)
+        setValue(binding.departureTitle, binding.departureValue, departure)
+        setValue(binding.arrivalTitle, binding.arrivalValue, arrival)
+        setValue(binding.acceptedCertificateTypeTitle, binding.acceptedCertificateTypeValue, acceptedCertificateType)
+        setValue(binding.categoryTitle, binding.categoryValue, category)
+        setValue(binding.validationTimeTitle, binding.validationTimeValue, validationTime)
+        setValue(binding.validFromTitle, binding.validFromValue, validFrom)
+        setValue(binding.validToTitle, binding.validToValue, validTo)
+    }
+
+    fun setValue(titleView: TextView, valueView: TextView, value: String?) {
+        if (value?.isNotBlank() == true) {
+            valueView.text = value
+            View.VISIBLE
+        } else {
+            View.GONE
+        }.let {
+            titleView.visibility = it
+            valueView.visibility = it
         }
     }
 }

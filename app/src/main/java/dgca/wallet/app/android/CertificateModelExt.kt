@@ -27,7 +27,7 @@ import dgca.wallet.app.android.data.CertificateModel
 
 fun CertificateModel.getTitle(res: Resources): String = when {
     vaccinations?.first() != null -> res.getString(
-        R.string.vaccination,
+        R.string.vaccination_of,
         vaccinations.first().doseNumber.toString(),
         vaccinations.first().totalSeriesOfDoses.toString()
     )

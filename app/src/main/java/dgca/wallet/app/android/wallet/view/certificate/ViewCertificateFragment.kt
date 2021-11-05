@@ -88,7 +88,7 @@ class ViewCertificateFragment : BindingFragment<FragmentCertificateViewBinding>(
             val certificate = it.certificatesCard.certificate
             binding.title.text = when {
                 certificate.vaccinations?.first() != null -> binding.root.resources.getString(
-                    R.string.vaccination,
+                    R.string.vaccination_of,
                     certificate.vaccinations.first().doseNumber.toString(),
                     certificate.vaccinations.first().totalSeriesOfDoses.toString()
                 )

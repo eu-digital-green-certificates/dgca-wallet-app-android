@@ -13,7 +13,8 @@
     <string name="scan_import">Scan / Import</string>
     <string name="check_validity">Check Validity</string>
     <string name="i_agree_check_validity">I agree, check validity</string>
-    <string name="vaccination">Vaccination %1$s of %2$s</string>
+    <string name="vaccination_of">Vaccination %1$s of %2$s</string>
+    <string name="vaccination">Vaccination</string>
     <string name="vaccination_certificate">vaccination certificate %1$s of %2$s</string>
     <string name="recovery">Recovery</string>
     <string name="recovery_certificate">recovery certificate</string>
@@ -21,6 +22,7 @@
     <string name="test_certificate">test certificate</string>
     <string name="your_certificate">Your Certificate</string>
     <string name="name">Name</string>
+    <string name="name_with_semi_colons">Name:</string>
     <string name="country_rules_validation">Country rules validation</string>
     <string name="check_country_rules_conformance_of_your_certificate">Check country rules conformance of your certificate</string>
 
@@ -133,4 +135,12 @@
     <string name="type">Type</string>
     <string name="details">Details</string>
     <string name="certificate_claimed">Certificate claimed</string>
+    <string name="date_of_birth">Date of Birth:</string>
+    <string name="departure">Departure:</string>
+    <string name="arrival">Arrival:</string>
+    <string name="category">Category:</string>
+    <string name="accepted_certificate_type">Accepted Certificate Type:</string>
+    <string name="validation_time">Validation Time:</string>
+    <string name="valid_from">Valid From:</string>
+    <string name="valid_to">Valid To:</string>
 </resources>

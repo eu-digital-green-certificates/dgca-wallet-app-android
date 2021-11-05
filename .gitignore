@@ -10,6 +10,8 @@
 /.idea/gradle.xml
 /.idea/sonarIssues.xml
 /.idea/sonarlint
+/.idea/codeStyles
+/.idea/misk.xml
 .DS_Store
 /build
 /captures

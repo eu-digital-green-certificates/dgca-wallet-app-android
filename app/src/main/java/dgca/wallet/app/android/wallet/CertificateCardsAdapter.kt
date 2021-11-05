@@ -116,7 +116,7 @@ class CertificateCardsAdapter(
             ) {
                 binding.titleView.text = when {
                     certificatesCard.certificate.vaccinations?.first() != null -> binding.root.resources.getString(
-                        R.string.vaccination,
+                        R.string.vaccination_of,
                         certificatesCard.certificate.vaccinations.first().doseNumber.toString(),
                         certificatesCard.certificate.vaccinations.first().totalSeriesOfDoses.toString()
                     )
