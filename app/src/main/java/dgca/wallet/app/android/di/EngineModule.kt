@@ -34,6 +34,7 @@ import dgca.verifier.app.decoder.JSON_SCHEMA_V1
 import dgca.verifier.app.engine.*
 import dgca.verifier.app.engine.data.source.countries.CountriesRepository
 import dgca.verifier.app.engine.data.source.countries.DefaultCountriesRepository
+import dgca.verifier.app.engine.data.source.local.EnginePreferences
 import dgca.verifier.app.engine.data.source.local.countries.CountriesLocalDataSource
 import dgca.verifier.app.engine.data.source.local.rules.RulesLocalDataSource
 import dgca.verifier.app.engine.data.source.local.valuesets.ValueSetsLocalDataSource
@@ -46,6 +47,8 @@ import dgca.verifier.app.engine.data.source.valuesets.DefaultValueSetsRepository
 import dgca.verifier.app.engine.data.source.valuesets.ValueSetsRepository
 import dgca.verifier.app.engine.domain.rules.DefaultGetRulesUseCase
 import dgca.verifier.app.engine.domain.rules.GetRulesUseCase
+import dgca.wallet.app.android.data.local.DefaultEnginePreferences
+import dgca.wallet.app.android.data.local.Preferences
 import dgca.wallet.app.android.data.local.countries.CountriesDao
 import dgca.wallet.app.android.data.local.countries.DefaultCountriesLocalDataSource
 import dgca.wallet.app.android.data.local.rules.DefaultRulesLocalDataSource
@@ -132,8 +135,12 @@ object EngineModule {
 
     @Singleton
     @Provides
-    fun provideCountriesLocalDataSource(countriesDao: CountriesDao): CountriesLocalDataSource =
-        DefaultCountriesLocalDataSource(countriesDao)
+    fun provideEnginePreferences(preferences: Preferences): EnginePreferences = DefaultEnginePreferences(preferences)
+
+    @Singleton
+    @Provides
+    fun provideCountriesLocalDataSource(countriesDao: CountriesDao, enginePreferences: EnginePreferences): CountriesLocalDataSource =
+        DefaultCountriesLocalDataSource(countriesDao, enginePreferences)
 
     @Singleton
     @Provides
