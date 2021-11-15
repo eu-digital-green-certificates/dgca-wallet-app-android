@@ -30,6 +30,8 @@ import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
 interface Preferences {
+    var lastCountriesSyncTimeMillis: Long
+
     var selectedCountryIsoCode: String?
 }
 
@@ -42,6 +44,12 @@ class PreferencesImpl(context: Context) : Preferences {
         context.applicationContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE)
     }
 
+    override var lastCountriesSyncTimeMillis by LongPreference(
+        preferences,
+        KEY_COUNTRIES_KEYS_SYNC_TIME_MILLIS,
+        -1
+    )
+
     override var selectedCountryIsoCode: String? by StringPreference(
         preferences,
         KEY_SELECTED_COUNTRY_ISO_CODE
@@ -49,7 +57,24 @@ class PreferencesImpl(context: Context) : Preferences {
 
     companion object {
         private const val USER_PREF = "dgca.wallet.app.pref"
+        private const val KEY_COUNTRIES_KEYS_SYNC_TIME_MILLIS = "last_countries_sync_time_millis"
         private const val KEY_SELECTED_COUNTRY_ISO_CODE = "selected_country_iso_code"
+    }
+}
+
+class LongPreference(
+    private val preferences: Lazy<SharedPreferences>,
+    private val name: String,
+    private val defaultValue: Long
+) : ReadWriteProperty<Any, Long> {
+
+    @WorkerThread
+    override fun getValue(thisRef: Any, property: KProperty<*>): Long {
+        return preferences.value.getLong(name, defaultValue)
+    }
+
+    override fun setValue(thisRef: Any, property: KProperty<*>, value: Long) {
+        preferences.value.edit { putLong(name, value) }
     }
 }
 
