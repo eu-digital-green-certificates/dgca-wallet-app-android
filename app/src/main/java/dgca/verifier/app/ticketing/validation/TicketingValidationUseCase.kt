@@ -55,7 +55,7 @@ class TicketingValidationUseCase(
             val authTokenHeader = "Bearer $token"
             val publicKeyJwk: TicketingPublicKeyJwkRemote =
                 validationServiceIdentityResponse.getEncryptionPublicKey()!!
-            val publicKey: PublicKey = publicKeyJwk.x5c.base64ToX509Certificate()!!.publicKey
+            val publicKey: PublicKey = publicKeyJwk.x5c.first().base64ToX509Certificate()!!.publicKey
             val validationRequest = ticketingValidationRequestProvider.provideTicketValidationRequest(
                 qrString,
                 publicKeyJwk.kid,
