@@ -28,7 +28,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class TicketingPublicKeyJwkParcelable(
-    val x5c: String,
+    val x5c: List<String>,
     val kid: String,
     val alg: String,
     val use: String

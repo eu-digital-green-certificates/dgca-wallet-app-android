@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 class TicketingPublicKeyJwkRemote(
     @JsonProperty("x5c")
-    val x5c: String,
+    val x5c: List<String>,
     @JsonProperty("kid")
     val kid: String,
     @JsonProperty("alg")
