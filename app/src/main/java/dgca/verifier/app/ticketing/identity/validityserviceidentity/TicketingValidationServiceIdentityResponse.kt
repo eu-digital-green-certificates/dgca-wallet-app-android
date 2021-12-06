@@ -33,13 +33,20 @@ data class TicketingValidationServiceIdentityResponse(
     val verificationMethods: Set<TicketingVerificationMethodRemote>,
 ) {
     fun getEncryptionPublicKey(): TicketingPublicKeyJwkRemote? {
-        var publicKeyJwkRemote: TicketingPublicKeyJwkRemote? = null
+        var verificationMethodId: String? = null
         verificationMethods.forEach { verificationMethodRemote ->
-            if (verificationMethodRemote.publicKeyJwk?.use == "enc") {
-                publicKeyJwkRemote = verificationMethodRemote.publicKeyJwk
+            if (verificationMethodRemote.type == "DccEncryptionScheme2021" && verificationMethodRemote.id.endsWith("RSAOAEPWithSHA256AESGCM")) {
+                verificationMethodId = verificationMethodRemote.verificationMethods!!.last()
                 return@forEach
             }
         }
-        return publicKeyJwkRemote
+        if (verificationMethodId?.isNotBlank() == true) {
+            verificationMethods.forEach { verificationMethodRemote ->
+                if (verificationMethodRemote.id == verificationMethodId) {
+                    return verificationMethodRemote.publicKeyJwk
+                }
+            }
+        }
+        return null
     }
 }
