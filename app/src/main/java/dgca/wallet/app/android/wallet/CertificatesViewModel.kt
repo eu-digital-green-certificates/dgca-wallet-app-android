@@ -27,9 +27,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dgca.wallet.app.android.Event
-import dgca.wallet.app.android.certificate.view.certificate.ViewCertificateViewModel
-import dgca.wallet.app.android.certificate.view.file.ViewFileViewModel
 import dgca.wallet.app.android.data.WalletRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
