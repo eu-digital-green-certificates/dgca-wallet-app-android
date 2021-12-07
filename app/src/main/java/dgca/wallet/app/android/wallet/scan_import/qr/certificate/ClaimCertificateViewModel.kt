@@ -66,38 +66,38 @@ class ClaimCertificateViewModel @Inject constructor(
             var claimResult: ApiResult<ClaimResponse>? = null
 
             withContext(Dispatchers.IO) {
-                val certHash = claimGreenCertificateModel.cose.getValidationDataFromCOSE().toHash()
-                val tanHash = tan.toByteArray().toHash()
-
-                val keyPairData = claimGreenCertificateModel.cose.generateKeyPair()
-                val keyPair: KeyPair? = keyPairData?.keyPair
-                val sigAlg = keyPairData?.algo
-
-                if (keyPair == null || sigAlg == null) {
-                    Timber.d("Key not generated")
-                    return@withContext
-                }
-
-                val keyData = PublicKeyData(
-                    keyPair.public.algorithm,
-                    Base64.getEncoder().encodeToString(keyPair.public.encoded)
-                )
-
-                val signature = generateClaimSignature(tanHash, certHash, keyData.value, keyPair.private, sigAlg)
-                val request = ClaimRequest(
-                    claimGreenCertificateModel.dgci,
-                    certHash,
-                    tanHash,
-                    keyData,
-                    sigAlg,
-                    signature
-                )
+//                val certHash = claimGreenCertificateModel.cose.getValidationDataFromCOSE().toHash()
+//                val tanHash = tan.toByteArray().toHash()
+//
+//                val keyPairData = claimGreenCertificateModel.cose.generateKeyPair()
+//                val keyPair: KeyPair? = keyPairData?.keyPair
+//                val sigAlg = keyPairData?.algo
+//
+//                if (keyPair == null || sigAlg == null) {
+//                    Timber.d("Key not generated")
+//                    return@withContext
+//                }
+//
+//                val keyData = PublicKeyData(
+//                    keyPair.public.algorithm,
+//                    Base64.getEncoder().encodeToString(keyPair.public.encoded)
+//                )
+//
+//                val signature = generateClaimSignature(tanHash, certHash, keyData.value, keyPair.private, sigAlg)
+//                val request = ClaimRequest(
+//                    claimGreenCertificateModel.dgci,
+//                    certHash,
+//                    tanHash,
+//                    keyData,
+//                    sigAlg,
+//                    signature
+//                )
 
                 val config = configRepository.local().getConfig()
                 claimResult = walletRepository.claimCertificate(
                     config.getClaimUrl(BuildConfig.VERSION_NAME),
                     prefixValidationService.encode(claimGreenCertificateModel.qrCodeText),
-                    request
+                    ClaimRequest()
                 )
             }
             _inProgress.value = false

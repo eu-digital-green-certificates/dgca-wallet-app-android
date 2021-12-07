@@ -33,6 +33,7 @@ import dgca.wallet.app.android.data.remote.ApiService
 import dgca.wallet.app.android.data.remote.ClaimResponse
 import dgca.wallet.app.android.model.ClaimRequest
 import dgca.wallet.app.android.security.KeyStoreCryptor
+import retrofit2.Response
 import javax.inject.Inject
 
 class WalletRepositoryImpl @Inject constructor(
@@ -43,22 +44,15 @@ class WalletRepositoryImpl @Inject constructor(
 ) : BaseRepository(), WalletRepository {
 
     override suspend fun claimCertificate(url: String, qrCode: String, request: ClaimRequest): ApiResult<ClaimResponse> {
-        return doApiBackgroundWork { apiService.claimCertificate(url, request) }.also { result ->
-            result.success?.let {
-                val tan = result.rawResponse?.body()?.tan ?: ""
-                val codeEncrypted = keyStoreCryptor.encrypt(qrCode)
-                val tanEncrypted = keyStoreCryptor.encrypt(tan)
-
-                if (codeEncrypted != null && tanEncrypted != null) {
-                    certificateDao.insert(
-                        CertificateEntity(
-                            qrCodeText = codeEncrypted,
-                            tan = tanEncrypted
-                        )
-                    )
-                }
-            }
-        }
+        val codeEncrypted = keyStoreCryptor.encrypt(qrCode)
+        val tanEncrypted = keyStoreCryptor.encrypt("")
+        certificateDao.insert(
+            CertificateEntity(
+                qrCodeText = codeEncrypted!!,
+                tan = tanEncrypted!!
+            )
+        )
+        return ApiResult(Response.success(ClaimResponse("")))
     }
 
     override suspend fun getCertificates(): List<CertificatesCard.CertificateCard>? {

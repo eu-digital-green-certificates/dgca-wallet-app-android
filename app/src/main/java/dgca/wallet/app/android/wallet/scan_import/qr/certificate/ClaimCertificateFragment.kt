@@ -61,8 +61,7 @@ class ClaimCertificateFragment : BindingFragment<FragmentCertificateClaimBinding
             }
 
         binding.saveBtn.setOnClickListener {
-            val action = ClaimCertificateFragmentDirections.actionClaimCertificateFragmentToTanFragment()
-            findNavController().navigate(action)
+            viewModel.save(args.claimCertificateModel, "")
         }
         viewModel.inProgress.observe(viewLifecycleOwner, { binding.progressView.isVisible = it })
         viewModel.event.observe(viewLifecycleOwner) { event ->
