@@ -39,11 +39,15 @@ import dgca.wallet.app.android.certificate.add.ADD_QR_STRING_KEY
 import dgca.wallet.app.android.certificate.add.ADD_REQUEST_KEY
 import dgca.wallet.app.android.databinding.FragmentCertificatesBinding
 import java.io.File
+import androidx.recyclerview.widget.ItemTouchHelper
+
+
+
 
 @AndroidEntryPoint
 class CertificatesFragment : BindingFragment<FragmentCertificatesBinding>(),
-    CertificateCardsAdapter.CertificateCardClickListener,
-    CertificateCardsAdapter.FileCardClickListener {
+    CertificateCardsAdapter.CertificateCardListener,
+    CertificateCardsAdapter.FileCardListener {
 
     private val viewModel by viewModels<CertificatesViewModel>()
 
@@ -102,14 +106,21 @@ class CertificatesFragment : BindingFragment<FragmentCertificatesBinding>(),
         if (certificatesCards.isNotEmpty()) {
             binding.certificatesView.setHasFixedSize(true)
             binding.certificatesView.layoutManager = LinearLayoutManager(requireContext())
-            binding.certificatesView.adapter = CertificateCardsAdapter(certificatesCards, this, this)
+            val adapter = CertificateCardsAdapter(certificatesCards, this, this)
+            binding.certificatesView.adapter = adapter
             binding.certificatesView.visibility = View.VISIBLE
+
+            val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(adapter))
+            itemTouchHelper.attachToRecyclerView(binding.certificatesView)
 
             binding.noAvailableOffersGroup.visibility = View.GONE
         } else {
-            binding.certificatesView.visibility = View.GONE
-            binding.noAvailableOffersGroup.visibility = View.VISIBLE
-        }
+            hideCertificatesCard()        }
+    }
+
+    private fun hideCertificatesCard() {
+        binding.certificatesView.visibility = View.GONE
+        binding.noAvailableOffersGroup.visibility = View.VISIBLE
     }
 
     private fun showCodeReader() {
@@ -147,8 +158,22 @@ class CertificatesFragment : BindingFragment<FragmentCertificatesBinding>(),
         findNavController().navigate(action)
     }
 
+    override fun onCertificateCardDeleted(certificateId: Int, isListEmpty: Boolean) {
+        viewModel.deleteCertificate(certificateId)
+        if (isListEmpty) {
+            hideCertificatesCard()
+        }
+    }
+
     override fun onFileCardClick(file: File) {
         val action = CertificatesFragmentDirections.actionCertificatesFragmentToViewFileFragment(file)
         findNavController().navigate(action)
+    }
+
+    override fun onFileCardDeleted(file: File, isListEmpty: Boolean) {
+        viewModel.deleteFile(file)
+        if (isListEmpty) {
+            hideCertificatesCard()
+        }
     }
 }

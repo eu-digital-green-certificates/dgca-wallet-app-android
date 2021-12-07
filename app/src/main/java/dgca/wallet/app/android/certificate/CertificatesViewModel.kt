@@ -27,8 +27,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dgca.wallet.app.android.Event
+import dgca.wallet.app.android.certificate.view.certificate.ViewCertificateViewModel
+import dgca.wallet.app.android.certificate.view.file.ViewFileViewModel
 import dgca.wallet.app.android.data.WalletRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
 
@@ -77,6 +82,22 @@ class CertificatesViewModel @Inject constructor(
 
             _inProgress.value = false
             _certificates.value = certificatesCards.toList()
+        }
+    }
+
+    fun deleteCertificate(certificateId: Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                walletRepository.deleteCertificateById(certificateId)
+            }
+        }
+    }
+
+    fun deleteFile(file: File) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                file.delete() || !file.exists()
+            }
         }
     }
 }
