@@ -34,10 +34,11 @@ import dgca.wallet.app.android.formatWith
 import java.io.File
 
 class CertificateCardsAdapter(
-    private val certificatesCards: List<CertificatesCard>,
-    private val certificateCardClickListener: CertificateCardClickListener,
-    private val fileCardClickListener: FileCardClickListener
+    certificatesCards: List<CertificatesCard>,
+    private val certificateCardListener: CertificateCardListener,
+    private val fileCardListener: FileCardListener
 ) : RecyclerView.Adapter<CertificateCardsAdapter.ViewHolder>() {
+    private val certificatesCards = certificatesCards.toMutableList()
 
     override fun getItemViewType(position: Int): Int {
         return when (certificatesCards[position]) {
@@ -67,23 +68,49 @@ class CertificateCardsAdapter(
             is ViewHolder.HeaderViewHolder -> holder.bind(certificatesCards[position])
             is ViewHolder.CertificateViewHolder -> holder.bind(
                 certificatesCards[position] as CertificatesCard.CertificateCard,
-                certificateCardClickListener
+                certificateCardListener
             )
             is ViewHolder.FileViewHolder -> holder.bind(
                 certificatesCards[position] as CertificatesCard.FileCard,
-                fileCardClickListener
+                fileCardListener
             )
         }
     }
 
     override fun getItemCount(): Int = certificatesCards.size
 
-    interface CertificateCardClickListener {
-        fun onCertificateCardClick(certificateId: Int)
+    fun deleteItem(position: Int) {
+        val item = certificatesCards.removeAt(position)
+        notifyItemRemoved(position)
+        val isListEmpty = certificatesCards.none {
+            return@none it is CertificatesCard.CertificateCard || it is CertificatesCard.FileCard
+        }
+        when (item) {
+            is CertificatesCard.CertificateCard -> {
+                certificateCardListener.onCertificateCardDeleted(item.certificateId, isListEmpty)
+            }
+            is CertificatesCard.FileCard -> {
+                fileCardListener.onFileCardDeleted(item.file, isListEmpty)
+            }
+            else -> {
+                throw IllegalStateException("This item cannot be deleted.")
+            }
+        }
     }
 
-    interface FileCardClickListener {
+    fun isSwipeEnabled(position: Int): Boolean {
+        val item = certificatesCards[position]
+        return item is CertificatesCard.CertificateCard || item is CertificatesCard.FileCard
+    }
+
+    interface CertificateCardListener {
+        fun onCertificateCardClick(certificateId: Int)
+        fun onCertificateCardDeleted(certificateId: Int, isListEmpty: Boolean)
+    }
+
+    interface FileCardListener {
         fun onFileCardClick(file: File)
+        fun onFileCardDeleted(file: File, isListEmpty: Boolean)
     }
 
     sealed class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -112,7 +139,7 @@ class CertificateCardsAdapter(
 
             fun bind(
                 certificatesCard: CertificatesCard.CertificateCard,
-                certificateCardClickListener: CertificateCardClickListener
+                certificateCardListener: CertificateCardListener
             ) {
                 binding.titleView.text = when {
                     certificatesCard.certificate.vaccinations?.first() != null -> binding.root.resources.getString(
@@ -128,7 +155,7 @@ class CertificateCardsAdapter(
                 }
                 binding.nameView.text = certificatesCard.certificate.getFullName()
                 binding.scannedAtDateView.text = this.getCertificateDate(certificatesCard)
-                binding.root.setOnClickListener { certificateCardClickListener.onCertificateCardClick(certificatesCard.certificateId) }
+                binding.root.setOnClickListener { certificateCardListener.onCertificateCardClick(certificatesCard.certificateId) }
             }
         }
 
@@ -137,11 +164,11 @@ class CertificateCardsAdapter(
 
             fun bind(
                 fileCard: CertificatesCard.FileCard,
-                fileCardClickListener: FileCardClickListener
+                fileCardListener: FileCardListener
             ) {
                 binding.titleView.text = fileCard.file.name
                 binding.scannedAtDateView.text = fileCard.dateTaken.formatWith(YEAR_MONTH_DAY)
-                binding.root.setOnClickListener { fileCardClickListener.onFileCardClick(fileCard.file) }
+                binding.root.setOnClickListener { fileCardListener.onFileCardClick(fileCard.file) }
             }
         }
         
