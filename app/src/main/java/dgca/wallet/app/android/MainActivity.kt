@@ -38,8 +38,10 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.databinding.ActivityMainBinding
+import dgca.wallet.app.android.model.TicketingCheckInParcelable
 import dgca.wallet.app.android.nfc.NdefParser
 import dgca.wallet.app.android.wallet.CertificatesFragmentDirections
+import dgca.wallet.app.android.wallet.scan_import.qr.BOOKING_SYSTEM_MODEL_RESULT_KEY
 import dgca.wallet.app.android.wallet.scan_import.qr.CLAIM_GREEN_CERTIFICATE_RESULT_KEY
 import dgca.wallet.app.android.wallet.scan_import.qr.FETCH_MODEL_REQUEST_KEY
 import dgca.wallet.app.android.wallet.scan_import.qr.certificate.ClaimGreenCertificateModel
@@ -83,6 +85,12 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 bundle.getParcelable(CLAIM_GREEN_CERTIFICATE_RESULT_KEY)
             if (claimGreenCertificateModel != null) {
                 navigateToClaimCertificatePage(claimGreenCertificateModel)
+            } else {
+                val ticketingCheckInParcelable: TicketingCheckInParcelable? =
+                    bundle.getParcelable(BOOKING_SYSTEM_MODEL_RESULT_KEY)
+                if (ticketingCheckInParcelable != null) {
+                    navigateToBookingSystemModelConsentPage(ticketingCheckInParcelable)
+                }
             }
             navController.addOnDestinationChangedListener(this)
         }
@@ -159,6 +167,13 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     private fun navigateToClaimCertificatePage(claimGreenCertificateModel: ClaimGreenCertificateModel) {
         val action =
             CertificatesFragmentDirections.actionCertificatesFragmentToClaimCertificateFragment(claimGreenCertificateModel)
+        navController.navigate(action)
+        navController.addOnDestinationChangedListener(this)
+    }
+
+    private fun navigateToBookingSystemModelConsentPage(ticketingCheckInParcelable: TicketingCheckInParcelable) {
+        val action =
+            CertificatesFragmentDirections.actionCertificatesFragmentToBookingSystemConsentFragment(ticketingCheckInParcelable)
         navController.navigate(action)
         navController.addOnDestinationChangedListener(this)
     }

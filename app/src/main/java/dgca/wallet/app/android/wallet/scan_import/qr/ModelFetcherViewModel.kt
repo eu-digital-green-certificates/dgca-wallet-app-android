@@ -28,8 +28,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.verifier.app.decoder.model.GreenCertificate
+import dgca.verifier.app.ticketing.data.checkin.TicketingCheckInRemote
+import dgca.verifier.app.ticketing.checkin.TicketingCheckInModelFetcher
 import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.local.toCertificateModel
+import dgca.wallet.app.android.model.TicketingCheckInParcelable
+import dgca.wallet.app.android.model.fromRemote
 import dgca.wallet.app.android.wallet.scan_import.GreenCertificateFetcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,12 +49,15 @@ sealed class ModelFetcherResult {
         val certificateModel: CertificateModel
     ) : ModelFetcherResult()
 
+    class BookingSystemModelRecognised(val ticketingCheckInParcelable: TicketingCheckInParcelable) : ModelFetcherResult()
+
     object NotApplicable : ModelFetcherResult()
 }
 
 @HiltViewModel
 class ModelFetcherViewModel @Inject constructor(
-    private val greenCertificateFetcher: GreenCertificateFetcher
+    private val greenCertificateFetcher: GreenCertificateFetcher,
+    private val ticketingCheckInModelFetcher: TicketingCheckInModelFetcher
 ) : ViewModel() {
     private val _modelFetcherResult = MutableLiveData<ModelFetcherResult>()
     val modelFetcherResult: LiveData<ModelFetcherResult> = _modelFetcherResult
@@ -61,6 +68,15 @@ class ModelFetcherViewModel @Inject constructor(
                 val greenCertificateRecognised: ModelFetcherResult.GreenCertificateRecognised? =
                     tryToFetchGreenCertificate(qrCodeText)
                 if (greenCertificateRecognised != null) return@withContext greenCertificateRecognised
+                val ticketingCheckInRemoteModel: TicketingCheckInRemote? = runCatching {
+                    ticketingCheckInModelFetcher.fetchTicketingCheckInModel(qrCodeText)
+                }.getOrElse {
+                    Timber.e(it)
+                    null
+                }
+                if (ticketingCheckInRemoteModel != null) return@withContext ModelFetcherResult.BookingSystemModelRecognised(
+                    ticketingCheckInRemoteModel.fromRemote()
+                )
                 return@withContext ModelFetcherResult.NotApplicable
             }.apply {
                 _modelFetcherResult.value = this

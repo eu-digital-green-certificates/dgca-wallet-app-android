@@ -24,3 +24,4 @@ package dgca.wallet.app.android.wallet.scan_import
 
 const val ADD_REQUEST_KEY = "ADD_REQUEST"
 const val ADD_CLAIM_GREEN_CERTIFICATE_MODEL_KEY = "ADD_CLAIM_GREEN_CERTIFICATE_MODEL"
+const val BOOKING_SYSTEM_MODEL_KEY = "BOOKING_SYSTEM_MODEL"
