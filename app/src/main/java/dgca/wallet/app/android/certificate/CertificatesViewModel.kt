@@ -63,8 +63,8 @@ class CertificatesViewModel @Inject constructor(
             val pdfFileCards = mutableListOf<CertificatesCard.FileCard>()
             imagesDir.listFiles()?.reversed()?.forEach { file ->
                 when (file.extension) {
-                    "jpeg" -> imageFileCards.add(CertificatesCard.FileCard(file))
-                    "pdf" -> pdfFileCards.add(CertificatesCard.FileCard(file))
+                    IMAGE_FILES_EXT -> imageFileCards.add(CertificatesCard.FileCard(file))
+                    PDF_FILES_EXT -> pdfFileCards.add(CertificatesCard.FileCard(file))
                     else -> {
                     }
                 }
@@ -85,19 +85,49 @@ class CertificatesViewModel @Inject constructor(
         }
     }
 
-    fun deleteCertificate(certificateId: Int) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                walletRepository.deleteCertificateById(certificateId)
+    private fun removeItem(position: Int): List<CertificatesCard> {
+        val list = _certificates.value!!.toMutableList()
+        val removedItem = list.removeAt(position)
+        if (removedItem is CertificatesCard.FileCard) {
+            if (removedItem.file.name.endsWith(IMAGE_FILES_EXT)) {
+                list.removeIf { it is CertificatesCard.ImagesHeader }
+            } else if (removedItem.file.name.endsWith(PDF_FILES_EXT)) {
+                list.removeIf { it is CertificatesCard.PdfsHeader }
             }
+        } else if (removedItem is CertificatesCard.CertificateCard && list.none { it is CertificatesCard.CertificateCard }) {
+            list.removeIf { it is CertificatesCard.CertificatesHeader }
+        }
+        return list.toList()
+    }
+
+    fun deleteFile(position: Int, file: File) {
+        viewModelScope.launch {
+            _inProgress.value = true
+            withContext(Dispatchers.IO) {
+                file.delete() || !file.exists()
+                removeItem(position)
+            }.let {
+                _certificates.value = it
+            }
+            _inProgress.value = false
         }
     }
 
-    fun deleteFile(file: File) {
+    fun deleteCertificate(position: Int, itemCard: CertificatesCard.CertificateCard) {
         viewModelScope.launch {
+            _inProgress.value = true
             withContext(Dispatchers.IO) {
-                file.delete() || !file.exists()
+                walletRepository.deleteCertificateById(itemCard.certificateId)
+                removeItem(position)
+            }.let {
+                _certificates.value = it
             }
+            _inProgress.value = false
         }
+    }
+
+    companion object {
+        private const val IMAGE_FILES_EXT = "jpeg"
+        private const val PDF_FILES_EXT = "pdf"
     }
 }

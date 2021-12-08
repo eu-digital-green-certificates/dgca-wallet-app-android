@@ -22,8 +22,10 @@
 
 package dgca.wallet.app.android.certificate
 
+import android.os.Parcelable
 import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.local.CertificateEntity
+import kotlinx.parcelize.Parcelize
 import java.io.File
 import java.time.Instant
 import java.time.LocalDate
@@ -33,13 +35,14 @@ sealed class CertificatesCard {
 
     object CertificatesHeader : CertificatesCard()
 
+    @Parcelize
     data class CertificateCard(
         val certificateId: Int,
         val qrCodeText: String,
         val certificate: CertificateModel,
         val tan: String,
         val dateTaken: LocalDate
-    ) : CertificatesCard() {
+    ) : CertificatesCard(), Parcelable {
 
         constructor(certificateEntity: CertificateEntity, certificateModel: CertificateModel) : this(
             certificateEntity.id,
