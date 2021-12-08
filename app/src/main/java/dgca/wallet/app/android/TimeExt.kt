@@ -22,8 +22,11 @@
 
 package dgca.wallet.app.android
 
+import dgca.verifier.app.engine.UTC_ZONE_ID
 import java.text.SimpleDateFormat
-import java.time.*
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -31,14 +34,20 @@ const val YEAR_MONTH_DAY = "yyyy-MM-dd"
 const val FORMATTED_YEAR_MONTH_DAY = "MMM d, yyyy"
 private const val FORMATTED_DATE_TIME = "MMM d, yyyy, HH:mm"
 
-private fun String.toZonedDateTime(): ZonedDateTime? = try {
+fun String.toZonedDateTime(): ZonedDateTime? = try {
     ZonedDateTime.parse(this)
 } catch (error: Throwable) {
     null
-}
+} ?: toLocalDateTime()?.atZone(UTC_ZONE_ID)
 
 private fun String.toLocalDateTime(): LocalDateTime? = try {
     LocalDateTime.parse(this)
+} catch (error: Throwable) {
+    null
+} ?: toLocalDate()?.atStartOfDay()
+
+private fun String.toLocalDate(): LocalDate? = try {
+    LocalDate.parse(this)
 } catch (error: Throwable) {
     null
 }

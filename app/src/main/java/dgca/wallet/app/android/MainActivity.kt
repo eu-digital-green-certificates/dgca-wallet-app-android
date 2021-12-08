@@ -1,6 +1,6 @@
 /*
  *  ---license-start
- *  eu-digital-green-certificates / dgca-verifier-app-android
+ *  eu-digital-green-certificates / dgca-wallet-app-android
  *  ---
  *  Copyright (C) 2021 T-Systems International GmbH and all other contributors
  *  ---
@@ -32,17 +32,23 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
-import dgca.wallet.app.android.certificate.CertificatesFragmentDirections
 import dgca.wallet.app.android.databinding.ActivityMainBinding
+import dgca.wallet.app.android.model.TicketingCheckInParcelable
 import dgca.wallet.app.android.nfc.NdefParser
+import dgca.wallet.app.android.wallet.CertificatesFragmentDirections
+import dgca.wallet.app.android.wallet.scan_import.qr.BOOKING_SYSTEM_MODEL_RESULT_KEY
+import dgca.wallet.app.android.wallet.scan_import.qr.CLAIM_GREEN_CERTIFICATE_RESULT_KEY
+import dgca.wallet.app.android.wallet.scan_import.qr.FETCH_MODEL_REQUEST_KEY
+import dgca.wallet.app.android.wallet.scan_import.qr.certificate.ClaimGreenCertificateModel
 import timber.log.Timber
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedListener {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
@@ -68,10 +74,25 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.certificatesFragment) {
-                checkNdefMessage(intent)
+        navController.addOnDestinationChangedListener(this)
+
+        navHostFragment.childFragmentManager.setFragmentResultListener(
+            FETCH_MODEL_REQUEST_KEY, this
+        ) { _, bundle ->
+            navController.removeOnDestinationChangedListener(this)
+            navController.navigateUp()
+            val claimGreenCertificateModel: ClaimGreenCertificateModel? =
+                bundle.getParcelable(CLAIM_GREEN_CERTIFICATE_RESULT_KEY)
+            if (claimGreenCertificateModel != null) {
+                navigateToClaimCertificatePage(claimGreenCertificateModel)
+            } else {
+                val ticketingCheckInParcelable: TicketingCheckInParcelable? =
+                    bundle.getParcelable(BOOKING_SYSTEM_MODEL_RESULT_KEY)
+                if (ticketingCheckInParcelable != null) {
+                    navigateToBookingSystemModelConsentPage(ticketingCheckInParcelable)
+                }
             }
+            navController.addOnDestinationChangedListener(this)
         }
     }
 
@@ -136,10 +157,30 @@ class MainActivity : AppCompatActivity() {
 
         val qrCodeText = builder.toString()
         if (qrCodeText.isNotEmpty()) {
-            val action = CertificatesFragmentDirections.actionCertificatesFragmentToClaimCertificateFragment(qrCodeText)
+            val action = CertificatesFragmentDirections.actionCertificatesFragmentToModelFetcherDialogFragment(qrCodeText)
             navController.navigate(action)
         } else {
             Timber.d("Received empty NDEFMessage")
+        }
+    }
+
+    private fun navigateToClaimCertificatePage(claimGreenCertificateModel: ClaimGreenCertificateModel) {
+        val action =
+            CertificatesFragmentDirections.actionCertificatesFragmentToClaimCertificateFragment(claimGreenCertificateModel)
+        navController.navigate(action)
+        navController.addOnDestinationChangedListener(this)
+    }
+
+    private fun navigateToBookingSystemModelConsentPage(ticketingCheckInParcelable: TicketingCheckInParcelable) {
+        val action =
+            CertificatesFragmentDirections.actionCertificatesFragmentToBookingSystemConsentFragment(ticketingCheckInParcelable)
+        navController.navigate(action)
+        navController.addOnDestinationChangedListener(this)
+    }
+
+    override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
+        if (destination.id == R.id.certificatesFragment) {
+            checkNdefMessage(intent)
         }
     }
 }
