@@ -32,12 +32,12 @@ import dgca.wallet.app.android.databinding.ItemLimitedValidityResultBinding
 
 class BookingPortalLimitedValidityResultItemsAdapter(
     private val inflater: LayoutInflater,
-    limitedValidityResultItems: List<BookingPortalLimitedValidityResultItem>
+    ruleResultItems: List<BookingPortalRuleResultItem>
 ) :
     RecyclerView.Adapter<BookingPortalLimitedValidityResultItemsAdapter.CardViewHolder>() {
 
-    private val ruleValidationResultCards: MutableList<BookingPortalLimitedValidityResultItem> =
-        limitedValidityResultItems.toMutableList()
+    private val ruleValidationResultCards: MutableList<BookingPortalRuleResultItem> =
+        ruleResultItems.toMutableList()
 
     class CardViewHolder(private val binding: ItemLimitedValidityResultBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -49,16 +49,16 @@ class BookingPortalLimitedValidityResultItemsAdapter(
             }
         )
 
-        fun bind(bookingPortalLimitedValidityResultItem: BookingPortalLimitedValidityResultItem) {
+        fun bind(bookingPortalRuleResultItem: BookingPortalRuleResultItem) {
             binding.ruleVerificationResultHeader.text =
-                bookingPortalLimitedValidityResultItem.result.getLocalizedText(
+                bookingPortalRuleResultItem.result.getLocalizedText(
                     itemView.context
                 )
 
             binding.ruleVerificationResultHeader.setTextColor(
                 ResourcesCompat.getColor(
                     itemView.resources,
-                    when (bookingPortalLimitedValidityResultItem.result) {
+                    when (bookingPortalRuleResultItem.result) {
                         BookingPortalLimitedValidityResult.OK -> R.color.green
                         BookingPortalLimitedValidityResult.CHK -> R.color.grey_50
                         BookingPortalLimitedValidityResult.NOK -> R.color.red
@@ -66,9 +66,9 @@ class BookingPortalLimitedValidityResultItemsAdapter(
                     null
                 )
             )
-            binding.identifier.text = bookingPortalLimitedValidityResultItem.identifier
-            binding.type.text = bookingPortalLimitedValidityResultItem.type
-            binding.details.text = bookingPortalLimitedValidityResultItem.details
+            binding.identifier.text = bookingPortalRuleResultItem.identifier
+            binding.type.text = bookingPortalRuleResultItem.type
+            binding.details.text = bookingPortalRuleResultItem.details
         }
 
         companion object {
