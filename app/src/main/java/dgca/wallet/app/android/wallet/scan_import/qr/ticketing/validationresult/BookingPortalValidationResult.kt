@@ -30,15 +30,16 @@ sealed class BookingPortalValidationResult : Parcelable {
     object Valid : BookingPortalValidationResult()
 
     @Parcelize
-    object Invalid : BookingPortalValidationResult()
+    class Invalid(val bookingPortalInvalidResultItems: List<BookingPortalRuleResultItem>) :
+        BookingPortalValidationResult()
 
     @Parcelize
-    class LimitedValidity(val bookingPortalLimitedValidityResultItems: List<BookingPortalLimitedValidityResultItem>) :
+    class LimitedValidity(val bookingPortalRuleResultItems: List<BookingPortalRuleResultItem>) :
         BookingPortalValidationResult()
 }
 
 @Parcelize
-data class BookingPortalLimitedValidityResultItem(
+data class BookingPortalRuleResultItem(
     val result: BookingPortalLimitedValidityResult,
     val identifier: String,
     val details: String,
