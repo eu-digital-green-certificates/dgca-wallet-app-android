@@ -39,10 +39,14 @@ import dgca.wallet.app.android.databinding.FragmentBookingPortalValidationResult
 
 
 @AndroidEntryPoint
-class BookingPortalValidationResultFragment : BindingFragment<FragmentBookingPortalValidationResultBinding>() {
+class BookingPortalValidationResultFragment :
+    BindingFragment<FragmentBookingPortalValidationResultBinding>() {
     private val args by navArgs<BookingPortalValidationResultFragmentArgs>()
 
-    override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBookingPortalValidationResultBinding =
+    override fun onCreateBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentBookingPortalValidationResultBinding =
         FragmentBookingPortalValidationResultBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,7 +58,7 @@ class BookingPortalValidationResultFragment : BindingFragment<FragmentBookingPor
         val title = getString(
             when (args.bookingPortalValidationResult) {
                 BookingPortalValidationResult.Valid -> R.string.valid_certificate_title
-                BookingPortalValidationResult.Invalid -> R.string.invalid_certificate_title
+                is BookingPortalValidationResult.Invalid -> R.string.invalid_certificate_title
                 is BookingPortalValidationResult.LimitedValidity -> R.string.certificate_has_limitation_title
             }
         )
@@ -63,7 +67,7 @@ class BookingPortalValidationResultFragment : BindingFragment<FragmentBookingPor
         val text = getString(
             when (args.bookingPortalValidationResult) {
                 BookingPortalValidationResult.Valid -> R.string.valid_certificate_message
-                BookingPortalValidationResult.Invalid -> R.string.invalid_certificate_message
+                is BookingPortalValidationResult.Invalid -> R.string.invalid_certificate_message
                 is BookingPortalValidationResult.LimitedValidity -> R.string.certificate_has_limitation_message
             }
         )
@@ -71,7 +75,7 @@ class BookingPortalValidationResultFragment : BindingFragment<FragmentBookingPor
 
         val icon = when (args.bookingPortalValidationResult) {
             BookingPortalValidationResult.Valid -> R.drawable.icon_large_valid
-            BookingPortalValidationResult.Invalid -> R.drawable.icon_large_invalid
+            is BookingPortalValidationResult.Invalid -> R.drawable.icon_large_invalid
             is BookingPortalValidationResult.LimitedValidity -> R.drawable.icon_large_warning
         }
         binding.icon.setImageResource(icon)
@@ -79,20 +83,23 @@ class BookingPortalValidationResultFragment : BindingFragment<FragmentBookingPor
         when (args.bookingPortalValidationResult) {
             BookingPortalValidationResult.Valid -> binding.icon.backgroundTintList =
                 ResourcesCompat.getColorStateList(resources, R.color.green, null)
-            BookingPortalValidationResult.Invalid -> binding.icon.imageTintList =
-                ResourcesCompat.getColorStateList(resources, R.color.red, null)
-            is BookingPortalValidationResult.LimitedValidity -> {
-                binding.rulesList.layoutManager = LinearLayoutManager(requireContext())
-                binding.rulesList.adapter =
-                    BookingPortalLimitedValidityResultItemsAdapter(
-                        layoutInflater,
-                        (args.bookingPortalValidationResult as BookingPortalValidationResult.LimitedValidity).bookingPortalLimitedValidityResultItems
-                    )
+            is BookingPortalValidationResult.Invalid -> {
+                binding.icon.imageTintList =
+                    ResourcesCompat.getColorStateList(resources, R.color.red, null)
+                showRuleResults((args.bookingPortalValidationResult as BookingPortalValidationResult.Invalid).bookingPortalInvalidResultItems)
             }
+            is BookingPortalValidationResult.LimitedValidity ->
+                showRuleResults((args.bookingPortalValidationResult as BookingPortalValidationResult.LimitedValidity).bookingPortalRuleResultItems)
         }
     }
 
     private fun close() {
         findNavController().popBackStack(R.id.certificatesFragment, false)
+    }
+
+    private fun showRuleResults(items: List<BookingPortalRuleResultItem>) {
+        binding.rulesList.layoutManager = LinearLayoutManager(requireContext())
+        binding.rulesList.adapter =
+            BookingPortalLimitedValidityResultItemsAdapter(layoutInflater, items)
     }
 }
