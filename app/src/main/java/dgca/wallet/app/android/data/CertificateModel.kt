@@ -24,6 +24,8 @@ package dgca.wallet.app.android.data
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import dgca.wallet.app.android.toZonedDateTime
+import java.time.ZonedDateTime
 
 @Parcelize
 data class CertificateModel(
@@ -32,7 +34,7 @@ data class CertificateModel(
     val vaccinations: List<VaccinationModel>?,
     val tests: List<TestModel>?,
     val recoveryStatements: List<RecoveryModel>?
-): Parcelable {
+) : Parcelable {
 
     fun getFullName(): String {
         val givenName: String? = person.givenName?.trim()
@@ -60,6 +62,30 @@ data class CertificateModel(
 
         return stringBuilder.trim().toString()
     }
+
+    fun getValidFrom(): ZonedDateTime? = when {
+        vaccinations?.isNotEmpty() == true -> {
+            vaccinations.first().dateOfVaccination
+        }
+        recoveryStatements?.isNotEmpty() == true -> {
+            recoveryStatements.first().certificateValidFrom
+        }
+        tests?.isNotEmpty() == true -> {
+            tests.first().dateTimeOfCollection
+        }
+        else -> {
+            null
+        }
+    }?.toZonedDateTime()
+
+    fun getValidTo(): ZonedDateTime? = when {
+        recoveryStatements?.isNotEmpty() == true -> {
+            recoveryStatements.first().certificateValidUntil.toZonedDateTime()
+        }
+        else -> {
+            null
+        }
+    }
 }
 
 @Parcelize
@@ -68,7 +94,7 @@ data class PersonModel(
     val familyName: String?,
     val standardisedGivenName: String?,
     val givenName: String?
-): Parcelable
+) : Parcelable
 
 @Parcelize
 data class VaccinationModel(

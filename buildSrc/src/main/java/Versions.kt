@@ -1,6 +1,6 @@
 /*
  *  ---license-start
- *  eu-digital-green-certificates / dgca-verifier-app-android
+ *  eu-digital-green-certificates / dgca-wallet-app-android
  *  ---
  *  Copyright (C) 2021 T-Systems International GmbH and all other contributors
  *  ---
@@ -30,7 +30,8 @@ object Versions {
     const val androidx_appcompat = "1.2.0"
     const val androidx_navigation = "2.3.5"
     const val androidx_fragment_ktx = "1.3.6"
-    const val androidx_material = "1.3.0"
+    const val androidx_material = "1.4.0"
+    const val androidx_recycler_view = "1.2.1"
     const val androidx_constraint = "2.0.4"
     const val kotlinx_coroutines = "1.3.9"
     const val kotlinx_coroutines_core = "1.5.1"
@@ -76,4 +77,6 @@ object Versions {
     // Instrumented tests
     const val test_ext = "1.1.2"
     const val test_rules = "1.3.0"
+    const val mockito_core_version = "3.9.0"
+    const val mockito_kotlin_version = "3.2.0"
 }

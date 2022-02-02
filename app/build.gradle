@@ -77,6 +77,7 @@ dependencies {
     implementation Deps.androidx_core
     implementation Deps.androidx_appcompat
     implementation Deps.androidx_material
+    implementation Deps.androidx_recycler_view
     implementation Deps.androidx_constraint
     implementation Deps.androidx_navigation_fragment
     implementation Deps.androidx_navigation_ui
@@ -100,6 +101,7 @@ dependencies {
     kapt Deps.androidx_hilt_compiler
 
     implementation Deps.retrofit2
+    implementation Deps.retrofit2_converter_scalars
     implementation Deps.log_interceptor
     implementation Deps.gson_converter
     implementation Deps.jackson_kotlin
@@ -108,8 +110,12 @@ dependencies {
     implementation Deps.timber
 
     testImplementation Deps.test_junit
+    testImplementation Deps.mockito_core
+    testImplementation Deps.mockito_kotlin
+    testImplementation Deps.appache_commons
 
     androidTestImplementation Deps.test_ext
     androidTestImplementation Deps.test_rules
 
+    implementation Deps.bouncy_castle
 }
