@@ -22,7 +22,7 @@
 
 package dgca.wallet.app.android.data
 
-import dgca.wallet.app.android.certificate.CertificatesCard
+import dgca.wallet.app.android.wallet.CertificatesCard
 import dgca.wallet.app.android.data.remote.ApiResult
 import dgca.wallet.app.android.data.remote.ClaimResponse
 import dgca.wallet.app.android.model.ClaimRequest

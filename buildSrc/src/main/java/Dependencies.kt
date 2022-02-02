@@ -1,6 +1,6 @@
 /*
  *  ---license-start
- *  eu-digital-green-certificates / dgca-verifier-app-android
+ *  eu-digital-green-certificates / dgca-wallet-app-android
  *  ---
  *  Copyright (C) 2021 T-Systems International GmbH and all other contributors
  *  ---
@@ -31,6 +31,7 @@ object Deps {
     const val androidx_core = "androidx.core:core-ktx:${Versions.androidx_core}"
     const val androidx_appcompat = "androidx.appcompat:appcompat:${Versions.androidx_appcompat}"
     const val androidx_material = "com.google.android.material:material:${Versions.androidx_material}"
+    const val androidx_recycler_view = "androidx.recyclerview:recyclerview:${Versions.androidx_recycler_view}"
     const val androidx_constraint = "androidx.constraintlayout:constraintlayout:${Versions.androidx_constraint}"
     const val androidx_navigation_fragment = "androidx.navigation:navigation-fragment-ktx:${Versions.androidx_navigation}"
     const val androidx_navigation_ui = "androidx.navigation:navigation-ui-ktx:${Versions.androidx_navigation}"
@@ -42,6 +43,7 @@ object Deps {
     const val androidx_navigation = "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.androidx_navigation}"
     const val androidx_hilt_compiler = "androidx.hilt:hilt-compiler:${Versions.androidx_hilt_compiler}"
     const val retrofit2 = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
+    const val retrofit2_converter_scalars = "com.squareup.retrofit2:converter-scalars:${Versions.retrofit}"
     const val log_interceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.logging_interceptor}"
     const val biometric = "androidx.biometric:biometric-ktx:${Versions.biometric}"
 
@@ -74,6 +76,8 @@ object Deps {
     const val test_runtime_only = "org.junit.jupiter:junit-jupiter-engine:${Versions.junit_jupiter}"
     const val test_hamcrest = "org.hamcrest:hamcrest:${Versions.hamcrest}"
     const val test_runner = "androidx.test:runner:${Versions.test_rules}}"
+    const val mockito_core = "org.mockito:mockito-core:${Versions.mockito_core_version}"
+    const val mockito_kotlin = "org.mockito.kotlin:mockito-kotlin:${Versions.mockito_kotlin_version}"
 
     const val test_ext = "androidx.test.ext:junit:${Versions.test_ext}"
     const val test_rules = "androidx.test:rules:${Versions.test_rules}"

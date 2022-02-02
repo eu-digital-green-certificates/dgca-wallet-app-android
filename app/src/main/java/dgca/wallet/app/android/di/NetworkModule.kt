@@ -35,9 +35,9 @@ import dgca.wallet.app.android.data.remote.ApiService
 import dgca.wallet.app.android.network.HeaderInterceptor
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.net.URL
 import java.util.concurrent.TimeUnit
 import javax.inject.Provider
@@ -61,8 +61,12 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    internal fun provideRetrofit(converterFactory: Converter.Factory, okHttpClient: Provider<OkHttpClient>): Retrofit {
-        return createRetrofit(converterFactory, okHttpClient)
+    internal fun provideRetrofit(
+        jacksonConverterFactory: JacksonConverterFactory,
+        scalarsConverterFactory: ScalarsConverterFactory,
+        okHttpClient: Provider<OkHttpClient>
+    ): Retrofit {
+        return createRetrofit(jacksonConverterFactory, scalarsConverterFactory, okHttpClient)
     }
 
     @Singleton
@@ -130,12 +134,22 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    internal fun provideConverterFactory(objectMapper: ObjectMapper): Converter.Factory =
+    internal fun provideJacksonConverterFactory(objectMapper: ObjectMapper): JacksonConverterFactory =
         JacksonConverterFactory.create(objectMapper)
 
-    private fun createRetrofit(converterFactory: Converter.Factory, okHttpClient: Provider<OkHttpClient>): Retrofit {
+    @Singleton
+    @Provides
+    internal fun provideScalarsConverterFactory(objectMapper: ObjectMapper): ScalarsConverterFactory =
+        ScalarsConverterFactory.create()
+
+    private fun createRetrofit(
+        jacksonConverterFactory: JacksonConverterFactory,
+        scalarsConverterFactory: ScalarsConverterFactory,
+        okHttpClient: Provider<OkHttpClient>
+    ): Retrofit {
         return Retrofit.Builder()
-            .addConverterFactory(converterFactory)
+            .addConverterFactory(scalarsConverterFactory)
+            .addConverterFactory(jacksonConverterFactory)
             .baseUrl(BASE_URL)
             .callFactory {
                 okHttpClient.get().newCall(it)

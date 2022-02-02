@@ -29,21 +29,33 @@
     tools:background="@color/white">
 
     <TextView
-        android:id="@+id/scanCertificate"
-        style="@style/ButtomDialogButton"
-        android:drawablePadding="@dimen/default_padding"
-        android:gravity="center_vertical"
-        android:minHeight="48dp"
-        android:paddingHorizontal="16dp"
-        android:text="@string/scan_certificate"
-        app:drawableStartCompat="@drawable/ic_scan"
+        android:id="@+id/title"
+        style="@style/BottomDialogTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/default_padding"
+        android:text="@string/validate_or_add_to_your_wallet_app"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/scanCertificate"
+        style="@style/BottomDialogButton"
+        android:layout_marginTop="@dimen/default_margin"
+        android:drawablePadding="@dimen/default_padding"
+        android:gravity="center_vertical"
+        android:minHeight="48dp"
+        android:paddingHorizontal="@dimen/default_padding"
+        android:text="@string/scan_qr_code"
+        app:drawableStartCompat="@drawable/ic_scan"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
+    <TextView
         android:id="@+id/importImage"
-        style="@style/ButtomDialogButton"
+        style="@style/BottomDialogButton"
         android:drawablePadding="@dimen/default_padding"
         android:gravity="center_vertical"
         android:minHeight="48dp"
@@ -55,7 +67,7 @@
 
     <TextView
         android:id="@+id/importPdf"
-        style="@style/ButtomDialogButton"
+        style="@style/BottomDialogButton"
         android:drawablePadding="@dimen/default_padding"
         android:gravity="center_vertical"
         android:minHeight="48dp"
