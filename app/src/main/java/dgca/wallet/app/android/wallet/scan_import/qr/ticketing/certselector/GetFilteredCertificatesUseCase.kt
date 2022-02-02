@@ -109,7 +109,7 @@ class GetFilteredCertificatesUseCase(
         val ticketingDateOfBirth: ZonedDateTime? =
             bookingPortalEncryptionData.accessTokenContainer.accessToken.certificateData.dateOfBirth?.toZonedDateTime()
         val greenCertificateDateOfBirth: ZonedDateTime? = certificateCard.certificate.dateOfBirth.toZonedDateTime()
-        if (ticketingDateOfBirth != null && !ticketingDateOfBirth.equals(greenCertificateDateOfBirth)) return false
+        if (ticketingDateOfBirth != null && ticketingDateOfBirth != greenCertificateDateOfBirth) return false
 
         return true
     }

@@ -31,10 +31,7 @@ import dgca.verifier.app.ticketing.identity.accesstoken.GetTicketingAccessTokenU
 import dgca.verifier.app.ticketing.identity.validityserviceidentity.GetTicketingValidationServiceIdentityUseCase
 import dgca.verifier.app.ticketing.identity.accesstoken.TicketingAccessTokenResponseContainer
 import dgca.verifier.app.ticketing.identity.validityserviceidentity.TicketingValidationServiceIdentityResponse
-import dgca.wallet.app.android.model.BookingPortalEncryptionData
-import dgca.wallet.app.android.model.TicketingCheckInParcelable
-import dgca.wallet.app.android.model.TicketingValidationServiceIdentityParcelable
-import dgca.wallet.app.android.model.fromRemote
+import dgca.wallet.app.android.model.*
 import dgca.wallet.app.android.wallet.scan_import.qr.ticketing.TicketingServiceParcelable
 import dgca.wallet.app.android.wallet.scan_import.qr.ticketing.toRemote
 import kotlinx.coroutines.launch
@@ -95,7 +92,7 @@ class BookingPortalEncryptionDataFetcherViewModel @Inject constructor(
     ): TicketingAccessTokenResponseContainer? = try {
         getTicketingAccessTokenUseCase.run(
             keyPair,
-            ticketingCheckInParcelable,
+            ticketingCheckInParcelable.toRemote(),
             accessTokenTicketingServiceParcelable.toRemote(),
             validationTicketingServiceParcelable.toRemote()
         )

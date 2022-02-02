@@ -27,6 +27,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import dgca.verifier.app.ticketing.JwtTokenParser
 import dgca.verifier.app.ticketing.data.accesstoken.TicketingAccessTokenRequest
 import dgca.verifier.app.ticketing.data.accesstoken.TicketingAccessTokenResponse
+import dgca.verifier.app.ticketing.data.checkin.TicketingCheckInRemote
 import dgca.verifier.app.ticketing.data.identity.TicketingServiceRemote
 import dgca.wallet.app.android.model.TicketingCheckInParcelable
 import kotlinx.coroutines.Dispatchers
@@ -41,7 +42,7 @@ class GetTicketingAccessTokenUseCase(
 ) {
     suspend fun run(
         keyPair: KeyPair,
-        ticketingCheckInParcelable: TicketingCheckInParcelable,
+        ticketingCheckInRemote: TicketingCheckInRemote,
         accessTokenService: TicketingServiceRemote,
         validationService: TicketingServiceRemote
     ): TicketingAccessTokenResponseContainer =
@@ -53,7 +54,7 @@ class GetTicketingAccessTokenUseCase(
                 )
             val ticketingAccessTokenDataRemote: TicketingAccessTokenDataRemote = accessTokenFetcher.fetchAccessToken(
                 accessTokenService.serviceEndpoint,
-                "Bearer ${ticketingCheckInParcelable.token}",
+                "Bearer ${ticketingCheckInRemote.token}",
                 accessTokenRequest
             )
             val ticketingAccessTokenResponse: TicketingAccessTokenResponse =
