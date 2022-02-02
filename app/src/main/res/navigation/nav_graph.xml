@@ -54,6 +54,18 @@
         tools:layout="@layout/fragment_certificates">
 
         <action
+            android:id="@+id/action_certificatesFragment_to_deleteFileDialogFragment"
+            app:destination="@id/deleteFileDialogFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim" />
+
+        <action
+            android:id="@+id/action_certificatesFragment_to_deleteCertificateDialogFragment"
+            app:destination="@id/deleteCertificateDialogFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim" />
+
+        <action
             android:id="@+id/action_certificatesFragment_to_codeReaderFragment"
             app:destination="@id/codeReaderFragment"
             app:enterAnim="@animator/nav_default_pop_enter_anim"
@@ -132,6 +144,37 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
     </fragment>
+
+    <dialog
+        android:id="@+id/deleteFileDialogFragment"
+        android:name="dgca.wallet.app.android.wallet.DeleteFileDialogFragment"
+        android:label="Delete File"
+        tools:layout="@layout/dialog_fragment_delete_file">
+
+
+        <argument
+            android:name="position"
+            app:argType="integer" />
+
+        <argument
+            android:name="file"
+            app:argType="java.io.File" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/deleteCertificateDialogFragment"
+        android:name="dgca.wallet.app.android.wallet.DeleteCertificateDialogFragment"
+        android:label="Delete Certificate"
+        tools:layout="@layout/dialog_fragment_delete_certificate">
+
+        <argument
+            android:name="position"
+            app:argType="integer" />
+
+        <argument
+            android:name="itemCard"
+            app:argType="dgca.wallet.app.android.wallet.CertificatesCard$CertificateCard" />
+    </dialog>
 
     <dialog
         android:id="@+id/addNewDialogFragment"

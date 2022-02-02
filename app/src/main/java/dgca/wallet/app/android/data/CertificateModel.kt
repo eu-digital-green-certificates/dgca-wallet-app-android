@@ -23,8 +23,8 @@
 package dgca.wallet.app.android.data
 
 import android.os.Parcelable
-import dgca.wallet.app.android.toZonedDateTime
 import kotlinx.parcelize.Parcelize
+import dgca.wallet.app.android.toZonedDateTime
 import java.time.ZonedDateTime
 
 @Parcelize
@@ -35,7 +35,6 @@ data class CertificateModel(
     val tests: List<TestModel>?,
     val recoveryStatements: List<RecoveryModel>?
 ) : Parcelable {
-
 
     fun getFullName(): String {
         val givenName: String? = person.givenName?.trim()

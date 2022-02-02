@@ -67,10 +67,12 @@ class CertificateCardsAdapter(
         when (holder) {
             is ViewHolder.HeaderViewHolder -> holder.bind(certificatesCards[position])
             is ViewHolder.CertificateViewHolder -> holder.bind(
+                position,
                 certificatesCards[position] as CertificatesCard.CertificateCard,
                 certificateCardListener
             )
             is ViewHolder.FileViewHolder -> holder.bind(
+                position,
                 certificatesCards[position] as CertificatesCard.FileCard,
                 fileCardListener
             )
@@ -79,38 +81,14 @@ class CertificateCardsAdapter(
 
     override fun getItemCount(): Int = certificatesCards.size
 
-    fun deleteItem(position: Int) {
-        val item = certificatesCards.removeAt(position)
-        notifyItemRemoved(position)
-        val isListEmpty = certificatesCards.none {
-            return@none it is CertificatesCard.CertificateCard || it is CertificatesCard.FileCard
-        }
-        when (item) {
-            is CertificatesCard.CertificateCard -> {
-                certificateCardListener.onCertificateCardDeleted(item.certificateId, isListEmpty)
-            }
-            is CertificatesCard.FileCard -> {
-                fileCardListener.onFileCardDeleted(item.file, isListEmpty)
-            }
-            else -> {
-                throw IllegalStateException("This item cannot be deleted.")
-            }
-        }
-    }
-
-    fun isSwipeEnabled(position: Int): Boolean {
-        val item = certificatesCards[position]
-        return item is CertificatesCard.CertificateCard || item is CertificatesCard.FileCard
-    }
-
     interface CertificateCardListener {
         fun onCertificateCardClick(certificateId: Int)
-        fun onCertificateCardDeleted(certificateId: Int, isListEmpty: Boolean)
+        fun onCertificateCardDeleted(position: Int, certificateCard: CertificatesCard.CertificateCard)
     }
 
     interface FileCardListener {
         fun onFileCardClick(file: File)
-        fun onFileCardDeleted(file: File, isListEmpty: Boolean)
+        fun onFileCardDeleted(position: Int, file: File)
     }
 
     sealed class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -138,6 +116,7 @@ class CertificateCardsAdapter(
             private val binding = CertificateCardViewBinding.bind(itemView)
 
             fun bind(
+                position: Int,
                 certificatesCard: CertificatesCard.CertificateCard,
                 certificateCardListener: CertificateCardListener
             ) {
@@ -156,6 +135,10 @@ class CertificateCardsAdapter(
                 binding.nameView.text = certificatesCard.certificate.getFullName()
                 binding.scannedAtDateView.text = this.getCertificateDate(certificatesCard)
                 binding.root.setOnClickListener { certificateCardListener.onCertificateCardClick(certificatesCard.certificateId) }
+                binding.root.setOnLongClickListener {
+                    certificateCardListener.onCertificateCardDeleted(position, certificatesCard)
+                    return@setOnLongClickListener true
+                }
             }
         }
 
@@ -163,12 +146,17 @@ class CertificateCardsAdapter(
             private val binding = CertificateCardFileBinding.bind(itemView)
 
             fun bind(
+                position: Int,
                 fileCard: CertificatesCard.FileCard,
                 fileCardListener: FileCardListener
             ) {
                 binding.titleView.text = fileCard.file.name
                 binding.scannedAtDateView.text = fileCard.dateTaken.formatWith(YEAR_MONTH_DAY)
                 binding.root.setOnClickListener { fileCardListener.onFileCardClick(fileCard.file) }
+                binding.root.setOnLongClickListener {
+                    fileCardListener.onFileCardDeleted(position, fileCard.file)
+                    return@setOnLongClickListener true
+                }
             }
         }
         

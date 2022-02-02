@@ -42,10 +42,6 @@ import dgca.wallet.app.android.wallet.scan_import.ADD_REQUEST_KEY
 import dgca.wallet.app.android.wallet.scan_import.BOOKING_SYSTEM_MODEL_KEY
 import dgca.wallet.app.android.wallet.scan_import.qr.certificate.ClaimGreenCertificateModel
 import java.io.File
-import androidx.recyclerview.widget.ItemTouchHelper
-
-
-
 
 @AndroidEntryPoint
 class CertificatesFragment : BindingFragment<FragmentCertificatesBinding>(),
@@ -105,6 +101,18 @@ class CertificatesFragment : BindingFragment<FragmentCertificatesBinding>(),
                 }
             }
         }
+
+        setFragmentResultListener(DELETE_CERTIFICATE_REQUEST_KEY) { _, bundle ->
+            val itemPosition = bundle.getInt(DELETE_CERTIFICATE_ITEM_POSITION_RESULT_PARAM)
+            val itemCard: CertificatesCard.CertificateCard = bundle.getParcelable(DELETE_CERTIFICATE_ITEM_CARD_RESULT_PARAM)!!
+            viewModel.deleteCertificate(itemPosition, itemCard)
+        }
+
+        setFragmentResultListener(DELETE_FILE_REQUEST_KEY) { _, bundle ->
+            val position = bundle.getInt(DELETE_FILE_POSITION_RESULT_PARAM)
+            val file: File = bundle.getSerializable(DELETE_FILE_FILE_RESULT_PARAM) as File
+            viewModel.deleteFile(position, file)
+        }
     }
 
     private fun showImportDcc(claimGreenCertificateModel: ClaimGreenCertificateModel) {
@@ -126,9 +134,6 @@ class CertificatesFragment : BindingFragment<FragmentCertificatesBinding>(),
             val adapter = CertificateCardsAdapter(certificatesCards, this, this)
             binding.certificatesView.adapter = adapter
             binding.certificatesView.visibility = View.VISIBLE
-
-            val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(adapter))
-            itemTouchHelper.attachToRecyclerView(binding.certificatesView)
 
             binding.noAvailableOffersGroup.visibility = View.GONE
         } else {
@@ -175,11 +180,9 @@ class CertificatesFragment : BindingFragment<FragmentCertificatesBinding>(),
         findNavController().navigate(action)
     }
 
-    override fun onCertificateCardDeleted(certificateId: Int, isListEmpty: Boolean) {
-        viewModel.deleteCertificate(certificateId)
-        if (isListEmpty) {
-            hideCertificatesCard()
-        }
+    override fun onCertificateCardDeleted(position: Int, certificateCard: CertificatesCard.CertificateCard) {
+        val action = CertificatesFragmentDirections.actionCertificatesFragmentToDeleteCertificateDialogFragment(position, certificateCard)
+        findNavController().navigate(action)
     }
 
     override fun onFileCardClick(file: File) {
@@ -187,10 +190,8 @@ class CertificatesFragment : BindingFragment<FragmentCertificatesBinding>(),
         findNavController().navigate(action)
     }
 
-    override fun onFileCardDeleted(file: File, isListEmpty: Boolean) {
-        viewModel.deleteFile(file)
-        if (isListEmpty) {
-            hideCertificatesCard()
-        }
+    override fun onFileCardDeleted(position: Int, file: File) {
+        val action = CertificatesFragmentDirections.actionCertificatesFragmentToDeleteFileDialogFragment(position, file)
+        findNavController().navigate(action)
     }
 }

@@ -38,7 +38,11 @@ abstract class BindingDialogFragment<T : ViewBinding> : DialogFragment() {
     open fun onDestroyBinding(binding: T) {
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         val innerBinding = onCreateBinding(inflater, container)
         _binding = innerBinding
         return innerBinding.root

@@ -68,7 +68,7 @@ class DgcaWalletApplication : Application(), Configuration.Provider {
         }
 
         WorkManager.getInstance(this).apply {
-            schedulePeriodicWorker<ConfigsLoadingWorker>(WORKER_CONFIGS)
+//            schedulePeriodicWorker<ConfigsLoadingWorker>(WORKER_CONFIGS)
             schedulePeriodicWorker<RulesLoadWorker>(WORKER_RULES)
             schedulePeriodicWorker<CountriesLoadWorker>(WORKER_COUNTRIES)
             schedulePeriodicWorker<ValueSetsLoadWorker>(WORKER_VALUESETS)
