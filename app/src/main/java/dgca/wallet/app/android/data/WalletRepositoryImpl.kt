@@ -71,6 +71,16 @@ class WalletRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getNotRevokedCertificates(): List<CertificatesCard.CertificateCard>? {
+        return execute {
+            certificateDao.getAllNotRevokedCertificates()
+                .map { encryptedCertificate -> decodeCertificate(encryptedCertificate) }
+                .filter { it.second is CertificateDecodingResult.Success }
+                .map { Pair(it.first, it.second as CertificateDecodingResult.Success) }
+                .map { it.toCertificateCard() }
+        }
+    }
+
     override suspend fun getCertificatesById(certificateId: Int): CertificatesCard.CertificateCard? {
         return execute {
             certificateDao.getById(certificateId)?.let { certificateEntity ->
@@ -89,6 +99,10 @@ class WalletRepositoryImpl @Inject constructor(
         return execute {
             certificateDao.delete(certificateId) == 1
         } == true
+    }
+
+    override suspend fun setCertificatesRevokedBy(ids: Collection<Int>) {
+        certificateDao.setCertificatesRevokedBy(ids)
     }
 
     private fun decodeCertificate(encryptedCertificate: CertificateEntity): Pair<CertificateEntity, CertificateDecodingResult> {

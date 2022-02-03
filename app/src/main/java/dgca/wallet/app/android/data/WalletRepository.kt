@@ -33,7 +33,11 @@ interface WalletRepository {
 
     suspend fun getCertificates(): List<CertificatesCard.CertificateCard>?
 
+    suspend fun getNotRevokedCertificates(): List<CertificatesCard.CertificateCard>?
+
     suspend fun getCertificatesById(certificateId: Int): CertificatesCard.CertificateCard?
 
     suspend fun deleteCertificateById(certificateId: Int): Boolean
+
+    suspend fun setCertificatesRevokedBy(ids: Collection<Int>)
 }

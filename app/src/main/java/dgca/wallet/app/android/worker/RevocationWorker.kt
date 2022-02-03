@@ -28,18 +28,22 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import dgca.wallet.app.android.data.WalletRepository
+import dgca.wallet.app.android.revocation.UpdateCertificatesRevocationDataUseCase
 import timber.log.Timber
 
 @HiltWorker
 class RevocationWorker @AssistedInject constructor(
     @Assisted context: Context,
-    @Assisted workParams: WorkerParameters
+    @Assisted workParams: WorkerParameters,
+    private val updateCertificatesRevocationDataUseCase: UpdateCertificatesRevocationDataUseCase
 ) : CoroutineWorker(context, workParams) {
 
     override suspend fun doWork(): Result {
         Timber.d("Revocation list loading start")
         return try {
-            // TODO implement certificates revocation check up.
+            updateCertificatesRevocationDataUseCase.run()
+            Timber.d("Revocation loading succeeded")
             Result.success()
         } catch (error: Throwable) {
             Timber.d("Revocation loading retry")
