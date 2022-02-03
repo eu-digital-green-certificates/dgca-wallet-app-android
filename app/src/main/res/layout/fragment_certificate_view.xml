@@ -47,13 +47,26 @@
             <TextView
                 android:id="@+id/title"
                 style="@style/TextAppearance.Dgca.GeneralTitle"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:lines="1"
+                android:maxLines="2"
+                app:layout_constraintEnd_toStartOf="@id/revoked"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Vaccination1 of 2" />
+
+            <TextView
+                android:id="@+id/revoked"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/revoked"
+                app:layout_constraintStart_toEndOf="@id/title"
+                android:layout_marginStart="8dp"
+                android:textColor="@color/red"
+                android:visibility="visible"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/person_full_name"

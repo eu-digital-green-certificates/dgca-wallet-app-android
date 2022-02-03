@@ -97,6 +97,8 @@ class ViewCertificateFragment : BindingFragment<FragmentCertificateViewBinding>(
                 else -> ""
             }
 
+            binding.revoked.isVisible = it.certificatesCard.isRevoked
+
             binding.qrCode.setImageBitmap(it.qrCode)
             binding.tan.text = getString(R.string.tan_placeholder, it.certificatesCard.tan)
             binding.personFullName.text = certificate.getFullName()

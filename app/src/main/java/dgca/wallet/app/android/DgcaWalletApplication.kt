@@ -27,10 +27,7 @@ import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.*
 import dagger.hilt.android.HiltAndroidApp
 import dgca.wallet.app.android.data.ConfigRepository
-import dgca.wallet.app.android.worker.ConfigsLoadingWorker
-import dgca.wallet.app.android.worker.CountriesLoadWorker
-import dgca.wallet.app.android.worker.RulesLoadWorker
-import dgca.wallet.app.android.worker.ValueSetsLoadWorker
+import dgca.wallet.app.android.worker.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -72,6 +69,7 @@ class DgcaWalletApplication : Application(), Configuration.Provider {
             schedulePeriodicWorker<RulesLoadWorker>(WORKER_RULES)
             schedulePeriodicWorker<CountriesLoadWorker>(WORKER_COUNTRIES)
             schedulePeriodicWorker<ValueSetsLoadWorker>(WORKER_VALUESETS)
+            schedulePeriodicWorker<RevocationWorker>(WORKER_REVOCATION)
         }
     }
 
@@ -97,5 +95,6 @@ class DgcaWalletApplication : Application(), Configuration.Provider {
         const val WORKER_RULES = "workerRules"
         const val WORKER_COUNTRIES = "workerCountries"
         const val WORKER_VALUESETS = "workerValueSets"
+        const val WORKER_REVOCATION = "workerRevocation"
     }
 }

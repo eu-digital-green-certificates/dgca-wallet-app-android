@@ -111,4 +111,5 @@
     <string name="do_you_want_to_delete_this_certificate">Do you want to delete this certificate?</string>
     <string name="date">Date</string>
     <string name="from">From</string>
+    <string name="revoked">Revoked</string>
 </resources>

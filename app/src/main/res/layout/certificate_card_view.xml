@@ -41,7 +41,7 @@
         android:ellipsize="end"
         android:lines="1"
         app:layout_constraintBottom_toTopOf="@id/scannedAtDateView"
-        app:layout_constraintEnd_toStartOf="@id/arrow"
+        app:layout_constraintEnd_toStartOf="@id/revoked"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Vaccination1 of 2" />
@@ -57,7 +57,7 @@
         android:textColor="@color/blue"
         android:textSize="@dimen/text_size_big"
         app:layout_constraintBottom_toTopOf="@id/nameView"
-        app:layout_constraintEnd_toStartOf="@id/arrow"
+        app:layout_constraintEnd_toStartOf="@id/revoked"
         app:layout_constraintStart_toStartOf="@id/titleView"
         app:layout_constraintTop_toBottomOf="@id/titleView"
         tools:text="2021-05-07" />
@@ -74,7 +74,7 @@
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@id/divider"
-        app:layout_constraintEnd_toStartOf="@id/arrow"
+        app:layout_constraintEnd_toStartOf="@id/revoked"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/scannedAtDateView"
         tools:text="Surname Name. Realy long name" />
@@ -98,5 +98,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/nameView" />
+
+    <TextView
+        android:id="@+id/revoked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/revoked"
+        android:textColor="@color/red"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

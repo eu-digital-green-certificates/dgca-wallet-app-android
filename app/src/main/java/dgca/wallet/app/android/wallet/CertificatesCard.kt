@@ -41,7 +41,8 @@ sealed class CertificatesCard {
         val qrCodeText: String,
         val certificate: CertificateModel,
         val tan: String,
-        val dateTaken: LocalDate
+        val dateTaken: LocalDate,
+        val isRevoked: Boolean
     ) : CertificatesCard(), Parcelable {
 
         constructor(certificateEntity: CertificateEntity, certificateModel: CertificateModel) : this(
@@ -49,7 +50,8 @@ sealed class CertificatesCard {
             certificateEntity.qrCodeText,
             certificateModel,
             certificateEntity.tan,
-            certificateEntity.dateAdded
+            certificateEntity.dateAdded,
+            certificateEntity.isRevoked
         )
     }
 

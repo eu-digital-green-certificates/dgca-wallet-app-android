@@ -41,5 +41,8 @@ data class CertificateEntity(
     val tan: String,
 
     @ColumnInfo(name = "date_added")
-    val dateAdded: LocalDate = LocalDate.now()
+    val dateAdded: LocalDate = LocalDate.now(),
+
+    @ColumnInfo(name = "is_revoked")
+    val isRevoked: Boolean = false
 )
