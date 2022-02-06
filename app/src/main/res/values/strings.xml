@@ -112,4 +112,6 @@
     <string name="date">Date</string>
     <string name="from">From</string>
     <string name="revoked">Revoked</string>
+    <string name="certificate_has_been_revoked">Your Certificate was revoked. You will no longer be able to use it</string>
+    <string name="ok">OK</string>
 </resources>

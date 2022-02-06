@@ -135,6 +135,12 @@ class ViewCertificateFragment : BindingFragment<FragmentCertificateViewBinding>(
                 binding.nfcSwitchText.text = getString(R.string.nfc_off)
             }
         }
+
+        binding.revokedInfo.setOnClickListener {
+            CertificateHasBeenRevokedDialogFragment().show(
+                childFragmentManager, CertificateHasBeenRevokedDialogFragment.TAG
+            )
+        }
     }
 
     override fun onPause() {

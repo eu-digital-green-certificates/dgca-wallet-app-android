@@ -56,17 +56,33 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Vaccination1 of 2" />
 
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/revokedInfo"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:padding="2dp"
+                android:focusable="true"
+                android:src="@android:drawable/ic_dialog_info"
+                android:tint="@color/red"
+                app:layout_constraintBottom_toBottomOf="@id/revoked"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/revoked" />
+
             <TextView
                 android:id="@+id/revoked"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/revoked"
-                app:layout_constraintStart_toEndOf="@id/title"
                 android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/revoked"
                 android:textColor="@color/red"
                 android:visibility="visible"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toStartOf="@id/revokedInfo"
+                app:layout_constraintStart_toEndOf="@id/title"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/person_full_name"
