@@ -22,22 +22,78 @@
 
 package dgca.wallet.app.android.revocation
 
+import android.util.Base64
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import dgca.wallet.app.android.data.WalletRepository
+import dgca.wallet.app.android.data.local.Converters
+import dgca.wallet.app.android.model.generateRevocationKeystoreKeyAlias
+import dgca.wallet.app.android.wallet.scan_import.GreenCertificateFetcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import timber.log.Timber
+import java.nio.charset.StandardCharsets
+import java.security.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class UpdateCertificatesRevocationDataUseCase @Inject constructor(
-    private val walletRepository: WalletRepository
+    private val walletRepository: WalletRepository,
+    private val converters: Converters,
+    private val revocationService: RevocationService,
+    private val greenCertificateFetcher: GreenCertificateFetcher
 ) {
     suspend fun run() {
-        val notRevokedCertificatesIds = mutableSetOf<Int>()
+        withContext(Dispatchers.IO) {
+            val notRevokedCertificatesIds = mutableSetOf<Int>()
+            val revocations: MutableList<String> = mutableListOf()
 
-        walletRepository.getNotRevokedCertificates()
-            ?.forEach {
-                notRevokedCertificatesIds.add(it.certificateId)
+            val certificates = walletRepository.getNotRevokedCertificates()
+            if (certificates?.isNotEmpty() == true) {
+                val ks: KeyStore = KeyStore.getInstance("AndroidKeyStore")
+                ks.load(null)
+                certificates.forEach {
+                    notRevokedCertificatesIds.add(it.certificateId)
+
+                    val timeStamp = converters.zonedDateTimeToTimestamp(it.dateTaken)
+                    val alias = generateRevocationKeystoreKeyAlias(timeStamp)
+                    val entry: KeyStore.Entry = ks.getEntry(alias, null)
+                    val privateKey: PrivateKey = (entry as KeyStore.PrivateKeyEntry).privateKey
+                    val publicKey: PublicKey = ks.getCertificate(alias).publicKey
+                    val keyPair: KeyPair = KeyPair(publicKey, privateKey)
+                    Timber.tag("MYTAG").d("KeyPair: $keyPair")
+
+                    val certificateModel = it.certificate
+                    val certificateIdentifier = certificateModel.getCertificateIdentifier()
+                    val issuingCountry = certificateModel.getIssuingCountry()
+                    val cose = greenCertificateFetcher.fetchDataFromQrString(it.qrCodeText).first
+                    val uvciSha256 = certificateIdentifier?.toByteArray()?.toSha256HexString() ?: ""
+                    val coUvciSha256 = (issuingCountry + certificateIdentifier).toByteArray().toSha256HexString()
+                    val signatureSha256 = cose?.getDccSignatureSha256() ?: ""
+
+                    val certificateRevocationSignaturesEntity = CertificateRevocationSignaturesEntity(
+                        sub = uvciSha256,
+                        payload = listOf(uvciSha256, coUvciSha256, signatureSha256),
+                        exp = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(15)
+                    )
+
+                    val json = jacksonObjectMapper().writeValueAsString(certificateRevocationSignaturesEntity)
+                    val signature = Signature.getInstance("SHA256withECDSA")
+                    signature.initSign(privateKey)
+                    signature.update(json.toString().toByteArray(StandardCharsets.UTF_8))
+                    val sigData = signature.sign()
+
+                    val encodedEntity = Base64.encodeToString(sigData, Base64.NO_WRAP)
+                    revocations.add(encodedEntity)
+                }
+
+
+                val res = revocationService.getRevocationLists(revocations)
+                Timber.tag("MYTAG").d("Res: $res")
+
+                // TODO implement logic to set certificates revoked.
+
+                walletRepository.setCertificatesRevokedBy(notRevokedCertificatesIds)
             }
-
-        // TODO implement logic to set certificates revoked.
-
-        walletRepository.setCertificatesRevokedBy(notRevokedCertificatesIds)
+        }
     }
 }

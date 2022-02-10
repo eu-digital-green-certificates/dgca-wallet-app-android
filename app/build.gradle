@@ -107,6 +107,8 @@ dependencies {
     implementation Deps.jackson_kotlin
     implementation Deps.jackson_datetype
 
+    implementation "com.upokecenter:cbor:4.5.1"
+
     implementation Deps.timber
 
     testImplementation Deps.test_junit

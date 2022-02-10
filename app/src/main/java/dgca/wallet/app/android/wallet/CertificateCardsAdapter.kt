@@ -175,7 +175,7 @@ class CertificateCardsAdapter(
                     certificateCard.certificate.recoveryStatements.first().certificateValidFrom
                 certificateCard.certificate.tests?.first() != null ->
                     certificateCard.certificate.tests.first().dateTimeOfCollection.split("T").first()
-                else -> certificateCard.dateTaken.formatWith(dgca.wallet.app.android.YEAR_MONTH_DAY)
+                else -> certificateCard.dateTaken.toLocalDate().formatWith(dgca.wallet.app.android.YEAR_MONTH_DAY)
             }
         }
     }

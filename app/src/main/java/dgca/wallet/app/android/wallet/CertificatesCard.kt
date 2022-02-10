@@ -30,6 +30,7 @@ import java.io.File
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
+import java.time.ZonedDateTime
 
 sealed class CertificatesCard {
 
@@ -41,7 +42,7 @@ sealed class CertificatesCard {
         val qrCodeText: String,
         val certificate: CertificateModel,
         val tan: String,
-        val dateTaken: LocalDate,
+        val dateTaken: ZonedDateTime,
         val isRevoked: Boolean
     ) : CertificatesCard(), Parcelable {
 

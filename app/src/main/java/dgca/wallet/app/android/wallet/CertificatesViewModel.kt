@@ -28,6 +28,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.wallet.app.android.data.WalletRepository
+import dgca.wallet.app.android.revocation.UpdateCertificatesRevocationDataUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -36,7 +37,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CertificatesViewModel @Inject constructor(
-    private val walletRepository: WalletRepository
+    private val walletRepository: WalletRepository,
+    private val updateCertificatesRevocationDataUseCase: UpdateCertificatesRevocationDataUseCase
 ) : ViewModel() {
 
     private val _certificates = MutableLiveData<List<CertificatesCard>>()
@@ -52,6 +54,11 @@ class CertificatesViewModel @Inject constructor(
             val certificatesCards = mutableListOf<CertificatesCard>()
 
             withContext(Dispatchers.IO) {
+                try{
+                    updateCertificatesRevocationDataUseCase.run()
+                } catch (ex: Exception) {
+
+                }
                 certificateCards = walletRepository.getCertificates()
 
                 if (certificateCards?.isNotEmpty() == true) {
