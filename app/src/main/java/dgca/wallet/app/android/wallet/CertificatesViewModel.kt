@@ -37,8 +37,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CertificatesViewModel @Inject constructor(
-    private val walletRepository: WalletRepository,
-    private val updateCertificatesRevocationDataUseCase: UpdateCertificatesRevocationDataUseCase
+    private val walletRepository: WalletRepository
 ) : ViewModel() {
 
     private val _certificates = MutableLiveData<List<CertificatesCard>>()
@@ -54,11 +53,6 @@ class CertificatesViewModel @Inject constructor(
             val certificatesCards = mutableListOf<CertificatesCard>()
 
             withContext(Dispatchers.IO) {
-                try{
-                    updateCertificatesRevocationDataUseCase.run()
-                } catch (ex: Exception) {
-
-                }
                 certificateCards = walletRepository.getCertificates()
 
                 if (certificateCards?.isNotEmpty() == true) {
