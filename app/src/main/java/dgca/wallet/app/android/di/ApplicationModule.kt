@@ -30,6 +30,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import dgca.wallet.app.android.data.local.Converters
 import dgca.wallet.app.android.util.base64.Base64Coder
 import dgca.wallet.app.android.util.base64.DefaultBase64Coder
 import dgca.wallet.app.android.util.jwt.DefaultJwtTokenGenerator
@@ -83,4 +84,8 @@ class ApplicationModule {
     fun provideJwtTokenGenerator(objectMapper: ObjectMapper, base64Coder: Base64Coder): JwtTokenGenerator {
         return DefaultJwtTokenGenerator(objectMapper, base64Coder)
     }
+
+    @Singleton
+    @Provides
+    fun provideConverter(): Converters = Converters()
 }

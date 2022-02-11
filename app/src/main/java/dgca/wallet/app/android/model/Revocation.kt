@@ -23,5 +23,5 @@
 package dgca.wallet.app.android.model
 
 fun generateRevocationKeystoreKeyAlias(timestamp: Long): String {
- return   "certificate_key_alias_$timestamp"
+    return "certificate_key_alias_$timestamp"
 }

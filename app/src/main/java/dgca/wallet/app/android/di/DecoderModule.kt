@@ -114,8 +114,4 @@ object DecoderModule {
         schemaValidator,
         cborService
     )
-
-    @Singleton
-    @Provides
-    fun provideConverter(): Converters = Converters()
 }
