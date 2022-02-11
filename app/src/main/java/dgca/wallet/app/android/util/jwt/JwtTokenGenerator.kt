@@ -1,6 +1,6 @@
 /*
  *  ---license-start
- *  eu-digital-green-certificates / dcc-revocation-app-android
+ *  eu-digital-green-certificates / dgca-verifier-app-android
  *  ---
  *  Copyright (C) 2022 T-Systems International GmbH and all other contributors
  *  ---
@@ -17,20 +17,17 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by mykhailo.nester on 13/01/2022, 12:06
+ *  Created by osarapulov on 2/11/22, 6:14 PM
  */
 
-package dgca.wallet.app.android.revocation
+package dgca.wallet.app.android.util.jwt
 
-import dgca.wallet.app.android.model.ClaimRequest
-import okhttp3.ResponseBody
-import retrofit2.Response
-import retrofit2.http.*
+import dgca.verifier.app.decoder.model.KeyPairData
 
-interface RevocationService {
-
-    @POST("/revocation/lookup")
-    suspend fun getRevocationLists(
-        @Body request: List<String>
-    ): Response<List<String>>
+interface JwtTokenGenerator {
+    fun generateJwtToken(
+        jwtTokenHeader: JwtTokenHeader,
+        jwtTokenBody: Any,
+        keyPairData: KeyPairData
+    ): String
 }

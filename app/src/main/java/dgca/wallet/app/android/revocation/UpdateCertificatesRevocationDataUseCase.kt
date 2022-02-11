@@ -22,17 +22,18 @@
 
 package dgca.wallet.app.android.revocation
 
-import android.util.Base64
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import android.security.keystore.KeyProperties
+import dgca.verifier.app.decoder.getKeyPairFor
+import dgca.verifier.app.decoder.model.KeyPairData
 import dgca.wallet.app.android.data.WalletRepository
 import dgca.wallet.app.android.data.local.Converters
 import dgca.wallet.app.android.model.generateRevocationKeystoreKeyAlias
+import dgca.wallet.app.android.util.jwt.JwtTokenGenerator
+import dgca.wallet.app.android.util.jwt.JwtTokenHeader
 import dgca.wallet.app.android.wallet.scan_import.GreenCertificateFetcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import java.nio.charset.StandardCharsets
-import java.security.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -40,60 +41,73 @@ class UpdateCertificatesRevocationDataUseCase @Inject constructor(
     private val walletRepository: WalletRepository,
     private val converters: Converters,
     private val revocationService: RevocationService,
-    private val greenCertificateFetcher: GreenCertificateFetcher
+    private val greenCertificateFetcher: GreenCertificateFetcher,
+    private val jwtTokenGenerator: JwtTokenGenerator
 ) {
     suspend fun run() {
         withContext(Dispatchers.IO) {
-            val notRevokedCertificatesIds = mutableSetOf<Int>()
+            val signatureCertificateIdMap = mutableMapOf<String, Int>()
             val revocations: MutableList<String> = mutableListOf()
 
             val certificates = walletRepository.getNotRevokedCertificates()
             if (certificates?.isNotEmpty() == true) {
-                val ks: KeyStore = KeyStore.getInstance("AndroidKeyStore")
-                ks.load(null)
                 certificates.forEach {
-                    notRevokedCertificatesIds.add(it.certificateId)
 
+                    // Jwt token header
                     val timeStamp = converters.zonedDateTimeToTimestamp(it.dateTaken)
                     val alias = generateRevocationKeystoreKeyAlias(timeStamp)
-                    val entry: KeyStore.Entry = ks.getEntry(alias, null)
-                    val privateKey: PrivateKey = (entry as KeyStore.PrivateKeyEntry).privateKey
-                    val publicKey: PublicKey = ks.getCertificate(alias).publicKey
-                    val keyPair: KeyPair = KeyPair(publicKey, privateKey)
-                    Timber.tag("MYTAG").d("KeyPair: $keyPair")
+                    val keyPairData: KeyPairData = getKeyPairFor(alias)
 
+                    val apiProtocolAlgo = when (keyPairData.keyPair.public.algorithm) {
+                        KeyProperties.KEY_ALGORITHM_EC -> ES256
+                        KeyProperties.KEY_ALGORITHM_RSA -> RSA256
+                        else -> throw IllegalArgumentException()
+                    }
+                    val jwtTokenHeader = JwtTokenHeader(apiProtocolAlgo)
+
+                    // Jwt token body
                     val certificateModel = it.certificate
                     val certificateIdentifier = certificateModel.getCertificateIdentifier()
                     val issuingCountry = certificateModel.getIssuingCountry()
                     val cose = greenCertificateFetcher.fetchDataFromQrString(it.qrCodeText).first
-                    val uvciSha256 = certificateIdentifier?.toByteArray()?.toSha256HexString() ?: ""
+
+                    val uvciSha256 = certificateIdentifier?.toByteArray(StandardCharsets.UTF_8)?.toSha256HexString() ?: ""
                     val coUvciSha256 = (issuingCountry + certificateIdentifier).toByteArray().toSha256HexString()
                     val signatureSha256 = cose?.getDccSignatureSha256() ?: ""
 
-                    val certificateRevocationSignaturesEntity = CertificateRevocationSignaturesEntity(
+                    signatureCertificateIdMap[uvciSha256] = it.certificateId
+                    signatureCertificateIdMap[coUvciSha256] = it.certificateId
+                    signatureCertificateIdMap[signatureSha256] = it.certificateId
+
+                    val jwtTokenBody = CertificateRevocationSignaturesEntity(
                         sub = uvciSha256,
                         payload = listOf(uvciSha256, coUvciSha256, signatureSha256),
                         exp = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(15)
                     )
 
-                    val json = jacksonObjectMapper().writeValueAsString(certificateRevocationSignaturesEntity)
-                    val signature = Signature.getInstance("SHA256withECDSA")
-                    signature.initSign(privateKey)
-                    signature.update(json.toString().toByteArray(StandardCharsets.UTF_8))
-                    val sigData = signature.sign()
-
-                    val encodedEntity = Base64.encodeToString(sigData, Base64.NO_WRAP)
-                    revocations.add(encodedEntity)
+                    val jwtToken = jwtTokenGenerator.generateJwtToken(jwtTokenHeader, jwtTokenBody, keyPairData)
+                    revocations.add(jwtToken)
                 }
 
 
-                val res = revocationService.getRevocationLists(revocations)
-                Timber.tag("MYTAG").d("Res: $res")
+                val revokedCertificateSignaturesListResult = revocationService.getRevocationLists(revocations)
+                if (!revokedCertificateSignaturesListResult.isSuccessful) {
+                    throw IllegalStateException()
+                }
 
-                // TODO implement logic to set certificates revoked.
+                val revokedCertificateIds = mutableListOf<Int>()
+                revokedCertificateSignaturesListResult.body()!!.forEach() {
+                    val certificateId = signatureCertificateIdMap[it]!!
+                    revokedCertificateIds.add(certificateId)
+                }
 
-                walletRepository.setCertificatesRevokedBy(notRevokedCertificatesIds)
+                walletRepository.setCertificatesRevokedBy(revokedCertificateIds)
             }
         }
+    }
+
+    companion object {
+        const val ES256 = "ES256"
+        const val RSA256 = "RSA256"
     }
 }

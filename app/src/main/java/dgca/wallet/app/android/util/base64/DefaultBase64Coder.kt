@@ -1,6 +1,6 @@
 /*
  *  ---license-start
- *  eu-digital-green-certificates / dcc-revocation-app-android
+ *  eu-digital-green-certificates / dgca-verifier-app-android
  *  ---
  *  Copyright (C) 2022 T-Systems International GmbH and all other contributors
  *  ---
@@ -17,20 +17,19 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by mykhailo.nester on 13/01/2022, 12:06
+ *  Created by osarapulov on 2/11/22, 7:08 PM
  */
 
-package dgca.wallet.app.android.revocation
+package dgca.wallet.app.android.util.base64
 
-import dgca.wallet.app.android.model.ClaimRequest
-import okhttp3.ResponseBody
-import retrofit2.Response
-import retrofit2.http.*
+import android.util.Base64
 
-interface RevocationService {
+class DefaultBase64Coder : Base64Coder {
+    override fun toBase64(input: ByteArray, flags: Int): String {
+        return Base64.encodeToString(input, Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP)
+    }
 
-    @POST("/revocation/lookup")
-    suspend fun getRevocationLists(
-        @Body request: List<String>
-    ): Response<List<String>>
+    override fun toBase64(input: String, flags: Int): String {
+        return toBase64(input.toByteArray(), flags)
+    }
 }

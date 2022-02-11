@@ -72,7 +72,7 @@ class ClaimCertificateViewModel @Inject constructor(
 
                 val currentTimeStamp = System.currentTimeMillis()
                 val alias = generateRevocationKeystoreKeyAlias(currentTimeStamp)
-                val keyPairData = claimGreenCertificateModel.cose.generateKeyPair(alias)
+                val keyPairData = claimGreenCertificateModel.cose.generateKeyPairFor(alias)
                 val keyPair: KeyPair? = keyPairData?.keyPair
                 val sigAlg = keyPairData?.algo
 
