@@ -26,6 +26,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.LocalDate
+import java.time.ZonedDateTime
 
 @Entity(tableName = "certificates")
 data class CertificateEntity(
@@ -41,7 +42,7 @@ data class CertificateEntity(
     val tan: String,
 
     @ColumnInfo(name = "date_added")
-    val dateAdded: LocalDate = LocalDate.now(),
+    val dateAdded: ZonedDateTime,
 
     @ColumnInfo(name = "is_revoked")
     val isRevoked: Boolean = false

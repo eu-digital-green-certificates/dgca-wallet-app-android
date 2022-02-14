@@ -37,6 +37,7 @@ import dgca.wallet.app.android.data.remote.ApiResult
 import dgca.wallet.app.android.data.remote.ClaimResponse
 import dgca.wallet.app.android.model.ClaimRequest
 import dgca.wallet.app.android.model.PublicKeyData
+import dgca.wallet.app.android.model.generateRevocationKeystoreKeyAlias
 import dgca.wallet.app.android.wallet.scan_import.GreenCertificateFetcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -69,7 +70,9 @@ class ClaimCertificateViewModel @Inject constructor(
                 val certHash = claimGreenCertificateModel.cose.getValidationDataFromCOSE().toHash()
                 val tanHash = tan.toByteArray().toHash()
 
-                val keyPairData = claimGreenCertificateModel.cose.generateKeyPair()
+                val currentTimeStamp = System.currentTimeMillis()
+                val alias = generateRevocationKeystoreKeyAlias(currentTimeStamp)
+                val keyPairData = claimGreenCertificateModel.cose.generateKeyPairFor(alias)
                 val keyPair: KeyPair? = keyPairData?.keyPair
                 val sigAlg = keyPairData?.algo
 
@@ -97,7 +100,8 @@ class ClaimCertificateViewModel @Inject constructor(
                 claimResult = walletRepository.claimCertificate(
                     config.getClaimUrl(BuildConfig.VERSION_NAME),
                     prefixValidationService.encode(claimGreenCertificateModel.qrCodeText),
-                    request
+                    request,
+                    currentTimeStamp
                 )
             }
             _inProgress.value = false

@@ -129,11 +129,6 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    internal fun provideObjectMapper(): ObjectMapper =
-        ObjectMapper().apply { findAndRegisterModules() }
-
-    @Singleton
-    @Provides
     internal fun provideJacksonConverterFactory(objectMapper: ObjectMapper): JacksonConverterFactory =
         JacksonConverterFactory.create(objectMapper)
 

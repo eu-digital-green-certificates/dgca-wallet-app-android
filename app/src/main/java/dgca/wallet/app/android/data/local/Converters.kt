@@ -23,21 +23,29 @@
 package dgca.wallet.app.android.data.local
 
 import androidx.room.TypeConverter
+import dgca.verifier.app.engine.UTC_ZONE_ID
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
 
 class Converters {
 
     @TypeConverter
-    fun fromTimestamp(value: Long?): LocalDate =
+    fun timestampToZonedDateTime(value: Long?): ZonedDateTime =
         if (value != null) {
-            Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDate()
+            val instant: Instant = Instant.EPOCH.plus(value, ChronoUnit.MICROS)
+            ZonedDateTime.ofInstant(instant, UTC_ZONE_ID)
         } else {
-            LocalDate.now()
+            ZonedDateTime.now(UTC_ZONE_ID)
         }
 
     @TypeConverter
-    fun dateToTimestamp(date: LocalDate?): Long =
-        date?.atStartOfDay()?.atZone(ZoneId.systemDefault())?.toInstant()?.toEpochMilli() ?: System.currentTimeMillis()
+    fun zonedDateTimeToTimestamp(zonedDateTime: ZonedDateTime?): Long =
+        ChronoUnit.MICROS.between(
+            Instant.EPOCH,
+            (zonedDateTime?.withZoneSameInstant(UTC_ZONE_ID)
+                ?: ZonedDateTime.now(UTC_ZONE_ID)).toInstant()
+        )
 }

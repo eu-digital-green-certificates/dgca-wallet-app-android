@@ -44,6 +44,7 @@ import dgca.verifier.app.decoder.prefixvalidation.PrefixValidationService
 import dgca.verifier.app.decoder.schema.DefaultSchemaValidator
 import dgca.verifier.app.decoder.schema.SchemaValidator
 import dgca.verifier.app.decoder.services.X509
+import dgca.wallet.app.android.data.local.Converters
 import dgca.wallet.app.android.wallet.scan_import.DefaultGreenCertificateFetcher
 import dgca.wallet.app.android.wallet.scan_import.GreenCertificateFetcher
 import javax.inject.Singleton
