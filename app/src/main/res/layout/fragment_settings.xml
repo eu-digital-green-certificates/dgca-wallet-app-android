@@ -77,6 +77,24 @@
         android:textSize="18sp"
         app:layout_constraintTop_toBottomOf="@+id/privacyInformation" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/updateRevocationState"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableEnd="@drawable/ic_synchronize_solid"
+        android:gravity="start|center"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:letterSpacing="0"
+        android:minHeight="48dp"
+        android:paddingHorizontal="@dimen/default_padding"
+        android:text="@string/update_revocation_state"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@+id/version" />
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/materialTextView"
         android:layout_width="match_parent"
