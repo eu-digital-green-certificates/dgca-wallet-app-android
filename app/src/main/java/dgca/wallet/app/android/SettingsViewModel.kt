@@ -32,6 +32,7 @@ import dgca.wallet.app.android.revocation.UpdateCertificatesRevocationDataUseCas
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -46,7 +47,11 @@ class SettingsViewModel @Inject constructor(
     fun updateRevocationState() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                updateCertificatesRevocationDataUseCase.run()
+                try {
+                    updateCertificatesRevocationDataUseCase.run()
+                } catch (exception: Exception) {
+                    Timber.e(exception)
+                }
                 _lastRevocationStateUpdateTimeStamp.postValue(preferences.lastRevocationStateUpdateTimeStamp)
             }
         }
