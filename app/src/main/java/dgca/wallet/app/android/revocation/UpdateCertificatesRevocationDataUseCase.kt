@@ -34,8 +34,8 @@ import dgca.wallet.app.android.util.jwt.JwtTokenHeader
 import dgca.wallet.app.android.wallet.scan_import.GreenCertificateFetcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.nio.charset.StandardCharsets
 import java.time.ZonedDateTime
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -74,10 +74,11 @@ class UpdateCertificatesRevocationDataUseCase @Inject constructor(
                     val issuingCountry = certificateModel.getIssuingCountry()
                     val cose = greenCertificateFetcher.fetchDataFromQrString(it.qrCodeText).first
 
-                    val uvciSha256Full = certificateIdentifier?.toByteArray(StandardCharsets.UTF_8)?.toSha256HexString() ?: ""
-                    val uvciSha256 = certificateIdentifier?.toByteArray(StandardCharsets.UTF_8)?.toSha256ShortHexString() ?: ""
-                    val coUvciSha256 = (issuingCountry + certificateIdentifier).toByteArray().toSha256ShortHexString()
-                    val signatureSha256 = cose?.toSha256ShortHexString() ?: ""
+                    val uvciSha256Full = certificateIdentifier?.toByteArray()?.toFullSha256HexString() ?: ""
+                    val uvciSha256 = certificateIdentifier?.toByteArray()?.toSha256HexString() ?: ""
+                    val coUvciSha256 = (issuingCountry?.toUpperCase(Locale.getDefault()) + certificateIdentifier).toByteArray()
+                        .toSha256HexString()
+                    val signatureSha256 = cose?.getDccSignatureSha256() ?: ""
 
                     signatureCertificateIdMap[uvciSha256] = it.certificateId
                     signatureCertificateIdMap[coUvciSha256] = it.certificateId

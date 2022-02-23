@@ -66,21 +66,21 @@ private fun getAlgoFromHeader(protectedHeader: ByteArray, unprotectedHeader: CBO
     }
 }
 
-fun ByteArray.toSha256HexString(): String = sha256()?.joinToString("") { "%02x".format(it) } ?: ""
+fun ByteArray.toFullSha256HexString(): String = sha256()?.joinToString("") { "%02x".format(it) } ?: ""
 
-fun ByteArray.toSha256ShortHexString(): String = sha256Short()?.joinToString("") { "%02x".format(it) } ?: ""
+fun ByteArray.toSha256HexString(): String = sha256Short()?.joinToString("") { "%02x".format(it) } ?: ""
 
-fun ByteArray.sha256(): ByteArray? {
+//  Cut off the first 128 bit, gateway has a definition that just the first 128 bits are shared
+fun ByteArray.sha256Short(): ByteArray? {
     return try {
-        MessageDigest.getInstance("SHA-256").digest(this)
+        MessageDigest.getInstance("SHA-256").digest(this).copyOfRange(0, 16)
     } catch (e: NoSuchAlgorithmException) {
         null
     }
 }
-
-fun ByteArray.sha256Short(): ByteArray? {
+fun ByteArray.sha256(): ByteArray? {
     return try {
-        MessageDigest.getInstance("SHA-256").digest(this).copyOfRange(0, 16)
+        MessageDigest.getInstance("SHA-256").digest(this)
     } catch (e: NoSuchAlgorithmException) {
         null
     }
