@@ -28,9 +28,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import dgca.wallet.app.android.data.local.Converters
+import dgca.wallet.app.android.wallet.scan_import.*
 import dgca.wallet.app.android.wallet.view.certificate.DefaultShareImageIntentProvider
 import dgca.wallet.app.android.wallet.view.certificate.ShareImageIntentProvider
-import dgca.wallet.app.android.wallet.scan_import.*
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -57,4 +58,8 @@ class ApplicationModule {
     @Singleton
     @Provides
     fun provideUriProvider(@ApplicationContext context: Context): UriProvider = DefaultUriProvider(context)
+
+    @Singleton
+    @Provides
+    fun provideConverter(): Converters = Converters()
 }

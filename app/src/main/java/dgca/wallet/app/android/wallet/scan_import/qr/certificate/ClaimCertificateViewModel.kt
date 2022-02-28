@@ -27,8 +27,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dgca.verifier.app.decoder.*
+import dgca.verifier.app.decoder.generateClaimSignature
+import dgca.verifier.app.decoder.generateKeyPairFor
+import dgca.verifier.app.decoder.getValidationDataFromCOSE
 import dgca.verifier.app.decoder.prefixvalidation.PrefixValidationService
+import dgca.verifier.app.decoder.toHash
 import dgca.wallet.app.android.BuildConfig
 import dgca.wallet.app.android.Event
 import dgca.wallet.app.android.data.ConfigRepository
@@ -42,7 +45,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.security.*
+import java.security.KeyPair
 import java.util.*
 import javax.inject.Inject
 
@@ -69,7 +72,9 @@ class ClaimCertificateViewModel @Inject constructor(
                 val certHash = claimGreenCertificateModel.cose.getValidationDataFromCOSE().toHash()
                 val tanHash = tan.toByteArray().toHash()
 
-                val keyPairData = claimGreenCertificateModel.cose.generateKeyPair()
+                val currentTimeStamp = System.currentTimeMillis()
+                val alias = "certificate_key_alias_$currentTimeStamp"
+                val keyPairData = claimGreenCertificateModel.cose.generateKeyPairFor(alias)
                 val keyPair: KeyPair? = keyPairData?.keyPair
                 val sigAlg = keyPairData?.algo
 
@@ -97,7 +102,8 @@ class ClaimCertificateViewModel @Inject constructor(
                 claimResult = walletRepository.claimCertificate(
                     config.getClaimUrl(BuildConfig.VERSION_NAME),
                     prefixValidationService.encode(claimGreenCertificateModel.qrCodeText),
-                    request
+                    request,
+                    currentTimeStamp
                 )
             }
             _inProgress.value = false
