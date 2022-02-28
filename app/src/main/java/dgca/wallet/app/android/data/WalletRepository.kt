@@ -29,7 +29,7 @@ import dgca.wallet.app.android.model.ClaimRequest
 
 interface WalletRepository {
 
-    suspend fun claimCertificate(url: String, qrCode: String, request: ClaimRequest): ApiResult<ClaimResponse>
+    suspend fun claimCertificate(url: String, qrCode: String, request: ClaimRequest, timeStamp: Long): ApiResult<ClaimResponse>
 
     suspend fun getCertificates(): List<CertificatesCard.CertificateCard>?
 

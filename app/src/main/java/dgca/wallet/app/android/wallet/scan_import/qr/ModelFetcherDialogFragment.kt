@@ -74,6 +74,10 @@ class ModelFetcherDialogFragment : BindingDialogFragment<DialogFragmentModelFetc
                     FETCH_MODEL_REQUEST_KEY,
                     bundleOf(CLAIM_GREEN_CERTIFICATE_RESULT_KEY to modelFetcherResult.toClaimCertificateModel())
                 )
+                is ModelFetcherResult.BookingSystemModelRecognised -> setFragmentResult(
+                    FETCH_MODEL_REQUEST_KEY,
+                    bundleOf(BOOKING_SYSTEM_MODEL_RESULT_KEY to modelFetcherResult.ticketingCheckInParcelable)
+                )
                 else -> setFragmentResult(FETCH_MODEL_REQUEST_KEY, bundleOf())
             }
         }

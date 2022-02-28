@@ -27,6 +27,7 @@ import dgca.verifier.app.decoder.CertificateDecodingResult
 import dgca.wallet.app.android.wallet.CertificatesCard
 import dgca.wallet.app.android.data.local.CertificateDao
 import dgca.wallet.app.android.data.local.CertificateEntity
+import dgca.wallet.app.android.data.local.Converters
 import dgca.wallet.app.android.data.local.toCertificateModel
 import dgca.wallet.app.android.data.remote.ApiResult
 import dgca.wallet.app.android.data.remote.ApiService
@@ -40,9 +41,12 @@ class WalletRepositoryImpl @Inject constructor(
     private val certificateDao: CertificateDao,
     private val keyStoreCryptor: KeyStoreCryptor,
     private val certificateDecoder: CertificateDecoder,
+    private val converters: Converters
 ) : BaseRepository(), WalletRepository {
 
-    override suspend fun claimCertificate(url: String, qrCode: String, request: ClaimRequest): ApiResult<ClaimResponse> {
+    override suspend fun claimCertificate(
+        url: String, qrCode: String, request: ClaimRequest, timeStamp: Long
+    ): ApiResult<ClaimResponse> {
         return doApiBackgroundWork { apiService.claimCertificate(url, request) }.also { result ->
             result.success?.let {
                 val tan = result.rawResponse?.body()?.tan ?: ""
@@ -53,7 +57,8 @@ class WalletRepositoryImpl @Inject constructor(
                     certificateDao.insert(
                         CertificateEntity(
                             qrCodeText = codeEncrypted,
-                            tan = tanEncrypted
+                            tan = tanEncrypted,
+                            dateAdded = converters.timestampToZonedDateTime(timeStamp)
                         )
                     )
                 }

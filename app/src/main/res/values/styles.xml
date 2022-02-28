@@ -64,4 +64,21 @@
         <item name="android:paddingHorizontal">@dimen/default_padding</item>
         <item name="android:textColor">@color/black</item>
     </style>
+
+    <style name="BookingSystemHeaderTitle">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/text_size_big</item>
+    </style>
+
+    <style name="BookingSystemTitle">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
+    </style>
+
+    <style name="BookingSystemContent">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
+    </style>
 </resources>
