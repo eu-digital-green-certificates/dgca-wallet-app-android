@@ -30,6 +30,9 @@ interface CertificateDao {
     @Query("SELECT * FROM certificates")
     suspend fun getAll(): List<CertificateEntity>
 
+    @Query("SELECT * FROM certificates WHERE is_revoked != 1")
+    suspend fun getAllNotRevokedCertificates(): List<CertificateEntity>
+
     @Query("SELECT * FROM certificates WHERE id LIKE :id LIMIT 1")
     suspend fun getById(id: Int): CertificateEntity?
 
@@ -49,4 +52,7 @@ interface CertificateDao {
             update(entity)
         }
     }
+
+    @Query("UPDATE certificates SET is_revoked=1 WHERE id IN (:ids)")
+    fun setCertificatesRevokedBy(ids: Collection<Int>)
 }

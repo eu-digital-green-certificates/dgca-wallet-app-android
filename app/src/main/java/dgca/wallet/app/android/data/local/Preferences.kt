@@ -33,6 +33,8 @@ interface Preferences {
     var lastCountriesSyncTimeMillis: Long
 
     var selectedCountryIsoCode: String?
+
+    var lastRevocationStateUpdateTimeStamp: Long
 }
 
 /**
@@ -55,10 +57,17 @@ class PreferencesImpl(context: Context) : Preferences {
         KEY_SELECTED_COUNTRY_ISO_CODE
     )
 
+    override var lastRevocationStateUpdateTimeStamp: Long by LongPreference(
+        preferences,
+        KEY_REVOCATION_STATE_UPDATE_TIME_STAMP,
+        -1
+    )
+
     companion object {
         private const val USER_PREF = "dgca.wallet.app.pref"
         private const val KEY_COUNTRIES_KEYS_SYNC_TIME_MILLIS = "last_countries_sync_time_millis"
         private const val KEY_SELECTED_COUNTRY_ISO_CODE = "selected_country_iso_code"
+        private const val KEY_REVOCATION_STATE_UPDATE_TIME_STAMP = "last_revocation_state_update_time_stamp"
     }
 }
 

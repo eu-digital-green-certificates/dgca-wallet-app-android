@@ -48,33 +48,37 @@ class CertificatesViewModel @Inject constructor(
     fun fetchCertificates(filesDir: File) {
         _inProgress.value = true
         viewModelScope.launch {
-            val certificateCards = walletRepository.getCertificates()
+            val certificateCards: List<CertificatesCard.CertificateCard>?
             val certificatesCards = mutableListOf<CertificatesCard>()
-            if (certificateCards?.isNotEmpty() == true) {
-                certificatesCards.add(CertificatesCard.CertificatesHeader)
-                certificatesCards.addAll(certificateCards)
-            }
 
-            val imagesDir = File(filesDir, "images")
-            val imageFileCards = mutableListOf<CertificatesCard.FileCard>()
-            val pdfFileCards = mutableListOf<CertificatesCard.FileCard>()
-            imagesDir.listFiles()?.reversed()?.forEach { file ->
-                when (file.extension) {
-                    IMAGE_FILES_EXT -> imageFileCards.add(CertificatesCard.FileCard(file))
-                    PDF_FILES_EXT -> pdfFileCards.add(CertificatesCard.FileCard(file))
-                    else -> {
+            withContext(Dispatchers.IO) {
+                certificateCards = walletRepository.getCertificates()
+
+                if (certificateCards?.isNotEmpty() == true) {
+                    certificatesCards.add(CertificatesCard.CertificatesHeader)
+                    certificatesCards.addAll(certificateCards)
+                }
+
+                val imagesDir = File(filesDir, "images")
+                val imageFileCards = mutableListOf<CertificatesCard.FileCard>()
+                val pdfFileCards = mutableListOf<CertificatesCard.FileCard>()
+                imagesDir.listFiles()?.reversed()?.forEach { file ->
+                    when (file.extension) {
+                        IMAGE_FILES_EXT -> imageFileCards.add(CertificatesCard.FileCard(file))
+                        PDF_FILES_EXT -> pdfFileCards.add(CertificatesCard.FileCard(file))
+                        else -> Unit
                     }
                 }
-            }
 
-            if (imageFileCards.isNotEmpty()) {
-                certificatesCards.add(CertificatesCard.ImagesHeader)
-                certificatesCards.addAll(imageFileCards)
-            }
+                if (imageFileCards.isNotEmpty()) {
+                    certificatesCards.add(CertificatesCard.ImagesHeader)
+                    certificatesCards.addAll(imageFileCards)
+                }
 
-            if (pdfFileCards.isNotEmpty()) {
-                certificatesCards.add(CertificatesCard.PdfsHeader)
-                certificatesCards.addAll(pdfFileCards)
+                if (pdfFileCards.isNotEmpty()) {
+                    certificatesCards.add(CertificatesCard.PdfsHeader)
+                    certificatesCards.addAll(pdfFileCards)
+                }
             }
 
             _inProgress.value = false

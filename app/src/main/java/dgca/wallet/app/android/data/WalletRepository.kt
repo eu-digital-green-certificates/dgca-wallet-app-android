@@ -22,10 +22,10 @@
 
 package dgca.wallet.app.android.data
 
-import dgca.wallet.app.android.wallet.CertificatesCard
 import dgca.wallet.app.android.data.remote.ApiResult
 import dgca.wallet.app.android.data.remote.ClaimResponse
 import dgca.wallet.app.android.model.ClaimRequest
+import dgca.wallet.app.android.wallet.CertificatesCard
 
 interface WalletRepository {
 
@@ -33,7 +33,11 @@ interface WalletRepository {
 
     suspend fun getCertificates(): List<CertificatesCard.CertificateCard>?
 
+    suspend fun getNotRevokedCertificates(): List<CertificatesCard.CertificateCard>?
+
     suspend fun getCertificatesById(certificateId: Int): CertificatesCard.CertificateCard?
 
     suspend fun deleteCertificateById(certificateId: Int): Boolean
+
+    suspend fun setCertificatesRevokedBy(ids: Collection<Int>)
 }

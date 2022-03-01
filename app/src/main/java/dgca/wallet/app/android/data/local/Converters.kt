@@ -25,6 +25,8 @@ package dgca.wallet.app.android.data.local
 import androidx.room.TypeConverter
 import dgca.verifier.app.engine.UTC_ZONE_ID
 import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 

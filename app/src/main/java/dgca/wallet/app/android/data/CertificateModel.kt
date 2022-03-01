@@ -26,6 +26,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import dgca.wallet.app.android.toZonedDateTime
 import java.time.ZonedDateTime
+import java.util.*
 
 @Parcelize
 data class CertificateModel(
@@ -86,6 +87,32 @@ data class CertificateModel(
             null
         }
     }
+
+    fun getCertificateIdentifier(): String? = when {
+        vaccinations?.isNotEmpty() == true -> {
+            vaccinations.first().certificateIdentifier
+        }
+        recoveryStatements?.isNotEmpty() == true -> {
+            recoveryStatements.first().certificateIdentifier
+        }
+        tests?.isNotEmpty() == true -> {
+            tests.first().certificateIdentifier
+        }
+        else -> {
+            null
+        }
+    }
+
+    fun getIssuingCountry(): String? = try {
+        when {
+            vaccinations?.isNotEmpty() == true -> vaccinations.last().countryOfVaccination
+            tests?.isNotEmpty() == true -> tests.last().countryOfVaccination
+            recoveryStatements?.isNotEmpty() == true -> recoveryStatements.last().countryOfVaccination
+            else -> ""
+        }
+    } catch (ex: Exception) {
+        null
+    }?.toLowerCase(Locale.ROOT)
 }
 
 @Parcelize

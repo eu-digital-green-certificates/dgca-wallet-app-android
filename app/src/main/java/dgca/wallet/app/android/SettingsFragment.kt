@@ -25,22 +25,42 @@ package dgca.wallet.app.android
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.text.toSpannable
+import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.base.BindingFragment
+import dgca.wallet.app.android.data.local.Converters
+import dgca.wallet.app.android.data.local.Preferences
 import dgca.wallet.app.android.databinding.FragmentSettingsBinding
+import dgca.wallet.app.android.util.applyStyle
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingsFragment : BindingFragment<FragmentSettingsBinding>() {
+
+    @Inject
+    lateinit var preferences: Preferences
+    private val converters: Converters = Converters()
+
+    private val viewModel by viewModels<SettingsViewModel>()
 
     override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSettingsBinding =
         FragmentSettingsBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
+
+        viewModel.lastRevocationStateUpdateTimeStamp.observe(viewLifecycleOwner) {
+            setUpUpdateRevocationStateButton(it)
+        }
 
         binding.privacyInformation.setOnClickListener { launchWebIntent() }
         binding.licenses.setOnClickListener { openLicenses() }
@@ -50,6 +70,34 @@ class SettingsFragment : BindingFragment<FragmentSettingsBinding>() {
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
         menu.findItem(R.id.settings).isVisible = false
+    }
+
+    private fun setUpUpdateRevocationStateButton(lastUpdatedTimeStamp: Long) {
+        val subString = if (lastUpdatedTimeStamp > 0) {
+            val localDateTime = Instant.ofEpochMilli(lastUpdatedTimeStamp / 1000).atZone(ZoneId.systemDefault()).toLocalDateTime()
+                .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+            getString(R.string.last_updated_at, localDateTime)
+        } else {
+            getString(R.string.wasnt_updated_yet)
+        }
+
+        val context = requireContext()
+        val spannable = SpannableStringBuilder()
+            .append(
+                getString(R.string.update_revocation_state).toSpannable()
+                    .applyStyle(context, R.style.TextAppearance_Dgca_SettingsButtonHeader)
+            )
+            .append("\n")
+            .append(
+                subString.toSpannable()
+                    .applyStyle(context, R.style.TextAppearance_Dgca_SettingsButtonSubHeader)
+            )
+
+        binding.updateRevocationState.text = spannable
+
+        binding.updateRevocationState.setOnClickListener {
+            viewModel.updateRevocationState()
+        }
     }
 
     private fun launchWebIntent() {

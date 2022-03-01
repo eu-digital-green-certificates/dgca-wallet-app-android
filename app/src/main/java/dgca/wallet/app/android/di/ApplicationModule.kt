@@ -23,12 +23,18 @@
 package dgca.wallet.app.android.di
 
 import android.content.Context
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dgca.wallet.app.android.data.local.Converters
+import dgca.wallet.app.android.util.base64.Base64Coder
+import dgca.wallet.app.android.util.base64.DefaultBase64Coder
+import dgca.wallet.app.android.util.jwt.DefaultJwtTokenGenerator
+import dgca.wallet.app.android.util.jwt.JwtTokenGenerator
 import dgca.wallet.app.android.wallet.scan_import.*
 import dgca.wallet.app.android.wallet.view.certificate.DefaultShareImageIntentProvider
 import dgca.wallet.app.android.wallet.view.certificate.ShareImageIntentProvider
@@ -58,6 +64,26 @@ class ApplicationModule {
     @Singleton
     @Provides
     fun provideUriProvider(@ApplicationContext context: Context): UriProvider = DefaultUriProvider(context)
+
+    @Singleton
+    @Provides
+    fun provideObjectMapper(): ObjectMapper {
+        return jacksonObjectMapper().apply {
+            findAndRegisterModules()
+        }
+    }
+
+    @Singleton
+    @Provides
+    fun provideBase64Code(): Base64Coder {
+        return DefaultBase64Coder()
+    }
+
+    @Singleton
+    @Provides
+    fun provideJwtTokenGenerator(objectMapper: ObjectMapper, base64Coder: Base64Coder): JwtTokenGenerator {
+        return DefaultJwtTokenGenerator(objectMapper, base64Coder)
+    }
 
     @Singleton
     @Provides

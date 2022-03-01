@@ -97,6 +97,8 @@ class ViewCertificateFragment : BindingFragment<FragmentCertificateViewBinding>(
                 else -> ""
             }
 
+            binding.revocationData.isVisible = it.certificatesCard.isRevoked
+
             binding.qrCode.setImageBitmap(it.qrCode)
             binding.tan.text = getString(R.string.tan_placeholder, it.certificatesCard.tan)
             binding.personFullName.text = certificate.getFullName()
@@ -132,6 +134,12 @@ class ViewCertificateFragment : BindingFragment<FragmentCertificateViewBinding>(
                 stopNfcService()
                 binding.nfcSwitchText.text = getString(R.string.nfc_off)
             }
+        }
+
+        binding.revokedInfo.setOnClickListener {
+            CertificateHasBeenRevokedDialogFragment().show(
+                childFragmentManager, CertificateHasBeenRevokedDialogFragment.TAG
+            )
         }
     }
 

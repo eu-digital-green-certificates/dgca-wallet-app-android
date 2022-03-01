@@ -1,8 +1,8 @@
 /*
  *  ---license-start
- *  eu-digital-green-certificates / dgca-verifier-app-android
+ *  eu-digital-green-certificates / dcc-revocation-app-android
  *  ---
- *  Copyright (C) 2021 T-Systems International GmbH and all other contributors
+ *  Copyright (C) 2022 T-Systems International GmbH and all other contributors
  *  ---
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,20 +17,20 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by Mykhailo Nester on 4/23/21 9:49 AM
+ *  Created by mykhailo.nester on 13/01/2022, 12:06
  */
 
-import org.gradle.api.JavaVersion
+package dgca.wallet.app.android.revocation
 
-object Config {
-    const val minSdk = 26
-    const val compileSdk = 29
-    const val targetSdk = 29
-    val javaVersion = JavaVersion.VERSION_1_8
+import dgca.wallet.app.android.model.ClaimRequest
+import okhttp3.ResponseBody
+import retrofit2.Response
+import retrofit2.http.*
 
-    const val versionCode = 36
-    const val versionName = "1.3.0"
+interface RevocationService {
 
-    const val androidTestInstrumentation = "androidx.test.runner.AndroidJUnitRunner"
-    const val proguardConsumerRules = "consumer-rules.pro"
+    @POST("/revocation/lookup")
+    suspend fun getRevocationLists(
+        @Body request: List<String>
+    ): Response<List<String>>
 }

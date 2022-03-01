@@ -25,6 +25,8 @@ package dgca.wallet.app.android.wallet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import dgca.wallet.app.android.R
 import dgca.wallet.app.android.databinding.CertificateCardFileBinding
@@ -138,6 +140,11 @@ class CertificateCardsAdapter(
                 binding.root.setOnLongClickListener {
                     certificateCardListener.onCertificateCardDeleted(position, certificatesCard)
                     return@setOnLongClickListener true
+                }
+                binding.revoked.visibility = if (certificatesCard.isRevoked) {
+                    View.VISIBLE
+                } else {
+                    View.INVISIBLE
                 }
             }
         }

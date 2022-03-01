@@ -17,20 +17,25 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by Mykhailo Nester on 4/23/21 9:49 AM
+ *  Created by mykhailo.nester on 10/10/2021, 09:10
  */
 
-import org.gradle.api.JavaVersion
+package dgca.wallet.app.android.util
 
-object Config {
-    const val minSdk = 26
-    const val compileSdk = 29
-    const val targetSdk = 29
-    val javaVersion = JavaVersion.VERSION_1_8
+import android.content.Context
+import android.text.Spannable
+import android.text.style.TextAppearanceSpan
+import androidx.annotation.StyleRes
 
-    const val versionCode = 36
-    const val versionName = "1.3.0"
-
-    const val androidTestInstrumentation = "androidx.test.runner.AndroidJUnitRunner"
-    const val proguardConsumerRules = "consumer-rules.pro"
-}
+fun Spannable.applyStyle(context: Context, @StyleRes styleRes: Int): Spannable =
+    apply {
+        setSpan(
+            TextAppearanceSpan(
+                context,
+                styleRes
+            ),
+            0,
+            length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+    }
