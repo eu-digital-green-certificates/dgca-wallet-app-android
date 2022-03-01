@@ -38,6 +38,9 @@ import dgca.wallet.app.android.data.local.Converters
 import dgca.wallet.app.android.data.local.Preferences
 import dgca.wallet.app.android.databinding.FragmentSettingsBinding
 import dgca.wallet.app.android.util.applyStyle
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -71,7 +74,9 @@ class SettingsFragment : BindingFragment<FragmentSettingsBinding>() {
 
     private fun setUpUpdateRevocationStateButton(lastUpdatedTimeStamp: Long) {
         val subString = if (lastUpdatedTimeStamp > 0) {
-            getString(R.string.last_updated_at, converters.timestampToZonedDateTime(lastUpdatedTimeStamp))
+            val localDateTime = Instant.ofEpochMilli(lastUpdatedTimeStamp / 1000).atZone(ZoneId.systemDefault()).toLocalDateTime()
+                .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+            getString(R.string.last_updated_at, localDateTime)
         } else {
             getString(R.string.wasnt_updated_yet)
         }
