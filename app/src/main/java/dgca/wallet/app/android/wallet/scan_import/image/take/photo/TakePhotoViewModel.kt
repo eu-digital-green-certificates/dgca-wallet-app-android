@@ -29,8 +29,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.verifier.app.decoder.model.GreenCertificate
+import dgca.verifier.app.ticketing.checkin.TicketingCheckInModelFetcher
 import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.local.toCertificateModel
+import dgca.wallet.app.android.model.TicketingCheckInParcelable
+import dgca.wallet.app.android.model.fromRemote
 import dgca.wallet.app.android.wallet.scan_import.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -46,6 +49,10 @@ sealed class TakePhotoResult {
         val cose: ByteArray,
         val certificateModel: CertificateModel
     ) : TakePhotoResult()
+
+    class BookingSystemModelRecognised(
+        val ticketingCheckInParcelable: TicketingCheckInParcelable
+    ) : TakePhotoResult()
 }
 
 @HiltViewModel
@@ -54,7 +61,8 @@ class TakePhotoViewModel @Inject constructor(
     private val bitmapFetcher: BitmapFetcher,
     private val uriProvider: UriProvider,
     private val fileSaver: FileSaver,
-    private val greenCertificateFetcher: GreenCertificateFetcher
+    private val greenCertificateFetcher: GreenCertificateFetcher,
+    private val ticketingCheckInModelFetcher: TicketingCheckInModelFetcher
 ) : ViewModel() {
 
     val uriLiveData: LiveData<Uri> = MutableLiveData(uriProvider.getUriFor("temp", "temp.jpeg"))
@@ -94,14 +102,18 @@ class TakePhotoViewModel @Inject constructor(
                 )
             }
             else -> {
-                val file = try {
-                    fileSaver.saveFileFromUri(this, "images", "${System.currentTimeMillis()}.jpeg")
-                } catch (exception: Exception) {
-                    null
+                runCatching {
+                    ticketingCheckInModelFetcher.fetchTicketingCheckInModel(qrCodeString ?: "")
+                        .let { TakePhotoResult.BookingSystemModelRecognised(it.fromRemote()) }
+                }.getOrElse {
+                    val file = try {
+                        fileSaver.saveFileFromUri(this, "images", "${System.currentTimeMillis()}.jpeg")
+                    } catch (exception: Exception) {
+                        null
+                    }
+                    if (file?.exists() == true && file.isFile) TakePhotoResult.Success else TakePhotoResult.Failed
                 }
-                if (file?.exists() == true && file.isFile) TakePhotoResult.Success else TakePhotoResult.Failed
             }
         }
     }
 }
-

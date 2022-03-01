@@ -30,8 +30,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dgca.verifier.app.decoder.model.GreenCertificate
+import dgca.verifier.app.ticketing.checkin.TicketingCheckInModelFetcher
 import dgca.wallet.app.android.data.CertificateModel
 import dgca.wallet.app.android.data.local.toCertificateModel
+import dgca.wallet.app.android.model.TicketingCheckInParcelable
+import dgca.wallet.app.android.model.fromRemote
 import dgca.wallet.app.android.wallet.scan_import.BitmapFetcher
 import dgca.wallet.app.android.wallet.scan_import.FileSaver
 import dgca.wallet.app.android.wallet.scan_import.GreenCertificateFetcher
@@ -51,6 +54,10 @@ sealed class ImportPdfResult {
         val cose: ByteArray,
         val certificateModel: CertificateModel
     ) : ImportPdfResult()
+
+    class BookingSystemModelRecognised(
+        val ticketingCheckInParcelable: TicketingCheckInParcelable
+    ) : ImportPdfResult()
 }
 
 @HiltViewModel
@@ -58,7 +65,8 @@ class ImportPdfViewModel @Inject constructor(
     private val bitmapFetcher: BitmapFetcher,
     private val qrCodeFetcher: QrCodeFetcher,
     private val fileSaver: FileSaver,
-    private val greenCertificateFetcher: GreenCertificateFetcher
+    private val greenCertificateFetcher: GreenCertificateFetcher,
+    private val ticketingCheckInModelFetcher: TicketingCheckInModelFetcher
 ) : ViewModel() {
 
     private val _result = MutableLiveData<ImportPdfResult>()
@@ -110,12 +118,17 @@ class ImportPdfViewModel @Inject constructor(
                 greenCertificate!!.toCertificateModel()
             )
         } else {
-            val file = try {
-                fileSaver.saveFileFromUri(this, "images", "${System.currentTimeMillis()}.pdf")
-            } catch (exception: Exception) {
-                null
+            runCatching {
+                ticketingCheckInModelFetcher.fetchTicketingCheckInModel(qrString)
+                    .let { ImportPdfResult.BookingSystemModelRecognised(it.fromRemote()) }
+            }.getOrElse {
+                val file = try {
+                    fileSaver.saveFileFromUri(this, "images", "${System.currentTimeMillis()}.pdf")
+                } catch (exception: Exception) {
+                    null
+                }
+                if (file?.exists() == true && file.isFile) ImportPdfResult.Success else ImportPdfResult.Failed
             }
-            if (file?.exists() == true && file.isFile) ImportPdfResult.Success else ImportPdfResult.Failed
         }
     }
 }
