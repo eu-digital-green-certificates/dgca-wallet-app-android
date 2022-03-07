@@ -128,7 +128,8 @@
     <string name="revoked">Revoked</string>
     <string name="certificate_has_been_revoked">Your Certificate was revoked. You will no longer be able to use it</string>
     <string name="update_revocation_state">Update revocation state</string>
-    <string name="last_updated_at">Last updated at %s</string>
+    <string name="last_successfully_updated_at">Last successfully updated at %s</string>
+    <string name="last_update_failed">Last update failed</string>
     <string name="wasnt_updated_yet">Wasn\'t updated yet</string>
     <string name="qr_code_from">QR Code from %1$s</string>
     <string name="subject">Subject</string>

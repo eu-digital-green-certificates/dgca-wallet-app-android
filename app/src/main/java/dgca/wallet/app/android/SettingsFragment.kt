@@ -34,7 +34,6 @@ import androidx.core.text.toSpannable
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.base.BindingFragment
-import dgca.wallet.app.android.data.local.Converters
 import dgca.wallet.app.android.data.local.Preferences
 import dgca.wallet.app.android.databinding.FragmentSettingsBinding
 import dgca.wallet.app.android.util.applyStyle
@@ -48,11 +47,13 @@ class SettingsFragment : BindingFragment<FragmentSettingsBinding>() {
 
     @Inject
     lateinit var preferences: Preferences
-    private val converters: Converters = Converters()
 
     private val viewModel by viewModels<SettingsViewModel>()
 
-    override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSettingsBinding =
+    override fun onCreateBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentSettingsBinding =
         FragmentSettingsBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,7 +65,8 @@ class SettingsFragment : BindingFragment<FragmentSettingsBinding>() {
 
         binding.privacyInformation.setOnClickListener { launchWebIntent() }
         binding.licenses.setOnClickListener { openLicenses() }
-        binding.version.text = getString(R.string.version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
+        binding.version.text =
+            getString(R.string.version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -72,11 +74,14 @@ class SettingsFragment : BindingFragment<FragmentSettingsBinding>() {
         menu.findItem(R.id.settings).isVisible = false
     }
 
-    private fun setUpUpdateRevocationStateButton(lastUpdatedTimeStamp: Long) {
-        val subString = if (lastUpdatedTimeStamp > 0) {
-            val localDateTime = Instant.ofEpochMilli(lastUpdatedTimeStamp / 1000).atZone(ZoneId.systemDefault()).toLocalDateTime()
-                .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
-            getString(R.string.last_updated_at, localDateTime)
+    private fun setUpUpdateRevocationStateButton(revocationUpdateResult: RevocationUpdateResult) {
+        val subString = if (revocationUpdateResult.timestamp > 0) {
+            val localDateTime =
+                Instant.ofEpochMilli(revocationUpdateResult.timestamp / 1000)
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime()
+                    .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+            getString(R.string.last_successfully_updated_at, localDateTime)
         } else {
             getString(R.string.wasnt_updated_yet)
         }
@@ -91,7 +96,18 @@ class SettingsFragment : BindingFragment<FragmentSettingsBinding>() {
             .append(
                 subString.toSpannable()
                     .applyStyle(context, R.style.TextAppearance_Dgca_SettingsButtonSubHeader)
-            )
+            ).apply {
+                if (revocationUpdateResult.isSuccessful?.not() == true) {
+                    append("\n\n")
+                    append(
+                        getString(R.string.last_update_failed).toSpannable()
+                            .applyStyle(
+                                context,
+                                R.style.TextAppearance_Dgca_SettingsButtonSubHeader
+                            )
+                    )
+                }
+            }
 
         binding.updateRevocationState.text = spannable
 
@@ -118,6 +134,7 @@ class SettingsFragment : BindingFragment<FragmentSettingsBinding>() {
     }
 
     companion object {
-        const val PRIVACY_POLICY = "https://op.europa.eu/en/web/about-us/legal-notices/eu-mobile-apps"
+        const val PRIVACY_POLICY =
+            "https://op.europa.eu/en/web/about-us/legal-notices/eu-mobile-apps"
     }
 }

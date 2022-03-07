@@ -35,24 +35,35 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
+data class RevocationUpdateResult(val timestamp: Long, val isSuccessful: Boolean? = null)
+
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val preferences: Preferences,
     private val updateCertificatesRevocationDataUseCase: UpdateCertificatesRevocationDataUseCase
 ) : ViewModel() {
 
-    private val _lastRevocationStateUpdateTimeStamp = MutableLiveData(preferences.lastRevocationStateUpdateTimeStamp)
-    val lastRevocationStateUpdateTimeStamp: LiveData<Long> = _lastRevocationStateUpdateTimeStamp
+    private val _lastRevocationStateUpdateTimeStamp =
+        MutableLiveData(RevocationUpdateResult(preferences.lastRevocationStateUpdateTimeStamp))
+    val lastRevocationStateUpdateTimeStamp: LiveData<RevocationUpdateResult> =
+        _lastRevocationStateUpdateTimeStamp
 
     fun updateRevocationState() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                try {
+                val isSuccessful = try {
                     updateCertificatesRevocationDataUseCase.run()
+                    true
                 } catch (exception: Exception) {
                     Timber.e(exception)
+                    false
                 }
-                _lastRevocationStateUpdateTimeStamp.postValue(preferences.lastRevocationStateUpdateTimeStamp)
+                _lastRevocationStateUpdateTimeStamp.postValue(
+                    RevocationUpdateResult(
+                        preferences.lastRevocationStateUpdateTimeStamp,
+                        isSuccessful
+                    )
+                )
             }
         }
     }
