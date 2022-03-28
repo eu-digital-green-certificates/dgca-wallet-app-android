@@ -52,7 +52,7 @@ class UpdateCertificatesRevocationDataUseCase @Inject constructor(
             val signatureCertificateIdMap = mutableMapOf<String, Int>()
             val revocations: MutableList<String> = mutableListOf()
 
-            val certificates = walletRepository.getNotRevokedCertificates()
+            var certificates = walletRepository.getCertificates()
             if (certificates?.isNotEmpty() == true) {
                 certificates.forEach {
 
@@ -74,10 +74,12 @@ class UpdateCertificatesRevocationDataUseCase @Inject constructor(
                     val issuingCountry = certificateModel.getIssuingCountry()
                     val cose = greenCertificateFetcher.fetchDataFromQrString(it.qrCodeText).first
 
-                    val uvciSha256Full = certificateIdentifier?.toByteArray()?.toFullSha256HexString() ?: ""
+                    val uvciSha256Full =
+                        certificateIdentifier?.toByteArray()?.toFullSha256HexString() ?: ""
                     val uvciSha256 = certificateIdentifier?.toByteArray()?.toSha256HexString() ?: ""
-                    val coUvciSha256 = (issuingCountry?.toUpperCase(Locale.getDefault()) + certificateIdentifier).toByteArray()
-                        .toSha256HexString()
+                    val coUvciSha256 =
+                        (issuingCountry?.toUpperCase(Locale.getDefault()) + certificateIdentifier).toByteArray()
+                            .toSha256HexString()
                     val signatureSha256 = cose?.getDccSignatureSha256() ?: ""
 
                     signatureCertificateIdMap[uvciSha256] = it.certificateId
@@ -90,26 +92,39 @@ class UpdateCertificatesRevocationDataUseCase @Inject constructor(
                         exp = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(15)
                     )
 
-                    val jwtToken = jwtTokenGenerator.generateJwtToken(jwtTokenHeader, jwtTokenBody, keyPairData)
+                    val jwtToken = jwtTokenGenerator.generateJwtToken(
+                        jwtTokenHeader,
+                        jwtTokenBody,
+                        keyPairData
+                    )
                     revocations.add(jwtToken)
                 }
 
 
-                val revokedCertificateSignaturesListResult = revocationService.getRevocationLists(revocations)
+                val revokedCertificateSignaturesListResult =
+                    revocationService.getRevocationLists(revocations)
                 if (!revokedCertificateSignaturesListResult.isSuccessful) {
                     throw IllegalStateException()
                 }
 
                 val revokedCertificateIds = mutableListOf<Int>()
-                revokedCertificateSignaturesListResult.body()!!.forEach() {
+                revokedCertificateSignaturesListResult.body()!!.forEach {
                     val certificateId = signatureCertificateIdMap[it]!!
                     revokedCertificateIds.add(certificateId)
                 }
+                val notRevokedCertificatesIds = mutableSetOf<Int>()
+                certificates.forEach {
+                    if (revokedCertificateIds.contains(it.certificateId).not()) {
+                        notRevokedCertificatesIds.add(it.certificateId)
+                    }
+                }
 
-                walletRepository.setCertificatesRevokedBy(revokedCertificateIds)
+                walletRepository.setCertificatesRevokedBy(revokedCertificateIds, true)
+                walletRepository.setCertificatesRevokedBy(notRevokedCertificatesIds, false)
             }
 
-            preferences.lastRevocationStateUpdateTimeStamp = converters.zonedDateTimeToTimestamp(ZonedDateTime.now())
+            preferences.lastRevocationStateUpdateTimeStamp =
+                converters.zonedDateTimeToTimestamp(ZonedDateTime.now())
         }
     }
 
