@@ -47,11 +47,13 @@ object Versions {
     const val retrofit = "2.9.0"
     const val logging_interceptor = "4.0.1"
     const val gson_converter = "2.1.0"
+    const val fab = "1.6.4"
     const val biometric = "1.2.0-alpha03"
     const val android_lifecycle_ktx_version = "2.4.0-alpha02"
 
     // QR
     const val zxing = "4.2.0"
+    const val zxing_core = "3.3.0"
     const val guave_conflict_resolver_version = "9999.0-empty-to-avoid-conflict-with-guava"
 
     // Decoder

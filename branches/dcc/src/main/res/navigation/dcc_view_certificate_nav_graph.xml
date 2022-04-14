@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~  license-start
+  ~  eu-digital-green-certificates / dgca-verifier-app-android
+  ~
+  ~  Copyright (C) 2021 T-Systems International GmbH and all other contributors
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  ~  license-end
+  ~
+  ~  Created by Mykhailo Nester on 4/23/21 9:53 AM
+  -->
+
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dcc_nav_view_certificate_graph"
+    app:startDestination="@id/viewCertificateFragment">
+
+    <fragment
+        android:id="@+id/viewCertificateFragment"
+        android:name="dgca.wallet.app.android.dcc.ui.wallet.certificates.view.DccViewCertificateFragment"
+        android:label="@string/your_certificate"
+        tools:layout="@layout/fragment_certificate_view">
+
+        <argument
+            android:name="certificateId"
+            app:argType="integer" />
+
+        <action
+            android:id="@+id/action_viewCertificateFragment_to_certificateValidityFragment"
+            app:destination="@id/certificateValidityFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+        <action
+            android:id="@+id/action_viewCertificateFragment_to_certificateHasBeenRevokedDialogFragment"
+            app:destination="@id/certificateHasBeenRevokedDialogFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/certificateValidityFragment"
+        android:name="dgca.wallet.app.android.dcc.ui.wallet.certificates.view.validity.DccCertificateValidityFragment"
+        android:label="@string/country_rules_validation"
+        tools:layout="@layout/fragment_validity_certificate">
+
+        <argument
+            android:name="qrCodeText"
+            app:argType="string" />
+
+        <action
+            android:id="@+id/action_certificateValidityFragment_to_rulesValidationFragment"
+            app:destination="@id/rulesValidationFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/rulesValidationFragment"
+        android:name="dgca.wallet.app.android.dcc.ui.wallet.certificates.view.validity.rules.DccRulesValidationFragment"
+        android:label="@string/country_rules_validation"
+        tools:layout="@layout/fragment_rules_validation">
+
+        <argument
+            android:name="qrCodeText"
+            app:argType="string" />
+
+        <argument
+            android:name="selectedCountry"
+            app:argType="string" />
+
+        <argument
+            android:name="timeStamp"
+            app:argType="long" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="dgca.wallet.app.android.dcc.settings.DccSettingsFragment"
+        android:label="@string/settings"
+        tools:layout="@layout/fragment_dcc_settings" />
+
+    <dialog
+        android:id="@+id/certificateHasBeenRevokedDialogFragment"
+        android:name="feature.revocation.CertificateHasBeenRevokedDialogFragment"
+        android:label="Certificate Has Been Revoked" />
+
+</navigation>

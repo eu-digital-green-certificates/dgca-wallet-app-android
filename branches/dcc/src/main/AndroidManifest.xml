@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.android.app.dcc">
+
+    <uses-permission android:name="android.permission.NFC" />
+
+    <application>
+        <activity
+            android:name="dgca.wallet.app.android.dcc.ui.DccActivity"
+            android:exported="false"
+            android:launchMode="singleInstance"
+            android:theme="@style/Theme.Dcc">
+
+            <intent-filter>
+                <action android:name="com.android.app.dcc.View" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="dcc"
+                    android:scheme="verifier" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="dgca.wallet.app.android.dcc.settings.DccSettingsActivity"
+            android:exported="false"
+            android:label="DccSettingsActivity"
+            android:theme="@style/Theme.Dcc">
+            <intent-filter>
+                <action android:name="com.android.app.dcc.View" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="dcc"
+                    android:scheme="settings" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="dgca.wallet.app.android.dcc.ui.wallet.certificates.view.DccViewCertificateActivity"
+            android:exported="false"
+            android:label="DccViewCertificateActivity"
+            android:theme="@style/Theme.Dcc">
+            <intent-filter>
+                <action android:name="com.android.app.dcc.View" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="dcc"
+                    android:scheme="view-certificate" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
+            android:theme="@style/Theme.DgcaVerifierAppAndroid.Licensing" />
+
+        <activity
+            android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
+            android:theme="@style/Theme.DgcaVerifierAppAndroid.Licensing" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
+        <service
+            android:name="dgca.wallet.app.android.dcc.nfc.DCCApduService"
+            android:exported="true"
+            android:permission="android.permission.BIND_NFC_SERVICE">
+            <intent-filter>
+                <action android:name="android.nfc.cardemulation.action.HOST_APDU_SERVICE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data
+                android:name="android.nfc.cardemulation.host_apdu_service"
+                android:resource="@xml/nfc_application_ids" />
+        </service>
+
+    </application>
+</manifest>

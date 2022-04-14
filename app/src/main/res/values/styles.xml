@@ -1,52 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  ~  -license-start
-  ~  eu-digital-green-certificates / dgca-wallet-app-android
-  ~  -
-  ~  Copyright (C) 2021 T-Systems International GmbH and all other contributors
-  ~  -
-  ~  Licensed under the Apache License, Version 2.0 (the "License");
-  ~  you may not use this file except in compliance with the License.
-  ~  You may obtain a copy of the License at
-  ~
-  ~       http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~  Unless required by applicable law or agreed to in writing, software
-  ~  distributed under the License is distributed on an "AS IS" BASIS,
-  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~  See the License for the specific language governing permissions and
-  ~  limitations under the License.
-  ~  -license-end
-  ~
-  ~  Created by mykhailo.nester on 5/13/21 4:21 PM
-  -->
-
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="TextAppearance.Dgca.GeneralTitle" parent="">
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
+    <style name="DgcaWalletAppAndroid.Toolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="actionMenuTextColor">@color/white</item>
+        <item name="android:itemTextAppearance">@style/menuItemTextAppearance</item>
 
-    <style name="TextAppearance.Dgca.CertificateTitle" parent="">
-        <item name="android:textColor">@color/grey_100</item>
-        <item name="android:textSize">@dimen/text_size_medium</item>
-        <item name="fontFamily">sans</item>
-        <item name="android:letterSpacing">-0.02</item>
-        <item name="android:typeface">normal</item>
-    </style>
-
-    <style name="TextAppearance.Dgca.CertificateValue" parent="">
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">@dimen/text_size_big</item>
-        <item name="fontFamily">sans</item>
-        <item name="android:letterSpacing">-0.02</item>
-        <item name="android:typeface">normal</item>
-    </style>
-
-    <style name="TextAppearance.Dgca.RuleTitle" parent="">
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">@dimen/text_size_medium</item>
+        <!-- color used by navigation icon and overflow icon -->
+        <item name="colorOnPrimary">@color/white</item>
     </style>
 
     <style name="BottomDialogTitle" parent="Widget.MaterialComponents.TextView">
@@ -65,38 +27,4 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="TextAppearance.Dgca.SettingsButtonHeader" parent="@style/Widget.MaterialComponents.Button.TextButton">
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:drawableEnd">@drawable/ic_baseline_arrow_forward_24</item>
-        <item name="android:gravity">start|center</item>
-        <item name="android:insetTop">0dp</item>
-        <item name="android:insetBottom">0dp</item>
-        <item name="android:letterSpacing">0</item>
-        <item name="android:minHeight">48dp</item>
-        <item name="android:paddingHorizontal">@dimen/default_padding</item>
-    </style>
-
-    <style name="TextAppearance.Dgca.SettingsButtonSubHeader" parent="@style/Widget.MaterialComponents.Button.TextButton">
-        <item name="android:textColor">@color/grey_50</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-
-    <style name="BookingSystemHeaderTitle">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">@dimen/text_size_big</item>
-    </style>
-
-    <style name="BookingSystemTitle">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">@dimen/text_size_medium</item>
-    </style>
-
-    <style name="BookingSystemContent">
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">@dimen/text_size_medium</item>
-    </style>
 </resources>

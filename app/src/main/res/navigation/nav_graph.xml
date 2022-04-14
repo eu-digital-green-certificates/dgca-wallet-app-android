@@ -1,25 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  ~  license-start
-  ~  eu-digital-green-certificates / dgca-wallet-app-android
-  ~
-  ~  Copyright (C) 2021 T-Systems International GmbH and all other contributors
-  ~
-  ~  Licensed under the Apache License, Version 2.0 (the "License");
-  ~  you may not use this file except in compliance with the License.
-  ~  You may obtain a copy of the License at
-  ~
-  ~       http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~  Unless required by applicable law or agreed to in writing, software
-  ~  distributed under the License is distributed on an "AS IS" BASIS,
-  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~  See the License for the specific language governing permissions and
-  ~  limitations under the License.
-  ~  license-end
-  ~
-  ~  Created by osarapulov on 5/7/21 10:08 AM
-  -->
-
+<?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -27,19 +6,13 @@
     app:startDestination="@id/authFragment">
 
     <fragment
-        android:id="@+id/settingsFragment"
-        android:name="dgca.wallet.app.android.SettingsFragment"
-        android:label="@string/settings"
-        tools:layout="@layout/fragment_settings" />
-
-    <fragment
         android:id="@+id/authFragment"
-        android:name="dgca.wallet.app.android.AuthFragment"
+        android:name="dgca.wallet.app.android.ui.AuthFragment"
         tools:layout="@layout/fragment_auth">
 
         <action
             android:id="@+id/action_authFragment_to_certificatesFragment"
-            app:destination="@id/certificatesFragment"
+            app:destination="@id/dashboardFragment"
             app:enterAnim="@animator/nav_default_pop_enter_anim"
             app:exitAnim="@animator/nav_default_exit_anim"
             app:launchSingleTop="true"
@@ -48,10 +21,36 @@
     </fragment>
 
     <fragment
-        android:id="@+id/certificatesFragment"
-        android:name="dgca.wallet.app.android.wallet.CertificatesFragment"
-        android:label="@string/certificate_wallet"
-        tools:layout="@layout/fragment_certificates">
+        android:id="@+id/dashboardFragment"
+        android:name="dgca.wallet.app.android.ui.dashboard.DashboardFragment"
+        android:label="Certificates"
+        tools:layout="@layout/fragment_dashboard">
+
+        <action
+            android:id="@+id/action_certificatesFragment_to_nfcFragment"
+            app:destination="@id/nfcFragment" />
+
+        <action
+            android:id="@+id/action_certificatesFragment_to_intentFragment"
+            app:destination="@id/intentFragment"
+            app:popUpTo="@+id/nav_graph"
+            app:popUpToInclusive="true" />
+
+        <action
+            android:id="@+id/action_certificatesFragment_to_qrReaderFragment"
+            app:destination="@id/qrReaderFragment" />
+
+        <action
+            android:id="@+id/action_certificatesFragment_to_urlSchemaFragment"
+            app:destination="@id/urlSchemaFragment"
+            app:popUpTo="@+id/nav_graph"
+            app:popUpToInclusive="true" />
+
+        <action
+            android:id="@+id/action_certificatesFragment_to_protocolHandlerDialogFragment"
+            app:destination="@id/protocolHandlerDialogFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim" />
 
         <action
             android:id="@+id/action_certificatesFragment_to_deleteFileDialogFragment"
@@ -64,30 +63,6 @@
             app:destination="@id/deleteCertificateDialogFragment"
             app:enterAnim="@animator/nav_default_pop_enter_anim"
             app:exitAnim="@animator/nav_default_exit_anim" />
-
-        <action
-            android:id="@+id/action_certificatesFragment_to_codeReaderFragment"
-            app:destination="@id/codeReaderFragment"
-            app:enterAnim="@animator/nav_default_pop_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim"
-            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-
-        <action
-            android:id="@+id/action_certificatesFragment_to_viewCertificateFragment"
-            app:destination="@id/viewCertificateFragment"
-            app:enterAnim="@animator/nav_default_pop_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim"
-            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-
-        <action
-            android:id="@+id/action_certificatesFragment_to_viewFileFragment"
-            app:destination="@id/viewFileFragment"
-            app:enterAnim="@animator/nav_default_pop_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim"
-            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
         <action
             android:id="@+id/action_certificatesFragment_to_addNewDialogFragment"
@@ -122,22 +97,8 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
         <action
-            android:id="@+id/action_certificatesFragment_to_modelFetcherDialogFragment"
-            app:destination="@id/modelFetcherDialogFragment"
-            app:enterAnim="@animator/nav_default_pop_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim" />
-
-        <action
-            android:id="@+id/action_certificatesFragment_to_claimCertificateFragment"
-            app:destination="@id/claimCertificateFragment"
-            app:enterAnim="@animator/nav_default_pop_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim"
-            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-
-        <action
-            android:id="@+id/action_certificatesFragment_to_bookingSystemConsentFragment"
-            app:destination="@id/bookingSystemConsentFragment"
+            android:id="@+id/action_certificatesFragment_to_viewFileFragment"
+            app:destination="@id/viewFileFragment"
             app:enterAnim="@animator/nav_default_pop_enter_anim"
             app:exitAnim="@animator/nav_default_exit_anim"
             app:popEnterAnim="@animator/nav_default_pop_enter_anim"
@@ -146,8 +107,96 @@
     </fragment>
 
     <dialog
+        android:id="@+id/addNewDialogFragment"
+        android:name="dgca.wallet.app.android.ui.dashboard.AddNewBottomDialogFragment"
+        android:label="Add New"
+        tools:layout="@layout/dialog_fragment_add_new" />
+
+    <dialog
+        android:id="@+id/imagePhotoDialogFragment"
+        android:name="dgca.wallet.app.android.inputrecognizer.file.image.ImportImageDialogFragment"
+        android:label="Import Image"
+        tools:layout="@layout/dialog_fragment_import_image" />
+
+    <fragment
+        android:id="@+id/takePhotoFragment"
+        android:name="dgca.wallet.app.android.inputrecognizer.file.image.take.TakePhotoFragment"
+        android:label="@string/take_photo"
+        tools:layout="@layout/fragment_take_photo" />
+
+    <fragment
+        android:id="@+id/pickImageFragment"
+        android:name="dgca.wallet.app.android.inputrecognizer.file.image.pick.PickImageFragment"
+        android:label="@string/pick_image"
+        tools:layout="@layout/fragment_pick_image" />
+
+    <fragment
+        android:id="@+id/importPdfFragment"
+        android:name="dgca.wallet.app.android.inputrecognizer.file.pdf.ImportPdfFragment"
+        android:label="@string/import_pdf"
+        tools:layout="@layout/fragment_import_pdf" />
+
+    <fragment
+        android:id="@+id/nfcFragment"
+        android:name="dgca.wallet.app.android.inputrecognizer.nfc.NfcFragment"
+        android:label="NFC"
+        tools:layout="@layout/fragment_nfc" />
+
+    <fragment
+        android:id="@+id/intentFragment"
+        android:name="dgca.wallet.app.android.inputrecognizer.intent.IntentFragment"
+        android:label="Intent"
+        tools:layout="@layout/fragment_intent">
+
+        <argument
+            android:name="data"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/qrReaderFragment"
+        android:name="dgca.wallet.app.android.inputrecognizer.qr.QrReaderFragment"
+        android:label="QR Reader"
+        tools:layout="@layout/fragment_qr_reader">
+
+        <action
+            android:id="@+id/action_qrReaderFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/urlSchemaFragment"
+        android:name="dgca.wallet.app.android.inputrecognizer.urlschema.UrlSchemaFragment"
+        android:label="Url Schema"
+        tools:layout="@layout/fragment_url_schema">
+
+        <argument
+            android:name="data"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="dgca.wallet.app.android.ui.settings.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/fragment_dcc_settings" />
+
+    <dialog
+        android:id="@+id/protocolHandlerDialogFragment"
+        android:name="dgca.wallet.app.android.protocolhandler.ProtocolHandlerDialogFragment"
+        android:label="Protocol Handler"
+        tools:layout="@layout/dialog_fragment_protocol_handler">
+
+        <argument
+            android:name="data"
+            app:argType="string" />
+    </dialog>
+
+    <dialog
         android:id="@+id/deleteFileDialogFragment"
-        android:name="dgca.wallet.app.android.wallet.DeleteFileDialogFragment"
+        android:name="dgca.wallet.app.android.ui.DeleteFileDialogFragment"
         android:label="Delete File"
         tools:layout="@layout/dialog_fragment_delete_file">
 
@@ -163,7 +212,7 @@
 
     <dialog
         android:id="@+id/deleteCertificateDialogFragment"
-        android:name="dgca.wallet.app.android.wallet.DeleteCertificateDialogFragment"
+        android:name="dgca.wallet.app.android.ui.DeleteCertificateDialogFragment"
         android:label="Delete Certificate"
         tools:layout="@layout/dialog_fragment_delete_certificate">
 
@@ -173,105 +222,12 @@
 
         <argument
             android:name="itemCard"
-            app:argType="dgca.wallet.app.android.wallet.CertificatesCard$CertificateCard" />
+            app:argType="com.android.app.base.ProcessorItemCard" />
     </dialog>
-
-    <dialog
-        android:id="@+id/addNewDialogFragment"
-        android:name="dgca.wallet.app.android.wallet.AddNewBottomDialogFragment"
-        android:label="Add New"
-        tools:layout="@layout/dialog_fragment_add_new" />
-
-    <dialog
-        android:id="@+id/imagePhotoDialogFragment"
-        android:name="dgca.wallet.app.android.wallet.ImportImageDialogFragment"
-        android:label="Import Image"
-        tools:layout="@layout/dialog_fragment_import_image" />
-
-    <fragment
-        android:id="@+id/takePhotoFragment"
-        android:name="dgca.wallet.app.android.wallet.scan_import.image.take.photo.TakePhotoFragment"
-        android:label="@string/take_photo"
-        tools:layout="@layout/fragment_take_photo">
-
-    </fragment>
-
-    <fragment
-        android:id="@+id/pickImageFragment"
-        android:name="dgca.wallet.app.android.wallet.scan_import.image.pick.image.PickImageFragment"
-        android:label="@string/pick_image"
-        tools:layout="@layout/fragment_pick_image" />
-
-    <fragment
-        android:id="@+id/importPdfFragment"
-        android:name="dgca.wallet.app.android.wallet.scan_import.pdf.ImportPdfFragment"
-        android:label="@string/import_pdf"
-        tools:layout="@layout/fragment_import_pdf" />
-
-    <fragment
-        android:id="@+id/codeReaderFragment"
-        android:name="dgca.wallet.app.android.wallet.scan_import.qr.CodeReaderFragment"
-        android:label="@string/qr_reader_title"
-        tools:layout="@layout/fragment_code_reader">
-
-        <action
-            android:id="@+id/action_codeReaderFragment_to_modelFetcherDialogFragment"
-            app:destination="@id/modelFetcherDialogFragment"
-            app:enterAnim="@animator/nav_default_pop_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim" />
-
-        <action
-            android:id="@+id/action_codeReaderFragment_to_claimCertificateFragment"
-            app:destination="@id/claimCertificateFragment"
-            app:enterAnim="@animator/nav_default_pop_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim"
-            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-
-        <action
-            android:id="@+id/action_codeReaderFragment_to_bookingSystemConsentFragment"
-            app:destination="@id/bookingSystemConsentFragment"
-            app:enterAnim="@animator/nav_default_pop_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim"
-            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-
-    </fragment>
-
-    <dialog
-        android:id="@+id/modelFetcherDialogFragment"
-        android:name="dgca.wallet.app.android.wallet.scan_import.qr.ModelFetcherDialogFragment"
-        android:label="Model Fetcher"
-        tools:layout="@layout/dialog_fragment_model_fetcher">
-
-        <argument
-            android:name="qrCodeText"
-            app:argType="string" />
-    </dialog>
-
-    <fragment
-        android:id="@+id/viewCertificateFragment"
-        android:name="dgca.wallet.app.android.wallet.view.certificate.ViewCertificateFragment"
-        android:label="@string/your_certificate"
-        tools:layout="@layout/fragment_certificate_view">
-
-        <argument
-            android:name="certificateId"
-            app:argType="integer" />
-
-        <action
-            android:id="@+id/action_viewCertificateFragment_to_certificateValidityFragment"
-            app:destination="@id/certificateValidityFragment"
-            app:enterAnim="@animator/nav_default_pop_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim"
-            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-    </fragment>
-
 
     <fragment
         android:id="@+id/viewFileFragment"
-        android:name="dgca.wallet.app.android.wallet.view.file.ViewFileFragment"
+        android:name="dgca.wallet.app.android.ui.file.ViewFileFragment"
         android:label="@string/your_file"
         tools:layout="@layout/fragment_file_view">
 
@@ -280,255 +236,4 @@
             app:argType="java.io.File" />
     </fragment>
 
-    <fragment
-        android:id="@+id/certificateValidityFragment"
-        android:name="dgca.wallet.app.android.wallet.view.certificate.validity.CertificateValidityFragment"
-        android:label="@string/country_rules_validation"
-        tools:layout="@layout/fragment_validity_certificate">
-
-        <argument
-            android:name="qrCodeText"
-            app:argType="string" />
-
-        <action
-            android:id="@+id/action_certificateValidityFragment_to_rulesValidationFragment"
-            app:destination="@id/rulesValidationFragment"
-            app:enterAnim="@animator/nav_default_pop_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim"
-            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/rulesValidationFragment"
-        android:name="dgca.wallet.app.android.wallet.view.certificate.validity.rules.RulesValidationFragment"
-        android:label="@string/country_rules_validation"
-        tools:layout="@layout/fragment_rules_validatation">
-
-        <argument
-            android:name="qrCodeText"
-            app:argType="string" />
-
-        <argument
-            android:name="selectedCountry"
-            app:argType="string" />
-
-        <argument
-            android:name="timeStamp"
-            app:argType="long" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/tanFragment"
-        android:name="dgca.wallet.app.android.wallet.scan_import.qr.certificate.TanFragment"
-        android:label="@string/tan_cert_title"
-        tools:layout="@layout/fragment_certificate_tan">
-
-        <action
-            android:id="@+id/action_tanFragment_to_claimCertificateFragment"
-            app:destination="@id/claimCertificateFragment"
-            app:enterAnim="@animator/nav_default_pop_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim"
-            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-
-    </fragment>
-    <fragment
-        android:id="@+id/claimCertificateFragment"
-        android:name="dgca.wallet.app.android.wallet.scan_import.qr.certificate.ClaimCertificateFragment"
-        android:label="@string/claim_cert_title"
-        app:enterAnim="@animator/nav_default_pop_enter_anim"
-        app:exitAnim="@animator/nav_default_exit_anim"
-        app:popEnterAnim="@animator/nav_default_pop_enter_anim"
-        app:popExitAnim="@anim/nav_default_pop_exit_anim"
-        tools:layout="@layout/fragment_certificate_claim">
-
-        <argument
-            android:name="claimCertificateModel"
-            app:argType="dgca.wallet.app.android.wallet.scan_import.qr.certificate.ClaimGreenCertificateModel" />
-
-        <action
-            android:id="@+id/action_claimCertificateFragment_to_tanFragment"
-            app:destination="@id/tanFragment"
-            app:enterAnim="@animator/nav_default_pop_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim"
-            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-
-        <action
-            android:id="@+id/action_claimCertificateFragment_to_certificatesFragment"
-            app:destination="@id/certificatesFragment"
-            app:enterAnim="@animator/nav_default_pop_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim"
-            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-
-    </fragment>
-
-    <fragment
-        android:id="@+id/bookingSystemConsentFragment"
-        android:name="dgca.wallet.app.android.wallet.scan_import.qr.ticketing.BookingSystemConsentFragment"
-        android:label="@string/step_1"
-        app:enterAnim="@animator/nav_default_pop_enter_anim"
-        app:exitAnim="@animator/nav_default_exit_anim"
-        app:popEnterAnim="@animator/nav_default_pop_enter_anim"
-        app:popExitAnim="@anim/nav_default_pop_exit_anim"
-        tools:layout="@layout/fragment_certificate_claim">
-
-        <argument
-            android:name="ticketingCheckInParcelable"
-            app:argType="dgca.wallet.app.android.model.TicketingCheckInParcelable" />
-
-        <action
-            android:id="@+id/action_bookingSystemConsentFragment_to_identityFetcherDialogFragment"
-            app:destination="@id/identityFetcherDialogFragment"
-            app:enterAnim="@animator/nav_default_pop_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim" />
-
-        <action
-            android:id="@+id/action_bookingSystemConsentFragment_to_bookingPortalEncryptionDataFetcherDialogFragment"
-            app:destination="@id/bookingPortalEncryptionDataFetcherDialogFragment"
-            app:enterAnim="@animator/nav_default_pop_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim" />
-
-        <action
-            android:id="@+id/action_bookingSystemConsentFragment_to_certificateSelectorFragment"
-            app:destination="@id/certificateSelectorFragment"
-            app:enterAnim="@animator/nav_default_pop_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim"
-            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-
-        <action
-            android:id="@+id/action_bookingSystemConsentFragment_to_validationServiceSelectorFragment"
-            app:destination="@id/validationServiceSelectorFragment"
-            app:enterAnim="@animator/nav_default_pop_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim"
-            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-    </fragment>
-
-    <dialog
-        android:id="@+id/identityFetcherDialogFragment"
-        android:name="dgca.wallet.app.android.wallet.scan_import.qr.ticketing.identity.IdentityFetcherDialogFragment"
-        android:label="Identity Fetcher"
-        tools:layout="@layout/dialog_fragment_progress_bar">
-
-        <argument
-            android:name="ticketingCheckInParcelable"
-            app:argType="dgca.wallet.app.android.model.TicketingCheckInParcelable" />
-    </dialog>
-
-    <dialog
-        android:id="@+id/bookingPortalEncryptionDataFetcherDialogFragment"
-        android:name="dgca.wallet.app.android.wallet.scan_import.qr.ticketing.accesstoken.BookingPortalEncryptionDataFetcherDialogFragment"
-        android:label="Access Token Fetcher"
-        tools:layout="@layout/dialog_fragment_progress_bar">
-
-        <argument
-            android:name="ticketingCheckInParcelable"
-            app:argType="dgca.wallet.app.android.model.TicketingCheckInParcelable" />
-
-        <argument
-            android:name="ticketingAccessTokenServiceParcelable"
-            app:argType="dgca.wallet.app.android.wallet.scan_import.qr.ticketing.TicketingServiceParcelable" />
-
-        <argument
-            android:name="ticketingValidationServiceParcelable"
-            app:argType="dgca.wallet.app.android.wallet.scan_import.qr.ticketing.TicketingServiceParcelable" />
-    </dialog>
-
-    <fragment
-        android:id="@+id/validationServiceSelectorFragment"
-        android:name="dgca.wallet.app.android.wallet.scan_import.qr.ticketing.serviceselector.ValidationServiceSelectorFragment"
-        android:label="@string/step_2"
-        tools:layout="@layout/fragment_validation_service_selector">
-
-        <argument
-            android:name="ticketingCheckInParcelable"
-            app:argType="dgca.wallet.app.android.model.TicketingCheckInParcelable" />
-
-        <argument
-            android:name="ticketingIdentityDocumentParcelable"
-            app:argType="dgca.wallet.app.android.model.TicketingIdentityDocumentParcelable" />
-
-        <action
-            android:id="@+id/action_validationServiceSelectorFragment_to_bookingPortalEncryptionDataFetcherDialogFragment"
-            app:destination="@id/bookingPortalEncryptionDataFetcherDialogFragment"
-            app:enterAnim="@animator/nav_default_pop_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim" />
-
-        <action
-            android:id="@+id/action_validationServiceSelectorFragment_to_certificateSelectorFragment"
-            app:destination="@id/certificateSelectorFragment"
-            app:enterAnim="@animator/nav_default_pop_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim"
-            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-
-    </fragment>
-
-    <fragment
-        android:id="@+id/certificateSelectorFragment"
-        android:name="dgca.wallet.app.android.wallet.scan_import.qr.ticketing.certselector.CertificateSelectorFragment"
-        android:label="@string/step_2"
-        tools:layout="@layout/fragment_certificate_selector">
-
-        <argument
-            android:name="bookingPortalEncryptionData"
-            app:argType="dgca.wallet.app.android.model.BookingPortalEncryptionData" />
-
-        <action
-            android:id="@+id/action_certificateSelectorFragment_to_transmissionConsentFragment"
-            app:destination="@id/transmissionConsentFragment"
-            app:enterAnim="@animator/nav_default_pop_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim"
-            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-
-    </fragment>
-
-    <fragment
-        android:id="@+id/transmissionConsentFragment"
-        android:name="dgca.wallet.app.android.wallet.scan_import.qr.ticketing.transmission.TransmissionConsentFragment"
-        android:label="@string/step_3"
-        tools:layout="@layout/fragment_transmission_consent">
-
-        <argument
-            android:name="bookingPortalEncryptionData"
-            app:argType="dgca.wallet.app.android.model.BookingPortalEncryptionData" />
-
-        <argument
-            android:name="certificateModel"
-            app:argType="dgca.wallet.app.android.data.CertificateModel" />
-
-        <argument
-            android:name="validTo"
-            app:argType="java.time.ZonedDateTime"
-            app:nullable="true" />
-
-        <argument
-            android:name="qrString"
-            app:argType="string" />
-
-        <action
-            android:id="@+id/action_transmissionConsentFragment_to_bookingPortalValidationResultFragment"
-            app:destination="@id/bookingPortalValidationResultFragment"
-            app:enterAnim="@animator/nav_default_pop_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim"
-            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/bookingPortalValidationResultFragment"
-        android:name="dgca.wallet.app.android.wallet.scan_import.qr.ticketing.validationresult.BookingPortalValidationResultFragment"
-        android:label="@string/validation_result"
-        tools:layout="@layout/fragment_transmission_consent">
-
-        <argument
-            android:name="bookingPortalValidationResult"
-            app:argType="dgca.wallet.app.android.wallet.scan_import.qr.ticketing.validationresult.BookingPortalValidationResult" />
-
-    </fragment>
 </navigation>

@@ -1,6 +1,11 @@
+include ':branches:base'
+include ':branches:icao'
+include ':branches:divoc'
+include ':branches:dcc'
 include ':app'
 include ':decoder'
 include ':engine'
-rootProject.name = "dgca-wallet-app-android"
+rootProject.name = "Wallet App"
+
 project(':decoder').projectDir = new File("../dgca-app-core-android/decoder")
 project(':engine').projectDir = new File("../dgc-certlogic-android/engine")

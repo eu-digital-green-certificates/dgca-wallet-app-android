@@ -54,6 +54,19 @@
         app:layout_constraintTop_toBottomOf="@id/title" />
 
     <TextView
+        android:id="@+id/scanNfcCode"
+        style="@style/BottomDialogButton"
+        android:drawablePadding="@dimen/default_padding"
+        android:gravity="center_vertical"
+        android:minHeight="48dp"
+        android:paddingHorizontal="@dimen/default_padding"
+        android:text="@string/scan_nfc_code"
+        app:drawableStartCompat="@drawable/ic_nfc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/scanCertificate" />
+
+    <TextView
         android:id="@+id/importImage"
         style="@style/BottomDialogButton"
         android:drawablePadding="@dimen/default_padding"
@@ -63,7 +76,7 @@
         app:drawableStartCompat="@drawable/ic_import_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/scanCertificate" />
+        app:layout_constraintTop_toBottomOf="@id/scanNfcCode" />
 
     <TextView
         android:id="@+id/importPdf"

@@ -1,6 +1,6 @@
 /*
  *  ---license-start
- *  eu-digital-green-certificates / dgca-verifier-app-android
+ *  eu-digital-green-certificates / dgca-wallet-app-android
  *  ---
  *  Copyright (C) 2021 T-Systems International GmbH and all other contributors
  *  ---
@@ -17,7 +17,7 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by mykhailo.nester on 18/08/2021, 17:21
+ *  Created by mykhailo.nester on 5/5/21 11:57 PM
  */
 
 package dgca.wallet.app.android.base
@@ -39,7 +39,11 @@ abstract class BindingFragment<T : ViewBinding> : Fragment() {
     open fun onDestroyBinding(binding: T) {
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         val innerBinding = onCreateBinding(inflater, container)
         _binding = innerBinding
         return innerBinding.root
