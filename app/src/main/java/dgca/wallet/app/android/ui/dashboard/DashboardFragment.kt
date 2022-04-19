@@ -41,6 +41,7 @@ import dgca.wallet.app.android.protocolhandler.PROTOCOL_HANDLER_REQUEST_KEY
 import dgca.wallet.app.android.protocolhandler.PROTOCOL_HANDLER_RESULT_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.databinding.FragmentDashboardBinding
+import dgca.wallet.app.android.inputrecognizer.INPUT_RECOGNISER_DATA_REQUEST_KEY
 import dgca.wallet.app.android.ui.*
 import dgca.wallet.app.android.ui.dashboard.*
 import java.io.File
@@ -61,27 +62,25 @@ class DashboardFragment : BindingFragment<FragmentDashboardBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity as MainActivity).disableBackButton()
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { requireActivity().finish() }
         binding.scanCode.setOnClickListener { showAddNewDialog() }
         binding.certificatesList.setHasFixedSize(true)
         binding.certificatesList.layoutManager = LinearLayoutManager(requireContext())
 
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>(
-            INPUT_RECOGNISER_DATA_KEY
-        )
-            ?.observe(viewLifecycleOwner) { data ->
+        setFragmentResultListener(INPUT_RECOGNISER_DATA_REQUEST_KEY) { _, bundle ->
+            bundle.getString(INPUT_RECOGNISER_DATA_KEY)?.let {
                 findNavController().navigate(
-                    DashboardFragmentDirections.actionCertificatesFragmentToProtocolHandlerDialogFragment(data)
+                    DashboardFragmentDirections.actionCertificatesFragmentToProtocolHandlerDialogFragment(it)
                 )
             }
+        }
 
         setFragmentResultListener(PROTOCOL_HANDLER_REQUEST_KEY) { _, bundle ->
             findNavController().navigateUp()
             bundle.getParcelable<Intent>(PROTOCOL_HANDLER_RESULT_KEY)?.let { startActivityForResult(it, 0x0) }
         }
 
-        viewModel.itemCards.observe(viewLifecycleOwner, {
+        viewModel.itemCards.observe(viewLifecycleOwner) {
             if (it.isEmpty()) {
                 binding.certificatesList.visibility = View.GONE
                 binding.noAvailableOffersGroup.visibility = View.VISIBLE
@@ -90,8 +89,8 @@ class DashboardFragment : BindingFragment<FragmentDashboardBinding>() {
                 binding.certificatesList.visibility = View.VISIBLE
                 binding.noAvailableOffersGroup.visibility = View.GONE
             }
-        })
-        viewModel.inProgress.observe(viewLifecycleOwner, { binding.progressBar.isVisible = it })
+        }
+        viewModel.inProgress.observe(viewLifecycleOwner) { binding.progressBar.isVisible = it }
 
         setFragmentResultListener(AddNewBottomDialogFragment.REQUEST_KEY) { key, bundle ->
             findNavController().navigateUp()

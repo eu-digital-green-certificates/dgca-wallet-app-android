@@ -36,13 +36,13 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import dgca.wallet.app.android.inputrecognizer.navigateToSpecificModule
-import dgca.wallet.app.android.inputrecognizer.nfc.NdefParser
-import dgca.wallet.app.android.protocolhandler.ProtocolHandlerViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.BuildConfig
 import dgca.wallet.app.android.R
 import dgca.wallet.app.android.databinding.ActivityMainBinding
+import dgca.wallet.app.android.inputrecognizer.navigateToSpecificModule
+import dgca.wallet.app.android.inputrecognizer.nfc.NdefParser
+import dgca.wallet.app.android.protocolhandler.ProtocolHandlerViewModel
 import dgca.wallet.app.android.ui.dashboard.DashboardFragmentDirections
 import timber.log.Timber
 
@@ -54,8 +54,14 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController: NavController
+
+    private val listener =
+        NavController.OnDestinationChangedListener { controller, destination, arguments ->
+            if (destination.id == R.id.dashboardFragment) {
+                binding.toolbar.navigationIcon = null
+            }
+        }
 
     private val viewModel by viewModels<MainViewModel>()
     private val protocolViewModel by viewModels<ProtocolHandlerViewModel>()
@@ -90,6 +96,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        navController.addOnDestinationChangedListener(listener)
+    }
+
+    override fun onPause() {
+        navController.removeOnDestinationChangedListener(listener)
+        super.onPause()
+    }
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         handleIntent(intent)
@@ -117,10 +133,6 @@ class MainActivity : AppCompatActivity() {
 
     fun clearBackground() {
         window.setBackgroundDrawable(ContextCompat.getDrawable(this, R.color.white))
-    }
-
-    fun disableBackButton() {
-        binding.toolbar.navigationIcon = null
     }
 
     private fun handleIntent(intent: Intent) {

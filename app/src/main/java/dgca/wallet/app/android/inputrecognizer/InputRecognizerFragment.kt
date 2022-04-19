@@ -28,6 +28,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
@@ -35,6 +37,7 @@ import dgca.wallet.app.android.base.BindingFragment
 import dgca.wallet.app.android.protocolhandler.PROTOCOL_HANDLER_REQUEST_KEY
 import dgca.wallet.app.android.protocolhandler.PROTOCOL_HANDLER_RESULT_KEY
 
+const val INPUT_RECOGNISER_DATA_REQUEST_KEY = "INPUT_RECOGNISER_DATA_REQUEST"
 const val INPUT_RECOGNISER_DATA_KEY = "INPUT_RECOGNISER_DATA"
 
 abstract class InputRecognizerFragment<T : ViewBinding> : BindingFragment<T>() {
@@ -54,10 +57,11 @@ abstract class InputRecognizerFragment<T : ViewBinding> : BindingFragment<T>() {
     }
 
     fun navigateToProtocolHandler(data: String) {
-        findNavController().apply {
-            previousBackStackEntry?.savedStateHandle?.set(INPUT_RECOGNISER_DATA_KEY, data)
-            navigateUp()
-        }
+        findNavController().navigateUp()
+        setFragmentResult(
+            INPUT_RECOGNISER_DATA_REQUEST_KEY,
+            bundleOf(INPUT_RECOGNISER_DATA_KEY to data)
+        )
     }
 }
 

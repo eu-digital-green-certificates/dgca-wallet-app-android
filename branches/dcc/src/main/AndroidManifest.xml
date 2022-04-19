@@ -39,7 +39,7 @@
         <activity
             android:name="dgca.wallet.app.android.dcc.ui.wallet.certificates.view.DccViewCertificateActivity"
             android:exported="false"
-            android:label="DccViewCertificateActivity"
+            android:label="@string/your_certificate"
             android:theme="@style/Theme.Dcc">
             <intent-filter>
                 <action android:name="com.android.app.dcc.View" />
