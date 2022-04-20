@@ -8,4 +8,6 @@
     <string name="cancel">Cancel</string>
     <string name="raw_data_details_view">RAW data details view</string>
     <string name="close">Close</string>
+    <string name="vc_cert_title">Step2: Your Data</string>
+    <string name="save">Save</string>
 </resources>

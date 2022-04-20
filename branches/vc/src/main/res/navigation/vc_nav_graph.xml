@@ -29,7 +29,7 @@
     <fragment
         android:id="@+id/verificationFragment"
         android:name="dgca.wallet.app.android.vc.ui.VcVerificationFragment"
-        android:label="VcVerification"
+        android:label="@string/vc_cert_title"
         tools:layout="@layout/fragment_vc_verification">
 
         <argument

@@ -110,6 +110,10 @@ class VcViewModel @Inject constructor(
         }
     }
 
+    fun saveItem() {
+//        TODO: update
+    }
+
     private suspend fun decodeJwsInput(input: String) {
         jwsObject = decodeJws(input)
 

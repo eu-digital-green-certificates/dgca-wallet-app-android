@@ -40,4 +40,18 @@
         <item name="android:textColorSecondary">@color/grey_75</item>
         <item name="android:textColorTertiary">@color/grey_50</item>
     </style>
+
+    <style name="Vc.Toolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="actionMenuTextColor">@color/white</item>
+        <item name="android:itemTextAppearance">@style/menuItemTextAppearance</item>
+
+        <!-- color used by navigation icon and overflow icon -->
+        <item name="colorOnPrimary">@color/white</item>
+    </style>
+
+    <style name="menuItemTextAppearance" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
+        <item name="android:textColor">@color/black</item>
+    </style>
 </resources>

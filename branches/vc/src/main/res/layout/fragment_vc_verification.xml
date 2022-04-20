@@ -27,40 +27,6 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <View
-        android:id="@+id/verificationStatusBackground"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/green"
-        app:layout_constraintBottom_toBottomOf="@+id/status"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/status" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/certStatusIcon"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:scaleType="centerInside"
-        android:src="@drawable/check"
-        app:layout_constraintBottom_toBottomOf="@id/status"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/status" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:paddingVertical="16dp"
-        android:textColor="@color/white"
-        android:textSize="42sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/certStatusIcon"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/cert_valid" />
-
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/status_detailed"
         android:layout_width="0dp"
@@ -72,7 +38,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/status"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="Invalid signature"
         tools:visibility="visible" />
 
@@ -93,7 +59,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="headers, certStatusIcon, status, scroll_view"
+        app:constraint_referenced_ids="headers, scroll_view"
         tools:visibility="visible" />
 
     <androidx.core.widget.NestedScrollView
@@ -102,7 +68,7 @@
         android:layout_height="0dp"
         android:overScrollMode="always"
         android:scrollbars="none"
-        app:layout_constraintBottom_toTopOf="@+id/close"
+        app:layout_constraintBottom_toTopOf="@+id/action_btn"
         app:layout_constraintTop_toBottomOf="@+id/headers">
 
         <LinearLayout
@@ -186,16 +152,20 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <Button
-        android:id="@+id/close"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/action_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
+        android:backgroundTint="@color/red"
         android:text="@string/close"
         android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
 
     <ProgressBar
         android:id="@+id/progressBar"

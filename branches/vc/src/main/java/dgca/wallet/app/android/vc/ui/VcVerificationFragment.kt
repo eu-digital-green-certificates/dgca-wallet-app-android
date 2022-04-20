@@ -44,11 +44,13 @@ import dgca.wallet.app.android.vc.model.DataItem
 @AndroidEntryPoint
 class VcVerificationFragment : BindingFragment<FragmentVcVerificationBinding>() {
 
+    private lateinit var adapter: VcAdapter
+
     private val viewModel by viewModels<VcViewModel>()
     private val args by navArgs<VcVerificationFragmentArgs>()
-    var isRawExpanded = false
 
-    private lateinit var adapter: VcAdapter
+    private var isQrValid: Boolean = false
+    private var isRawExpanded = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +74,13 @@ class VcVerificationFragment : BindingFragment<FragmentVcVerificationBinding>() 
 
         viewModel.validate(args.qrCodeText)
 
-        binding.close.setOnClickListener { requireActivity().finish() }
+        binding.actionBtn.setOnClickListener {
+            if (isQrValid) {
+                viewModel.saveItem()
+            } else {
+                requireActivity().finish()
+            }
+        }
         binding.expandButton.setOnClickListener {
             isRawExpanded = !isRawExpanded
             binding.expandButton.setImageResource(if (isRawExpanded) R.drawable.ic_icon_minus else R.drawable.ic_icon_plus)
@@ -86,13 +94,18 @@ class VcVerificationFragment : BindingFragment<FragmentVcVerificationBinding>() 
     private fun onViewModelEvent(event: VcViewModel.ViewEvent) {
         when (event) {
             is VcViewModel.ViewEvent.OnError -> handleError(event.type, event.rawPayloadData)
-            is VcViewModel.ViewEvent.OnVerified -> showVerified(event.headers, event.payloadItems, event.json)
+            is VcViewModel.ViewEvent.OnVerified -> showVerified(
+                event.headers,
+                event.payloadItems,
+                event.json
+            )
             is VcViewModel.ViewEvent.OnIssuerNotTrusted -> showConfirmationDialog(event.issuerDomain)
         }
     }
 
     @SuppressLint("SetTextI18n")
     private fun handleError(error: VcViewModel.ErrorType, rawPayloadData: String) {
+        isQrValid = false
         val errorText = when (error) {
             VcViewModel.ErrorType.JWS_STRUCTURE_NOT_VALID -> "JWS structure not valid"
             VcViewModel.ErrorType.KID_NOT_INCLUDED -> "Key id (KID) not included"
@@ -106,28 +119,29 @@ class VcVerificationFragment : BindingFragment<FragmentVcVerificationBinding>() 
         binding.rawDataContainer.isVisible = rawPayloadData.isNotEmpty()
         binding.vcRawData.text = rawPayloadData
         binding.progressBar.isVisible = false
-        binding.certStatusIcon.setImageResource(R.drawable.error)
-        binding.verificationStatusBackground.backgroundTintList =
-            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.red))
-        binding.status.text = getString(R.string.cert_invalid)
         binding.statusDetailed.isVisible = true
         binding.statusDetailed.text = errorText
         binding.statusViews.isVisible = true
+
+        binding.actionBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.red))
+        binding.actionBtn.text = getString(R.string.close)
+        binding.actionBtn.isVisible = true
     }
 
     @SuppressLint("SetTextI18n")
     private fun showVerified(headers: MutableList<DataItem>, payloadItems: List<DataItem>, rawJson: String) {
+        isQrValid = true
         addHeaders(headers)
         adapter.update(payloadItems)
 
         binding.progressBar.isVisible = false
-        binding.certStatusIcon.setImageResource(R.drawable.check)
-        binding.verificationStatusBackground.backgroundTintList =
-            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.green))
         binding.rawDataContainer.isVisible = true
         binding.vcRawData.text = rawJson
-        binding.status.text = getString(R.string.cert_valid)
         binding.statusViews.isVisible = true
+
+        binding.actionBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.green))
+        binding.actionBtn.text = getString(R.string.save)
+        binding.actionBtn.isVisible = true
     }
 
     private fun addHeaders(headers: MutableList<DataItem>) {
