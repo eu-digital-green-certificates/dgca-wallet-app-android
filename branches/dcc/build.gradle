@@ -106,5 +106,10 @@ dependencies {
     implementation Deps.timber
 
     testImplementation Deps.test_junit
+    testImplementation Deps.mockito_core
+    testImplementation Deps.mockito_kotlin
+    testImplementation Deps.appache_commons
+
+    testImplementation Deps.test_junit
     androidTestImplementation Deps.test_ext
 }

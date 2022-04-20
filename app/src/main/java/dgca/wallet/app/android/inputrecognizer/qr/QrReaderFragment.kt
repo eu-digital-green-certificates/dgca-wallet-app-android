@@ -78,11 +78,6 @@ class QrReaderFragment : InputRecognizerFragment<FragmentQrReaderBinding>() {
         binding.barcodeScanner.decoderFactory = DefaultDecoderFactory(formats)
         binding.barcodeScanner.decodeContinuous(callback)
         beepManager = BeepManager(requireActivity())
-
-        binding.settings.setOnClickListener {
-            val action = QrReaderFragmentDirections.actionQrReaderFragmentToSettingsFragment()
-            findNavController().navigate(action)
-        }
     }
 
     override fun onResume() {

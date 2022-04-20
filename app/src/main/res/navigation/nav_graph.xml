@@ -156,7 +156,7 @@
     <fragment
         android:id="@+id/qrReaderFragment"
         android:name="dgca.wallet.app.android.inputrecognizer.qr.QrReaderFragment"
-        android:label="QR Reader"
+        android:label="@string/qr_reader_title"
         tools:layout="@layout/fragment_qr_reader">
 
         <action

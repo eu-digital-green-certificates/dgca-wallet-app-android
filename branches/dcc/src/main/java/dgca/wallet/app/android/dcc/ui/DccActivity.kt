@@ -52,7 +52,7 @@ class DccActivity : AppCompatActivity() {
         val input = intent.getStringExtra(RESULT_KEY) ?: ""
         viewModel.init(input)
 
-        viewModel.modelFetcherResult.observe(this, { modelFetcherResult ->
+        viewModel.modelFetcherResult.observe(this) { modelFetcherResult ->
             when (modelFetcherResult) {
                 is MainViewModel.ModelFetcherResult.GreenCertificateRecognised -> {
                     navController.setGraph(
@@ -68,13 +68,13 @@ class DccActivity : AppCompatActivity() {
                     )
                 else -> showErrorAndClose()
             }
-        })
+        }
 
-        viewModel.event.observe(this, { event ->
+        viewModel.event.observe(this) { event ->
             event.getContentIfNotHandled()?.let {
                 onViewModelEvent(it)
             }
-        })
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -83,14 +83,12 @@ class DccActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.settings -> {
-                navController.navigate(R.id.settingsFragment)
-                true
-            }
-            android.R.id.home -> navController.navigateUp()
-            else -> super.onOptionsItemSelected(item)
+        if (item.itemId == R.id.settings) {
+            navController.navigate(R.id.settingsFragment)
+        } else if (item.itemId != android.R.id.home || !navController.navigateUp()) {
+            super.onBackPressed()
         }
+        return true
     }
 
     override fun onSupportNavigateUp(): Boolean {
