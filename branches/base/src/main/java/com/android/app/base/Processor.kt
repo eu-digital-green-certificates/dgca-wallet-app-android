@@ -11,7 +11,7 @@ interface Processor {
 
     suspend fun getItemCards(): List<ProcessorItemCard>?
 
-    fun getSettingsIntent(): Pair<String, Intent>
+    fun getSettingsIntent(): Pair<String, Intent>?
 
     suspend fun deleteItem(itemCard: Int)
 }
