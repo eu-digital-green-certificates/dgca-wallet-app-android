@@ -22,11 +22,25 @@
 
 package dgca.wallet.app.android.vc
 
-import com.jayway.jsonpath.DocumentContext
-import com.jayway.jsonpath.JsonPath
-import com.jayway.jsonpath.TypeRef
+import com.jayway.jsonpath.*
+import com.jayway.jsonpath.spi.json.GsonJsonProvider
+import com.jayway.jsonpath.spi.json.JsonProvider
+import com.jayway.jsonpath.spi.mapper.GsonMappingProvider
+import com.jayway.jsonpath.spi.mapper.MappingProvider
 import dgca.wallet.app.android.vc.model.DataItem
 import timber.log.Timber
+import java.util.*
+
+fun setupPathProviders() {
+    Configuration.setDefaults(object : Configuration.Defaults {
+        private val jsonProvider: JsonProvider = GsonJsonProvider()
+        private val mappingProvider: MappingProvider = GsonMappingProvider()
+
+        override fun jsonProvider(): JsonProvider = jsonProvider
+        override fun mappingProvider(): MappingProvider = mappingProvider
+        override fun options(): Set<Option> = EnumSet.noneOf(Option::class.java)
+    })
+}
 
 fun String.tryFetchObject(path: String, title: String, items: MutableList<DataItem>) {
     try {
@@ -48,5 +62,3 @@ private fun String.tryFetchObjects(path: String, title: String, items: MutableLi
         Timber.e(ex, "Cannot parse path")
     }
 }
-
-

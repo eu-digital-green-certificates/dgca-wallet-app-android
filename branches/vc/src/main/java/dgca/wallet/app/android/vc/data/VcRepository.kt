@@ -26,6 +26,7 @@ import com.android.app.base.ProcessorItemCard
 import dgca.wallet.app.android.vc.data.remote.model.Jwk
 import dgca.wallet.app.android.vc.data.remote.model.SignerCertificate
 import dgca.wallet.app.android.vc.data.remote.model.VerificationMethod
+import dgca.wallet.app.android.vc.model.VcCard
 import java.time.ZonedDateTime
 
 interface VcRepository {
@@ -47,4 +48,6 @@ interface VcRepository {
     suspend fun getVcItems(): List<ProcessorItemCard>
 
     suspend fun deleteItem(itemCard: Int)
+
+    suspend fun getVcItemById(certId: Int): VcCard?
 }

@@ -35,6 +35,7 @@ import java.time.format.DateTimeFormatter
 
 @Parcelize
 data class VcCard(
+    val kid: String,
     val id: Int,
     val contextJson: String,
     val payload: String,
@@ -54,15 +55,14 @@ data class VcCard(
 
     override fun subTitle(res: Resources): String = ""
 
-    override fun dateString(res: Resources): String = DateTimeFormatter.ofPattern("d MMMM yyyy, HH:mm").format(
-        timeOfScanning.withZoneSameInstant(
-            ZoneId.systemDefault()
-        )
-    )
+    override fun dateString(res: Resources): String =
+        DateTimeFormatter.ofPattern("d MMMM yyyy, HH:mm").format(timeOfScanning.withZoneSameInstant(ZoneId.systemDefault()))
 
-    override fun actionIntent(): Intent =
-        Intent("com.android.app.dcc.View", Uri.parse("view-certificate://dcc"))
-            .putExtra(VC_CERTIFICATE_ID_PARAM_KEY, id)
+    override fun actionIntent(): Intent = Intent(VC_VIEW_ACTION, Uri.parse(VC_VIEW_URI)).putExtra(VC_CERTIFICATE_ID_PARAM_KEY, id)
+
+    companion object {
+        const val VC_CERTIFICATE_ID_PARAM_KEY = "dgca.wallet.app.android.vc.id_key"
+        private const val VC_VIEW_ACTION = "com.android.app.vc.View"
+        private const val VC_VIEW_URI = "view-certificate://vc"
+    }
 }
-
-const val VC_CERTIFICATE_ID_PARAM_KEY = "dgca.wallet.app.android.vc.id_key"

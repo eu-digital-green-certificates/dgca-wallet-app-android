@@ -29,12 +29,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.gson.Gson
-import com.jayway.jsonpath.Configuration
-import com.jayway.jsonpath.Option
-import com.jayway.jsonpath.spi.json.GsonJsonProvider
-import com.jayway.jsonpath.spi.json.JsonProvider
-import com.jayway.jsonpath.spi.mapper.GsonMappingProvider
-import com.jayway.jsonpath.spi.mapper.MappingProvider
 import com.nimbusds.jose.JWSObject
 import com.nimbusds.jose.Payload
 import com.nimbusds.jose.crypto.factories.DefaultJWSVerifierFactory
@@ -46,6 +40,7 @@ import dgca.wallet.app.android.vc.data.remote.model.Jwk
 import dgca.wallet.app.android.vc.inflate
 import dgca.wallet.app.android.vc.model.DataItem
 import dgca.wallet.app.android.vc.model.PayloadData
+import dgca.wallet.app.android.vc.setupPathProviders
 import dgca.wallet.app.android.vc.tryFetchObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -54,7 +49,6 @@ import timber.log.Timber
 import java.net.URI
 import java.text.ParseException
 import java.time.ZonedDateTime
-import java.util.*
 import javax.inject.Inject
 import kotlin.math.roundToLong
 
@@ -73,14 +67,7 @@ class VcViewModel @Inject constructor(
     private var contextFileJson = ""
 
     init {
-        Configuration.setDefaults(object : Configuration.Defaults {
-            private val jsonProvider: JsonProvider = GsonJsonProvider()
-            private val mappingProvider: MappingProvider = GsonMappingProvider()
-
-            override fun jsonProvider(): JsonProvider = jsonProvider
-            override fun mappingProvider(): MappingProvider = mappingProvider
-            override fun options(): Set<Option> = EnumSet.noneOf(Option::class.java)
-        })
+        setupPathProviders()
     }
 
     fun setContextJson(json: String) {

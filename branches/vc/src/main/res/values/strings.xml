@@ -11,4 +11,7 @@
     <string name="vc_cert_title">Step2: Your Data</string>
     <string name="save">Save</string>
     <string name="vc_card_title">Verifiable Credential</string>
+    <string name="settings">Settings</string>
+    <string name="delete">Delete</string>
+    <string name="your_verifiable_credential">Your verifiable credential</string>
 </resources>

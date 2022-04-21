@@ -27,6 +27,7 @@ import com.google.gson.Gson
 import dgca.wallet.app.android.vc.containsServerError
 import dgca.wallet.app.android.vc.data.local.JwkDao
 import dgca.wallet.app.android.vc.data.local.JwkLocal
+import dgca.wallet.app.android.vc.data.local.VcItemDao
 import dgca.wallet.app.android.vc.data.local.VcPreferences
 import dgca.wallet.app.android.vc.data.local.mapper.toVcCard
 import dgca.wallet.app.android.vc.data.local.model.VcEntity
@@ -34,6 +35,7 @@ import dgca.wallet.app.android.vc.data.remote.VcApiService
 import dgca.wallet.app.android.vc.data.remote.model.Jwk
 import dgca.wallet.app.android.vc.data.remote.model.SignerCertificate
 import dgca.wallet.app.android.vc.data.remote.model.VerificationMethod
+import dgca.wallet.app.android.vc.model.VcCard
 import retrofit2.HttpException
 import timber.log.Timber
 import java.io.IOException
@@ -44,7 +46,8 @@ import javax.inject.Inject
 class VcRepositoryImpl @Inject constructor(
     private val preferences: VcPreferences,
     private val apiService: VcApiService,
-    private val dao: JwkDao
+    private val jwkDao: JwkDao,
+    private val vcItemDao: VcItemDao
 ) : VcRepository {
 
     override suspend fun loadTrustList(): List<SignerCertificate> {
@@ -82,12 +85,12 @@ class VcRepositoryImpl @Inject constructor(
 
     override suspend fun saveJWKs(result: List<Jwk>) {
         val localJwkList = result.map { JwkLocal(it.kid, Gson().toJson(it)) }
-        dao.save(localJwkList)
+        jwkDao.save(localJwkList)
     }
 
     override suspend fun getIssuerJWKsByKid(kid: String): List<Jwk> =
         try {
-            dao.getIssuer(kid).map { Gson().fromJson(it.jwk, Jwk::class.java) }
+            jwkDao.getIssuer(kid).map { Gson().fromJson(it.jwk, Jwk::class.java) }
         } catch (ex: Exception) {
             Timber.e(ex, "Cannot parse local jwk list")
             emptyList()
@@ -95,7 +98,7 @@ class VcRepositoryImpl @Inject constructor(
 
     override suspend fun removeOutdated() {
         try {
-            dao.deleteAll()
+            jwkDao.deleteAll()
         } catch (ex: Exception) {
             Timber.e(ex, "Failed to clear db")
         }
@@ -108,9 +111,10 @@ class VcRepositoryImpl @Inject constructor(
         time: ZonedDateTime
     ): Boolean =
         try {
-            dao.saveVcItem(
+            vcItemDao.saveVcItem(
                 VcEntity(
                     kid = kid,
+                    id = kid.hashCode(),
                     contextJson = contextFileJson,
                     payload = payloadUnzipString,
                     timeOfScanning = time
@@ -124,7 +128,7 @@ class VcRepositoryImpl @Inject constructor(
 
     override suspend fun getVcItems(): List<ProcessorItemCard> =
         try {
-            dao.getVcItems().map { it.toVcCard() }
+            vcItemDao.getVcItems().map { it.toVcCard() }
         } catch (ex: Exception) {
             Timber.e(ex, "Failed to get items")
             emptyList()
@@ -132,9 +136,17 @@ class VcRepositoryImpl @Inject constructor(
 
     override suspend fun deleteItem(itemCard: Int) {
         try {
-            dao.deleteItem(itemCard)
+            vcItemDao.deleteItem(itemCard)
         } catch (ex: Exception) {
             Timber.e(ex, "Failed to delete item")
         }
     }
+
+    override suspend fun getVcItemById(certId: Int): VcCard? =
+        try {
+            vcItemDao.getById(certId)?.toVcCard()
+        } catch (ex: Exception) {
+            Timber.e(ex, "Failed to get item by id:$certId")
+            null
+        }
 }

@@ -27,6 +27,7 @@ import dgca.wallet.app.android.vc.model.VcCard
 
 fun VcEntity.toVcCard(): VcCard =
     VcCard(
+        kid = kid,
         id = id,
         contextJson = contextJson,
         payload = payload,

@@ -17,28 +17,29 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 3/17/22, 1:52 PM
+ *  Created by osarapulov on 3/17/22, 1:55 PM
  */
 
 package dgca.wallet.app.android.vc.data.local
 
-import androidx.room.Database
-import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
-import dgca.wallet.app.android.vc.data.Converters
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import dgca.wallet.app.android.vc.data.local.model.VcEntity
 
-@Database(
-    entities = [
-        JwkLocal::class,
-        VcEntity::class
-    ],
-    version = 1
-)
-@TypeConverters(Converters::class)
-abstract class VcDatabase : RoomDatabase() {
+@Dao
+interface VcItemDao {
 
-    abstract fun jwkDao(): JwkDao
+    @Query("SELECT * FROM vc_item")
+    suspend fun getVcItems(): List<VcEntity>
 
-    abstract fun vcItemDao(): VcItemDao
+    @Query("DELETE FROM vc_item WHERE kid = :itemCard")
+    suspend fun deleteItem(itemCard: Int)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveVcItem(vcEntity: VcEntity): Long
+
+    @Query("SELECT * FROM vc_item WHERE id = :certId")
+    suspend fun getById(certId: Int): VcEntity?
 }

@@ -26,7 +26,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import dgca.wallet.app.android.vc.data.local.model.VcEntity
 
 @Dao
 interface JwkDao {
@@ -39,13 +38,4 @@ interface JwkDao {
 
     @Query("DELETE FROM jwk")
     suspend fun deleteAll()
-
-    @Query("SELECT * FROM vc_item")
-    suspend fun getVcItems(): List<VcEntity>
-
-    @Query("DELETE FROM vc_item WHERE kid = :itemCard")
-    suspend fun deleteItem(itemCard: Int)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun saveVcItem(vcEntity: VcEntity): Long
 }

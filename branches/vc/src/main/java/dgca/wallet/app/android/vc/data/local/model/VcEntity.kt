@@ -30,16 +30,16 @@ import java.time.ZonedDateTime
 
 @Entity(
     tableName = "vc_item",
-    indices = [Index("id")]
+    indices = [Index("kid")]
 )
 data class VcEntity(
 
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    val id: Int = 0,
-
+    @PrimaryKey
     @ColumnInfo(name = "kid")
     val kid: String,
+
+    @ColumnInfo(name = "id")
+    val id: Int,
 
     @ColumnInfo(name = "context_json")
     val contextJson: String,

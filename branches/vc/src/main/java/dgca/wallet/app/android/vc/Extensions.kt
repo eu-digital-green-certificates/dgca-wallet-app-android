@@ -27,6 +27,10 @@ import android.util.Base64
 import timber.log.Timber
 import java.io.*
 
+private const val HEALTH_CARD = "https://smarthealth.cards#health-card"
+private const val HEALTH_CARD_IMMUNIZATION = "https://smarthealth.cards#immunization"
+private const val HEALTH_CARD_COVID19 = "https://smarthealth.cards#covid19"
+
 fun String.fromBase64(): ByteArray = Base64.decode(this, Base64.NO_WRAP)
 
 fun Context.getStringFromJsonFile(fileId: Int): String {
@@ -48,3 +52,13 @@ fun Context.getStringFromJsonFile(fileId: Int): String {
 
     return ""
 }
+
+fun List<String>.replaceKnownTypes(): List<String> =
+    map {
+        when (it) {
+            HEALTH_CARD -> "Health-card"
+            HEALTH_CARD_IMMUNIZATION -> "Immunization"
+            HEALTH_CARD_COVID19 -> "Covid19"
+            else -> it
+        }
+    }

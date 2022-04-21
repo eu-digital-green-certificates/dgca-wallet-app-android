@@ -31,6 +31,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dgca.wallet.app.android.vc.data.local.JwkDao
 import dgca.wallet.app.android.vc.data.local.VcDatabase
+import dgca.wallet.app.android.vc.data.local.VcItemDao
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -46,4 +47,8 @@ object VcLocalDataSourceModule {
     @Singleton
     @Provides
     fun provideJwkDao(database: VcDatabase): JwkDao = database.jwkDao()
+
+    @Singleton
+    @Provides
+    fun provideVcItemDao(database: VcDatabase): VcItemDao = database.vcItemDao()
 }

@@ -23,6 +23,7 @@
 package dgca.wallet.app.android.vc.ui
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -66,6 +67,13 @@ class VcActivity : AppCompatActivity() {
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
 
         setSupportActionBar(binding.toolbar)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId != android.R.id.home || !navController.navigateUp()) {
+            super.onBackPressed()
+        }
+        return true
     }
 
     override fun onSupportNavigateUp(): Boolean {

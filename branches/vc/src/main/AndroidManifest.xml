@@ -42,6 +42,22 @@
                     android:scheme="verifier" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="dgca.wallet.app.android.vc.ui.certview.VcViewCertificateActivity"
+            android:exported="false"
+            android:label="@string/your_verifiable_credential"
+            android:theme="@style/Theme.Vc">
+            <intent-filter>
+                <action android:name="com.android.app.vc.View" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="vc"
+                    android:scheme="view-certificate" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name="dgca.wallet.app.android.vc.ui.VcSettingsActivity"
             android:exported="false"

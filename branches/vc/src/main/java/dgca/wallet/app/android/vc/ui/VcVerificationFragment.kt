@@ -41,6 +41,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.vc.getStringFromJsonFile
 import dgca.wallet.app.android.vc.model.DataItem
+import dgca.wallet.app.android.vc.replaceKnownTypes
 
 @AndroidEntryPoint
 class VcVerificationFragment : BindingFragment<FragmentVcVerificationBinding>() {
@@ -186,22 +187,6 @@ class VcVerificationFragment : BindingFragment<FragmentVcVerificationBinding>() 
                 requireActivity().finish()
             }
             .show()
-    }
-
-    private fun List<String>.replaceKnownTypes(): List<String> =
-        map {
-            when (it) {
-                HEALTH_CARD -> "Health-card"
-                HEALTH_CARD_IMMUNIZATION -> "Immunization"
-                HEALTH_CARD_COVID19 -> "Covid19"
-                else -> it
-            }
-        }
-
-    companion object {
-        private const val HEALTH_CARD = "https://smarthealth.cards#health-card"
-        private const val HEALTH_CARD_IMMUNIZATION = "https://smarthealth.cards#immunization"
-        private const val HEALTH_CARD_COVID19 = "https://smarthealth.cards#covid19"
     }
 }
 
