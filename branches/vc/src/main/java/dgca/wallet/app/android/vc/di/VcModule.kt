@@ -32,6 +32,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
 import dgca.wallet.app.android.vc.VcProcessor
+import dgca.wallet.app.android.vc.data.VcRepository
 import dgca.wallet.app.android.vc.data.local.VcPreferences
 import dgca.wallet.app.android.vc.data.local.VcPreferencesImpl
 import javax.inject.Singleton
@@ -43,7 +44,8 @@ class VcModule {
     @Provides
     @IntoSet
     @ProcessorMarker
-    fun provideVcProcessor(@ApplicationContext context: Context): Processor = VcProcessor(context)
+    fun provideVcProcessor(@ApplicationContext context: Context, vcRepository: VcRepository): Processor =
+        VcProcessor(context, vcRepository)
 
     @Singleton
     @Provides

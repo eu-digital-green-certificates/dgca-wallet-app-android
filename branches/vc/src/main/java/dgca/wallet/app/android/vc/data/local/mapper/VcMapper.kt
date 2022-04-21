@@ -1,6 +1,6 @@
 /*
  *  ---license-start
- *  eu-digital-green-certificates / dgca-verifier-app-android
+ *  eu-digital-green-certificates / dgca-wallet-app-android
  *  ---
  *  Copyright (C) 2022 T-Systems International GmbH and all other contributors
  *  ---
@@ -17,26 +17,19 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 3/17/22, 1:52 PM
+ *  Created by mykhailo.nester on 21/04/2022, 12:30
  */
 
-package dgca.wallet.app.android.vc.data.local
+package dgca.wallet.app.android.vc.data.local.mapper
 
-import androidx.room.Database
-import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
-import dgca.wallet.app.android.vc.data.Converters
 import dgca.wallet.app.android.vc.data.local.model.VcEntity
+import dgca.wallet.app.android.vc.model.VcCard
 
-@Database(
-    entities = [
-        JwkLocal::class,
-        VcEntity::class
-    ],
-    version = 1
-)
-@TypeConverters(Converters::class)
-abstract class VcDatabase : RoomDatabase() {
-
-    abstract fun jwkDao(): JwkDao
-}
+fun VcEntity.toVcCard(): VcCard =
+    VcCard(
+        id = id,
+        contextJson = contextJson,
+        payload = payload,
+        timeOfScanning = timeOfScanning,
+        isRevoked = false
+    )

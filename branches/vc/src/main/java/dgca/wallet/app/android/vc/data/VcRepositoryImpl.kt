@@ -22,11 +22,14 @@
 
 package dgca.wallet.app.android.vc.data
 
+import com.android.app.base.ProcessorItemCard
 import com.google.gson.Gson
 import dgca.wallet.app.android.vc.containsServerError
 import dgca.wallet.app.android.vc.data.local.JwkDao
 import dgca.wallet.app.android.vc.data.local.JwkLocal
 import dgca.wallet.app.android.vc.data.local.VcPreferences
+import dgca.wallet.app.android.vc.data.local.mapper.toVcCard
+import dgca.wallet.app.android.vc.data.local.model.VcEntity
 import dgca.wallet.app.android.vc.data.remote.VcApiService
 import dgca.wallet.app.android.vc.data.remote.model.Jwk
 import dgca.wallet.app.android.vc.data.remote.model.SignerCertificate
@@ -35,6 +38,7 @@ import retrofit2.HttpException
 import timber.log.Timber
 import java.io.IOException
 import java.net.HttpURLConnection
+import java.time.ZonedDateTime
 import javax.inject.Inject
 
 class VcRepositoryImpl @Inject constructor(
@@ -94,6 +98,43 @@ class VcRepositoryImpl @Inject constructor(
             dao.deleteAll()
         } catch (ex: Exception) {
             Timber.e(ex, "Failed to clear db")
+        }
+    }
+
+    override suspend fun saveVcItem(
+        kid: String,
+        contextFileJson: String,
+        payloadUnzipString: String,
+        time: ZonedDateTime
+    ): Boolean =
+        try {
+            dao.saveVcItem(
+                VcEntity(
+                    kid = kid,
+                    contextJson = contextFileJson,
+                    payload = payloadUnzipString,
+                    timeOfScanning = time
+                )
+            ) != -1L
+        } catch (ex: Exception) {
+            Timber.e(ex, "Failed to save item")
+            false
+        }
+
+
+    override suspend fun getVcItems(): List<ProcessorItemCard> =
+        try {
+            dao.getVcItems().map { it.toVcCard() }
+        } catch (ex: Exception) {
+            Timber.e(ex, "Failed to get items")
+            emptyList()
+        }
+
+    override suspend fun deleteItem(itemCard: Int) {
+        try {
+            dao.deleteItem(itemCard)
+        } catch (ex: Exception) {
+            Timber.e(ex, "Failed to delete item")
         }
     }
 }

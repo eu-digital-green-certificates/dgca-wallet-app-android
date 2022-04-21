@@ -24,6 +24,13 @@ package dgca.wallet.app.android.vc.data
 
 import androidx.room.TypeConverter
 import dgca.wallet.app.android.vc.data.remote.model.IssuerType
+import java.time.Instant
+import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
+
+val UTC_ZONE_ID: ZoneId = ZoneId.ofOffset("", ZoneOffset.UTC).normalized()
 
 class Converters {
 
@@ -32,4 +39,21 @@ class Converters {
 
     @TypeConverter
     fun toType(value: String): IssuerType = IssuerType.values().find { it.name == value } ?: IssuerType.UNKNOWN
+
+    @TypeConverter
+    fun timestampToZonedDateTime(value: Long?): ZonedDateTime =
+        if (value != null) {
+            val instant: Instant = Instant.EPOCH.plus(value, ChronoUnit.MICROS)
+            ZonedDateTime.ofInstant(instant, UTC_ZONE_ID)
+        } else {
+            ZonedDateTime.now(UTC_ZONE_ID)
+        }
+
+    @TypeConverter
+    fun zonedDateTimeToTimestamp(zonedDateTime: ZonedDateTime?): Long =
+        ChronoUnit.MICROS.between(
+            Instant.EPOCH,
+            (zonedDateTime?.withZoneSameInstant(UTC_ZONE_ID)
+                ?: ZonedDateTime.now(UTC_ZONE_ID)).toInstant()
+        )
 }

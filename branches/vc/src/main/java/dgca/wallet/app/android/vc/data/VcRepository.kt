@@ -22,9 +22,11 @@
 
 package dgca.wallet.app.android.vc.data
 
+import com.android.app.base.ProcessorItemCard
 import dgca.wallet.app.android.vc.data.remote.model.Jwk
 import dgca.wallet.app.android.vc.data.remote.model.SignerCertificate
 import dgca.wallet.app.android.vc.data.remote.model.VerificationMethod
+import java.time.ZonedDateTime
 
 interface VcRepository {
 
@@ -39,4 +41,10 @@ interface VcRepository {
     suspend fun getIssuerJWKsByKid(kid: String): List<Jwk>
 
     suspend fun removeOutdated()
+
+    suspend fun saveVcItem(kid: String, contextFileJson: String, payloadUnzipString: String, time: ZonedDateTime): Boolean
+
+    suspend fun getVcItems(): List<ProcessorItemCard>
+
+    suspend fun deleteItem(itemCard: Int)
 }

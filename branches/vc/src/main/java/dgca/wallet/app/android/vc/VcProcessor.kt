@@ -31,6 +31,7 @@ import com.android.app.base.ProcessorItemCard
 import com.android.app.base.RESULT_KEY
 import com.nimbusds.jose.JWSObject
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dgca.wallet.app.android.vc.data.VcRepository
 import dgca.wallet.app.android.vc.worker.TrustListLoadingWorker
 import timber.log.Timber
 import java.text.ParseException
@@ -38,18 +39,16 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class VcProcessor @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val vcRepository: VcRepository
 ) : Processor {
 
-    override fun id(): String {
-        return ""
-    }
+    override fun id(): String = VC_PROCESSOR_ID
 
-    override suspend fun getItemCards(): List<ProcessorItemCard>? {
-        return emptyList()
-    }
+    override suspend fun getItemCards(): List<ProcessorItemCard> = vcRepository.getVcItems()
 
     override suspend fun deleteItem(itemCard: Int) {
+        vcRepository.deleteItem(itemCard)
     }
 
     override fun prefetchData() {
@@ -67,7 +66,6 @@ class VcProcessor @Inject constructor(
             Timber.e(ex, "Not valid jws format")
             null
         }
-
 
     override fun getSettingsIntent(): Pair<String, Intent> =
         Pair(VC_SETTINGS_TITLE, Intent(VC_VIEW_ACTION, Uri.parse(VC_SETTINGS_URI)))
@@ -90,6 +88,7 @@ class VcProcessor @Inject constructor(
         )
 
     companion object {
+        internal const val VC_PROCESSOR_ID = "VC"
         private const val VC_WORKER_CONFIGS = "vcWorkerConfigs"
         private const val VC_VIEW_ACTION = "com.android.app.vc.View"
         private const val VC_VIEW_URI = "verifier://vc"

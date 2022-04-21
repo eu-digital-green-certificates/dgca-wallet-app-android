@@ -25,6 +25,7 @@ package dgca.wallet.app.android.ui.dashboard
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.android.app.base.ProcessorItemCard
 import dgca.wallet.app.android.databinding.ItemCertificateCardBinding
@@ -44,9 +45,19 @@ class CertificateViewHolder(
 
     fun bind(item: ProcessorItemCard) {
         binding.typeView.text = item.processorId()
-        binding.titleView.text = item.title(itemView.resources)
+
+        val title = item.title(itemView.resources)
+        binding.titleView.isVisible = title.isNotEmpty()
+        binding.titleView.text = title
+
+        val subTitle = item.subTitle(itemView.resources)
+        binding.nameView.isVisible = subTitle.isNotEmpty()
         binding.nameView.text = item.subTitle(itemView.resources)
-        binding.scannedAtDateView.text = item.dateString(itemView.resources)
+
+        val date = item.dateString(itemView.resources)
+        binding.scannedAtDateView.isVisible = date.isNotEmpty()
+        binding.scannedAtDateView.text = date
+
         binding.revoked.visibility = if (item.isRevoked) {
             View.VISIBLE
         } else {

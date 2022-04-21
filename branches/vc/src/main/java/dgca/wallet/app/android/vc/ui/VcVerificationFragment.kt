@@ -29,6 +29,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -100,6 +101,11 @@ class VcVerificationFragment : BindingFragment<FragmentVcVerificationBinding>() 
                 event.json
             )
             is VcViewModel.ViewEvent.OnIssuerNotTrusted -> showConfirmationDialog(event.issuerDomain)
+            is VcViewModel.ViewEvent.OnSaveEvent -> if (event.isSaved) {
+                requireActivity().finish()
+            } else {
+                Toast.makeText(requireContext(), "Failed to save item, please try again.", Toast.LENGTH_LONG).show()
+            }
         }
     }
 

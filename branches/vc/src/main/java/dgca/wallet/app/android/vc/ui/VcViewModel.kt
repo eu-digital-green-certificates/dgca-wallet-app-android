@@ -53,6 +53,7 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.net.URI
 import java.text.ParseException
+import java.time.ZonedDateTime
 import java.util.*
 import javax.inject.Inject
 import kotlin.math.roundToLong
@@ -111,7 +112,15 @@ class VcViewModel @Inject constructor(
     }
 
     fun saveItem() {
-//        TODO: update
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = vcRepository.saveVcItem(
+                kid,
+                contextFileJson,
+                payloadUnzipString,
+                ZonedDateTime.now()
+            )
+            _event.postValue(Event(ViewEvent.OnSaveEvent(result)))
+        }
     }
 
     private suspend fun decodeJwsInput(input: String) {
@@ -277,6 +286,8 @@ class VcViewModel @Inject constructor(
         data class OnError(val type: ErrorType, val rawPayloadData: String) : ViewEvent()
         data class OnVerified(val headers: MutableList<DataItem>, val payloadItems: List<DataItem>, val json: String) :
             ViewEvent()
+
+        data class OnSaveEvent(val isSaved: Boolean) : ViewEvent()
     }
 
     enum class ErrorType {
