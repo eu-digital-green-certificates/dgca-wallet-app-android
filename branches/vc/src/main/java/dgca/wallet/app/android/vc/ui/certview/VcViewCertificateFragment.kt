@@ -80,7 +80,8 @@ class VcViewCertificateFragment : BindingFragment<FragmentVcCertificateViewBindi
                     findNavController().navigate(direction)
                 }
                 R.id.delete -> {
-                    Toast.makeText(requireContext(), "Delete TODO", Toast.LENGTH_SHORT).show()
+                    binding.progressBar.isVisible = true
+                    viewModel.deleteItem(args.certificateId)
                 }
             }
 
@@ -108,6 +109,12 @@ class VcViewCertificateFragment : BindingFragment<FragmentVcCertificateViewBindi
             is ViewCertificateViewModel.ViewEvent.OnItemAvailable -> setupUi(event.headers, event.payloadItems, event.json)
             ViewCertificateViewModel.ViewEvent.OnItemNotFound -> {
                 Toast.makeText(requireContext(), "Item not found", Toast.LENGTH_SHORT).show()
+                requireActivity().finish()
+            }
+            is ViewCertificateViewModel.ViewEvent.OnDeleteItem -> {
+                if (!event.isDeleted) {
+                    Toast.makeText(requireContext(), "Item not deleted", Toast.LENGTH_SHORT).show()
+                }
                 requireActivity().finish()
             }
         }

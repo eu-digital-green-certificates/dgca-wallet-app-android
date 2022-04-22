@@ -47,7 +47,7 @@ interface VcRepository {
 
     suspend fun getVcItems(): List<ProcessorItemCard>
 
-    suspend fun deleteItem(itemCard: Int)
+    suspend fun deleteItem(itemCard: Int): Boolean
 
     suspend fun getVcItemById(certId: Int): VcCard?
 }

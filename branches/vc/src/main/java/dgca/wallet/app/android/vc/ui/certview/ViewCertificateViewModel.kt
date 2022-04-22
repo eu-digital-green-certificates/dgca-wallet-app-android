@@ -65,6 +65,13 @@ class ViewCertificateViewModel @Inject constructor(
         }
     }
 
+    fun deleteItem(certificateId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = vcRepository.deleteItem(certificateId)
+            _event.postValue(Event(ViewEvent.OnDeleteItem(result)))
+        }
+    }
+
     private fun parsePayload(contextJson: String, payload: String) {
         val payloadData = Gson().fromJson(contextJson, PayloadData::class.java)
 
@@ -85,5 +92,7 @@ class ViewCertificateViewModel @Inject constructor(
         object OnItemNotFound : ViewEvent()
         data class OnItemAvailable(val headers: MutableList<DataItem>, val payloadItems: List<DataItem>, val json: String) :
             ViewEvent()
+
+        data class OnDeleteItem(val isDeleted: Boolean) : ViewEvent()
     }
 }

@@ -34,8 +34,8 @@ interface VcItemDao {
     @Query("SELECT * FROM vc_item")
     suspend fun getVcItems(): List<VcEntity>
 
-    @Query("DELETE FROM vc_item WHERE kid = :itemCard")
-    suspend fun deleteItem(itemCard: Int)
+    @Query("DELETE FROM vc_item WHERE id = :itemCard")
+    suspend fun deleteItem(itemCard: Int): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveVcItem(vcEntity: VcEntity): Long

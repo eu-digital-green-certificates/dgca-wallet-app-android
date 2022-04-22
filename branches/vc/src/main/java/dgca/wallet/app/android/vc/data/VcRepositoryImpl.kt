@@ -134,13 +134,13 @@ class VcRepositoryImpl @Inject constructor(
             emptyList()
         }
 
-    override suspend fun deleteItem(itemCard: Int) {
+    override suspend fun deleteItem(itemCard: Int): Boolean =
         try {
-            vcItemDao.deleteItem(itemCard)
+            vcItemDao.deleteItem(itemCard) == 1
         } catch (ex: Exception) {
             Timber.e(ex, "Failed to delete item")
+            false
         }
-    }
 
     override suspend fun getVcItemById(certId: Int): VcCard? =
         try {

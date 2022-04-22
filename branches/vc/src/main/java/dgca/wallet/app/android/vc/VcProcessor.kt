@@ -67,8 +67,8 @@ class VcProcessor @Inject constructor(
             null
         }
 
-    override fun getSettingsIntent(): Pair<String, Intent> =
-        Pair(VC_SETTINGS_TITLE, Intent(VC_VIEW_ACTION, Uri.parse(VC_SETTINGS_URI)))
+    override fun getSettingsIntent(): Pair<String, Intent>? = null
+//        Pair(VC_SETTINGS_TITLE, Intent(VC_VIEW_ACTION, Uri.parse(VC_SETTINGS_URI))) // TODO: implement settings
 
     private inline fun <reified T : ListenableWorker> WorkManager.schedulePeriodicWorker(workerId: String) =
         this.enqueueUniquePeriodicWork(
