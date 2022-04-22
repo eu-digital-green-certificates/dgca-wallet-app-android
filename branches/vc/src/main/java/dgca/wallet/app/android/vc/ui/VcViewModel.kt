@@ -86,7 +86,6 @@ class VcViewModel @Inject constructor(
         viewModelScope.launch {
             val holder = issuerHolder ?: return@launch
 
-
             withContext(Dispatchers.IO) {
                 val result = when (holder.type) {
                     IssuerType.HTTP -> resolveIssuer(kid, holder.issuerUrl)
@@ -172,6 +171,7 @@ class VcViewModel @Inject constructor(
                 return null
             }
         } else {
+            payloadUnzipString = jws.payload.toBytes().toString(Charsets.UTF_8)
             jws.payload.toJSONObject()
         }
     }
