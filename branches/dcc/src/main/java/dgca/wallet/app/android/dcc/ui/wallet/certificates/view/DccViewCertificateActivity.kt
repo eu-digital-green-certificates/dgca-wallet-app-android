@@ -47,7 +47,7 @@ class DccViewCertificateActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
-        return true
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -56,6 +56,6 @@ class DccViewCertificateActivity : AppCompatActivity() {
         } else if (item.itemId != android.R.id.home || !navController.navigateUp()) {
             super.onBackPressed()
         }
-        return true
+        return super.onOptionsItemSelected(item)
     }
 }

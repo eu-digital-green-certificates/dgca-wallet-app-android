@@ -87,8 +87,8 @@ class DccViewCertificateFragment : BindingFragment<FragmentCertificateViewBindin
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = adapter
 
-        viewModel.inProgress.observe(viewLifecycleOwner, { binding.progressView.isVisible = it })
-        viewModel.certificate.observe(viewLifecycleOwner, {
+        viewModel.inProgress.observe(viewLifecycleOwner) { binding.progressView.isVisible = it }
+        viewModel.certificate.observe(viewLifecycleOwner) {
             val certificate = it.certificatesCard.certificate
             binding.title.text = when {
                 certificate.vaccinations?.first() != null -> binding.root.resources.getString(
@@ -109,7 +109,7 @@ class DccViewCertificateFragment : BindingFragment<FragmentCertificateViewBindin
             binding.tan.text = getString(R.string.tan_placeholder, it.certificatesCard.tan)
             binding.personFullName.text = certificate.getFullName()
             adapter.update(certificate.getCertificateListData())
-        })
+        }
         viewModel.event.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
                 onViewModelEvent(it)
