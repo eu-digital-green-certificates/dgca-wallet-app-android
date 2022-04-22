@@ -39,6 +39,7 @@ object Versions {
     const val androidx_hilt_viewmodel = "1.0.0-alpha01"
     const val androidx_hilt_work = work_hilt
     const val androidx_hilt_compiler = work_hilt
+    const val androidx_lifecycle_livedata_ktx = "2.4.0-alpha02"
 
     const val androidx_room = "2.3.0"
     const val androidx_worker_ktx = "2.5.0"
@@ -64,6 +65,9 @@ object Versions {
     const val jackson_kotlin = "2.12.0"
     const val jackson_datetype = "jackson-datatype-jsr310"
     const val appache_commons = "2.9.0"
+    const val jose_jwt = "9.21"
+    const val json_path = "2.7.0"
+    const val gson = "2.9.0"
 
     // Validation
     const val json_validation = "2.2.14"

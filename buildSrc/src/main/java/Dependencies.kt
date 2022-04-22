@@ -46,6 +46,7 @@ object Deps {
     const val retrofit2_converter_scalars = "com.squareup.retrofit2:converter-scalars:${Versions.retrofit}"
     const val log_interceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.logging_interceptor}"
     const val biometric = "androidx.biometric:biometric-ktx:${Versions.biometric}"
+    const val androidx_lifecycle_livedata_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.androidx_lifecycle_livedata_ktx}"
 
     const val hilt_plugin = "com.google.dagger:hilt-android-gradle-plugin:${Versions.hilt_version}"
     const val hilt = "com.google.dagger:hilt-android:${Versions.hilt_version}"
@@ -69,6 +70,9 @@ object Deps {
     const val gson_converter = "com.squareup.retrofit2:converter-jackson:${Versions.gson_converter}"
     const val fab = "com.github.clans:fab:${Versions.fab}"
     const val android_lifecycle_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.android_lifecycle_ktx_version}"
+    const val jose_jwt = "com.nimbusds:nimbus-jose-jwt:${Versions.jose_jwt}"
+    const val json_path = "com.jayway.jsonpath:json-path:${Versions.json_path}"
+    const val gson = "com.google.code.gson:gson:${Versions.gson}"
 
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
 

@@ -34,16 +34,15 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.app.base.ProcessorItemCard
+import dagger.hilt.android.AndroidEntryPoint
 import dgca.wallet.app.android.base.BindingFragment
+import dgca.wallet.app.android.databinding.FragmentDashboardBinding
 import dgca.wallet.app.android.inputrecognizer.INPUT_RECOGNISER_DATA_KEY
+import dgca.wallet.app.android.inputrecognizer.INPUT_RECOGNISER_DATA_REQUEST_KEY
 import dgca.wallet.app.android.inputrecognizer.file.image.ImportImageDialogFragment
 import dgca.wallet.app.android.protocolhandler.PROTOCOL_HANDLER_REQUEST_KEY
 import dgca.wallet.app.android.protocolhandler.PROTOCOL_HANDLER_RESULT_KEY
-import dagger.hilt.android.AndroidEntryPoint
-import dgca.wallet.app.android.databinding.FragmentDashboardBinding
-import dgca.wallet.app.android.inputrecognizer.INPUT_RECOGNISER_DATA_REQUEST_KEY
 import dgca.wallet.app.android.ui.*
-import dgca.wallet.app.android.ui.dashboard.*
 import java.io.File
 
 @AndroidEntryPoint

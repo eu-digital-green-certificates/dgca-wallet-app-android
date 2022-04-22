@@ -49,7 +49,7 @@ class DefaultProtocolHandler(private val processors: Set<Processor>) : ProtocolH
     }
 
     override fun getSettingsIntents(): List<Pair<String, Intent>> =
-        processors.map { processor -> processor.getSettingsIntent() }
+        processors.mapNotNull { processor -> processor.getSettingsIntent() }
 
     override suspend fun deleteItem(itemId: Int, processorId: String) {
         processors.forEach {

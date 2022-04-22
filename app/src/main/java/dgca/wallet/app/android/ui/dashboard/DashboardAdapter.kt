@@ -27,7 +27,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.android.app.base.BaseItem
 import com.android.app.base.ProcessorItemCard
-import dgca.wallet.app.android.ui.dashboard.CertificateViewHolder
 import dgca.wallet.app.android.ui.model.FileCard
 import dgca.wallet.app.android.ui.model.HeaderItem
 
