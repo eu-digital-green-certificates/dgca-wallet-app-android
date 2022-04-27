@@ -52,6 +52,18 @@ android {
         }
     }
 
+    flavorDimensions "version"
+    productFlavors {
+        tst {
+            dimension "version"
+            buildConfigField "String", "VC_SERVICE_HOST", "\"https://dgca-verifier-service.cfapps.eu10.hana.ondemand.com/\""
+        }
+        acc {
+            dimension "version"
+            buildConfigField "String", "VC_SERVICE_HOST", "\"https://dgca-verifier-service-eu-acc.cfapps.eu10.hana.ondemand.com/\""
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

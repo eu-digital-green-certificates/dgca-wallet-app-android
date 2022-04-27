@@ -37,8 +37,6 @@ interface VcRepository {
 
     suspend fun resolveIssuerByDid(fullUrl: String): List<VerificationMethod>
 
-    suspend fun saveJWKs(result: List<Jwk>)
-
     suspend fun getIssuerJWKsByKid(kid: String): List<Jwk>
 
     suspend fun removeOutdated()
@@ -50,4 +48,8 @@ interface VcRepository {
     suspend fun deleteItem(itemCard: Int): Boolean
 
     suspend fun getVcItemById(certId: Int): VcCard?
+
+    suspend fun saveJWKs(result: List<Jwk>, url: String)
+
+    suspend fun isIssuerKnown(issuerUrl: String): Boolean
 }

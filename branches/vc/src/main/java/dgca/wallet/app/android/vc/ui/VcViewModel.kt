@@ -34,14 +34,12 @@ import com.nimbusds.jose.Payload
 import com.nimbusds.jose.crypto.factories.DefaultJWSVerifierFactory
 import com.nimbusds.jose.jwk.ECKey
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dgca.wallet.app.android.vc.*
 import dgca.wallet.app.android.vc.data.VcRepository
 import dgca.wallet.app.android.vc.data.remote.model.IssuerType
 import dgca.wallet.app.android.vc.data.remote.model.Jwk
-import dgca.wallet.app.android.vc.inflate
 import dgca.wallet.app.android.vc.model.DataItem
 import dgca.wallet.app.android.vc.model.PayloadData
-import dgca.wallet.app.android.vc.setupPathProviders
-import dgca.wallet.app.android.vc.tryFetchObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -87,12 +85,14 @@ class VcViewModel @Inject constructor(
             val holder = issuerHolder ?: return@launch
 
             withContext(Dispatchers.IO) {
+                val url = holder.issuerUrl
                 val result = when (holder.type) {
-                    IssuerType.HTTP -> resolveIssuer(kid, holder.issuerUrl)
-                    IssuerType.DID -> resolveDid(kid, holder.issuerUrl)
+                    IssuerType.HTTP -> vcRepository.resolveIssuer(url)
+                    IssuerType.DID -> vcRepository.resolveIssuerByDid(url).map { it.publicKeyJwk }
                     else -> emptyList()
                 }
-                validateJws(result)
+                vcRepository.saveJWKs(result, url)
+                validateJws(result.filter { it.kid == kid })
             }
         }
     }
@@ -141,12 +141,24 @@ class VcViewModel @Inject constructor(
         }
 
         if (isTimeValid(notBefore, expires).not()) return
+        val issuerHolder = resolveIssuerUrl(issuer)
+        if (issuerHolder == null) {
+            _event.postValue(Event(ViewEvent.OnError(ErrorType.ISSUER_NOT_RECOGNIZED, payloadUnzipString)))
+            return
+        }
+
+        val isIssuerKnown = vcRepository.isIssuerKnown(issuerHolder.issuerUrl)
+        if (isIssuerKnown.not()) {
+            _event.postValue(Event(ViewEvent.OnIssuerNotTrusted(URI(issuerHolder.issuerUrl).host)))
+            return
+        }
 
         val result = vcRepository.getIssuerJWKsByKid(kid)
         if (result.isEmpty()) {
-            onJWKNotFoundError(issuer)
+            _event.postValue(Event(ViewEvent.OnError(ErrorType.NO_JWK_FOR_KID, payloadUnzipString)))
             return
         }
+
         validateJws(result)
     }
 
@@ -191,24 +203,13 @@ class VcViewModel @Inject constructor(
         return true
     }
 
-    private fun onJWKNotFoundError(issuer: String) {
+    private fun resolveIssuerUrl(issuer: String): IssuerHolder? {
         issuerHolder = when {
-            URLUtil.isValidUrl(issuer) -> IssuerHolder("$issuer$TYPE_HTTP_SUFFIX", IssuerType.HTTP)
-            issuer.contains(DID) -> {
-                val didUrl = issuer.drop(DID.length).replace(":", "/")
-                val url = if (didUrl.contains("/")) {
-                    "https://${didUrl}/did.json"
-                } else {
-                    "https://${didUrl}/.well-known/did.json"
-                }
-                IssuerHolder(url, IssuerType.DID)
-            }
-            else -> {
-                _event.postValue(Event(ViewEvent.OnError(ErrorType.ISSUER_NOT_RECOGNIZED, payloadUnzipString)))
-                return
-            }
+            URLUtil.isValidUrl(issuer) -> IssuerHolder(issuer.resolveHttpUrl(), IssuerType.HTTP)
+            issuer.contains(DID) -> IssuerHolder(issuer.resolveDidUrl(), IssuerType.DID)
+            else -> null
         }
-        _event.postValue(Event(ViewEvent.OnIssuerNotTrusted(URI(issuerHolder!!.issuerUrl).host)))
+        return issuerHolder
     }
 
     private fun validateJws(list: List<Jwk>) {
@@ -242,14 +243,6 @@ class VcViewModel @Inject constructor(
 
         _event.postValue(Event(ViewEvent.OnVerified(headers, items, payloadUnzipString)))
     }
-
-    private suspend fun resolveIssuer(kid: String, url: String): List<Jwk> =
-        vcRepository.resolveIssuer(url).filter { it.kid == kid }
-
-    private suspend fun resolveDid(kid: String, issuer: String): List<Jwk> =
-        vcRepository.resolveIssuerByDid(issuer)
-            .filter { it.publicKeyJwk.kid == kid }
-            .map { it.publicKeyJwk }
 
     private fun verifyJws(jwk: Jwk, jws: JWSObject?): Boolean {
         jws ?: return false
@@ -290,7 +283,6 @@ class VcViewModel @Inject constructor(
         private const val TIME_EXPIRES = "exp"
         private const val DEFLATE = "DEF"
         private const val DID = "did:web:"
-        private const val TYPE_HTTP_SUFFIX = "/.well-known/jwks.json"
     }
 
     sealed class ViewEvent {
@@ -310,6 +302,7 @@ class VcViewModel @Inject constructor(
         ISSUER_NOT_INCLUDED,
         TIME_BEFORE_NBF,
         VC_EXPIRED,
+        NO_JWK_FOR_KID,
         INVALID_SIGNATURE
     }
 

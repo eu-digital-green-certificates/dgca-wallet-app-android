@@ -83,8 +83,10 @@ class VcRepositoryImpl @Inject constructor(
             emptyList()
         }
 
-    override suspend fun saveJWKs(result: List<Jwk>) {
-        val localJwkList = result.map { JwkLocal(it.kid, Gson().toJson(it)) }
+    override suspend fun saveJWKs(result: List<Jwk>, url: String) {
+        val localJwkList = result.map {
+            JwkLocal(it.kid, Gson().toJson(it), url)
+        }
         jwkDao.save(localJwkList)
     }
 
@@ -148,5 +150,13 @@ class VcRepositoryImpl @Inject constructor(
         } catch (ex: Exception) {
             Timber.e(ex, "Failed to get item by id:$certId")
             null
+        }
+
+    override suspend fun isIssuerKnown(issuerUrl: String): Boolean =
+        try {
+            jwkDao.getIssuerByUrl(issuerUrl) != null
+        } catch (ex: Exception) {
+            Timber.e(ex, "Failed to clear db")
+            false
         }
 }
