@@ -1,6 +1,6 @@
 /*
  *  ---license-start
- *  eu-digital-covid-certificates / dcc-verifier-app-android
+ *  eu-digital-covid-certificates / dcc-wallet-app-android
  *  ---
  *  Copyright (C) 2022 T-Systems International GmbH and all other contributors
  *  ---
@@ -35,6 +35,9 @@ import dgca.wallet.app.android.vc.VcProcessor
 import dgca.wallet.app.android.vc.data.VcRepository
 import dgca.wallet.app.android.vc.data.local.VcPreferences
 import dgca.wallet.app.android.vc.data.local.VcPreferencesImpl
+import dgca.wallet.app.android.vc.domain.ErrorHandler
+import dgca.wallet.app.android.vc.network.GeneralErrorHandlerImpl
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -50,4 +53,14 @@ class VcModule {
     @Singleton
     @Provides
     fun providePreferences(@ApplicationContext context: Context): VcPreferences = VcPreferencesImpl(context)
+
+    @Provides
+    @Singleton
+    @VerifiableCredentials
+    fun provideVcExecutionDispatcher() = Dispatchers.IO
+
+    @Singleton
+    @Provides
+    @VerifiableCredentials
+    fun provideVcErrorHandler(): ErrorHandler = GeneralErrorHandlerImpl()
 }

@@ -1,6 +1,6 @@
 /*
  *  ---license-start
- *  eu-digital-covid-certificates / dcc-verifier-app-android
+ *  eu-digital-covid-certificates / dcc-wallet-app-android
  *  ---
  *  Copyright (C) 2022 T-Systems International GmbH and all other contributors
  *  ---

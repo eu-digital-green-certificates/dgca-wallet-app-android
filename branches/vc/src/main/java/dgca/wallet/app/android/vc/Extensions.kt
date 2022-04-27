@@ -1,6 +1,6 @@
 /*
  *  ---license-start
- *  eu-digital-covid-certificates / dcc-verifier-app-android
+ *  eu-digital-covid-certificates / dcc-wallet-app-android
  *  ---
  *  Copyright (C) 2022 T-Systems International GmbH and all other contributors
  *  ---
@@ -26,6 +26,10 @@ import android.content.Context
 import android.util.Base64
 import timber.log.Timber
 import java.io.*
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 private const val HEALTH_CARD = "https://smarthealth.cards#health-card"
 private const val HEALTH_CARD_IMMUNIZATION = "https://smarthealth.cards#immunization"
@@ -62,3 +66,9 @@ fun List<String>.replaceKnownTypes(): List<String> =
             else -> it
         }
     }
+
+fun Long.toLocalDateTime(): LocalDateTime =
+    LocalDateTime.ofInstant(Instant.ofEpochMilli(this), ZoneId.systemDefault())
+
+fun LocalDateTime.formatWith(pattern: String): String =
+    DateTimeFormatter.ofPattern(pattern).format(this)

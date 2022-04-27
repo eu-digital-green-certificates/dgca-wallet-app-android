@@ -1,6 +1,6 @@
 /*
  *  ---license-start
- *  eu-digital-covid-certificates / dcc-verifier-app-android
+ *  eu-digital-covid-certificates / dcc-wallet-app-android
  *  ---
  *  Copyright (C) 2022 T-Systems International GmbH and all other contributors
  *  ---
@@ -23,16 +23,59 @@
 package dgca.wallet.app.android.vc.ui
 
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.android.app.vc.R
+import com.android.app.vc.databinding.ActivityVcSettingsBinding
 import dagger.hilt.android.AndroidEntryPoint
+import dgca.wallet.app.android.vc.formatWith
+import dgca.wallet.app.android.vc.toLocalDateTime
+import dgca.wallet.app.android.vc.ui.settings.SettingsViewModel
 
 @AndroidEntryPoint
 class VcSettingsActivity : AppCompatActivity() {
 
+    private val viewModel by viewModels<SettingsViewModel>()
+    private lateinit var binding: ActivityVcSettingsBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_vc_settings)
+        binding = ActivityVcSettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.syncTrustedList.setOnClickListener { viewModel.reloadTrustList() }
+        binding.toolbar.setNavigationOnClickListener { finish() }
+
+        viewModel.lastTimeSync.observe(this) {
+            if (it <= 0) {
+                binding.lastUpdate.visibility = View.GONE
+            } else {
+                binding.lastUpdate.visibility = View.VISIBLE
+                binding.lastUpdate.text = getString(
+                    R.string.last_updated,
+                    it.toLocalDateTime().formatWith(LAST_UPDATE_DATE_TIME_FORMAT)
+                )
+            }
+        }
+        viewModel.event.observe(this) { event ->
+            event.getContentIfNotHandled()?.let {
+                onViewModelEvent(it)
+            }
+        }
+    }
+
+    private fun onViewModelEvent(event: SettingsViewModel.ViewEvent) {
+        when (event) {
+            is SettingsViewModel.ViewEvent.OnError -> Toast.makeText(this, "Error: ${event.error}", Toast.LENGTH_SHORT).show()
+            is SettingsViewModel.ViewEvent.OnLoading -> binding.progressBar.isVisible = event.isLoading
+        }
+    }
+
+    companion object {
+        private const val LAST_UPDATE_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm"
     }
 }

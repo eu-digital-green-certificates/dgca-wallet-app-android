@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<!--
   ~  -license-start
-  ~  eu-digital-covid-certificates / dcc-wallet-app-android
+  ~  eu-digital-green-certificates / dgca-wallet-app-android
   ~  -
-  ~  Copyright (C) 2022 T-Systems International GmbH and all other contributors
+  ~  Copyright (C) 2021 T-Systems International GmbH and all other contributors
   ~  -
   ~  Licensed under the Apache License, Version 2.0 (the "License");
   ~  you may not use this file except in compliance with the License.
@@ -17,7 +17,17 @@
   ~  limitations under the License.
   ~  -license-end
   ~
-  ~  Created by mykhailo.nester on 12/04/2022, 13:25
+  ~  Created by mykhailo.nester on 5/13/21 3:16 PM
   -->
 
-<manifest package="com.android.app.shc" />
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="12dp"
+    android:height="12dp"
+    android:autoMirrored="true"
+    android:tint="?attr/colorControlNormal"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M6.23,20.23l1.77,1.77l10,-10l-10,-10l-1.77,1.77l8.23,8.23z" />
+</vector>

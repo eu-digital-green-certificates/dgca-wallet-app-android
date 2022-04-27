@@ -1,8 +1,8 @@
 /*
  *  ---license-start
- *  eu-digital-green-certificates / dgca-verifier-app-android
+ *  eu-digital-covid-certificates / dcc-wallet-app-android
  *  ---
- *  Copyright (C) 2021 T-Systems International GmbH and all other contributors
+ *  Copyright (C) 2022 T-Systems International GmbH and all other contributors
  *  ---
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,20 +17,28 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by Mykhailo Nester on 4/23/21 9:49 AM
+ *  Created by mykhailo.nester on 26/04/2022, 23:54
  */
 
-import org.gradle.api.JavaVersion
+package dgca.wallet.app.android.vc.domain
 
-object Config {
-    const val minSdk = 26
-    const val compileSdk = 29
-    const val targetSdk = 29
-    val javaVersion = JavaVersion.VERSION_1_8
+sealed class ErrorType {
 
-    const val versionCode = 45
-    const val versionName = "1.4.0"
+    object Network : ErrorType()
 
-    const val androidTestInstrumentation = "androidx.test.runner.AndroidJUnitRunner"
-    const val proguardConsumerRules = "consumer-rules.pro"
+    object NotFound : ErrorType()
+
+    object AccessDenied : ErrorType()
+
+    object InternalServer : ErrorType()
+
+    object ServiceUnavailable : ErrorType()
+
+    object UnknownHostException : ErrorType()
+
+    object SocketTimeoutException : ErrorType()
+
+    object PreconditionFailedException : ErrorType()
+
+    object Unknown : ErrorType()
 }
