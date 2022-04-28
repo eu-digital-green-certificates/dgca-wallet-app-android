@@ -34,8 +34,8 @@ class DefaultShareImageIntentProvider @Inject constructor(private val context: C
 
     override fun getShareImageIntent(file: File): Intent =
         Intent(Intent.ACTION_SEND).apply {
-            type = "image/jpeg"
             val uri: Uri = FileProvider.getUriForFile(context, context.applicationContext.packageName + ".provider", file)
             putExtra(Intent.EXTRA_STREAM, uri)
+            type = context.contentResolver.getType(uri)
         }
 }
