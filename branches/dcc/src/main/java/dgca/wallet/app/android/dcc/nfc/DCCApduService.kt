@@ -30,7 +30,6 @@ import android.nfc.cardemulation.HostApduService
 import android.os.Bundle
 import dgca.wallet.app.android.dcc.ui.wallet.certificates.view.DccViewCertificateFragment
 import timber.log.Timber
-import java.io.UnsupportedEncodingException
 import java.math.BigInteger
 import java.util.*
 
@@ -246,15 +245,8 @@ class DCCApduService : HostApduService() {
     }
 
     private fun createTextRecord(language: String, text: String, id: ByteArray): NdefRecord {
-        val languageBytes: ByteArray
-        val textBytes: ByteArray
-        try {
-            languageBytes = language.toByteArray(Charsets.US_ASCII)
-            textBytes = text.toByteArray(Charsets.UTF_8)
-        } catch (e: UnsupportedEncodingException) {
-            throw AssertionError(e)
-        }
-
+        val languageBytes = language.toByteArray(Charsets.US_ASCII)
+        val textBytes = text.toByteArray(Charsets.UTF_8)
         val recordPayload = ByteArray(1 + (languageBytes.size and 0x03F) + textBytes.size)
 
         recordPayload[0] = (languageBytes.size and 0x03F).toByte()
