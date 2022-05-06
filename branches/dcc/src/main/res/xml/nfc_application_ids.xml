@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~  -license-start
   ~  eu-digital-green-certificates / dgca-verifier-app-android
   ~  -
@@ -23,7 +22,7 @@
 
 <host-apdu-service xmlns:android="http://schemas.android.com/apk/res/android"
     android:description="@string/nfc_service_description"
-    android:requireDeviceUnlock="false">
+    android:requireDeviceUnlock="true">
     <aid-group
         android:category="other"
         android:description="@string/nfc_aid_description">
