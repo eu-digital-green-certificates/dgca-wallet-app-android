@@ -173,6 +173,7 @@ class MainActivity : AppCompatActivity() {
 
         val qrCodeText = builder.toString()
         if (qrCodeText.isNotEmpty()) {
+            Timber.d("Received NDEFMessage: $qrCodeText")
             protocolViewModel.init(qrCodeText)
         } else {
             Timber.d("Received empty NDEFMessage")
