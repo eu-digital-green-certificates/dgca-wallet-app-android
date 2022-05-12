@@ -60,7 +60,7 @@ class DccCertificateValidityFragment : Fragment() {
         binding.iAgreeCheckValidity.setOnClickListener {
             val selectedDateTime: ZonedDateTime =
                 LocalDate.of(binding.date.year, binding.date.month + 1, binding.date.dayOfMonth).atStartOfDay()
-                    .atZone(UTC_ZONE_ID)
+                    .atZone(UTC_ZONE_ID).plusSeconds(1)
             val action =
                 DccCertificateValidityFragmentDirections.actionCertificateValidityFragmentToRulesValidationFragment(
                     args.qrCodeText,
