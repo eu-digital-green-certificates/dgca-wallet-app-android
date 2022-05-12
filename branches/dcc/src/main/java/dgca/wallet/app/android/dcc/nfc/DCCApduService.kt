@@ -76,7 +76,7 @@ class DCCApduService : HostApduService() {
         0x04.toByte(), // T field of the NDEF File Control TLV
         0x06.toByte(), // L field of the NDEF File Control TLV
         0xE1.toByte(), 0x04.toByte(), // File Identifier of NDEF file
-        0x02.toByte(), 0x10.toByte(), // Maximum NDEF file size of 528 bytes
+        0x04.toByte(), 0x00.toByte(), // Maximum NDEF file size of 1024 bytes
         0x00.toByte(), // Read access without any security
         0x00.toByte(), // Write access without any security
         0x90.toByte(), 0x00.toByte() // A_OKAY
