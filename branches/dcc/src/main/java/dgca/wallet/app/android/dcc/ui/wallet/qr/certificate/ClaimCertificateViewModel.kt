@@ -27,22 +27,26 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.app.dcc.BuildConfig
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dgca.verifier.app.decoder.generateClaimSignature
+import dgca.verifier.app.decoder.generateKeyPairFor
+import dgca.verifier.app.decoder.getValidationDataFromCOSE
+import dgca.verifier.app.decoder.prefixvalidation.PrefixValidationService
+import dgca.verifier.app.decoder.toHash
 import dgca.wallet.app.android.dcc.Event
 import dgca.wallet.app.android.dcc.data.ConfigRepository
 import dgca.wallet.app.android.dcc.data.remote.ApiResult
 import dgca.wallet.app.android.dcc.data.remote.claim.ClaimRequest
 import dgca.wallet.app.android.dcc.data.remote.claim.ClaimResponse
 import dgca.wallet.app.android.dcc.data.remote.claim.PublicKeyData
-import dgca.wallet.app.android.dcc.data.wallet.WalletRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dgca.verifier.app.decoder.*
-import dgca.verifier.app.decoder.prefixvalidation.PrefixValidationService
 import dgca.wallet.app.android.dcc.data.remote.claim.generateRevocationKeystoreKeyAlias
+import dgca.wallet.app.android.dcc.data.wallet.WalletRepository
+import feature.revocation.UpdateCertificatesRevocationDataUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.security.*
+import java.security.KeyPair
 import java.util.*
 import javax.inject.Inject
 
@@ -50,7 +54,8 @@ import javax.inject.Inject
 class ClaimCertificateViewModel @Inject constructor(
     private val prefixValidationService: PrefixValidationService,
     private val configRepository: ConfigRepository,
-    private val walletRepository: WalletRepository
+    private val walletRepository: WalletRepository,
+    private val updateCertificatesRevocationDataUseCase: UpdateCertificatesRevocationDataUseCase
 ) : ViewModel() {
 
     private val _inProgress = MutableLiveData<Boolean>()
@@ -101,6 +106,14 @@ class ClaimCertificateViewModel @Inject constructor(
                     request,
                     currentTimeStamp
                 )
+
+                if (claimResult?.success != null) {
+                    try {
+                        updateCertificatesRevocationDataUseCase.run()
+                    } catch (ex: Exception) {
+                        Timber.e(ex, "Revocation update state after claiming")
+                    }
+                }
             }
             _inProgress.value = false
             claimResult?.success?.let { _event.value = Event(ClaimCertEvent.OnCertClaimed(true)) }
