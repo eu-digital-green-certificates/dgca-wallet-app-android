@@ -86,6 +86,7 @@ object Deps {
     const val test_runner = "androidx.test:runner:${Versions.test_rules}}"
     const val mockito_core = "org.mockito:mockito-core:${Versions.mockito_core_version}"
     const val mockito_kotlin = "org.mockito.kotlin:mockito-kotlin:${Versions.mockito_kotlin_version}"
+    const val mockito_inline = "org.mockito:mockito-inline:${Versions.mockito_kotlin_version}"
 
     const val test_ext = "androidx.test.ext:junit:${Versions.test_ext}"
     const val test_rules = "androidx.test:rules:${Versions.test_rules}"

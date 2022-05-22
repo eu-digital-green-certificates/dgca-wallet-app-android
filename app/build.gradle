@@ -115,6 +115,7 @@ dependencies {
     testImplementation Deps.test_junit
     testImplementation Deps.mockito_core
     testImplementation Deps.mockito_kotlin
+    testImplementation Deps.mockito_inline
     testImplementation Deps.appache_commons
 
     androidTestImplementation Deps.test_ext
