@@ -142,7 +142,7 @@ class AuthFragment : BindingFragment<FragmentAuthBinding>() {
 
     private fun showDeviceCredentialPrompt() {
         generateSecretKey(generateKeyGenParameterSpec())
-        promptInfo = getPrompInfo()
+        promptInfo = getPrompInfo(false)
         biometricPrompt.authenticate(promptInfo)
     }
 
@@ -175,19 +175,21 @@ class AuthFragment : BindingFragment<FragmentAuthBinding>() {
         return spec.build()
     }
 
-    private fun getPrompInfo(withBiometric: Boolean = false): BiometricPrompt.PromptInfo {
-        val prompt = BiometricPrompt.PromptInfo.Builder()
-            .setTitle(getString(R.string.biometric_dialog_title))
-            .setSubtitle(getString(R.string.biometric_dialog_subtitle))
-
-        if (withBiometric) {
-            prompt.setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
-            prompt.setNegativeButtonText(getString(R.string.biometric_dialog_cancel))
-        } else {
-            prompt.setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_WEAK or BiometricManager.Authenticators.DEVICE_CREDENTIAL)
-        }
-
-        return prompt.build()
+    private fun getPrompInfo(withBiometric: Boolean): BiometricPrompt.PromptInfo {
+        return BiometricPrompt.PromptInfo.Builder()
+            .apply {
+                if (withBiometric) {
+                    setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
+                    setNegativeButtonText(getString(R.string.biometric_dialog_cancel))
+                    setTitle(getString(R.string.biometric_dialog_title))
+                    setSubtitle(getString(R.string.biometric_dialog_subtitle))
+                } else {
+                    setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_WEAK or BiometricManager.Authenticators.DEVICE_CREDENTIAL)
+                    setTitle(getString(R.string.device_credential_dialog_title))
+                    setSubtitle(getString(R.string.device_credential_dialog_subtitle))
+                }
+            }
+            .build()
     }
 
     private fun encryptSecretInformation(cryptoObject: BiometricPrompt.CryptoObject?) {
