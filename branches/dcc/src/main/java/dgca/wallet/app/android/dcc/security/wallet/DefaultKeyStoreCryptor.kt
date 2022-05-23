@@ -28,6 +28,7 @@ import timber.log.Timber
 import java.io.IOException
 import java.security.*
 import java.security.cert.CertificateException
+import javax.crypto.KeyGenerator
 import javax.inject.Inject
 
 class DefaultKeyStoreCryptor @Inject constructor() : KeyStoreCryptor {
@@ -62,16 +63,15 @@ class DefaultKeyStoreCryptor @Inject constructor() : KeyStoreCryptor {
     private fun getSecurityKeyWrapper(keyStore: KeyStore): SecurityKeyWrapper? {
         try {
             if (!keyStore.containsAlias(KEY_ALIAS)) {
-                val keyPairGenerator = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_RSA, ANDROID_KEY_STORE)
-                val builder =
+                val keyGenerator: KeyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE)
+                keyGenerator.init(
                     KeyGenParameterSpec.Builder(KEY_ALIAS, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
-                        .setBlockModes(KeyProperties.BLOCK_MODE_ECB)
-                        .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1)
-
-                keyPairGenerator.initialize(builder.build())
-
-
-                return SecurityKeyWrapper(keyPairGenerator.generateKeyPair())
+                        .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+                        .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+                        .setRandomizedEncryptionRequired(false)
+                        .build()
+                )
+                return SecurityKeyWrapper(keyGenerator.generateKey())
             }
         } catch (e: KeyStoreException) {
             Timber.w(e)
@@ -82,10 +82,10 @@ class DefaultKeyStoreCryptor @Inject constructor() : KeyStoreCryptor {
         } catch (e: InvalidAlgorithmParameterException) {
             Timber.w(e)
         }
+
         try {
-            val privateKey: PrivateKey = keyStore.getKey(KEY_ALIAS, null) as PrivateKey
-            val publicKey: PublicKey = keyStore.getCertificate(KEY_ALIAS).publicKey
-            return SecurityKeyWrapper(KeyPair(publicKey, privateKey))
+            val entry = keyStore.getEntry(KEY_ALIAS, null) as KeyStore.SecretKeyEntry
+            return SecurityKeyWrapper(entry.secretKey)
         } catch (e: KeyStoreException) {
             Timber.w(e)
         } catch (e: NoSuchAlgorithmException) {
@@ -97,8 +97,7 @@ class DefaultKeyStoreCryptor @Inject constructor() : KeyStoreCryptor {
     }
 
     companion object {
-
         const val ANDROID_KEY_STORE = "AndroidKeyStore"
-        const val KEY_ALIAS = "KEY_ALIAS"
+        const val KEY_ALIAS = "KEY_ALIAS_DCC"
     }
 }

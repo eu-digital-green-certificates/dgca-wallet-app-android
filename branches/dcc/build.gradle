@@ -63,6 +63,13 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    packagingOptions {
+        pickFirst 'META-INF/ASL-2.0.txt'
+        pickFirst 'draftv4/schema'
+        pickFirst 'draftv3/schema'
+        pickFirst 'META-INF/LGPL-3.0.txt'
+    }
 }
 
 dependencies {
@@ -112,4 +119,6 @@ dependencies {
 
     testImplementation Deps.test_junit
     androidTestImplementation Deps.test_ext
+    androidTestImplementation Deps.test_runner
+    androidTestImplementation Deps.test_rules
 }
