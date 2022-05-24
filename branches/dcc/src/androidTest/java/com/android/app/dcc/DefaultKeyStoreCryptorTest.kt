@@ -33,11 +33,8 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class DefaultKeyStoreCryptorTest {
-    private lateinit var cryptor: KeyStoreCryptor
 
-    companion object {
-        const val MAX_BLOCK_SIZE = 214
-    }
+    private lateinit var cryptor: KeyStoreCryptor
 
     @Before
     fun createLogHistory() {
@@ -46,13 +43,15 @@ class DefaultKeyStoreCryptorTest {
 
     @Test
     fun test() {
-        val text = String(ByteArray(MAX_BLOCK_SIZE)) + "Hello World!"
+        val text = "Hello World!"
 
         val encrypted = cryptor.encrypt(text)
+        println("Encrypted: $encrypted")
 
         assertNotNull(encrypted)
 
         val decrypted = cryptor.decrypt(encrypted)
+        println("Decrypted: $decrypted")
 
         assertEquals(text, decrypted)
     }

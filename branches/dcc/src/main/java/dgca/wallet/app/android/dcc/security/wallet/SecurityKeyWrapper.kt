@@ -24,90 +24,69 @@ package dgca.wallet.app.android.dcc.security.wallet
 
 import android.util.Base64
 import timber.log.Timber
-import java.security.GeneralSecurityException
-import java.security.Key
-import java.security.KeyPair
+import java.security.SecureRandom
 import javax.crypto.Cipher
-import kotlin.math.ceil
+import javax.crypto.SecretKey
+import javax.crypto.spec.GCMParameterSpec
 
 /**
  * Wrapper for {@SecretKey} that provide ability to encrypt/decrypt data using it.
  */
-class SecurityKeyWrapper(private val keyPair: KeyPair) {
+class SecurityKeyWrapper(private val secretKey: SecretKey) {
+
+    private val cipher = Cipher.getInstance(AES_GCM_NO_PADDING)
 
     fun encrypt(token: String?): String? {
         if (token == null) return null
-        try {
-            val cipher = getCipher(Cipher.ENCRYPT_MODE, keyPair.public)
-            val byteArray = token.toByteArray()
-            val chunksAmount = ceil(byteArray.size.toFloat() / BLOCK_SIZE).toInt()
-            val chunks = Array(chunksAmount) { ByteArray(BLOCK_SIZE) { EMPTY_BYTE } }
-            val outputChunk = ByteArray(OUTPUT_BLOCK_SIZE * chunksAmount)
-            for (i in 0..byteArray.lastIndex) {
-                val curChunk = i / BLOCK_SIZE
-                val pos = i % BLOCK_SIZE
-                chunks[curChunk][pos] = byteArray[i]
-            }
-            var counter = 0
-            for (i in 0 until chunksAmount) {
-                val encrypted: ByteArray = cipher.doFinal(chunks[i])
-                encrypted.forEach { encryptedByte ->
-                    outputChunk[counter++] = encryptedByte
-                }
-            }
-            return Base64.encodeToString(outputChunk, Base64.DEFAULT)
-        } catch (e: GeneralSecurityException) {
-            Timber.w(e)
+
+        return try {
+            val iv = ByteArray(16)
+            SecureRandom().nextBytes(iv)
+            cipher.init(
+                Cipher.ENCRYPT_MODE,
+                secretKey,
+                GCMParameterSpec(128, iv, 0, 12)
+            )
+
+            val ivString = Base64.encodeToString(iv, Base64.URL_SAFE)
+            val result = StringBuilder(ivString)
+            result.append(IV_SEPARATOR)
+
+            val bytes = cipher.doFinal(token.toByteArray())
+            result.append(Base64.encodeToString(bytes, Base64.URL_SAFE))
+            result.toString()
+        } catch (ex: Exception) {
+            Timber.w(ex)
+            null
         }
-        return null
     }
 
     fun decrypt(encryptedToken: String?): String? {
         if (encryptedToken == null) return null
-        try {
-            val cipher = getCipher(Cipher.DECRYPT_MODE, keyPair.private)
-            val decoded: ByteArray = Base64.decode(encryptedToken, Base64.DEFAULT)
 
-            val chunksAmount = ceil(decoded.size.toFloat() / OUTPUT_BLOCK_SIZE).toInt()
-            var counter = 0
-            val originalSum = ByteArray(chunksAmount * BLOCK_SIZE) { EMPTY_BYTE }
-            for (i in 0 until chunksAmount) {
-                val chunk = ByteArray(OUTPUT_BLOCK_SIZE)
-                for (j in 0 until OUTPUT_BLOCK_SIZE) {
-                    chunk[j] = decoded[i * OUTPUT_BLOCK_SIZE + j]
-                }
-                val original: ByteArray = cipher.doFinal(chunk)
-                original.forEach { originalByte ->
-                    originalSum[counter++] = originalByte
-                }
-            }
+        return try {
+            val split = encryptedToken.split(IV_SEPARATOR.toRegex())
+            if (split.size != 2) throw IllegalArgumentException("Passed data is incorrect. There was no IV specified with it.")
 
-            var resSize = originalSum.size
-            while (resSize > 0 && originalSum[resSize - 1] == EMPTY_BYTE) {
-                resSize--
-            }
-            val res = ByteArray(resSize)
-            for (i in 0 until resSize) {
-                res[i] = originalSum[i]
-            }
-            return String(res)
-        } catch (e: GeneralSecurityException) {
-            Timber.w(e)
+            val ivString = split[0]
+            val encodedString = split[1]
+            cipher.init(
+                Cipher.DECRYPT_MODE,
+                secretKey,
+                GCMParameterSpec(128, Base64.decode(ivString, Base64.URL_SAFE), 0, 12)
+            )
+
+            val encryptedData = Base64.decode(encodedString, Base64.URL_SAFE)
+            val decodedData = cipher.doFinal(encryptedData)
+            String(decodedData)
         } catch (ex: Exception) {
             Timber.w(ex)
+            null
         }
-        return null
-    }
-
-    @Throws(GeneralSecurityException::class)
-    private fun getCipher(mode: Int, key: Key) = Cipher.getInstance(RSA_ECB_PKCS1_PADDING).apply {
-        init(mode, key)
     }
 
     companion object {
-        private const val RSA_ECB_PKCS1_PADDING = "RSA/ECB/PKCS1Padding"
-        private const val BLOCK_SIZE = 214
-        private const val OUTPUT_BLOCK_SIZE = 256
-        private const val EMPTY_BYTE = Byte.MIN_VALUE
+        private const val AES_GCM_NO_PADDING = "AES/GCM/NoPadding"
+        private const val IV_SEPARATOR = "]"
     }
 }
