@@ -23,7 +23,6 @@
 package feature.revocation
 
 import android.security.keystore.KeyProperties
-import com.android.app.dcc.BuildConfig
 import dgca.verifier.app.decoder.getKeyPairFor
 import dgca.verifier.app.decoder.model.KeyPairData
 import dgca.wallet.app.android.dcc.GreenCertificateFetcher
@@ -43,6 +42,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class UpdateCertificatesRevocationDataUseCase @Inject constructor(
+    private val getRevocationBaseUrl: GetRevocationBaseUrl,
     private val walletRepository: WalletRepository,
     private val converters: Converters,
     private val revocationService: RevocationService,
@@ -103,8 +103,7 @@ class UpdateCertificatesRevocationDataUseCase @Inject constructor(
                     revocations.add(jwtToken)
                 }
 
-
-                val baseUrl = BuildConfig.REVOCATION_SERVICE_HOST
+                val baseUrl = getRevocationBaseUrl.invoke()
                 val url = "$baseUrl/revocation/lookup"
                 val revokedCertificateSignaturesListResult =
                     revocationService.getRevocationLists(url, revocations)
