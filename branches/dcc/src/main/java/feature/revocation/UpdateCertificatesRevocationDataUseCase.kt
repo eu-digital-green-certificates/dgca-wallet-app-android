@@ -23,6 +23,7 @@
 package feature.revocation
 
 import android.security.keystore.KeyProperties
+import com.android.app.dcc.BuildConfig
 import dgca.verifier.app.decoder.getKeyPairFor
 import dgca.verifier.app.decoder.model.KeyPairData
 import dgca.wallet.app.android.dcc.GreenCertificateFetcher
@@ -103,8 +104,10 @@ class UpdateCertificatesRevocationDataUseCase @Inject constructor(
                 }
 
 
+                val baseUrl = BuildConfig.REVOCATION_SERVICE_HOST
+                val url = "$baseUrl/revocation/lookup"
                 val revokedCertificateSignaturesListResult =
-                    revocationService.getRevocationLists(revocations)
+                    revocationService.getRevocationLists(url, revocations)
                 if (!revokedCertificateSignaturesListResult.isSuccessful) {
                     throw IllegalStateException()
                 }
