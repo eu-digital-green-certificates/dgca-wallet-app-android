@@ -33,11 +33,14 @@ import dgca.verifier.app.decoder.prefixvalidation.PrefixValidationService
 import dgca.verifier.app.decoder.schema.DefaultSchemaValidator
 import dgca.verifier.app.decoder.schema.SchemaValidator
 import dgca.verifier.app.decoder.services.X509
+import dgca.wallet.app.android.dcc.data.ConfigRepository
 import dgca.wallet.app.android.dcc.data.local.Converters
+import dgca.wallet.app.android.dcc.revocation.GetRevocationBaseUrlImpl
 import dgca.wallet.app.android.dcc.utils.base64.Base64Coder
 import dgca.wallet.app.android.dcc.utils.base64.DefaultBase64Coder
 import dgca.wallet.app.android.dcc.utils.jwt.DefaultJwtTokenGenerator
 import dgca.wallet.app.android.util.jwt.JwtTokenGenerator
+import feature.revocation.GetRevocationBaseUrl
 import feature.ticketing.domain.checkin.TicketingCheckInModelFetcher
 import javax.inject.Singleton
 
@@ -140,4 +143,9 @@ class DccModule {
     @Singleton
     @Provides
     fun provideConverter(): Converters = Converters()
+
+    @Singleton
+    @Provides
+    fun provideGetRevocationBaseUr(configRepository: ConfigRepository): GetRevocationBaseUrl =
+        GetRevocationBaseUrlImpl(configRepository)
 }

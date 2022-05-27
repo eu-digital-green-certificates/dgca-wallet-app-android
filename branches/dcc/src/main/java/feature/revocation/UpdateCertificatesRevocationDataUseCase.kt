@@ -42,6 +42,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class UpdateCertificatesRevocationDataUseCase @Inject constructor(
+    private val getRevocationBaseUrl: GetRevocationBaseUrl,
     private val walletRepository: WalletRepository,
     private val converters: Converters,
     private val revocationService: RevocationService,
@@ -102,9 +103,10 @@ class UpdateCertificatesRevocationDataUseCase @Inject constructor(
                     revocations.add(jwtToken)
                 }
 
-
+                val baseUrl = getRevocationBaseUrl.invoke()
+                val url = "$baseUrl/revocation/lookup"
                 val revokedCertificateSignaturesListResult =
-                    revocationService.getRevocationLists(revocations)
+                    revocationService.getRevocationLists(url, revocations)
                 if (!revokedCertificateSignaturesListResult.isSuccessful) {
                     throw IllegalStateException()
                 }

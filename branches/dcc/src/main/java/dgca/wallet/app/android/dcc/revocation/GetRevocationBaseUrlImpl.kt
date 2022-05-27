@@ -1,6 +1,6 @@
 /*
  *  ---license-start
- *  eu-digital-green-certificates / dcc-revocation-app-android
+ *  eu-digital-green-certificates / dgca-wallet-app-android
  *  ---
  *  Copyright (C) 2022 T-Systems International GmbH and all other contributors
  *  ---
@@ -17,19 +17,22 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by mykhailo.nester on 13/01/2022, 12:06
+ *  Created by osarapulov on 5/27/22, 9:18 AM
  */
 
-package feature.revocation.data.remote
+package dgca.wallet.app.android.dcc.revocation
 
-import retrofit2.Response
-import retrofit2.http.*
+import com.android.app.dcc.BuildConfig
+import dgca.wallet.app.android.dcc.data.ConfigRepository
+import feature.revocation.GetRevocationBaseUrl
+import javax.inject.Inject
 
-interface RevocationService {
-
-    @POST
-    suspend fun getRevocationLists(
-        @Url url: String,
-        @Body request: List<String>
-    ): Response<List<String>>
+class GetRevocationBaseUrlImpl @Inject constructor(
+    private val configRepository: ConfigRepository
+): GetRevocationBaseUrl {
+    override suspend fun invoke(): String {
+        val config = configRepository.local().getConfig()
+        val versionName = BuildConfig.VERSION_NAME
+        return config.getRevocationUrl(versionName)
+    }
 }

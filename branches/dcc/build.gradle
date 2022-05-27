@@ -38,14 +38,10 @@ android {
     flavorDimensions "version"
     productFlavors {
         tst {
-            buildConfigField "String", "REVOCATION_SERVICE_HOST", "\"https://dgca-revocation-service-eu-test.cfapps.eu10.hana.ondemand.com\""
-
             dimension "version"
             versionNameSuffix "-tst"
         }
         acc {
-            buildConfigField "String", "REVOCATION_SERVICE_HOST", "\"https://dgca-revocation-service-eu-acc.cfapps.eu10.hana.ondemand.com\""
-
             dimension "version"
             versionNameSuffix "-acc"
         }
