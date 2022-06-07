@@ -47,7 +47,9 @@ gradlew -PCONFIG_FILE_NAME="config.json"
 
 ## Documentation  
 
-- [ ] TODO: Link to documentation
+- [App architecture](/docs/architecture.md)
+- [DCC Revocation](/docs/revocation.md)
+- [Verifiable credentials](/docs/verifiable_credentials.md)
 
 ## Support and feedback
 
