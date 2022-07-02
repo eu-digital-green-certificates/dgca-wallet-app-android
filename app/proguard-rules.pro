@@ -21,3 +21,18 @@
 #-renamesourcefileattribute SourceFile
 -keep public class dgca.verifier.app.decoder.model.*
 -keep public class com.github.fge.jsonschema.** { *; }
+
+-keepnames class androidx.navigation.fragment.NavHostFragment
+-keep class * extends androidx.fragment.app.Fragment{}
+
+-keepnames class * extends android.os.Parcelable
+-keepnames class * extends java.io.Serializable
+
+-keep class dgca.wallet.app.android.dcc.data.*  { *; }
+-keep class dgca.wallet.app.android.dcc.data.remote.claim.* { *; }
+-keep class feature.ticketing.domain.data.accesstoken.* { *; }
+-keep class feature.ticketing.domain.data.identity.* { *; }
+-keep class feature.ticketing.domain.data.checkin.TicketingCheckInRemote { *; }
+-keep class feature.ticketing.domain.data.validate.* { *; }
+-keep class feature.ticketing.domain.identity.accesstoken.* { *; }
+-keep class feature.ticketing.domain.identity.validityserviceidentity.* { *; }
