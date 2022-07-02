@@ -19,3 +19,15 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keepnames class * extends android.os.Parcelable
+-keepnames class * extends java.io.Serializable
+
+-keep class dgca.wallet.app.android.dcc.data.*  { *; }
+-keep class dgca.wallet.app.android.dcc.data.remote.claim.* { *; }
+-keep class feature.ticketing.domain.data.accesstoken.* { *; }
+-keep class feature.ticketing.domain.data.identity.* { *; }
+-keep class feature.ticketing.domain.data.checkin.TicketingCheckInRemote { *; }
+-keep class feature.ticketing.domain.data.validate.* { *; }
+-keep class feature.ticketing.domain.identity.accesstoken.* { *; }
+-keep class feature.ticketing.domain.identity.validityserviceidentity.* { *; }
