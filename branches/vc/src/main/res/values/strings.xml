@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">vc</string>
+
+    <string name="cert_valid">Valid</string>
+    <string name="cert_invalid">Invalid</string>
+    <string name="issuer_not_trusted">Issuer %s is not trusted. Do you agree to proceed?</string>
+    <string name="approve">Approve</string>
+    <string name="cancel">Cancel</string>
+    <string name="raw_data_details_view">RAW data details view</string>
+    <string name="close">Close</string>
+    <string name="vc_cert_title">Step2: Your Data</string>
+    <string name="save">Save</string>
+    <string name="vc_card_title">Verifiable Credential</string>
+    <string name="settings">Settings</string>
+    <string name="delete">Delete</string>
+    <string name="your_verifiable_credential">Your verifiable credential</string>
+    <string name="reload_trusted_list">Reload trusted list</string>
+    <string name="last_updated">Last Updated: %s</string>
+</resources>

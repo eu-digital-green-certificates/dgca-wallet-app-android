@@ -1,60 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~  license-start
+  ~  eu-digital-green-certificates / dgca-wallet-app-android
+  ~
+  ~  Copyright (C) 2022 T-Systems International GmbH and all other contributors
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  ~  license-end
+  ~
+  ~  Created by osarapulov on 4/4/22, 1:06 AM
+  -->
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="dgca.wallet.app.android">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
+
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.NFC" />
 
     <application
-        android:name=".DgcaWalletApplication"
+        android:name=".ui.MainApp"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.DgcaWalletAppAndroid">
+        android:theme="@style/Theme.DgcaVerifierAppAndroid">
 
         <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:launchMode="singleInstance">
+            android:name="dgca.wallet.app.android.ui.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="dgca.wallet.app.android.INTENT" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
             <intent-filter>
-                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="text/plain" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "app://open.my.app” -->
+                <data
+                    android:host="open.my.app"
+                    android:scheme="app" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".LicensesActivity"
-            android:theme="@style/Theme.DgcaVerifierAppAndroid.Licensing" />
 
         <provider
             android:name="androidx.work.impl.WorkManagerInitializer"
             android:authorities="${applicationId}.workmanager-init"
             android:exported="false"
             tools:node="remove" />
-
-        <service
-            android:name=".nfc.DCCApduService"
-            android:exported="true"
-            android:permission="android.permission.BIND_NFC_SERVICE">
-            <intent-filter>
-                <action android:name="android.nfc.cardemulation.action.HOST_APDU_SERVICE" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <meta-data
-                android:name="android.nfc.cardemulation.host_apdu_service"
-                android:resource="@xml/nfc_application_ids" />
-        </service>
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -65,6 +77,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
     </application>
 
 </manifest>

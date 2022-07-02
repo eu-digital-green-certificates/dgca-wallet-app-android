@@ -17,7 +17,7 @@
  *  limitations under the License.
  *  ---license-end
  *
- *  Created by osarapulov on 9/15/21 4:49 PM
+ *  Created by mykhailo.nester on 5/5/21 11:57 PM
  */
 
 package dgca.wallet.app.android.base
@@ -30,6 +30,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.viewbinding.ViewBinding
 
 abstract class BindingDialogFragment<T : ViewBinding> : DialogFragment() {
+
     private var _binding: T? = null
     val binding get() = _binding!!
 

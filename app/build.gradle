@@ -19,11 +19,6 @@ android {
         versionCode Config.versionCode
         versionName Config.versionName
 
-        // It's required to provide config json files, and path to it.
-        // Examples based on different flavors could be found here: 'app/src/acc/assets/wallet-context.jsonc' or 'app/src/tst/assets/wallet-context.jsonc'
-
-        buildConfigField "String", "CONFIG_FILE_NAME", "\"$CONFIG_FILE_NAME\""
-
         testInstrumentationRunner Config.androidTestInstrumentation
     }
 
@@ -70,6 +65,12 @@ android {
 }
 
 dependencies {
+    implementation project(":branches:base")
+    implementation project(":branches:dcc")
+    implementation project(":branches:icao")
+    implementation project(":branches:divoc")
+    implementation project(":branches:vc")
+    implementation project(":branches:shc")
     implementation project(':decoder')
     implementation project(':engine')
 
@@ -114,10 +115,39 @@ dependencies {
     testImplementation Deps.test_junit
     testImplementation Deps.mockito_core
     testImplementation Deps.mockito_kotlin
+    testImplementation Deps.mockito_inline
     testImplementation Deps.appache_commons
 
     androidTestImplementation Deps.test_ext
     androidTestImplementation Deps.test_rules
 
     implementation Deps.bouncy_castle
+
+    implementation Deps.kotlin_stdlib
+    implementation Deps.androidx_core
+    implementation Deps.kotlinx_coroutines
+    implementation Deps.androidx_appcompat
+    implementation Deps.androidx_fragment_ktx
+    implementation Deps.androidx_material
+    implementation Deps.androidx_constraint
+    implementation Deps.androidx_navigation_fragment
+    implementation Deps.androidx_navigation_ui
+    implementation Deps.androidx_worker_ktx
+    implementation Deps.fab
+    implementation Deps.biometric
+
+    implementation Deps.retrofit2
+    implementation Deps.log_interceptor
+    implementation Deps.gson_converter
+    implementation Deps.jackson_kotlin
+
+    implementation Deps.zxing
+    implementation Deps.hilt
+    kapt Deps.hilt_compiler
+    implementation Deps.hilt_work
+
+    implementation Deps.timber
+
+    testImplementation Deps.test_junit
+    androidTestImplementation Deps.test_ext
 }

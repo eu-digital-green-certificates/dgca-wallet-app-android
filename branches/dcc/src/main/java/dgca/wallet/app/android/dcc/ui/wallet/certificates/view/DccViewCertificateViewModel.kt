@@ -1,0 +1,169 @@
+/*
+ *  ---license-start
+ *  eu-digital-green-certificates / dgca-wallet-app-android
+ *  ---
+ *  Copyright (C) 2021 T-Systems International GmbH and all other contributors
+ *  ---
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *  ---license-end
+ *
+ *  Created by osarapulov on 8/23/21 1:54 PM
+ */
+
+package dgca.wallet.app.android.dcc.ui.wallet.certificates.view
+
+import android.graphics.Bitmap
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dgca.wallet.app.android.dcc.Event
+import dgca.wallet.app.android.dcc.data.CertificatesCard
+import dgca.wallet.app.android.dcc.data.wallet.WalletRepository
+import dgca.wallet.app.android.dcc.toFile
+import dgca.wallet.app.android.dcc.toPdfDocument
+import dgca.wallet.app.android.dcc.ui.verification.detailed.qr.QrCodeConverter
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import timber.log.Timber
+import java.io.File
+import javax.inject.Inject
+
+@HiltViewModel
+class ViewCertificateViewModel @Inject constructor(
+    private val qrCodeConverter: QrCodeConverter,
+    private val walletRepository: WalletRepository
+) : ViewModel() {
+
+    private val _certificate = MutableLiveData<CertificateViewCard>()
+    val certificate: LiveData<CertificateViewCard> = _certificate
+
+    private val _inProgress = MutableLiveData<Boolean>()
+    val inProgress: LiveData<Boolean> = _inProgress
+
+    private val _event = MutableLiveData<Event<ViewCertEvent>>()
+    val event: LiveData<Event<ViewCertEvent>> = _event
+
+    private val _shareImageFile = MutableLiveData<Event<FilePreparationResult>>()
+    val shareImageFile: LiveData<Event<FilePreparationResult>> = _shareImageFile
+
+    private val _sharePdfFile = MutableLiveData<Event<FilePreparationResult>>()
+    val sharePdfFile: LiveData<Event<FilePreparationResult>> = _sharePdfFile
+
+    fun setCertificateId(certificateId: Int, qrCodeSize: Int) {
+        viewModelScope.launch {
+            _inProgress.value = true
+            var qrCode: Bitmap
+
+            val certificateCard = walletRepository.getCertificatesById(certificateId)
+            if (certificateCard == null) {
+                _inProgress.value = false
+                return@launch
+            }
+
+            withContext(Dispatchers.IO) {
+                qrCode = qrCodeConverter.convertStringIntoQrCode(certificateCard.qrCodeText, qrCodeSize)
+            }
+            _certificate.value = CertificateViewCard(certificateCard, qrCode)
+            _inProgress.value = false
+        }
+    }
+
+    fun deleteCert(certificateId: Int) {
+        viewModelScope.launch {
+            val result = walletRepository.deleteCertificateById(certificateId)
+            _event.value = Event(ViewCertEvent.OnCertDeleted(result))
+        }
+    }
+
+    fun shareImage(parentFile: File) {
+        viewModelScope.launch {
+            _inProgress.value = true
+            var fileForSharing: File? = null
+            var error: Exception? = null
+
+            withContext(Dispatchers.IO) {
+                try {
+                    fileForSharing = certificate.value!!.qrCode.toFile(
+                        File(parentFile, "temp").apply {
+                            if (!exists() || !isDirectory) {
+                                mkdirs()
+                            }
+                        }, "${System.currentTimeMillis()}.jpeg"
+                    )
+                } catch (exception: Exception) {
+                    error = exception
+                    Timber.e(exception, "Was not able to prepare image for sharing")
+                }
+            }
+
+            _inProgress.value = false
+            _shareImageFile.postValue(
+                Event(
+                    if (fileForSharing != null) {
+                        FilePreparationResult.FileResult(fileForSharing!!)
+                    } else {
+                        FilePreparationResult.ErrorResult(error)
+                    }
+                )
+            )
+        }
+    }
+
+    fun sharePdf(parentFile: File) {
+        viewModelScope.launch {
+            _inProgress.value = true
+            var fileForSharing: File? = null
+            var error: Exception? = null
+
+            withContext(Dispatchers.IO) {
+                try {
+                    fileForSharing = certificate.value!!.qrCode.toPdfDocument().toFile(
+                        File(parentFile, "temp").apply {
+                            if (!exists() || !isDirectory) {
+                                mkdirs()
+                            }
+                        }, "${System.currentTimeMillis()}.pdf"
+                    )
+                } catch (exception: Exception) {
+                    error = exception
+                    Timber.e(exception, "Was not able to prepare pdf for sharing")
+                }
+            }
+
+            _inProgress.value = false
+            _sharePdfFile.postValue(
+                Event(
+                    if (fileForSharing != null) {
+                        FilePreparationResult.FileResult(fileForSharing!!)
+                    } else {
+                        FilePreparationResult.ErrorResult(error)
+                    }
+                )
+            )
+        }
+    }
+
+    sealed class ViewCertEvent {
+        data class OnCertDeleted(val isDeleted: Boolean) : ViewCertEvent()
+    }
+}
+
+data class CertificateViewCard(val certificatesCard: CertificatesCard.CertificateCard, val qrCode: Bitmap)
+
+sealed class FilePreparationResult {
+    class FileResult(val file: File) : FilePreparationResult()
+    class ErrorResult(val error: Exception?) : FilePreparationResult()
+}

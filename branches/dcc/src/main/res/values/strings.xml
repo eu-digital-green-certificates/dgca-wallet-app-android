@@ -1,0 +1,176 @@
+<!--
+  ~  license-start
+  ~  eu-digital-green-certificates / dgca-verifier-app-android
+  ~
+  ~  Copyright (C) 2021 T-Systems International GmbH and all other contributors
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  ~  license-end
+  ~
+  ~  Created by Mykhailo Nester on 4/23/21 9:53 AM
+  -->
+
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="app_name">Verifier App</string>
+    <string name="nfc_service_description">Host Card Emulator Service</string>
+    <string name="nfc_aid_description">DCC AID</string>
+
+    <string name="cert_valid">Valid</string>
+    <string name="cert_limited_validity">Limited validity</string>
+    <string name="cert_invalid">Invalid</string>
+    <string name="done">Done</string>
+    <string name="retry">Retry</string>
+    <string name="biometric_dialog_title">Biometric login</string>
+    <string name="biometric_dialog_subtitle">Log in using your biometric credential.</string>
+    <string name="device_credential_dialog_title">Login</string>
+    <string name="device_credential_dialog_subtitle">Log in with your device credentials.</string>
+    <string name="biometric_dialog_cancel">Cancel</string>
+    <string name="date_of_vaccination_title">Date of Vaccination</string>
+    <string name="issuer_country">Issuer Country</string>
+    <string name="target_disease">Target Disease</string>
+    <string name="date_of_test">Date of Test</string>
+    <string name="test_result_title">Test Result</string>
+
+    <string name="settings">Settings</string>
+    <string name="privacy_information">Privacy information</string>
+    <string name="licenses">Licenses</string>
+    <string name="reload_countries">Reload Countries</string>
+    <string name="last_updated">Last Updated: %s</string>
+    <string name="version">Version: %1$s (%2$d)</string>
+    <string name="about">About</string>
+    <string name="settings_version_title">Wallet App</string>
+    <string name="result">Result</string>
+    <string name="current">Current</string>
+    <string name="passed">Passed</string>
+    <string name="failed">Failed</string>
+    <string name="open">Open</string>
+    <string name="rule">Rule</string>
+    <string name="passed_for">Passed for %1$s (see settings)</string>
+    <string name="open_for">Open for %1$s (see settings)</string>
+    <string name="failed_for">Failed for %1$s (see settings)</string>
+    <string name="country_of_test">Country of Test</string>
+    <string name="none">None</string>
+    <string name="technical_verification">Technical\nVerification</string>
+    <string name="issuer_invalidation">Issuer\nInvalidation</string>
+    <string name="destination_acceptance">Destination\nAcceptance</string>
+    <string name="traveller_acceptance">Traveller\nAcceptance</string>
+    <string name="raw_data_details_view">RAW data details view</string>
+    <string name="share">Share</string>
+    <string name="type_of_test_title">Type of test</string>
+    <string name="nfc_enabled">NFC enabled</string>
+    <string name="never">Never</string>
+
+    <string name="certificate_type">Certificate Type</string>
+    <string name="name">Name</string>
+    <string name="save">Save</string>
+    <string name="claim_cert_title">Step2: Your Data</string>
+
+    <string name="vaccination_of">Vaccination %1$s of %2$s</string>
+    <string name="recovery">Recovery</string>
+    <string name="test">Test</string>
+    <string name="certificate_claimed">Certificate claimed</string>
+    <string name="certificate_valid_from_to_title">Certificate Valid From - To</string>
+    <string name="first_positive_test_result">First Positive Test Result</string>
+    <string name="certificate_issuer">Certificate Issuer</string>
+    <string name="date_of_test_result_title">Date of Test Result</string>
+    <string name="manufacturer">Manufacturer</string>
+    <string name="vaccine_of_prophylaxis">Vaccine or Prophylaxis</string>
+    <string name="check_the_tan_and_try_again">Check the TAN and try again</string>
+    <string name="tan_code">TAN Code</string>
+    <string name="tan_code_subtitle">Please provide the TAN Code associated to this certificate. This was sent to you via email or similar.</string>
+    <string name="tan_hint">TAN Code</string>
+    <string name="next">Next</string>
+    <string name="tan_empty_error">TAN cannot be empty</string>
+    <string name="tan_cert_title">Step3: TAN</string>
+
+    <string name="check_validity">Check Validity</string>
+    <string name="vaccination">Vaccination</string>
+    <string name="vaccination_certificate">vaccination certificate %1$s of %2$s</string>
+    <string name="recovery_certificate">recovery certificate</string>
+    <string name="test_certificate">test certificate</string>
+    <string name="your_certificate">Your Certificate</string>
+    <string name="name_with_semi_colons">Name:</string>
+
+    <string name="step_1" tools:ignore="Typos">Step1</string>
+    <string name="step_2">Step2</string>
+    <string name="step_3">Step3</string>
+    <string name="tan_placeholder">Tan: %1$s</string>
+    <string name="valid_certificate_title">Valid certificate</string>
+    <string name="invalid_certificate_title">Invalid certificate</string>
+    <string name="certificate_has_limitation_title">Certificate has limitation</string>
+    <string name="valid_certificate_message">Your certificate is valid and confirms to the provided country rules. Additional entry requirements might apply, please refer to the Re-open EU website: https://reopen.europa.eu/</string>
+    <string name="invalid_certificate_message">Your certificate is not valid. Please refer to the Re-open EU website: https://reopen.europa.eu/</string>
+    <string name="certificate_has_limitation_message">Your certificate is valid but has the following restrictions:</string>
+    <string name="share_image">Share Image</string>
+    <string name="share_pdf">Share PDF</string>
+    <string name="file_preparation_error">File preparation failed</string>
+    <string name="scan_qr_code">Scan QR code</string>
+
+    <string name="nfc_status_ok">Allow data exchange when your phone is close to another device (5cm or closer)</string>
+    <string name="nfc_off">NFC off</string>
+    <string name="qr_code_from">QR Code from %1$s</string>
+    <string name="subject">Subject</string>
+    <string name="service_provider">Service provider</string>
+    <string name="consent">Consent</string>
+    <string name="deny">Deny</string>
+    <string name="allow">Allow</string>
+    <string name="valid_until">Valid until %1$s</string>
+
+    <plurals name="certificates_found_title">
+        <item quantity="one">%1$s certificate found for %2$s</item>
+        <item quantity="other">%1$s certificates found for %2$s</item>
+    </plurals>
+    <string name="validation_services_found_title">%1$s validation services found</string>
+    <string name="do_you_agree_to_share_certificate">Do you agree to share the %1$s with Airline.com?</string>
+    <string name="cancel">Cancel</string>
+    <string name="grant_permission">Grant Permission</string>
+    <string name="ok" tools:ignore="ButtonCase,Typos">Ok</string>
+    <string name="cert_transfer_failed">Failed to transfer certificate</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="no_expiration_date">No expiration date</string>
+    <string name="validation_result">Validation Result</string>
+    <string name="identifier">Identifier</string>
+    <string name="type">Type</string>
+    <string name="details">Details</string>
+    <string name="date_of_birth">Date of Birth:</string>
+    <string name="departure">Departure:</string>
+    <string name="arrival">Arrival:</string>
+    <string name="category">Category:</string>
+    <string name="accepted_certificate_type">Accepted Certificate Type:</string>
+    <string name="validation_time">Validation Time:</string>
+    <string name="valid_from">Valid From:</string>
+    <string name="valid_to">Valid To:</string>
+    <string name="delete">Delete</string>
+    <string name="nfc_turn_on_title">NFC is turned off.</string>
+    <string name="nfc_turn_on_message">You need turn on NFC module for scanning. Wish turn on it now?</string>
+    <string name="nfc_turn_on_positive">Turn on</string>
+    <string name="nfc_turn_on_negative">Dismiss</string>
+    <string name="nfc_on">NFC on</string>
+
+    <string name="country_rules_validation">Country rules validation</string>
+    <string name="please_note_that_this_informaiont_is_without_guaranty">This check gives an indication on eligibility to travel based on your certificate. Restriction of free movement in response to the coronavirus pandemic are subject to change and might be based on additional information not available to and within this application.</string>
+    <string name="check_country_rules_conformance_of_your_certificate">Check country rules conformance of your certificate</string>
+    <string name="your_destination_country">Your destination country</string>
+    <string name="country_code_list_is_empty">Country codes list is empty</string>
+    <string name="check_the_date">Check the date</string>
+    <string name="disclaimer">Disclaimer</string>
+    <string name="disclaimer_message">This check gives an indication on eligibility to travel based on your certificate. Restriction of free movement in response to the coronavirus pandemic are subject to change and might be based on additional information not available to and within this application. Please refer to authoritative national sources for more information and the Re-open EU website: https://reopen.europa.eu/. Your data is being processed locally on this device.</string>
+    <string name="i_agree_check_validity">I agree, check validity</string>
+
+    <string name="certificate_has_been_revoked">Your Certificate was revoked. You will no longer be able to use it</string>
+    <string name="update_revocation_state">Update revocation state</string>
+    <string name="revoked">Revoked</string>
+    <string name="last_successfully_updated_at">Last successfully updated at %s</string>
+    <string name="last_update_failed">Last update failed</string>
+    <string name="wasnt_updated_yet">Wasn\'t updated yet</string>
+</resources>

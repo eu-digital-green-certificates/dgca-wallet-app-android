@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dcc_nav_graph"
+    app:startDestination="@id/claimCertificateFragment">
+
+    <fragment
+        android:id="@+id/claimCertificateFragment"
+        android:name="dgca.wallet.app.android.dcc.ui.wallet.qr.certificate.ClaimCertificateFragment"
+        android:label="@string/claim_cert_title"
+        app:enterAnim="@animator/nav_default_pop_enter_anim"
+        app:exitAnim="@animator/nav_default_exit_anim"
+        app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"
+        tools:layout="@layout/fragment_certificate_claim">
+
+        <argument
+            android:name="claimCertificateModel"
+            app:argType="dgca.wallet.app.android.dcc.ui.wallet.qr.certificate.ClaimGreenCertificateModel" />
+
+        <action
+            android:id="@+id/action_claimCertificateFragment_to_tanFragment"
+            app:destination="@id/tanFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/tanFragment"
+        android:name="dgca.wallet.app.android.dcc.ui.wallet.qr.certificate.TanFragment"
+        android:label="@string/tan_cert_title"
+        tools:layout="@layout/fragment_certificate_tan">
+
+        <action
+            android:id="@+id/action_tanFragment_to_claimCertificateFragment"
+            app:destination="@id/claimCertificateFragment"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+    </fragment>
+
+</navigation>
