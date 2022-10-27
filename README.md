@@ -28,10 +28,6 @@ The wallet app provides a user interface to store and manage personal DGCs direc
 
 ## Development
 
-### Prerequisites
-
-- [ ] TODO: Describe prerequisites
-
 ### Build
 
 Whether you cloned or downloaded the 'zipped' sources you will either find the sources in the chosen checkout-directory or get a zip file with the source code, which you can expand to a folder of your choice.
