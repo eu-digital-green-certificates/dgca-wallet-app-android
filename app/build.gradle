@@ -9,6 +9,10 @@ plugins {
     id 'kotlin-parcelize'
 }
 
+def debugKeystorePropertiesFile = rootProject.file("debug.keystore.properties")
+def debugKeystoreProperties = new Properties()
+debugKeystoreProperties.load(new FileInputStream(debugKeystorePropertiesFile))
+
 android {
     compileSdkVersion Config.compileSdk
 
@@ -22,9 +26,19 @@ android {
         testInstrumentationRunner Config.androidTestInstrumentation
     }
 
+    signingConfigs {
+        debug {
+            keyAlias debugKeystoreProperties['keyAlias']
+            keyPassword debugKeystoreProperties['keyPassword']
+            storeFile file(debugKeystoreProperties['storeFile'])
+            storePassword debugKeystoreProperties['storePassword']
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            signingConfig signingConfigs.debug
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
