@@ -24,8 +24,8 @@ object Versions {
 
     // Base
     const val gradle = "4.1.3"
-    const val kotlin = "1.4.32"
-    const val desugar_jdk_libs = "1.1.5"
+    const val kotlin = "1.6.21"
+    const val desugar_jdk_libs = "2.0.0"
     const val androidx_core = "1.3.2"
     const val androidx_appcompat = "1.2.0"
     const val androidx_navigation = "2.3.5"
@@ -33,20 +33,20 @@ object Versions {
     const val androidx_material = "1.4.0"
     const val androidx_recycler_view = "1.2.1"
     const val androidx_constraint = "2.0.4"
-    const val kotlinx_coroutines = "1.3.9"
-    const val kotlinx_coroutines_core = "1.5.1"
-    private const val work_hilt = "1.0.0-beta01"
-    const val androidx_hilt_viewmodel = "1.0.0-alpha01"
+    const val kotlinx_coroutines = "1.6.0"
+    const val kotlinx_coroutines_core = "1.5.2"
+    private const val work_hilt = "1.0.0"
+    const val androidx_hilt_viewmodel = "1.0.0-alpha02"
     const val androidx_hilt_work = work_hilt
     const val androidx_hilt_compiler = work_hilt
     const val androidx_lifecycle_livedata_ktx = "2.4.0-alpha02"
 
     const val androidx_room = "2.3.0"
-    const val androidx_worker_ktx = "2.5.0"
-    const val hilt_version = "2.33-beta"
+    const val androidx_worker_ktx = "2.7.1"
+    const val hilt_version = "2.38.1"
     const val google_licenses_version = "0.10.4"
     const val retrofit = "2.9.0"
-    const val logging_interceptor = "4.0.1"
+    const val logging_interceptor = "4.10.0"
     const val gson_converter = "2.1.0"
     const val fab = "1.6.4"
     const val biometric = "1.2.0-alpha03"
@@ -58,11 +58,11 @@ object Versions {
     const val guave_conflict_resolver_version = "9999.0-empty-to-avoid-conflict-with-guava"
 
     // Decoder
-    const val kotlin_reflect = "1.4.32"
+    const val kotlin_reflect = "1.6.21"
     const val jackson_cbor = "2.12.3"
     const val java_cose = "1.1.0"
     const val bouncy_castle = "1.68"
-    const val jackson_kotlin = "2.12.0"
+    const val jackson_kotlin = "2.14.0"
     const val jackson_datetype = "jackson-datatype-jsr310"
     const val appache_commons = "2.9.0"
     const val jose_jwt = "9.21"

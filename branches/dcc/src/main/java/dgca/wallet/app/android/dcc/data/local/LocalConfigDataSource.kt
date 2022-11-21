@@ -72,7 +72,7 @@ class LocalConfigDataSource @Inject constructor(
     }
 
     private fun defaultConfig(): Config =
-        context.assets.open(BuildConfig.CONFIG_FILE_NAME).bufferedReader().use {
+        context.assets.open("wallet-context.jsonc").bufferedReader().use {
             objectMapper.readValue(it.readText(), Config::class.java)
         }
 
